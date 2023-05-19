@@ -3,6 +3,11 @@ on:
   push:
     branches-ignore:
       - ga-ignore-**
+  workflow_run:
+    workflows:
+      - "Block Push on Norme Failure"
+    types:
+      - completed
 env:
   MIRROR_URL:
     git@github.com:EpitechPromo2026/B-YEP-400-REN-4-1-zappy-mael1.becel.git

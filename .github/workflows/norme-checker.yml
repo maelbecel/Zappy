@@ -30,6 +30,3 @@ jobs:
         run: |
           echo "The norme.sh script failed. Push has been blocked."
           exit 1
-        else:
-          echo "The norme.sh script passed. Push has been allowed."
-          exit 1

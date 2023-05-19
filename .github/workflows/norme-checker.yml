@@ -19,14 +19,10 @@ jobs:
           chmod +x norme.sh
 
       - name: Run norme.sh script
-        run: ./norme.sh -v .
-
-      - name: Check script exit code
-        id: check_exit_code
-        run: echo "::set-output name=exit_code::${{ steps.check_norme_script.outcome }}"
-
-      - name: Block push on script failure
-        if: ${{ steps.check_exit_code.outputs.exit_code == 'failure' }}
         run: |
-          echo "The norme.sh script failed. Push has been blocked."
-          exit 1
+          ./norme.sh -v .
+          exit_code=$?
+          if [ $exit_code -ne 0 ]; then
+            echo "The norme.sh script failed. Push has been blocked."
+            exit 1
+          fi

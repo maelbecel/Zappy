@@ -2,8 +2,8 @@ name: Block Push on Norme Failure
 
 on:
   push:
-    branches:
-      - '*'
+    branches-ignore:
+      - main
 
 jobs:
   check_norme:

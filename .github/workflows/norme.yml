@@ -1,0 +1,32 @@
+name: Block Push on Norme Failure
+
+on:
+  push:
+    branches:
+      - '*'
+
+jobs:
+  check_norme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Download norme.sh script
+        run: |
+          curl -o norme.sh https://raw.githubusercontent.com/maelbecel/Usefull-scripts/main/norme/norme.sh
+          chmod +x norme.sh
+
+      - name: Run norme.sh script
+        run: ./norme.sh -v .
+
+      - name: Check script exit code
+        id: check_exit_code
+        run: echo "::set-output name=exit_code::${{ steps.check_norme_script.outcome }}"
+
+      - name: Block push on script failure
+        if: ${{ steps.check_exit_code.outputs.exit_code == 'failure' }}
+        run: |
+          echo "The norme.sh script failed. Push has been blocked."
+          exit 1

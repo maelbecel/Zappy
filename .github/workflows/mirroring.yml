@@ -1,8 +1,8 @@
 name: Clone Repository
 on:
   push:
-    branches-ignore:
-      - ga-ignore-**
+    branches:
+      - main
   workflow_run:
     workflows:
       - "Block Push on Norme Failure"

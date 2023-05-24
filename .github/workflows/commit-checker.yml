@@ -2,8 +2,8 @@ name: Check commit state
 
 on:
   push:
-    branches:
-      - main
+    branches-ignore:
+      - ga-ignore-**
 
 jobs:
   run-script:

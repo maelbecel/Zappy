@@ -41,6 +41,8 @@ jobs:
           git add .
           git commit -m "Auto-format code by Black"
           git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true
 
   tests:

@@ -1,7 +1,8 @@
-# test_with_pytest.py
+from unittest import TestCase
 
-def test_always_passes():
-    assert True
+class TryTesting(TestCase):
+    def test_always_true_1(self):
+        self.assertFalse(False)
 
-def test_always_fails():
-    assert False
+    def test_always_true_2(self):
+        self.assertF(False)

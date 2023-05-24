@@ -40,7 +40,7 @@ jobs:
           git config --local user.name "GitHub Action"
           git add .
           git commit -m "Auto-format code by Black"
-          git push
+          git push origin ${{ github.ref }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true

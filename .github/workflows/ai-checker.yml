@@ -1,0 +1,97 @@
+name: Python Cli-Ai
+
+on:
+  push:
+    branches:
+      - dev
+      - client-AI
+      - CI/CD_#2
+jobs:
+  format:
+    name: Format code if needed
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+
+      - name: Install dependencies
+        run: pip install black
+
+      - name: Check for Black modifications
+        id: black_check
+        run: |
+          black --check ./src/clientAi/
+        continue-on-error: true
+
+      - name: Check error
+        run: echo "black_output=${{ steps.black_check.outcome }}" >> $GITHUB_ENV
+
+      - name: Format code with Black
+        if: ${{ env.black_output }} != '0'
+        run: black ./src/clientAi/
+
+      - name: Commit changes
+        if: ${{ env.black_output }} != '0'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "Auto-format code by Black"
+          git push
+        continue-on-error: true
+
+  tests:
+    needs: format
+    name: Quality check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out source repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python environment
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Pull Modification
+        run: |
+          git pull
+
+      - name: Run unit tests
+        run: |
+          pip install pytest
+          pytest test/clientAi/*
+  flake8-lint:
+    needs: tests
+    runs-on: ubuntu-latest
+    name: Lint
+
+    steps:
+      - name: Check out source repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python environment
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Pull Modification
+        run: |
+          git pull
+
+      - uses: psf/black@stable
+        with:
+          options: "--check --verbose"
+          src: "./src/clientAi/"
+
+      - name: flake8 Lint
+        uses: py-actions/flake8@v2
+        with:
+          ignore: E305
+          # exclude: "src/ignoreme.py"
+          max-line-length: "120"
+          path: "./src/clientAi/"

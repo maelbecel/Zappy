@@ -51,3 +51,12 @@ Module.symvers
 Mkfile.old
 dkms.conf
 a.out
+
+# python stuff:
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# vscode stuff:
+.vscode/

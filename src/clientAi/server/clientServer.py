@@ -27,7 +27,7 @@ class clientServer:
 
     def disconnect(self):
         self.socket.close()
-        if self.socket != None:
+        if self.socket is not None:
             cEx.clientException("Error: socket is not close")
         print("Disconnect to server")
 

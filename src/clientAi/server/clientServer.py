@@ -19,7 +19,7 @@ class clientServer:
     def connect(self):
         # AF_INET = IPv4 / SOCK_STREAM = TCP
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        if self.socket == None:
+        if self.socket is None:
             cEx.clientException("Error: socket is null")
         if self.socket.connect((self.host, int(self.port))) == -1:
             cEx.clientException("Error: socket is not connect")
@@ -27,21 +27,21 @@ class clientServer:
 
     def disconnect(self):
         self.socket.close()
-        if self.socket != None:
+        if self.socket is not None:
             cEx.clientException("Error: socket is not close")
         print("Disconnect to server")
 
     def send(self, message):
-        if self.socket == None:
+        if self.socket is None:
             cEx.clientException("Error: socket is null")
         print("Send message to server: " + message + "\n")
         self.socket.sendall(message.encode("ascii"))
 
     def receive(self):
-        if self.socket == None:
+        if self.socket is None:
             cEx.clientException("Error: socket is null")
         response = self.socket.recv(1024).decode()
-        if response == None:
+        if response is None:
             print("Error: response is null")
         print("Receive message from server: " + response + "\n")
         return response

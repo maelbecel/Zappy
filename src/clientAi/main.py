@@ -31,7 +31,7 @@ def parse(argv):
 
 def main(client):
     try:
-        if client == None:
+        if client is None:
             raise cException.clientException("Error: client is null")
         client.connect()
         client.disconnect()

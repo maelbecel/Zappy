@@ -6,6 +6,8 @@ on:
       - dev
       - client-AI
       - CI/CD_#2
+      - IA
+
 jobs:
   format:
     name: Format code if needed

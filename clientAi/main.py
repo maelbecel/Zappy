@@ -6,8 +6,8 @@
 ##
 
 import sys
-import exception.clientException as cException
-import ai.clientAi as cAi
+import src.exception.clientException as cException
+import src.ai.clientAi as cAi
 
 MAX_PORT = 65535
 
@@ -34,6 +34,7 @@ def main(client):
         if client is None:
             raise cException.clientException("Error: client is null")
         client.connect()
+        client.look()
         client.disconnect()
     except Exception as e:
         raise e

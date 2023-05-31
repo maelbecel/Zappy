@@ -6,8 +6,7 @@
 ##
 
 import socket
-import exception.clientException as cEx
-
+from ..exception.clientException import clientException as cEx
 
 class clientServer:
     def __init__(self, port, host):

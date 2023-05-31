@@ -5,11 +5,9 @@
 ## clientAi
 ##
 
-from action.clientAction import enumActions as cAct
-
-import exception.clientException as cEx
-import server.clientServer as cServ
-
+from ..action.clientAction import enumActions as cAct
+from ..exception.clientException import clientException as cEx
+from ..server.clientServer import clientServer
 
 class clientAi:
     def __init__(self, teamName, port, host):
@@ -19,7 +17,7 @@ class clientAi:
         self.response = None
         self.availablePlace = 0
         self.teamName = teamName + "\n"
-        self.client = cServ.clientServer(port, host)
+        self.client = clientServer(port, host)
 
     def getConnectionResponse(self):
         self.availablePlace = int(self.response[0])

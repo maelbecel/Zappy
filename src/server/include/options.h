@@ -8,10 +8,10 @@
 #ifndef OPTIONS_H_
     #define OPTIONS_H_
 
-    #include "server.h"
+typedef unsigned int uint;
 
 typedef struct options_s {
-    ushort port;
+    unsigned short port;
     uint width;
     uint height;
     char **teams_name;

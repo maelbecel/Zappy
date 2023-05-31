@@ -10,7 +10,11 @@ SRC_DIR = src
 BUILD_DIR = build
 
 SRC = 	$(SRC_DIR)/main.c \
-		$(SRC_DIR)/server.c
+		$(SRC_DIR)/server.c \
+		$(SRC_DIR)/main_loop.c
+
+SRC +=	$(SRC_DIR)/server/server_create.c \
+		$(SRC_DIR)/server/server_destroy.c
 
 SRC +=	$(SRC_DIR)/options/del_options.c \
 		$(SRC_DIR)/options/init_options.c \
@@ -22,6 +26,29 @@ SRC +=	$(SRC_DIR)/options/del_options.c \
 		$(SRC_DIR)/options/options_getter/get_teams_names.c \
 		$(SRC_DIR)/options/options_getter/get_width.c
 
+SRC +=	$(SRC_DIR)/inventory/inventory_create.c \
+		$(SRC_DIR)/inventory/inventory_destroy.c
+
+SRC += 	$(SRC_DIR)/map/tile/tile_add_player.c \
+		$(SRC_DIR)/map/tile/tile_create.c \
+		$(SRC_DIR)/map/tile/tile_destroy.c \
+		$(SRC_DIR)/map/tile/tile_remove_player.c \
+		$(SRC_DIR)/map/map_create.c \
+		$(SRC_DIR)/map/map_destroy.c \
+		$(SRC_DIR)/map/map_get_tile.c
+
+SRC +=	$(SRC_DIR)/client/client_accept.c \
+		$(SRC_DIR)/client/client_create.c \
+		$(SRC_DIR)/client/client_destroy.c \
+		$(SRC_DIR)/client/client_read.c \
+		$(SRC_DIR)/client/client_disconnect.c \
+
+SRC +=	$(SRC_DIR)/command/command_exec.c \
+		$(SRC_DIR)/command/none/select_team.c
+
+SRC +=	$(SRC_DIR)/utils/id_generator.c \
+		$(SRC_DIR)/utils/read_socket.c
+
 OBJ = $(SRC:%.c=$(BUILD_DIR)/%.o)
 
 NAME = zappy_server
@@ -30,12 +57,14 @@ CFLAGS += -Wall -Wextra
 
 CFLAGS += -I include -I libs/list/include -I libs/socket/include
 
+LDFLAGS += -L libs/list -lolist -L libs/socket -losocket
+
 all: $(NAME)
 
 $(NAME): $(OBJ)
 	@make -C libs/list
 	@make -C libs/socket
-	@$(CC) -o $(NAME) $(OBJ) $(CFLAGS) \
+	@$(CC) -o $(NAME) $(OBJ) $(CFLAGS) $(LDFLAGS) \
 	&& $(ECHO) $(BOLD) $(GREEN)"► SERVER BUILD SUCCESS !"$(DEFAULT) \
 	|| ($(ECHO) $(BOLD) $(RED)"► SERVER BUILD FAILED"$(DEFAULT) && exit 1)
 

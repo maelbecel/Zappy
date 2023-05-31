@@ -8,7 +8,7 @@
 #ifndef INVENTORY_H_
     #define INVENTORY_H_
 
-    #include "server.h"
+typedef unsigned int uint;
 
 typedef struct inventory_s {
     uint food;

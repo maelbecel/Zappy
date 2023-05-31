@@ -8,8 +8,10 @@
 #ifndef MAP_H_
     #define MAP_H_
 
-    #include "server.h"
+    #include "client.h"
     #include "inventory.h"
+
+typedef unsigned int uint;
 
 typedef struct tile_s {
     uint x;

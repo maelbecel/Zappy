@@ -19,6 +19,6 @@ map_t *map_create(uint width, uint height)
     map->tiles = olist_create();
     for (uint y = 0; y < height; y++)
         for (uint x = 0; x < width; x++)
-            olist_add(map->tiles, tile_create(x, y));
+            olist_add_node(map->tiles, tile_create(x, y));
     return map;
 }

@@ -15,7 +15,7 @@ SRC	=	./Main.cpp\
 		./Game/Scene/Menu/HUD/Widget/ButtonWidget.cpp\
 		./Parser/Parser.cpp\
 		./Server/Server.cpp\
-		./Tools/Network/Socket.cpp\
+		./Server/Socket/Socket.cpp\
 
 SRC	+=	./UI/Animation/Animation.cpp\
 		./UI/Button/Button.cpp\
@@ -39,7 +39,7 @@ INCLUDE =	-I .\
 			-I ./Game/Scene/Menu/HUD/Widget/\
 			-I ./Parser/\
 			-I ./Server/\
-			-I ./Tools/Network/\
+			-I ./Server/Socket/\
 			-I ./UI/Animation/\
 			-I ./UI/Button/\
 			-I ./UI/EventHandler/\

@@ -115,18 +115,6 @@ namespace Network {
              */
             void processClient();
 
-            /**
-             * @brief Read and parse information that the server read
-             * 
-             * @return std::string The information read by the server
-             */
-            void readClient();
-
-            /**
-             * @brief Write the response of the information given
-             */
-            void writeClient();
-
         // Setters and Getters
         public:
             /**
@@ -146,6 +134,18 @@ namespace Network {
              * @return std::string The great answer
              */
             std::string parseResponse(std::string const &response);
+
+                        /**
+             * @brief Read and parse information that the server read
+             * 
+             * @return std::string The information read by the server
+             */
+            void readClient();
+
+            /**
+             * @brief Write the response of the information given
+             */
+            void writeClient();
 
         // Attributes
         private:

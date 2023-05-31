@@ -16,7 +16,7 @@
     #include <map>
 
 namespace UI {
-    static std::string ARIAL = "./Assets/Font/arial.TTF";
+    static std::string ARIAL = "./Assets/Fonts/arial.TTF";
 
     class FontManager {
         // Constructor (default) & Destructor (default)

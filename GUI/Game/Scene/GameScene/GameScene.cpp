@@ -25,7 +25,7 @@ namespace Scene {
     {
         server.Run();
 
-        // server.getSocket().response; // for the response of the server
+        _gameData.parse(server.getSocket().response);
     };
 
     void GameScene::Render(sf::RenderWindow &window) {};

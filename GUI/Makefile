@@ -8,7 +8,9 @@
 SRC	=	./Main.cpp\
 		./App/Application.cpp\
 		./Game/Game.cpp\
-		./Game/Scene/GameScene.cpp\
+		./Game/Scene/GameScene/GameScene.cpp\
+		./Game/Scene/GameScene/GameData/GameData.cpp\
+		./Game/Scene/GameScene/Tiles/Tile.cpp\
 		./Game/Scene/Menu/Menu.cpp\
 		./Game/Scene/Menu/HUD/MenuHUD.cpp\
 		./Game/Scene/Menu/HUD/Widget/InputBox.cpp\
@@ -34,6 +36,9 @@ INCLUDE =	-I .\
 			-I ./Error/\
 			-I ./Game/\
 			-I ./Game/Scene/\
+			-I ./Game/Scene/GameScene/\
+			-I ./Game/Scene/GameScene/GameData/\
+			-I ./Game/Scene/GameScene/Tiles/\
 			-I ./Game/Scene/Menu/\
 			-I ./Game/Scene/Menu/HUD/\
 			-I ./Game/Scene/Menu/HUD/Widget/\

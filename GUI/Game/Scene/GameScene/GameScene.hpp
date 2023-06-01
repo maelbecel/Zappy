@@ -9,6 +9,7 @@
     #define GAMESCENE_HPP_
 
     #include "IScene.hpp"
+    #include "GameData.hpp"
 
 namespace Scene {
     /**
@@ -60,6 +61,7 @@ namespace Scene {
 
         // Attributes
         private:
+            GameData _gameData; /*!< The game data */
     };
 }
 

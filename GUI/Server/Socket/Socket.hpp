@@ -16,6 +16,7 @@
     #include <strings.h>
     #include <unistd.h>
     #include <string>
+    #include <sstream>
 
 namespace Network {
     /**

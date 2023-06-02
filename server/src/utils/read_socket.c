@@ -43,4 +43,8 @@ void read_socket(client_t *client)
         return;
     }
     do_read(client);
+    if (!client->buffer)
+        return;
+    if (client->buffer[strlen(client->buffer) - 1] == '\n')
+        client->buffer[strlen(client->buffer) - 1] = '\0';
 }

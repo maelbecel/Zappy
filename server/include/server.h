@@ -98,4 +98,19 @@ int client_accept(server_t *server);
  */
 int client_read(server_t *server);
 
+/**
+ * @brief Create new team
+ *
+ * @param name Name of team (used to identify it)
+ * @return team_t* Allocated team object
+ */
+team_t *team_create(char *name);
+
+/**
+ * @brief Destroy a team object
+ * Free the team object
+ * @param team
+ */
+void team_destroy(team_t *team);
+
 #endif /* !SERVER_H_ */

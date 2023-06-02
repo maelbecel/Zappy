@@ -35,3 +35,23 @@ void olist_clear(olist_t *list)
     list->tail = NULL;
     list->size = 0;
 }
+
+void olist_clear_wdfree(olist_t *list)
+{
+    olist_node_t *tmp = NULL;
+
+    if (list == NULL)
+        return;
+    tmp = list->head;
+    for (uint i = 0; i < list->size; i++) {
+        if (tmp->next == NULL) {
+            free(tmp);
+            break;
+        }
+        tmp = tmp->next;
+        free(tmp->prev);
+    }
+    list->head = NULL;
+    list->tail = NULL;
+    list->size = 0;
+}

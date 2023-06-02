@@ -20,6 +20,17 @@ static void add_select_fds(server_t *server)
     server->select->maxfd = server->socket->fd;
 }
 
+static void setup_teams(server_t *server, options_t *options)
+{
+    team_t *team = NULL;
+
+    server->teams = olist_create();
+    for (uint i = 0; options->teams_name[i]; i++) {
+        team = team_create(options->teams_name[i]);
+        olist_add_node(server->teams, team);
+    }
+}
+
 server_t *server_create(options_t *options)
 {
     server_t *server = calloc(1, sizeof(server_t));
@@ -28,7 +39,6 @@ server_t *server_create(options_t *options)
         return NULL;
     server->running = true;
     server->clients = olist_create();
-    server->teams = olist_create();
     server->max_team_size = options->clients_nb;
     server->freq = options->freq;
     server->map = map_create(options->width, options->height);
@@ -40,5 +50,6 @@ server_t *server_create(options_t *options)
     if (!server->socket)
         return NULL;
     add_select_fds(server);
+    setup_teams(server, options);
     return server;
 }

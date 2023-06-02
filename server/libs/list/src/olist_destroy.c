@@ -21,6 +21,19 @@ void default_destructor(olist_t *list)
 }
 
 /**
+ * @brief Default destructor without free of
+ * node data
+ * @param list
+ */
+void default_destructor_no_free(olist_t *list)
+{
+    if (!list)
+        return;
+    olist_clear_wdfree(list);
+    free(list);
+}
+
+/**
  * @brief Call the destructor of the list
  * @param list to destroy
  */

@@ -49,6 +49,9 @@ SRC +=	$(SRC_DIR)/command/command_exec.c \
 SRC +=	$(SRC_DIR)/utils/id_generator.c \
 		$(SRC_DIR)/utils/read_socket.c
 
+SRC +=	$(SRC_DIR)/team/team_create.c \
+		$(SRC_DIR)/team/team_destroy.c
+
 OBJ = $(SRC:%.c=$(BUILD_DIR)/%.o)
 
 NAME = zappy_server

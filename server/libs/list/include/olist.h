@@ -86,6 +86,7 @@ olist_node_t *olist_get_node(olist_t *list, uint index);
  * @param list
  */
 void olist_clear(olist_t *list);
+void olist_clear_wdfree(olist_t *list);
 
 /**
  * @brief Get the index of the given data
@@ -96,5 +97,6 @@ void olist_clear(olist_t *list);
 int olist_index_of(olist_t *list, void *data);
 
 void default_destructor(olist_t *list);
+void default_destructor_no_free(olist_t *list);
 
 #endif /* !OLIST_H_ */

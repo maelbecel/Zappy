@@ -8,4 +8,4 @@
 all: server
 
 server:
-	@make -C src/server
+	@make -C server/

@@ -10,6 +10,7 @@
 
     #include "IScene.hpp"
     #include "GameData.hpp"
+    #include "Map.hpp"
 
 namespace Scene {
     /**
@@ -62,6 +63,7 @@ namespace Scene {
         // Attributes
         private:
             GameData _gameData; /*!< The game data */
+            Map _map;           /*!< The map */
     };
 }
 

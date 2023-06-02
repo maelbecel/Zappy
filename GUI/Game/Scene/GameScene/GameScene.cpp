@@ -28,7 +28,10 @@ namespace Scene {
         _gameData.parse(server.getSocket().response);
     };
 
-    void GameScene::Render(sf::RenderWindow &window) {};
+    void GameScene::Render(sf::RenderWindow &window)
+    {
+        _map.draw(window, _gameData);
+    };
 
     void GameScene::ShutDown() {};
 

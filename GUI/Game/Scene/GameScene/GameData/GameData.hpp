@@ -107,7 +107,7 @@ class GameData {
 
     // Global Attributes
     public:
-        static uint timeUnit;                /*!< The time unit of the game */
+        static uint timeUnit;                     /*!< The time unit of the game */
 };
 
 #endif /* !GAMEDATA_HPP_ */

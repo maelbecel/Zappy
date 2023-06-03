@@ -42,10 +42,14 @@ static void client_loop(server_t *server, client_t *client)
 int client_read(server_t *server)
 {
     client_t *client = NULL;
+    olist_node_t *node = server->clients->head;
 
-    OLIST_FOREACH(server->clients, node) {
+    if (!node)
+        return 0;
+    while (server->clients->head != NULL && node != NULL) {
         client = (client_t *)node->data;
         client_loop(server, client);
+        node = node->next;
     }
     return 0;
 }

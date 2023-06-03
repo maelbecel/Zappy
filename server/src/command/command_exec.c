@@ -17,15 +17,7 @@ static const ai_command_t ai_commands[] = {
     {NULL, NULL}
 };
 
-static int test_cmd(client_t *client, server_t *server, char **args)
-{
-    OLOG_FATAL("Message from client id#%ld fd#%d> %s", client->id,
-    client->socket->fd, client->buffer);
-    return 0;
-}
-
 static const graphic_command_t graphic_commands[] = {
-    {"test", &test_cmd},
     {NULL, NULL}
 };
 

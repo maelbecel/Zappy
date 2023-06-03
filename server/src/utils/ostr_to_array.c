@@ -61,11 +61,6 @@ static uint for_boucle(char *str, char *separators, char *result, uint i)
     return (i);
 }
 
-/**
-* Split string to array with separators
-* Separators is a string, don't use a space
-* Example: ostr_to_array(str, " ");
-*/
 char **ostr_to_array(char *str, char *separators)
 {
     char **result = NULL;
@@ -86,6 +81,5 @@ char **ostr_to_array(char *str, char *separators)
         j++;
         if (i >= strlen(str))
             break;
-    }
-    return result;
+    } return result;
 }

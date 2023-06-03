@@ -16,9 +16,7 @@
     #define OLOG_COLOR_RED "\033[0;31m"
     #define OLOG_COLOR_GREEN "\033[0;32m"
     #define OLOG_COLOR_YELLOW "\033[0;33m"
-    #define OLOG_COLOR_BLUE "\033[0;34m"
     #define OLOG_COLOR_MAGENTA "\033[0;35m"
-    #define OLOG_COLOR_CYAN "\033[0;36m"
     #define OLOG_COLOR_RESET "\033[0m"
 
     #define OLOG(fmt, ...) \
@@ -37,7 +35,7 @@
         __VA_ARGS__)
 
     #define OLOG_FATAL(fmt, ...) \
-        fprintf(stderr, OLOG_COLOR_MAGENTA "[FATAL] " fmt OLOG_COLOR_RESET \
+        fprintf(stderr, OLOG_COLOR_RED "[FATAL] " fmt OLOG_COLOR_RESET \
         "\n", __VA_ARGS__)
 
     #define OLOG_INFOA(fmt) \
@@ -50,7 +48,7 @@
         fprintf(stderr, OLOG_COLOR_RED "[ERROR] " OLOG_COLOR_RESET fmt "\n")
 
     #define OLOG_FATALA(fmt) \
-        fprintf(stderr, OLOG_COLOR_MAGENTA "[FATAL] " fmt OLOG_COLOR_RESET "\n")
+        fprintf(stderr, OLOG_COLOR_RED "[FATAL] " fmt OLOG_COLOR_RESET "\n")
 
     // Check if the debug mode is enabled
     #if DEBUG == 1

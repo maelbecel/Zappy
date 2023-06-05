@@ -34,7 +34,13 @@ namespace UI {
         window.draw(_background);
         _ip.draw(window, sf::RenderStates::Default);
         _port.draw(window, sf::RenderStates::Default);
-        _connect->render(window);
+        if (_connect->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))) {
+            std::cout << "Hovered" << std::endl;
+            _connect->render(window, ButtonState::HOVERED);
+        } else {
+            std::cout << "Not hovered" << std::endl;
+            _connect->render(window, ButtonState::IDLE);
+        }
     }
 
     void MenuHUD::handleEvent(sf::Event event, Network::Server &server)
@@ -54,8 +60,8 @@ namespace UI {
                 }
                 return;
             }
-            _ip.isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
-            _port.isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
+            _ip.isIn(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
+            _port.isIn(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
             return;
         }
         _ip.handleEvent(event);

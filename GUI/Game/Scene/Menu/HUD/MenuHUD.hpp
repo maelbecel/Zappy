@@ -27,14 +27,14 @@ namespace UI {
 
             /**
              * @brief Draw the Menu HUD
-             * 
+             *
              * @param window The window where the HUD will be drawn
              */
             void draw(sf::RenderWindow &window);
 
             /**
              * @brief Handle the event of the Menu HUD
-             * 
+             *
              * @param event  The event to handle
              * @param server The server to connect to
              */

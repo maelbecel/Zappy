@@ -24,7 +24,7 @@ namespace UI {
         public:
             /**
              * @brief Construct a new AWidget object
-             * 
+             *
              * @param position The position of the widget
              * @param size     The size of the widget
              */
@@ -40,7 +40,7 @@ namespace UI {
 
             /**
              * @brief Get the Position of the widget
-             * 
+             *
              * @return sf::Vector2f The position of the widget
              */
             sf::Vector2f getPosition() const override
@@ -50,7 +50,7 @@ namespace UI {
 
             /**
              * @brief Get the Size of the widget
-             * 
+             *
              * @return sf::Vector2f The size of the widget
              */
             virtual sf::Vector2f getSize() const override
@@ -74,7 +74,7 @@ namespace UI {
              * @return true         The widget is clicked
              * @return false        The widget is not clicked
              */
-            virtual bool isClicked(sf::Vector2f mousePosition) override
+            virtual bool isIn(sf::Vector2f mousePosition) override
             {
                 if (mousePosition.x >= _position.x && mousePosition.x <= _position.x + _size.x && mousePosition.y >= _position.y && mousePosition.y <= _position.y + _size.y) {
                     _isClicked = true;

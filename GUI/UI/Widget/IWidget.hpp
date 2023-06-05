@@ -31,7 +31,7 @@ namespace UI {
 
             /**
              * @brief Get the Position of the widget
-             * 
+             *
              * @return sf::Vector2f The position of the widget
              */
             virtual sf::Vector2f getPosition() const = 0;
@@ -45,7 +45,7 @@ namespace UI {
 
             /**
              * @brief Get the Size of the widget
-             * 
+             *
              * @return sf::Vector2f The size of the widget
              */
             virtual sf::Vector2f getSize() const = 0;
@@ -78,7 +78,7 @@ namespace UI {
              * @return true         The widget got clicked
              * @return false        The widget didn't get clicked
              */
-            virtual bool isClicked(sf::Vector2f mousePosition) = 0;
+            virtual bool isIn(sf::Vector2f mousePosition) = 0;
     };
 };
 

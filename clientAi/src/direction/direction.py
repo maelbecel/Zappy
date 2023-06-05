@@ -24,6 +24,8 @@ class direction:
         attribute to the value of enumDirection.NORTH.
         """
         self.direction = enumDirection.NORTH
+        self.x = 0
+        self.y = 0
 
     def getDirection(self):
         """
@@ -53,3 +55,13 @@ class direction:
             self.direction = enumDirection.NORTH
         else:
             self.direction = enumDirection(self.direction.value + 1)
+
+    def upadteCoord(self):
+        if self.direction == enumDirection.NORTH:
+            self.y -= 1
+        elif self.direction == enumDirection.EAST:
+            self.x += 1
+        elif self.direction == enumDirection.SOUTH:
+            self.y += 1
+        elif self.direction == enumDirection.WEST:
+            self.x -= 1

@@ -17,6 +17,10 @@ class evoli(clientAI):
         while self.alive:
             self.look()
 
+    def computeQueueActions(self):
+        for element in self.queue:
+            element()
+
     def __getGoTo(self, value):
         x, y, max, result = 0
         beforeSize = 1

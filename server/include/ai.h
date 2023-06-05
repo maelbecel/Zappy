@@ -46,4 +46,13 @@ ai_t *ai_create(uint xmax, uint ymax);
  */
 void ai_destroy(ai_t *ai);
 
+/**
+ * @brief Function call when a player die
+ * Send a message to the graphic client
+ *
+ * @param client
+ * @param server
+ */
+void ai_dead(client_t *client, server_t *server);
+
 #endif

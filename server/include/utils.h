@@ -16,5 +16,6 @@ typedef unsigned int uint;
 ulong generate_id(void);
 void read_socket(client_t *client);
 char **ostr_to_array(char *str, char *separators);
+uint array_size(char **array);
 
 #endif /* !UTILS_H_ */

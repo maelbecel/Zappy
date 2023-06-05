@@ -9,6 +9,7 @@
 #include <string.h>
 #include "server.h"
 #include "client.h"
+#include "ai.h"
 #include "command.h"
 #include "olog.h"
 
@@ -42,8 +43,7 @@ static int update_food(client_t *client, uint tickDiff, server_t *server)
             ai->inventory->food--;
             ai->time_before_death += 126;
         } else {
-            dprintf(client->socket->fd, "dead\n");
-            client_disconnect(server, client);
+            ai_dead(client, server);
             return -1;
         }
     }

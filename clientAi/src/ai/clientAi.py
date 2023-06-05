@@ -12,17 +12,18 @@ from ..exception.clientException import clientException as cEx
 from ..server.clientServer import clientServer
 
 class clientAi:
-    def __init__(self, teamName, port, host):
+    def __init__(self, teamName: str, port: int, host: str):
         """
         This is the initialization function for a client AI that sets up various
         attributes and creates a client server object.
 
-        @param teamName The name of the team that the AI client belongs to.
-        @param port The port parameter is the port number that the client will use
-        to connect to the server. It is a numeric value that identifies a specific
-        process to which the client will connect.
-        @param host The "host" parameter is the IP address or hostname of the
-        server that the client will connect to.
+        @param teamName A string representing the name of the team that the AI
+        client belongs to.
+        @param port The port number on which the client will connect to the server.
+        It is a communication endpoint that identifies a specific process to which
+        the client will connect.
+        @param host The host parameter is a string that represents the IP address
+        or hostname of the server that the client will connect to.
         """
         print("Init clientAi")
         self.alive = True
@@ -69,13 +70,13 @@ class clientAi:
         except Exception as e:
             print(e)
 
-    def send(self, message):
+    def send(self, message: str):
         """
         This function sends a message using a client and receives a response,
         handling any exceptions that may occur.
 
-        @param message The message parameter is the data that the client wants to
-        send to the server. It is a string.
+        @param message The parameter "message" is a string that represents the
+        message that the client wants to send to the server.
         """
         try:
             self.client.send(message)
@@ -172,12 +173,14 @@ class clientAi:
         """
         self.send(cAct.INVENTORY.value)
 
-    def broadcast(self, message):
+    def broadcast(self, message: str):
         """
-        This function sends a broadcast message to all connected clients.
+        This function sends a broadcast message with a given string message.
 
-        @param message The message parameter is a string that represents the
-        message that will be broadcasted to all connected clients.
+        @param message The parameter "message" is a string that represents the
+        message that will be broadcasted. It will be concatenated with the string
+        value of the "BROADCAST" constant from the "cAct" enum class and a newline
+        character, and then sent using the "send" method.
         """
         self.send(cAct.BROADCAST.value + " " + message + "\n")
 
@@ -199,25 +202,24 @@ class clientAi:
         """
         self.send(cAct.EJECT.value)
 
-    def take(self, object):
+    def take(self, object: str):
         """
-        This function sends a command to take an object.
+        This function sends a command to take an object to a game server.
 
-        @param object The parameter "object" in the "take" method is a string that
+        @param object The "object" parameter in the "take" method is a string that
         represents the name or identifier of the object that the player wants to
-        take in the game. This string is concatenated with the "TAKE" action
-        command and sent to the game engine through the "send" method.
+        take in the game. This parameter is used to construct a command that will
+        be sent to the game engine to execute the "take" action.
         """
         self.send(cAct.TAKE.value + " " + object + "\n")
 
-    def set(self, object):
+    def set(self, object: str):
         """
-        This function sends a message to set an object using a specific protocol.
+        This function sends a message with a "SET" command and an object parameter.
 
-        @param object The "object" parameter is a variable that represents the
-        value being set. It could be any data type such as a string, integer,
-        float, or even an object. The method "set" is used to set the value of this
-        object.
+        @param object The "object" parameter is a string that represents the object
+        that needs to be set. It is passed as an argument to the "set" method of a
+        class.
         """
         self.send(cAct.SET.value + " " + object + "\n")
 

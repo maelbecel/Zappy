@@ -52,7 +52,8 @@ SRC +=	$(SRC_DIR)/utils/id_generator.c \
 		$(SRC_DIR)/utils/ostr_to_array.c
 
 SRC +=	$(SRC_DIR)/team/team_create.c \
-		$(SRC_DIR)/team/team_destroy.c
+		$(SRC_DIR)/team/team_destroy.c \
+		$(SRC_DIR)/team/team_get_by_id.c
 
 SRC +=	$(SRC_DIR)/ai/ai_create.c \
 		$(SRC_DIR)/ai/ai_destroy.c

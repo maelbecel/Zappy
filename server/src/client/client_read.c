@@ -49,7 +49,8 @@ int client_read(server_t *server)
     while (server->clients->head != NULL && node != NULL) {
         client = (client_t *)node->data;
         client_loop(server, client);
-        node = node->next;
+        if (node)
+            node = node->next;
     }
     return 0;
 }

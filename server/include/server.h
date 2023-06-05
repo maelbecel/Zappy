@@ -113,4 +113,13 @@ team_t *team_create(char *name);
  */
 void team_destroy(team_t *team);
 
+/**
+ * @brief Get a team by its id
+ *
+ * @param server
+ * @param id
+ * @return team_t*
+ */
+team_t *team_get_by_id(server_t *server, ulong id);
+
 #endif /* !SERVER_H_ */

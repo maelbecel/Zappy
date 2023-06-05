@@ -9,7 +9,7 @@
 
 uint GameData::timeUnit = 0;
 
-GameData::GameData() : _mapSize(sf::Vector2i(0, 0)), _gameScale(1.0f)
+GameData::GameData() : _mapSize(sf::Vector2i(0, 0)), _gameScale(1.0f), _scale(sf::Vector2f(1.0f, 1.0f)), _position(sf::Vector2f(0, 900 / 2))
 {
     _teams = std::vector<std::string>();
 
@@ -134,4 +134,14 @@ uint GameData::getTimeUnit() const
 double **GameData::getNoise() const
 {
     return _noise.getNoise();
+}
+
+sf::Vector2f GameData::getScale() const
+{
+    return _scale;
+}
+
+sf::Vector2f GameData::getPosition() const
+{
+    return _position;
 }

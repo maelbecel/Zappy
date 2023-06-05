@@ -11,6 +11,7 @@
     #include "server.h"
     #include "client.h"
     #include "ai.h"
+    #include "olog.h"
 
 typedef struct ai_command_s {
     char *command;
@@ -29,7 +30,9 @@ int execute_waiting_order(client_t *client, server_t *server);
 // NONE commands
 int select_team(client_t *client, server_t *server);
 
-
+// Graphic commands
+int msz(client_t *client, server_t *server, UNUSED char **args);
+int bct(client_t *client, server_t *server, char **args);
 
 // ALL commands
 void client_disconnect(server_t *server, client_t *client);

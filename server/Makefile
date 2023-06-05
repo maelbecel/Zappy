@@ -49,20 +49,25 @@ SRC +=	$(SRC_DIR)/command/command_exec.c \
 
 SRC +=	$(SRC_DIR)/utils/id_generator.c \
 		$(SRC_DIR)/utils/read_socket.c \
-		$(SRC_DIR)/utils/ostr_to_array.c
+		$(SRC_DIR)/utils/ostr_to_array.c \
+		$(SRC_DIR)/utils/array_size.c
 
 SRC +=	$(SRC_DIR)/team/team_create.c \
 		$(SRC_DIR)/team/team_destroy.c \
 		$(SRC_DIR)/team/team_get_by_id.c
 
 SRC +=	$(SRC_DIR)/ai/ai_create.c \
-		$(SRC_DIR)/ai/ai_destroy.c
+		$(SRC_DIR)/ai/ai_destroy.c \
+		$(SRC_DIR)/ai/ai_dead.c
 
 SRC +=	$(SRC_DIR)/time/time_create.c \
 		$(SRC_DIR)/time/time_destroy.c \
 		$(SRC_DIR)/time/time_update.c
 
 SRC +=	$(SRC_DIR)/action/action_update.c
+
+SRC +=	$(SRC_DIR)/command/graphic/msz.c \
+		$(SRC_DIR)/command/graphic/bct.c
 
 OBJ = $(SRC:%.c=$(BUILD_DIR)/%.o)
 

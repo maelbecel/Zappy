@@ -30,12 +30,12 @@ static void assign_next_action(client_t *client, server_t *server)
     execute_waiting_order(client, server);
 }
 
-static void update_food(client_t *client, uint tickDiff, server_t *server)
+static int update_food(client_t *client, uint tickDiff, server_t *server)
 {
     ai_t *ai = client->data;
 
     if (!ai)
-        return;
+        return -1;
     ai->time_before_death -= tickDiff;
     if (ai->time_before_death <= 0) {
         if (ai->inventory->food > 0) {
@@ -44,13 +44,16 @@ static void update_food(client_t *client, uint tickDiff, server_t *server)
         } else {
             dprintf(client->socket->fd, "dead\n");
             client_disconnect(server, client);
+            return -1;
         }
     }
+    return 0;
 }
 
 static void update_client(client_t *client, uint tickDiff, server_t *server)
 {
-    update_food(client, tickDiff, server);
+    if (update_food(client, tickDiff, server) == -1)
+        return;
     if (!client->current_action && client->waiting_orders->size == 0)
         return;
     if (client->current_action) {

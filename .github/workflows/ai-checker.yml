@@ -6,6 +6,7 @@ on:
       - dev
       - client-AI
       - CI/CD_#2
+      - ft/clientAi
 jobs:
   format:
     name: Format code if needed
@@ -88,7 +89,7 @@ jobs:
       - uses: psf/black@stable
         with:
           options: "--check --verbose"
-          src: "./src/clientAi/"
+          src: "./clientAi/src"
 
       - name: flake8 Lint
         uses: py-actions/flake8@v2
@@ -96,4 +97,4 @@ jobs:
           ignore: E305,E266
           # exclude: "src/ignoreme.py"
           max-line-length: "120"
-          path: "./src/clientAi/"
+          path: "./clientAi/src"

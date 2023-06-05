@@ -32,7 +32,21 @@ int select_team(client_t *client, server_t *server);
 
 // Graphic commands
 int msz(client_t *client, server_t *server, UNUSED char **args);
+
 int bct(client_t *client, server_t *server, char **args);
+void print_bct(client_t *client, tile_t *tile, int x, int y);
+
+int mct(client_t *client, server_t *server, UNUSED char **args);
+
+int tna(client_t *client, server_t *server, UNUSED char **args);
+
+int sgt(client_t *client, server_t *server, UNUSED char **args);
+
+int sst(client_t *client, server_t *server, char **args);
+
+int ppo(client_t *client, server_t *server, char **args);
+
+int welcome(client_t *client, server_t *server);
 
 // ALL commands
 void client_disconnect(server_t *server, client_t *client);

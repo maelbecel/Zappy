@@ -42,6 +42,7 @@ SRC +=	$(SRC_DIR)/client/client_accept.c \
 		$(SRC_DIR)/client/client_destroy.c \
 		$(SRC_DIR)/client/client_read.c \
 		$(SRC_DIR)/client/client_disconnect.c \
+		$(SRC_DIR)/client/client_get_by_id.c
 
 SRC +=	$(SRC_DIR)/command/command_exec.c \
 		$(SRC_DIR)/command/command_exec_ai.c \
@@ -67,7 +68,13 @@ SRC +=	$(SRC_DIR)/time/time_create.c \
 SRC +=	$(SRC_DIR)/action/action_update.c
 
 SRC +=	$(SRC_DIR)/command/graphic/msz.c \
-		$(SRC_DIR)/command/graphic/bct.c
+		$(SRC_DIR)/command/graphic/bct.c \
+		$(SRC_DIR)/command/graphic/mct.c \
+		$(SRC_DIR)/command/graphic/tna.c \
+		$(SRC_DIR)/command/graphic/sgt.c \
+		$(SRC_DIR)/command/graphic/sst.c \
+		$(SRC_DIR)/command/graphic/welcome_message.c \
+		$(SRC_DIR)/command/graphic/ppo.c
 
 OBJ = $(SRC:%.c=$(BUILD_DIR)/%.o)
 

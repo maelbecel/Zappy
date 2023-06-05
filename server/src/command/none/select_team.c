@@ -59,6 +59,7 @@ int select_team(client_t *client, server_t *server)
     if (strcmp(client->buffer, "GRAPHIC") == 0) {
         OLOG_DEBUG("Client %d is now a graphic client", client->socket->fd);
         client->type = GRAPHIC;
+        welcome(client, server);
         return 0;
     }
     team = get_team_by_name(server, client->buffer);

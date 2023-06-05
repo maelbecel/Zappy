@@ -161,4 +161,13 @@ void time_update(time_manager_t *time);
  */
 void action_update(server_t *server);
 
+/**
+ * @brief Get a client by its id
+ *
+ * @param server
+ * @param id
+ * @return client_t*
+ */
+client_t *client_get_by_id(server_t *server, ulong id);
+
 #endif /* !SERVER_H_ */

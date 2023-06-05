@@ -13,10 +13,10 @@
     #include "inventory.h"
 
 typedef enum {
-    NORTH,
-    EAST,
-    SOUTH,
-    WEST
+    NORTH = 1,
+    EAST = 2,
+    SOUTH = 3,
+    WEST = 4
 } orientation_t;
 
 typedef struct ai_s {

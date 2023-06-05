@@ -16,6 +16,11 @@
 static const graphic_command_t graphic_commands[] = {
     {"msz", &msz},
     {"bct", &bct},
+    {"mct", &mct},
+    {"tna", &tna},
+    {"sgt", &sgt},
+    {"sst", &sst},
+    {"ppo", &ppo},
     {NULL, NULL}
 };
 

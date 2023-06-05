@@ -18,7 +18,7 @@ GameData::GameData() : _mapSize(sf::Vector2i(0, 0)), _gameScale(1.0f)
 
 void GameData::parse(std::string &line)
 {
-    if (line.find("msz") != std::string::npos)      // msz = map size
+    if (line.find("msz") != std::string::npos)     // msz = map size
         return setMapSize(line);
     else if (line.find("sgt") != std::string::npos) // sgt = time unit
         return setTimeUnit(line);
@@ -33,6 +33,8 @@ void GameData::parse(std::string &line)
 
 void GameData::setMapSize(const std::string &mapSize)
 {
+    if (_mapSize.x != 0 && _mapSize.y != 0)
+        return;
     std::string temp;
     std::string x;
     std::string y;
@@ -45,6 +47,9 @@ void GameData::setMapSize(const std::string &mapSize)
     } catch (std::invalid_argument &e) {
         throw Error::InvalidArgument("GameData::setMapSize");
     }
+
+    _noise.setSize(_mapSize.x, _mapSize.y);
+    _noise.generateNoise();
 }
 
 void GameData::setTimeUnit(const std::string &timeUnit)
@@ -124,4 +129,9 @@ std::map<std::pair<int, int>, Tile> GameData::getMap() const
 uint GameData::getTimeUnit() const
 {
     return GameData::timeUnit;
+}
+
+double **GameData::getNoise() const
+{
+    return _noise.getNoise();
 }

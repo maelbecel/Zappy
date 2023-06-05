@@ -20,6 +20,8 @@ SRC	=	./Main.cpp\
 		./Server/Server.cpp\
 		./Server/Socket/Socket.cpp\
 
+SRC	+=	./Tools/PerlinNoise.cpp\
+
 SRC	+=	./UI/Animation/Animation.cpp\
 		./UI/Button/Button.cpp\
 		./UI/InputHandler/InputHandler.cpp\
@@ -47,6 +49,7 @@ INCLUDE =	-I .\
 			-I ./Parser/\
 			-I ./Server/\
 			-I ./Server/Socket/\
+			-I ./Tools/\
 			-I ./UI/Animation/\
 			-I ./UI/Button/\
 			-I ./UI/EventHandler/\

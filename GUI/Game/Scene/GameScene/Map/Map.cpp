@@ -25,92 +25,22 @@ Map::Map()
     }
 }
 
+Map::~Map()
+{
+    if (_sea)
+        delete _sea;
+    if (_ocean)
+        delete _ocean;
+}
+
 void Map::draw(sf::RenderWindow &window, GameData &gameData)
 {
     std::map<std::pair<int, int>, Tile> map = gameData.getMap();
     sf::Vector2i mapSize = gameData.getMapSize();
+    double **noise = gameData.getNoise();
 
-    /*for (int height = mapSize.y + SEA_SIZE * 2; height > 0; height--) {
-        for (int width = 0; width < mapSize.x + SEA_SIZE * 2; width++) {
-            // Isometric projection
-            Tile tile = map[std::make_pair(width, height)];
-            sf::Sprite *sprite;
-
-            if (height > mapSize.y + SEA_SIZE || width > mapSize.x + SEA_SIZE || height < SEA_SIZE || width < SEA_SIZE) {
-                sprite = _sea;
-
-                sprite->setPosition(sf::Vector2f(
-                    (-Tile::TILE_WIDTH / 2.0f) + ((width * Tile::TILE_WIDTH + height * Tile::TILE_WIDTH) / 2.0f),
-                    (Tile::TILE_WIDTH * (mapSize.y / 2.0f)) + ((width * Tile::TILE_WIDTH - height * Tile::TILE_WIDTH) / 4.0f) + 9)
-                );
-            } else {
-                sprite = tile.sprites["Grass"];
-                
-                sprite->setPosition(sf::Vector2f(
-                    (-Tile::TILE_WIDTH / 2.0f) + ((width * Tile::TILE_WIDTH + height * Tile::TILE_WIDTH) / 2.0f),
-                    (Tile::TILE_WIDTH * (mapSize.y / 2.0f)) + ((width * Tile::TILE_WIDTH - height * Tile::TILE_WIDTH) / 4.0f))
-                );
-            }
-
-            window.draw(*sprite);
-        }
-    }*/
-
-    /*for (int height = 0; height < mapSize.x + SEA_SIZE * 2; height++) {
-        for (int width = 0; width < mapSize.y + SEA_SIZE * 2; width++) {
-            // Hexagonal projection
-            sf::Vector2f position(width * Tile::TILE_WIDTH, height * 47);
-            Tile tile = map[std::make_pair(width, height)];
-            sf::Sprite *sprite;
-
-            if (height % 2 == 0)
-                position.x += Tile::TILE_WIDTH / 2;
-
-            if (height >= mapSize.y + SEA_SIZE || width >= mapSize.x + SEA_SIZE || height < SEA_SIZE || width < SEA_SIZE) {
-                position.y += 10;
-                if (width != 0)
-                    position.x -= 2;
-                sprite = _sea;
-            } else {
-                sprite = tile.sprites["Grass"];
-            }
-
-            sprite->setPosition(position.x, position.y);
-            window.draw(*sprite);
-        }
-    }*/
-
-    /*for (int height = 0; height < mapSize.y + SEA_SIZE * 2; height++) {
-        for (int width = 0; width < mapSize.x + SEA_SIZE * 2; width++) {
-            // Hexagonal to isometric projection
-            sf::Vector2f position(
-                (width - height) * (Tile::TILE_WIDTH / 2),
-                (width + height) * 47
-            );
-            sf::Sprite *sprite;
-
-            position.x += 1600 / 2;
-            position.y -= (mapSize.y + SEA_SIZE) * (Tile::TILE_HEIGHT) - 450;
-
-            // Handle tiles outside the map
-            if (height >= mapSize.y + SEA_SIZE || width >= mapSize.x + SEA_SIZE || height < SEA_SIZE || width < SEA_SIZE) {
-                // Handle sea tiles
-                position.y += 15;
-                sprite = _sea;
-            } else {
-                // Handle grass tiles
-                Tile tile = map[std::make_pair(width, height)];
-
-                sprite = tile.sprites["Grass"];
-            }
-
-            sprite->setPosition(position);
-            window.draw(*sprite);
-        }
-    }*/
-
-    for (int height = 0; height < mapSize.y + SEA_SIZE * 2; height++) {
-        for (int width = 0; width < mapSize.x + SEA_SIZE * 2; width++) {
+    for (int height = mapSize.x + SEA_SIZE * 2; height > 0; height--) {
+        for (int width = mapSize.x + SEA_SIZE * 2; width > 0; width--) {
             // Hexagonal to isometric projection
             sf::Vector2f position(
                 (width + height) * (25 * 3),
@@ -126,10 +56,17 @@ void Map::draw(sf::RenderWindow &window, GameData &gameData)
                 position.y += 1;
                 sprite = _sea;
             } else {
-                // Handle grass tiles
                 Tile tile = map[std::make_pair(width, height)];
 
-                sprite = tile.sprites["Grass"];
+                if (noise[width - SEA_SIZE][height - SEA_SIZE] < 0.3) {
+                    sprite = tile.sprites["Desert"];
+                } else if (noise[width - SEA_SIZE][height - SEA_SIZE] < 0.7) {
+                    sprite = tile.sprites["Grass"];
+                } else {
+                    position.y -= 10;
+
+                    sprite = tile.sprites["Forest"];
+                }
             }
 
             sprite->setScale(3.00, 2.25);

@@ -9,12 +9,13 @@
     #define MAP_HPP_
 
     #include "GameData.hpp"
+    #include "PerlinNoise.hpp"
 
 class Map {
     // Constructor and Destructor (default)
     public:
         Map();
-        ~Map() = default;
+        ~Map();
 
     // Methods
     public:

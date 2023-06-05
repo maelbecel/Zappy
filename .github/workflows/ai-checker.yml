@@ -24,7 +24,7 @@ jobs:
       - name: Check for Black modifications
         id: black_check
         run: |
-          black --check ./src/clientAi/
+          black --check ./clientAi/src
         continue-on-error: true
 
       - name: Check error
@@ -32,7 +32,7 @@ jobs:
 
       - name: Format code with Black
         if: ${{ env.black_output }} != '0'
-        run: black ./src/clientAi/
+        run: black ./clientAi/src
 
       - name: Commit changes
         if: ${{ env.black_output }} != '0'
@@ -40,7 +40,7 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add .
-          git commit -m "fix (./src/clientAi): coding style by gitAction"
+          git commit -m "fix (./clientAi/src/): coding style by gitAction"
           git push origin ${{ github.ref }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -67,7 +67,7 @@ jobs:
       - name: Run unit tests
         run: |
           pip install pytest
-          pytest test/clientAi/*
+          pytest clientAi/tests/ai/*
   flake8-lint:
     needs: tests
     runs-on: ubuntu-latest

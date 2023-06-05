@@ -7,6 +7,7 @@
 
 from enum import Enum
 
+
 # The class "enumActions" defines a set of actions with corresponding string
 # values.
 class enumDirection(Enum):
@@ -14,6 +15,7 @@ class enumDirection(Enum):
     EAST = 1
     SOUTH = 2
     WEST = 3
+
 
 class direction:
     def __init__(self):
@@ -37,7 +39,7 @@ class direction:
         This function updates the direction to the left based on the current
         direction.
         """
-        if (self.direction == enumDirection.NORTH):
+        if self.direction == enumDirection.NORTH:
             self.direction = enumDirection.EAST
         else:
             self.direction = enumDirection(self.direction.value - 1)
@@ -47,7 +49,7 @@ class direction:
         This function updates the direction to the right based on the current
         direction.
         """
-        if (self.direction == enumDirection.EAST):
+        if self.direction == enumDirection.EAST:
             self.direction = enumDirection.NORTH
         else:
             self.direction = enumDirection(self.direction.value + 1)

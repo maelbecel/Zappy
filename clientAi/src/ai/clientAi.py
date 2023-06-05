@@ -12,6 +12,7 @@ from ..exception.clientException import clientException as cEx
 from ..server.clientServer import clientServer
 from ..direction.direction import direction
 
+
 class clientAi:
     def __init__(self, teamName: str, port: int, host: str):
         """
@@ -148,7 +149,7 @@ class clientAi:
         the direction accordingly.
         """
         self.send(cAct.RIGHT.value)
-        if (self.response == "ok\n"):
+        if self.response == "ok\n":
             self.direction.updateDirectionToRight()
 
     def left(self):
@@ -157,7 +158,7 @@ class clientAi:
         if the response is "ok".
         """
         self.send(cAct.LEFT.value)
-        if (self.response == "ok\n"):
+        if self.response == "ok\n":
             self.direction.updateDirectionToLeft()
 
     def look(self):

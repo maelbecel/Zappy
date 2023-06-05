@@ -28,7 +28,8 @@ class Map {
 
     // Attributes
     private:
-        sf::Sprite *_sea; /*!< The sea Tiles for the map */
+        sf::Sprite *_sea;              /*!< The sea Tiles for the map */
+        sf::Sprite *_ocean;            /*!< The Ocean Tiles for the map */
 
     // Define
     public:

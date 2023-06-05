@@ -105,6 +105,8 @@ class GameData {
         std::map<std::pair<int, int>, Tile> _map; /*!< The map of the game with the coordinates of the tiles and their content */
         std::vector<std::string> _teams;          /*!< The list of all the teams */
 
+        int _gameScale;                           /*!< The scale of the game */
+
     // Global Attributes
     public:
         static uint timeUnit;                     /*!< The time unit of the game */

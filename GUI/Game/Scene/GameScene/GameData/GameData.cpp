@@ -9,7 +9,7 @@
 
 uint GameData::timeUnit = 0;
 
-GameData::GameData() : _mapSize(sf::Vector2i(0, 0))
+GameData::GameData() : _mapSize(sf::Vector2i(0, 0)), _gameScale(1.0f)
 {
     _teams = std::vector<std::string>();
 

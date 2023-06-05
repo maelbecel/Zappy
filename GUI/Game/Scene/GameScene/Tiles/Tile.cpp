@@ -12,16 +12,16 @@ Tile::Tile(sf::Vector2i coordonates, int q0, int q1, int q2, int q3, int q4, int
     _quantities = q0 + q1 + q2 + q3 + q4 + q5 + q6;
 
     try {
-        sf::Texture *summerTexture = UI::TextureManager::getTexture("./Assets/Isometric/Tiles/SummerTile.png");
+        sf::Texture *summerTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/GrassHexP.png");
 
         sf::Sprite *summerSprite = new sf::Sprite();
 
         // TODO: implement other sprite;
 
         summerSprite->setTexture(*summerTexture);
-        summerSprite->setTextureRect(sf::IntRect(0, 0, TILE_WIDTH, TILE_HEIGHT));
+        summerSprite->setTextureRect(sf::IntRect(0, 0, TILE_WIDTH, TILE_TOTAL_HEIGHT));
 
-        sprites["Summer"] = summerSprite;
+        sprites["Grass"] = summerSprite;
     } catch (Error::TextureError &e) {
         std::cerr << e.what() << std::endl;
     }

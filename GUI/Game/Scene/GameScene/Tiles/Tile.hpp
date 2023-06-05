@@ -52,8 +52,9 @@ class Tile {
 
     // Define
     public:
-        static const int TILE_WIDTH = 96;            /*!< Width of a tiles in pixel */
-        static const int TILE_HEIGHT = 65;           /*!< Height of a tiles in pixel */
+        static const int TILE_WIDTH = 32;            /*!< Width of a tiles in pixel */
+        static const int TILE_HEIGHT = 28;           /*!< Height of a tiles in pixel */
+        static const int TILE_TOTAL_HEIGHT = 30;     /*!< Height of a tiles in pixel with is 3D base */
 };
 
 #endif /* !TILE_HPP_ */

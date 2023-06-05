@@ -39,8 +39,8 @@ void Map::draw(sf::RenderWindow &window, GameData &gameData)
     sf::Vector2i mapSize = gameData.getMapSize();
     double **noise = gameData.getNoise();
 
-    for (int height = mapSize.x + SEA_SIZE * 2; height > 0; height--) {
-        for (int width = mapSize.x + SEA_SIZE * 2; width > 0; width--) {
+    for (int height = mapSize.x + SEA_SIZE * 2 - 1; height > -1; height--) {
+        for (int width = mapSize.x + SEA_SIZE * 2 - 1; width > -1; width--) {
             // Hexagonal to isometric projection
             sf::Vector2f position(
                 (width + height) * (25 * 3),

@@ -132,8 +132,26 @@ void team_destroy(team_t *team);
  */
 team_t *team_get_by_id(server_t *server, ulong id);
 
+/**
+ * @brief Create a time manager object
+ *
+ * @param freq Frequency of ticks
+ * @return time_manager_t*
+ */
 time_manager_t *time_create(uint freq);
+
+/**
+ * @brief Destroy a time manager object
+ * Free the time manager object
+ * @param time time manager object
+ */
 void time_destroy(time_manager_t *time);
+
+/**
+ * @brief Update time
+ * Add ticks based on frequency and elapsed time
+ * @param time time manager object
+ */
 void time_update(time_manager_t *time);
 
 /**

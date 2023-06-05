@@ -15,7 +15,7 @@ class evoli(clientAI):
 
     def run(self):
         while self.alive:
-            response = self.look()
+            self.look()
 
     def __getGoTo(self, value):
         x, y, max, result = 0

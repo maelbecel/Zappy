@@ -13,33 +13,9 @@
 #include "olog.h"
 #include "utils.h"
 
-static const ai_command_t ai_commands[] = {
-    {NULL, NULL}
-};
-
 static const graphic_command_t graphic_commands[] = {
     {NULL, NULL}
 };
-
-static int command_exec_ai(client_t *client, server_t *server, char **args)
-{
-    ai_t *ai = client->data;
-
-    if (!ai) {
-        dprintf(client->socket->fd, "ko\n");
-        OLOG_ERROR("AI id#%ld fd#%d> Failed to get ai data", client->id,
-        client->socket->fd);
-    }
-    OLOG_INFO("AI id#%ld fd#%d> %s", client->id, client->socket->fd,
-    client->buffer);
-    for (uint i = 0; ai_commands[i].command; i++) {
-        if (strcmp(ai_commands[i].command, args[0]) == 0) {
-            return ai_commands[i].func(client, server, ai, args);
-        }
-    }
-    dprintf(client->socket->fd, "ko\n");
-    return 0;
-}
 
 static int command_exec_graphic(client_t *client, server_t *server, char **args)
 {
@@ -57,7 +33,6 @@ static int command_exec_graphic(client_t *client, server_t *server, char **args)
 int command_exec(client_t *client, server_t *server)
 {
     char **args = ostr_to_array(client->buffer, " ");
-
     if (!args) {
         OLOG_ERROR("Client id#%ld fd#%d> Failed to parse command", client->id,
         client->socket->fd);
@@ -73,5 +48,8 @@ int command_exec(client_t *client, server_t *server)
         free(client->buffer);
         client->buffer = NULL;
     }
+    for (uint i = 0; args[i]; i++)
+        free(args[i]);
+    free(args);
     return 0;
 }

@@ -23,6 +23,7 @@ typedef struct graphic_command_s {
 } graphic_command_t;
 
 int command_exec(client_t *client, server_t *server);
+int command_exec_ai(client_t *client, server_t *server, char **args);
 
 // NONE commands
 int select_team(client_t *client, server_t *server);

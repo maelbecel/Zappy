@@ -13,8 +13,8 @@ void client_destroy(client_t *client)
 {
     if (!client)
         return;
-    if (client->actions_queue)
-        olist_destroy(client->actions_queue);
+    if (client->waiting_orders)
+        olist_destroy(client->waiting_orders);
     if (client->current_action)
         OLOG_ERRORA("Free of current action not implemented for client");
     if (client->buffer)

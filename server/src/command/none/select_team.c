@@ -10,6 +10,7 @@
 #include "server.h"
 #include "client.h"
 #include "command.h"
+#include "ai.h"
 
 static team_t *get_team_by_name(server_t *server, char *name)
 {
@@ -44,6 +45,7 @@ server_t *server)
     }
     client->team_id = team->id;
     team->team_size++;
+    client->data = ai_create(server->map->width, server->map->height);
     olist_add_node(team->clients, client);
     return 0;
 }

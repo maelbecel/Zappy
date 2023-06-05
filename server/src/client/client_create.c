@@ -21,7 +21,7 @@ client_t *client_create(void)
     client->team_id = 0;
     client->type = NONE;
     client->data = NULL;
-    client->actions_queue = NULL;
+    client->waiting_orders = olist_create();
     client->current_action = NULL;
     return client;
 }

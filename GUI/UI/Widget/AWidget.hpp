@@ -95,6 +95,14 @@ namespace UI {
             virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const = 0;
 
             /**
+             * @brief Draw the widget on hover state
+             * Function that draw all the elements of the widget on hover state
+             * @param target The target where the widget will be drawn
+             * @param states The current render states
+             */
+            virtual void drawHover(sf::RenderTarget &target, sf::RenderStates states) const = 0;
+
+            /**
              * @brief Handle the event of the widget
              * Function that handle all the events of the widget
              * @param event The event to handle
@@ -120,6 +128,7 @@ namespace UI {
             sf::Vector2f _position; /*!< Position of the widget */
             sf::Vector2f _size;     /*!< Size of the widget */
             bool _isClicked;        /*!< Bool for check if the widget got clicked or not */
+            int _nbrTiles;          /*!< Number of tiles for the widget */
     };
 };
 

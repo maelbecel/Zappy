@@ -19,7 +19,7 @@ namespace UI {
         _ip = InputBox(std::string("Ip Adress :"), sf::Vector2f(25, 50), sf::Vector2f(200, 34));
         _port = InputBox(std::string("Port :"), sf::Vector2f(25, 100), sf::Vector2f(200, 34));
 
-        ButtonWidget *button = new ButtonWidget(sf::Vector2f(35, 250), sf::Vector2f(140, 22), std::string("Connect"));
+        ButtonWidget *button = new ButtonWidget(sf::Vector2f(35, 250), sf::Vector2f(7 * 32, 32), std::string("Connect"), 7);
 
         _connect = new Button(button);
     }
@@ -35,10 +35,8 @@ namespace UI {
         _ip.draw(window, sf::RenderStates::Default);
         _port.draw(window, sf::RenderStates::Default);
         if (_connect->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))) {
-            std::cout << "Hovered" << std::endl;
             _connect->render(window, ButtonState::HOVERED);
         } else {
-            std::cout << "Not hovered" << std::endl;
             _connect->render(window, ButtonState::IDLE);
         }
     }

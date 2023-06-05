@@ -27,7 +27,10 @@ namespace UI {
 
     void Button::render(sf::RenderWindow& window, ButtonState state) const
     {
-        _widget->draw(window, sf::RenderStates::Default);
+        if (state == ButtonState::IDLE)
+            _widget->draw(window, sf::RenderStates::Default);
+        else if (state == ButtonState::HOVERED)
+            _widget->drawHover(window, sf::RenderStates::Default);
     }
 
     bool Button::isClicked(sf::Vector2f clickPosition) const

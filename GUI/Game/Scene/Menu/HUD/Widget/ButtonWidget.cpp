@@ -14,7 +14,7 @@ namespace UI {
 
     ButtonWidget::ButtonWidget() : AWidget() {};
 
-    ButtonWidget::ButtonWidget(const sf::Vector2f &position, const sf::Vector2f &size, const std::string &text) : AWidget(position, size)
+    ButtonWidget::ButtonWidget(const sf::Vector2f &position, const sf::Vector2f &size, const std::string &text, const int nbrTiles) : AWidget(position, size)
     {
         // [___Text____]
 
@@ -25,17 +25,17 @@ namespace UI {
             _name.setFont(*font);
             _name.setCharacterSize(FONT_SIZE);
             _name.setFillColor(sf::Color::Black);
-            _name.setPosition(position.x + 4.0f, position.y + 4.0f);
+            _name.setPosition(position.x + 25.0f, position.y + 16.0f);
         } catch (const Error::TextureError &e) {
-            std::cerr << "Bad Initialization of InputBox : " << text << std::endl;
+            std::cerr << "Bad Initialization of font : " << text << std::endl;
         }
 
-        _box.setSize(size);
-        _box.setPosition(position);
+        _position = position;
 
-        BackgroundStyle bgStyle(sf::Color(255, 165, 0, 255));
+        _nbrTiles = nbrTiles;
 
-        bgStyle.apply(_box);
+        _idleSprites = setIdleSprites();
+        _hoveredSprites = setHoveredSprites();
     }
 
     /////////////
@@ -44,8 +44,54 @@ namespace UI {
 
     void ButtonWidget::draw(sf::RenderTarget &target, sf::RenderStates states) const
     {
-        target.draw(_box, states);
+        sf::Sprite sprite;
+
+        for (int i = 0; i < _nbrTiles; i++) {
+            if (i == 0) {
+                sprite = _idleSprites.at("left");
+                sprite.setPosition(_position.x, _position.y);
+                sprite.setScale(1.5f, 1.5f);
+                target.draw(sprite, states);
+            } else if (i == _nbrTiles - 1) {
+                sprite = _idleSprites.at("right");
+                sprite.setPosition(_position.x + (32 * i), _position.y);
+                sprite.setScale(1.5f, 1.5f);
+                target.draw(sprite, states);
+            } else {
+                sprite = _idleSprites.at("middle");
+                sprite.setPosition(_position.x + (32 * i), _position.y);
+                sprite.setScale(1.5f, 1.5f);
+                target.draw(sprite, states);
+            }
+        }
         target.draw(_name, states);
+    }
+
+    void ButtonWidget::drawHover(sf::RenderTarget &target, sf::RenderStates states) const
+    {
+        sf::Sprite sprite;
+        sf::Text text = _name;
+
+        for (int i = 0; i < _nbrTiles; i++) {
+            if (i == 0) {
+                sprite = _hoveredSprites.at("left");
+                sprite.setPosition(_position.x, _position.y);
+                sprite.setScale(1.5f, 1.5f);
+                target.draw(sprite, states);
+            } else if (i == _nbrTiles - 1) {
+                sprite = _hoveredSprites.at("right");
+                sprite.setPosition(_position.x + (32 * i), _position.y);
+                sprite.setScale(1.5f, 1.5f);
+                target.draw(sprite, states);
+            } else {
+                sprite = _hoveredSprites.at("middle");
+                sprite.setPosition(_position.x + (32 * i), _position.y);
+                sprite.setScale(1.5f, 1.5f);
+                target.draw(sprite, states);
+            }
+        }
+        text.setPosition(_position.x + 25.0f, _position.y + 18.0f);
+        target.draw(text, states);
     }
 
     void ButtonWidget::handleEvent(sf::Event event)
@@ -66,6 +112,42 @@ namespace UI {
     void ButtonWidget::setSize(const sf::Vector2f &size)
     {
         _box.setSize(size);
+    }
+
+    std::map<std::string, sf::Sprite> ButtonWidget::setHoveredSprites()
+    {
+        std::map<std::string, sf::Sprite> sprites;
+        sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/25.png");
+        sf::Sprite sprite;
+        sprite.setTexture(*texture);
+        sprites["left"] = sprite;
+
+        texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/27.png");
+        sprite.setTexture(*texture);
+        sprites["right"] = sprite;
+
+        texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/26.png");
+        sprite.setTexture(*texture);
+        sprites["middle"] = sprite;
+        return sprites;
+    }
+
+    std::map<std::string, sf::Sprite> ButtonWidget::setIdleSprites()
+    {
+        std::map<std::string, sf::Sprite> sprites;
+        sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/22.png");
+        sf::Sprite sprite;
+        sprite.setTexture(*texture);
+        sprites["left"] = sprite;
+
+        texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/24.png");
+        sprite.setTexture(*texture);
+        sprites["right"] = sprite;
+
+        texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/23.png");
+        sprite.setTexture(*texture);
+        sprites["middle"] = sprite;
+        return sprites;
     }
 
     ///////////////

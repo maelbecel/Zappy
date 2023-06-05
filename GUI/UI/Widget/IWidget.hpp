@@ -11,6 +11,8 @@
     #include <SFML/Graphics.hpp>
     #include <memory>
 
+    #define UNUSED __attribute__((unused))
+
 namespace UI {
     /**
      * @brief Interface for all widgets
@@ -57,6 +59,14 @@ namespace UI {
              * @param states The current render states
              */
             virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const = 0;
+
+            /**
+             * @brief Draw the widget on hover state
+             * Function that draw all the elements of the widget on hover state
+             * @param target The target where the widget will be drawn
+             * @param states The current render states
+             */
+            virtual void drawHover(sf::RenderTarget &target, sf::RenderStates states) const = 0;
 
             /**
              * @brief Update the widget

@@ -30,4 +30,20 @@ typedef struct ai_s {
     bool incantation;
 } ai_t;
 
-#endif /* !AI_H_ */
+/**
+ * @brief Create a ai object
+ *
+ * @param xmax Max size of the map
+ * @param ymax Max size of the map
+ * @return ai_t* The ai object
+ */
+ai_t *ai_create(uint xmax, uint ymax);
+
+/**
+ * @brief Destroy a ai object
+ * Also destroy the inventory
+ * @param ai
+ */
+void ai_destroy(ai_t *ai);
+
+#endif

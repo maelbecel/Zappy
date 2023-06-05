@@ -21,12 +21,22 @@ typedef enum {
     NONE
 } client_type_t;
 
+/**
+ * @brief Structure that represent an action (command from ai)
+ * data can be all data needed by action.
+ * Be careful, datas can be different for each action
+ *
+ * Usually, data[0] is the client and data[1] is the server
+ * You are free to use it as you want
+ *
+ * Callback is called when duration is <= 0
+ * Duration decrease by 1 each server tick
+ */
 typedef struct action_s {
     char *name;
-    char **args;
+    void **data;
     uint duration;
-    char *response;
-    void (*callback)(struct action_s *action, socket_t *socket);
+    void (*callback)(struct action_s *action);
 } action_t;
 
 typedef struct client_s {
@@ -36,7 +46,7 @@ typedef struct client_s {
     ulong team_id;
     client_type_t type;
     void *data;
-    olist_t *actions_queue;
+    olist_t *waiting_orders;
     action_t *current_action;
 } client_t;
 

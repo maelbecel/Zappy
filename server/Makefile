@@ -44,6 +44,7 @@ SRC +=	$(SRC_DIR)/client/client_accept.c \
 		$(SRC_DIR)/client/client_disconnect.c \
 
 SRC +=	$(SRC_DIR)/command/command_exec.c \
+		$(SRC_DIR)/command/command_exec_ai.c \
 		$(SRC_DIR)/command/none/select_team.c
 
 SRC +=	$(SRC_DIR)/utils/id_generator.c \
@@ -52,6 +53,9 @@ SRC +=	$(SRC_DIR)/utils/id_generator.c \
 
 SRC +=	$(SRC_DIR)/team/team_create.c \
 		$(SRC_DIR)/team/team_destroy.c
+
+SRC +=	$(SRC_DIR)/ai/ai_create.c \
+		$(SRC_DIR)/ai/ai_destroy.c
 
 OBJ = $(SRC:%.c=$(BUILD_DIR)/%.o)
 

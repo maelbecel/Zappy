@@ -6,6 +6,8 @@
 */
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 #include "options.h"
 #include "server.h"
 
@@ -21,5 +23,6 @@ int server(int ac, char **av)
         return (EXIT_FAILTEK);
     printf("Port: %d\n", options->port);
     del_options(options);
+    srand(time(NULL));
     return main_loop(server);
 }

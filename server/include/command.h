@@ -24,6 +24,7 @@ typedef struct graphic_command_s {
 
 int command_exec(client_t *client, server_t *server);
 int command_exec_ai(client_t *client, server_t *server, char **args);
+int execute_waiting_order(client_t *client, server_t *server);
 
 // NONE commands
 int select_team(client_t *client, server_t *server);

@@ -40,7 +40,6 @@ server_t *server_create(options_t *options)
     server->running = true;
     server->clients = olist_create();
     server->max_team_size = options->clients_nb;
-    server->freq = options->freq;
     server->map = map_create(options->width, options->height);
     if (!server->map) {
         free(server);
@@ -51,5 +50,6 @@ server_t *server_create(options_t *options)
         return NULL;
     add_select_fds(server);
     setup_teams(server, options);
+    server->time = time_create(options->freq);
     return server;
 }

@@ -10,6 +10,7 @@
 
     #include <stdbool.h>
     #include <sys/select.h>
+    #include <sys/time.h>
     #include "options.h"
     #include "olist.h"
     #include "osocket.h"
@@ -39,6 +40,15 @@ typedef struct select_s {
     uint maxfd;
 } select_t;
 
+typedef struct time_manager_s {
+    uint tick;
+    uint freq;
+    struct timeval last;
+    struct timeval current;
+    double secPerTick;
+    uint actionLastTick;
+} time_manager_t;
+
 typedef struct server_s {
     socket_t *socket;
     bool running;
@@ -46,8 +56,8 @@ typedef struct server_s {
     olist_t *teams;
     uint max_team_size;
     map_t *map;
-    uint freq;
     select_t *select;
+    time_manager_t *time;
 } server_t;
 
 typedef struct team_s {
@@ -121,5 +131,16 @@ void team_destroy(team_t *team);
  * @return team_t*
  */
 team_t *team_get_by_id(server_t *server, ulong id);
+
+time_manager_t *time_create(uint freq);
+void time_destroy(time_manager_t *time);
+void time_update(time_manager_t *time);
+
+/**
+ * @brief Update actions for all clients
+ *
+ * @param server
+ */
+void action_update(server_t *server);
 
 #endif /* !SERVER_H_ */

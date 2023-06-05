@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include "server.h"
 #include "client.h"
+#include "olog.h"
 
 static void update_max_fd(server_t *server)
 {
@@ -40,6 +41,8 @@ int main_loop(server_t *server)
             return EXIT_FAILTEK;
         if (client_read(server) == EXIT_FAILTEK)
             return EXIT_FAILTEK;
+        time_update(server->time);
+        action_update(server);
     }
     return 0;
 }

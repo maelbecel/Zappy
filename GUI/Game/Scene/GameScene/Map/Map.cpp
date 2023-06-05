@@ -37,19 +37,21 @@ void Map::draw(sf::RenderWindow &window, GameData &gameData)
 {
     std::map<std::pair<int, int>, Tile> map = gameData.getMap();
     sf::Vector2i mapSize = gameData.getMapSize();
+    sf::Vector2f scale = gameData.getScale();
+    sf::Vector2f userPosition = gameData.getPosition();
     double **noise = gameData.getNoise();
 
-    for (int height = mapSize.x + SEA_SIZE * 2; height > 0; height--) {
-        for (int width = mapSize.x + SEA_SIZE * 2; width > 0; width--) {
+    for (int height = mapSize.x + SEA_SIZE * 2 - 1; height > -1; height--) {
+        for (int width = mapSize.x + SEA_SIZE * 2 - 1; width > -1; width--) {
             // Hexagonal to isometric projection
             sf::Vector2f position(
-                (width + height) * (25 * 3),
-                (width - height) * ((Tile::TILE_WIDTH - 3) * 2.25 / 2)
+                (width + height) * (25 * (scale.x + 2)),
+                (width - height) * ((Tile::TILE_WIDTH - 3) * (scale.y + 1.25) / 2)
             );
             sf::Sprite *sprite;
 
-            position.x -= Tile::TILE_WIDTH * 3;
-            position.y -= (mapSize.y + SEA_SIZE) * (Tile::TILE_HEIGHT - 3) - 900;
+            position.x += userPosition.x;
+            position.y += userPosition.y;
 
             // Handle tiles outside the map
             if (height >= mapSize.y + SEA_SIZE || width >= mapSize.x + SEA_SIZE || height < SEA_SIZE || width < SEA_SIZE) {
@@ -69,7 +71,7 @@ void Map::draw(sf::RenderWindow &window, GameData &gameData)
                 }
             }
 
-            sprite->setScale(3.00, 2.25);
+            sprite->setScale(scale.x + 2.00, scale.y + 1.25);
             sprite->setPosition(position);
             window.draw(*sprite);
         }

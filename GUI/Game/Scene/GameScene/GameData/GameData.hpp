@@ -107,6 +107,20 @@ class GameData {
          */
         double **getNoise() const;
 
+        /**
+         * @brief Get the Scale of the game
+         * 
+         * @return sf::Vector2f The scale of the game
+         */
+        sf::Vector2f getScale() const;
+
+        /**
+         * @brief Get the Position of the game
+         * 
+         * @return sf::Vector2f The position of the game
+         */
+        sf::Vector2f getPosition() const;
+
     // Attributes
     private:
         sf::Vector2i _mapSize;                    /*!< The size of the map between (10 and 50 for width and height)*/
@@ -116,6 +130,11 @@ class GameData {
         int _gameScale;                           /*!< The scale of the game */
 
         Math::Noise _noise;
+    
+    // User Info
+    private:
+        sf::Vector2f _scale;                       /*!< The user scale (mouse scroll) */
+        sf::Vector2f _position;                    /*!< The user position (arrow key) */
 
     // Global Attributes
     public:

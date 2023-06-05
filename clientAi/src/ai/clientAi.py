@@ -10,6 +10,7 @@
 from ..action.clientAction import enumActions as cAct
 from ..exception.clientException import clientException as cEx
 from ..server.clientServer import clientServer
+from ..direction.direction import direction
 
 class clientAi:
     def __init__(self, teamName: str, port: int, host: str):
@@ -32,6 +33,7 @@ class clientAi:
         self.availablePlace = 0
         self.teamName = teamName + "\n"
         self.client = clientServer(port, host)
+        self.direction = direction()
 
     def getConnectionResponse(self):
         """
@@ -80,7 +82,7 @@ class clientAi:
         """
         try:
             self.client.send(message)
-            self.client.receive()
+            self.response = self.client.receive()
         except Exception as e:
             print(e)
 
@@ -142,16 +144,21 @@ class clientAi:
 
     def right(self):
         """
-        The function sends a "right" action command.
+        This function sends a command to move the object to the right and updates
+        the direction accordingly.
         """
         self.send(cAct.RIGHT.value)
+        if (self.response == "ok\n"):
+            self.direction.updateDirectionToRight()
 
     def left(self):
         """
-        This function sends a "left" command using a value from an enum called
-        cAct.
+        This function sends a "LEFT" command and updates the direction to the left
+        if the response is "ok".
         """
         self.send(cAct.LEFT.value)
+        if (self.response == "ok\n"):
+            self.direction.updateDirectionToLeft()
 
     def look(self):
         """

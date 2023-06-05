@@ -8,6 +8,8 @@
 from enum import Enum
 
 
+# The class "enumActions" defines a set of actions with corresponding string
+# values.
 class enumActions(Enum):
     FORWARD = "Forward\n"
     RIGHT = "Right\n"

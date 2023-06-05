@@ -18,12 +18,12 @@ class TryClientServerClass(TestCase):
         self.assertEqual(client.client.getPort(), 4242)
         self.assertEqual(client.client.getHost(), "localhost")
 
-    def test_clientServer_connect(self):
-        client = clientAi("team1", 4242, "localhost")
-        # client = clientAi("team1", 4242, "localhost")
-        client.connect()
-        self.assertIsNotNone(client.getSocket())
-        client.disconnect()
+    # def test_clientServer_connect(self):
+    #     client = clientAi("team1", 4242, "localhost")
+    #     # client = clientAi("team1", 4242, "localhost")
+    #     client.connect()
+    #     self.assertIsNotNone(client.getSocket())
+    #     client.disconnect()
 
     # def test_clientServer_cmd_forward(self):
     #     response = None

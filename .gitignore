@@ -54,6 +54,7 @@ a.out
 
 # Project binaries
 zappy_*
+unit_tests
 
 # Build folder
 build/

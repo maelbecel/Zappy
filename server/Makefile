@@ -7,6 +7,8 @@
 
 SRC_DIR = src
 
+TESTS_DIR = tests
+
 BUILD_DIR = build
 
 SRC = 	$(SRC_DIR)/main.c \
@@ -91,11 +93,17 @@ fclean: clean
 	rm -f $(NAME)
 	make -C libs/list fclean
 	make -C libs/socket fclean
+	rm -f unit_tests
+
 
 re: fclean all
 
 debug: CFLAGS += -g
 debug: re
+
+tests_run:
+	@make -C $(TESTS_DIR)
+	cp $(TESTS_DIR)/unit_tests . && ./unit_tests && gcovr --exclude tests
 
 .PHONY: all clean fclean re debug
 

@@ -58,6 +58,12 @@ SRC +=	$(SRC_DIR)/team/team_create.c \
 SRC +=	$(SRC_DIR)/ai/ai_create.c \
 		$(SRC_DIR)/ai/ai_destroy.c
 
+SRC +=	$(SRC_DIR)/time/time_create.c \
+		$(SRC_DIR)/time/time_destroy.c \
+		$(SRC_DIR)/time/time_update.c
+
+SRC +=	$(SRC_DIR)/action/action_update.c
+
 OBJ = $(SRC:%.c=$(BUILD_DIR)/%.o)
 
 NAME = zappy_server

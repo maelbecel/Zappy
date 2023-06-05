@@ -22,7 +22,7 @@ typedef enum {
 typedef struct ai_s {
     ulong id;
     uint level;
-    uint time_before_death;
+    int time_before_death;
     uint x;
     uint y;
     orientation_t orientation;

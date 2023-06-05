@@ -17,7 +17,6 @@ static void get_random_pos(ai_t *ai, uint xmax, uint ymax)
     OLOG_DEBUG("Generate random pos: %d %d", ai->x, ai->y);
 }
 
-// Time before death is 1260 (126 * 10, start with 10 food)
 ai_t *ai_create(uint xmax, uint ymax)
 {
     ai_t *ai = calloc(1, sizeof(ai_t));
@@ -26,9 +25,10 @@ ai_t *ai_create(uint xmax, uint ymax)
         return NULL;
     ai->id = generate_id();
     ai->level = 1;
-    ai->time_before_death = 1260;
+    ai->time_before_death = 0;
     ai->orientation = NORTH;
     ai->inventory = inventory_create();
+    ai->inventory->food = 10;
     if (!ai->inventory) {
         free(ai);
         return NULL;

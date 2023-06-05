@@ -35,7 +35,7 @@ typedef enum {
 typedef struct action_s {
     char *name;
     void **data;
-    uint duration;
+    long duration;
     void (*callback)(struct action_s *action);
 } action_t;
 

@@ -121,6 +121,20 @@ class GameData {
          */
         sf::Vector2f getPosition() const;
 
+        /**
+         * @brief Set the Scale of the game
+         * 
+         * @param scale The scale of the game
+         */
+        void setScale(const sf::Vector2f &scale);
+
+        /**
+         * @brief Set the Position of the game
+         * 
+         * @param position The position of the game
+         */
+        void setPosition(const sf::Vector2f &position);
+
     // Attributes
     private:
         sf::Vector2i _mapSize;                    /*!< The size of the map between (10 and 50 for width and height)*/

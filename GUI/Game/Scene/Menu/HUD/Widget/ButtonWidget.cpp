@@ -24,7 +24,7 @@ namespace UI {
             _name.setString(text);
             _name.setFont(*font);
             _name.setCharacterSize(FONT_SIZE);
-            _name.setFillColor(sf::Color::Black);
+            _name.setFillColor(sf::Color(15, 143, 104, 255));
             _name.setPosition(position.x + 25.0f, position.y + 16.0f);
         } catch (const Error::TextureError &e) {
             std::cerr << "Bad Initialization of font : " << text << std::endl;

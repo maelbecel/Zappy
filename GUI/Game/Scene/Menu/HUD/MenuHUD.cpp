@@ -16,14 +16,14 @@ namespace UI {
 
         _background.setPosition(sf::Vector2f(0.0f, 0.0f));
 
-        _ip = InputBox(std::string("Ip Adress :"), sf::Vector2f(25, 50), sf::Vector2f(200, 34));
-        _port = InputBox(std::string("Port :"), sf::Vector2f(25, 100), sf::Vector2f(200, 34));
+        _ip = InputBox(std::string("Ip Adress :"), sf::Vector2f((1920 - (15 * 32)) / 2 - 30, 200), sf::Vector2f(200, 34));
+        _port = InputBox(std::string("Port :"), sf::Vector2f((1920 - (15 * 32)) / 2 - 30, 250), sf::Vector2f(200, 34));
         _settingsButtonOpen = false;
 
-        ButtonWidget *connectButton = new ButtonWidget(sf::Vector2f(35, 250), sf::Vector2f(7 * 32, 32), std::string("Connect"), 7);
-        ButtonWidget *settingsButton = new ButtonWidget(sf::Vector2f(35, 300), sf::Vector2f(7 * 32, 32), std::string("Settings"), 7);
-        ButtonWidget *quitButton = new ButtonWidget(sf::Vector2f(35, 350), sf::Vector2f(7 * 32, 32), std::string("Quit"), 7);
-        ButtonWidget *crossSettingsButton = new ButtonWidget(sf::Vector2f((1920 - (7 * 32)) / 2, 35), sf::Vector2f(7 * 32, 32), std::string("Quit"), 7);
+        ButtonWidget *connectButton = new ButtonWidget(sf::Vector2f((1920 - (15 * 32)) / 2 - 50, 350), sf::Vector2f(7 * 32, 32), std::string("Connect"), 7);
+        ButtonWidget *settingsButton = new ButtonWidget(sf::Vector2f((1920 - (15 * 32)) / 2 - 50, 400), sf::Vector2f(7 * 32, 32), std::string("Settings"), 7);
+        ButtonWidget *quitButton = new ButtonWidget(sf::Vector2f((1920 - (15 * 32)) / 2 - 50, 450), sf::Vector2f(7 * 32, 32), std::string("Quit"), 7);
+        ButtonWidget *crossSettingsButton = new ButtonWidget(sf::Vector2f((1920 - (15 * 32)) / 2 - 50, 35), sf::Vector2f(7 * 32, 32), std::string("Quit"), 7);
 
         _connectButton = new Button(connectButton);
         _settingsButton = new Button(settingsButton);
@@ -31,6 +31,20 @@ namespace UI {
         _crossSettingsButton = new Button(crossSettingsButton);
 
         _settings = Scene::Settings();
+
+        sf::Texture *titleTexture = TextureManager::getTexture("./Assets/UI_UX/Paper UI Pack/Paper UI/Folding & Cutout/2 Headers/4.png");
+        _titleHeader = sf::Sprite();
+        _titleHeader.setTexture(*titleTexture);
+        _titleHeader.setPosition(sf::Vector2f(1920 / 2 - 448 - (448 / 2) + 50, 0));
+        _titleHeader.setScale(sf::Vector2f(2, 2));
+
+        sf::Font *font = FontManager::getFont(UI::ARIAL);
+        _titleText = sf::Text();
+        _titleText.setFont(*font);
+        _titleText.setString("Zappy");
+        _titleText.setCharacterSize(50);
+        _titleText.setFillColor(sf::Color(15, 143, 104, 255));
+        _titleText.setPosition(sf::Vector2f(1920 / 2 - 448 + (448 / 4), 75));
     }
 
     MenuHUD::~MenuHUD()
@@ -42,7 +56,9 @@ namespace UI {
 
     void MenuHUD::draw(sf::RenderWindow &window)
     {
-        window.draw(_background);
+        // window.draw(_background);
+        window.draw(_titleHeader);
+        window.draw(_titleText);
         _ip.draw(window, sf::RenderStates::Default);
         _port.draw(window, sf::RenderStates::Default);
         if (_connectButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))) {
@@ -91,9 +107,12 @@ namespace UI {
                 return;
             }
             if (_settingsButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
-                std::cout << "Settings" << std::endl;
                 _settingsButtonOpen = true;
                 return;
+            }
+            if (_quitButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                std::cout << "Quit" << std::endl;
+                // Need to quit the game
             }
             _ip.isIn(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
             _port.isIn(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));

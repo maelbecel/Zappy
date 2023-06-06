@@ -78,7 +78,7 @@ void Map::draw(sf::RenderWindow &window, GameData &gameData)
                     else if (scale.x == 0.25f)
                         position.y -= 27 * scale.x;
                     else
-                        position.y -= 5;
+                        position.y -= 6;
 
                     sprite = tile.sprites["Forest"];
                 }

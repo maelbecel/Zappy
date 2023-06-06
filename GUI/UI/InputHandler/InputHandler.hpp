@@ -11,6 +11,7 @@
     #include <SFML/Graphics.hpp>
 
     #include <unordered_map>
+    #include <functional>
 
 namespace UI {
     /**

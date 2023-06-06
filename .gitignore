@@ -51,6 +51,15 @@ Module.symvers
 Mkfile.old
 dkms.conf
 a.out
+
+# Build folder
+build/
+
+# IDE
+.idea
+.vscode
+*.code-workspace
+
 zappy_server
 zappy_gui
 *.vscode

@@ -20,7 +20,7 @@ jobs:
 
       - name: Run norme.sh script
         run: |
-          ./norme.sh -v .
+          ./norme.sh ./ -v
           exit_code=$?
           if [ $exit_code -ne 0 ]; then
             echo "The norme.sh script failed. Push has been blocked."

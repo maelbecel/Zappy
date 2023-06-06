@@ -13,6 +13,12 @@
     #include "IWidget.hpp"
 
 namespace UI {
+    enum ButtonState {
+        IDLE,
+        HOVERED,
+        CLICKED
+    };
+
     class IButton {
         public:
             /**
@@ -23,7 +29,7 @@ namespace UI {
 
             /**
              * @brief Set the Position of the button
-             * 
+             *
              * @param position The button position
              */
             virtual void setPosition(const sf::Vector2f& position) = 0;
@@ -67,7 +73,7 @@ namespace UI {
              *
              * @param window The window where the button will be rendered
              */
-            virtual void render(sf::RenderWindow& window) const = 0;
+            virtual void render(sf::RenderWindow& window, ButtonState state) const = 0;
 
             /**
              * @brief Set the Widget object
@@ -84,6 +90,15 @@ namespace UI {
              * @return false        If the button is not clicked
              */
             virtual bool isClicked(sf::Vector2f clickPosition) const = 0;
+
+            /**
+             * @brief Check if the button is hovered
+             *
+             * @param mousePosition The mouse position
+             * @return true         If the button is hovered
+             * @return false        If the button is not hovered
+             */
+            virtual bool isHovered(sf::Vector2f mousePosition) const = 0;
     };
 };
 

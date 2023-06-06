@@ -33,7 +33,7 @@ namespace UI {
              *
              * @param window The window where the button will be rendered
              */
-            void render(sf::RenderWindow& window) const override;
+            void render(sf::RenderWindow& window, ButtonState state) const override;
 
             /**
              * @brief Check if the button is clicked
@@ -43,6 +43,15 @@ namespace UI {
              * @return false        The button is not clicked
              */
             bool isClicked(sf::Vector2f clickPosition) const override;
+
+            /**
+             * @brief Check if the button is hovered
+             *
+             * @param mousePosition The mouse position
+             * @return true         The button is hovered
+             * @return false        The button is not hovered
+             */
+            bool isHovered(sf::Vector2f mousePosition) const override;
 
         // Setters & Getters
         public:
@@ -63,7 +72,7 @@ namespace UI {
 
             /**
              * @brief Set the Position of the button
-             * 
+             *
              * @param position The button position
              */
             void setPosition(const sf::Vector2f& position) override;

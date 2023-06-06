@@ -11,6 +11,8 @@
     #include <SFML/Graphics.hpp>
     #include <memory>
 
+    #define UNUSED __attribute__((unused))
+
 namespace UI {
     /**
      * @brief Interface for all widgets
@@ -31,7 +33,7 @@ namespace UI {
 
             /**
              * @brief Get the Position of the widget
-             * 
+             *
              * @return sf::Vector2f The position of the widget
              */
             virtual sf::Vector2f getPosition() const = 0;
@@ -45,7 +47,7 @@ namespace UI {
 
             /**
              * @brief Get the Size of the widget
-             * 
+             *
              * @return sf::Vector2f The size of the widget
              */
             virtual sf::Vector2f getSize() const = 0;
@@ -57,6 +59,14 @@ namespace UI {
              * @param states The current render states
              */
             virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const = 0;
+
+            /**
+             * @brief Draw the widget on hover state
+             * Function that draw all the elements of the widget on hover state
+             * @param target The target where the widget will be drawn
+             * @param states The current render states
+             */
+            virtual void drawHover(sf::RenderTarget &target, sf::RenderStates states) const = 0;
 
             /**
              * @brief Update the widget
@@ -78,7 +88,7 @@ namespace UI {
              * @return true         The widget got clicked
              * @return false        The widget didn't get clicked
              */
-            virtual bool isClicked(sf::Vector2f mousePosition) = 0;
+            virtual bool isIn(sf::Vector2f mousePosition) = 0;
     };
 };
 

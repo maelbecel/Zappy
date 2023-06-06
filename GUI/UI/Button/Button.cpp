@@ -24,15 +24,23 @@ namespace UI {
     {
         _callback();
     }
-    
-    void Button::render(sf::RenderWindow& window) const
+
+    void Button::render(sf::RenderWindow& window, ButtonState state) const
     {
-        _widget->draw(window, sf::RenderStates::Default);
+        if (state == ButtonState::IDLE)
+            _widget->draw(window, sf::RenderStates::Default);
+        else if (state == ButtonState::HOVERED)
+            _widget->drawHover(window, sf::RenderStates::Default);
     }
 
     bool Button::isClicked(sf::Vector2f clickPosition) const
     {
-        return _widget->isClicked(clickPosition);
+        return _widget->isIn(clickPosition);
+    }
+
+    bool Button::isHovered(sf::Vector2f mousePosition) const
+    {
+        return _widget->isIn(mousePosition);
     }
 
     ///////////////////////

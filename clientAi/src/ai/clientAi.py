@@ -95,7 +95,7 @@ class clientAi:
         try:
             self.response = self.client.receive()
             print("RESPONSE -> ", self.response)
-            if (self.response == "dead\n"):
+            if self.response == "dead\n":
                 self.alive = False
                 print("DEAD")
                 return
@@ -152,9 +152,9 @@ class clientAi:
         """
         This function sends a command to move forward.
         """
-        if (self.alive):
+        if self.alive:
             self.send(cAct.FORWARD.value)
-        if (self.response == "ok\n" and self.alive):
+        if self.response == "ok\n" and self.alive:
             print("forward")
             self.direction.updateCoord()
 
@@ -163,7 +163,7 @@ class clientAi:
         This function sends a command to move the object to the right and updates
         the direction accordingly.
         """
-        if (self.alive):
+        if self.alive:
             self.send(cAct.RIGHT.value)
         if self.response == "ok\n" and self.alive:
             print("right")
@@ -174,7 +174,7 @@ class clientAi:
         This function sends a "LEFT" command and updates the direction to the left
         if the response is "ok".
         """
-        if (self.alive):
+        if self.alive:
             self.send(cAct.LEFT.value)
         if self.response == "ok\n" and self.alive:
             print("left")
@@ -190,9 +190,9 @@ class clientAi:
         response depends on the implementation of the server and the game being
         played.
         """
-        if (self.alive):
+        if self.alive:
             self.send(cAct.LOOK.value)
-        if (self.isValidLook() and self.alive):
+        if self.isValidLook() and self.alive:
             print("look -> %s" % self.response)
             # make a decision
             ...
@@ -201,11 +201,12 @@ class clientAi:
         """
         This function sends a request for inventory information.
         """
-        if (self.alive):
+        if self.alive:
             self.send(cAct.INVENTORY.value)
-        if (self.response == "ok\n" and self.alive):
+        if self.response == "ok\n" and self.alive:
             print("inventory -> %s" % self.response)
             return
+
     def broadcast(self, message: str):
         """
         This function sends a broadcast message with a given string message.
@@ -216,7 +217,7 @@ class clientAi:
         character, and then sent using the "send" method.
         """
         self.send(cAct.BROADCAST.value + " " + message + "\n")
-        if (self.response == "ok\n" and self.alive):
+        if self.response == "ok\n" and self.alive:
             print("broadcast -> %s" % self.response)
             return
 
@@ -225,7 +226,7 @@ class clientAi:
         This function sends a message to connect to neighboring nodes.
         """
         self.send(cAct.CONNECT_NBR.value)
-        if (self.response.isdigit() and self.alive):
+        if self.response.isdigit() and self.alive:
             self.availablePlaces = int(self.response.split("\n")[0])
             print("connect_nbr -> %s" % self.response)
             return
@@ -235,7 +236,7 @@ class clientAi:
         The function sends a fork command using the cAct enum value.
         """
         self.send(cAct.FORK.value)
-        if (self.response == "ok\n" and self.alive):
+        if self.response == "ok\n" and self.alive:
             print("fork -> %s" % self.response)
             return
 
@@ -244,7 +245,7 @@ class clientAi:
         The function "eject" sends a command to eject something.
         """
         self.send(cAct.EJECT.value)
-        if (self.response == "ok\n" and self.alive):
+        if self.response == "ok\n" and self.alive:
             print("eject -> %s" % self.response)
             return
 
@@ -258,7 +259,7 @@ class clientAi:
         be sent to the game engine to execute the "take" action.
         """
         self.send(cAct.TAKE.value + " " + object + "\n")
-        if (self.response == "ok\n" and self.alive):
+        if self.response == "ok\n" and self.alive:
             # handle inventory
             print("take -> %s" % self.response)
             return
@@ -272,7 +273,7 @@ class clientAi:
         class.
         """
         self.send(cAct.SET.value + " " + object + "\n")
-        if (self.response == "ok\n" and self.alive):
+        if self.response == "ok\n" and self.alive:
             # handle inventory
             print("set -> %s" % self.response)
             return
@@ -283,7 +284,7 @@ class clientAi:
         cAct.INCANTATION.
         """
         self.send(cAct.INCANTATION.value)
-        if (self.response == "ok\n" and self.alive):
+        if self.response == "ok\n" and self.alive:
             # gain level
             print("incantation -> %s" % self.response)
             return
@@ -293,7 +294,7 @@ class clientAi:
         The function "run" is defined with an ellipsis as its body, indicating that
         it is not yet implemented.
         """
-        while (self.alive):
+        while self.alive:
             self.forward()
 
     def isValidLook(self):

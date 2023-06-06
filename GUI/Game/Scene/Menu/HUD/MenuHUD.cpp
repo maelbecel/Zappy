@@ -23,10 +23,12 @@ namespace UI {
         ButtonWidget *connectButton = new ButtonWidget(sf::Vector2f(35, 250), sf::Vector2f(7 * 32, 32), std::string("Connect"), 7);
         ButtonWidget *settingsButton = new ButtonWidget(sf::Vector2f(35, 300), sf::Vector2f(7 * 32, 32), std::string("Settings"), 7);
         ButtonWidget *quitButton = new ButtonWidget(sf::Vector2f(35, 350), sf::Vector2f(7 * 32, 32), std::string("Quit"), 7);
+        ButtonWidget *crossSettingsButton = new ButtonWidget(sf::Vector2f((1920 - (7 * 32)) / 2, 35), sf::Vector2f(7 * 32, 32), std::string("Quit"), 7);
 
         _connectButton = new Button(connectButton);
         _settingsButton = new Button(settingsButton);
         _quitButton = new Button(quitButton);
+        _crossSettingsButton = new Button(crossSettingsButton);
 
         _settings = Scene::Settings();
     }
@@ -58,6 +60,14 @@ namespace UI {
         } else {
             _quitButton->render(window, ButtonState::IDLE);
         }
+        if (_settingsButtonOpen == true) {
+            _settings.Render(window);
+            if (_crossSettingsButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))) {
+                _crossSettingsButton->render(window, ButtonState::HOVERED);
+            } else {
+                _crossSettingsButton->render(window, ButtonState::IDLE);
+            }
+        }
     }
 
     void MenuHUD::handleEvent(sf::Event event, Network::Server &server)
@@ -65,8 +75,7 @@ namespace UI {
         if (event.type == sf::Event::MouseButtonPressed) {
             if (event.mouseButton.button != sf::Mouse::Left)
                 return;
-            if (_settingsButtonOpen) {
-
+            if (_crossSettingsButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
                 _settingsButtonOpen = false;
             }
             if (_connectButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {

@@ -43,11 +43,13 @@ namespace UI {
         // Attributes
         private:
             sf::RectangleShape _background;         /*!< Background of the Settings HUD */
-            InputBox _ip;                           /*!< Input box for the ip */
-            InputBox _port;                         /*!< Input box for the port */
-            IButton *_connectButton;                /*!< Button to connect to the server */
-            IButton *_settingsButton;               /*!< Button to go to the settings */
-            IButton *_quitButton;                   /*!< Button to quit the game */
+            sf::Sprite _backgroundSprite;           /*!< Sprite of the Settings HUD */
+            IButton *_decreaseSoundButton;          /*!< Button to decrease the sound */
+            IButton *_increaseSoundButton;          /*!< Button to increase the sound */
+            IButton *_decreaseMusicButton;          /*!< Button to decrease the music */
+            IButton *_increaseMusicButton;          /*!< Button to increase the music */
+            InputBox _sound;                        /*!< Input box for the sound */
+            InputBox _music;                        /*!< Input box for the music */
     };
 };
 

@@ -51,6 +51,7 @@ namespace UI {
             IButton *_quitButton;                  /*!< Button to quit the game */
             bool _settingsButtonOpen;              /*!< Boolean to know if the settings are open */
             Scene::Settings _settings;                    /*!< Settings scene */
+            IButton *_crossSettingsButton;                /*!< Button to close the settings */
     };
 };
 

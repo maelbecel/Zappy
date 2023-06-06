@@ -65,7 +65,20 @@ void Map::draw(sf::RenderWindow &window, GameData &gameData)
                 } else if (noise[width - SEA_SIZE][height - SEA_SIZE] < 0.7) {
                     sprite = tile.sprites["Grass"];
                 } else {
-                    position.y -= 10;
+                    if (scale.x >= 2.0f && scale.x <= 4.0f)
+                        position.y -= 7 * scale.x;
+                    else if (scale.x >= 4.0f)
+                        position.y -= 6 * scale.x;
+                    else if (scale.x == 1.0f)
+                        position.y -= 10 * scale.x;
+                    else if (scale.x < 1.0f && scale.x > 0.5f)
+                        position.y -= 14 * scale.x;
+                    else if (scale.x == 0.5f)
+                        position.y -= 20 * scale.x;
+                    else if (scale.x == 0.25f)
+                        position.y -= 27 * scale.x;
+                    else
+                        position.y -= 6;
 
                     sprite = tile.sprites["Forest"];
                 }

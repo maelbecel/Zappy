@@ -15,4 +15,4 @@ commit = sys.argv[1]
 
 # Check the commit format
 result = check_commit_format(commit)
-print(result)
+exit(result)

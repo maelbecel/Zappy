@@ -19,7 +19,7 @@ jobs:
 
     - name: Run Python Script
       run: |
-        commit=$(git log -1 --pretty=format:"%H")
+        commit=$(git log -1 --pretty=format:'%s' ${{ github.sha }})
         python .github/commit-checker.py $commit
         if [ $? -eq 1 ]; then
           echo "Python script returned 1. Cancelling the push..."

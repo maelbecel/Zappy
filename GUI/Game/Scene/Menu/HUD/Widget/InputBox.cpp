@@ -25,7 +25,7 @@ namespace UI {
             _name.setString(name);
             _name.setFont(*font);
             _name.setCharacterSize(FONT_SIZE);
-            _name.setFillColor(sf::Color::Black);
+            _name.setFillColor(sf::Color(15, 143, 104, 255));
             _name.setPosition(position);
         } catch (const Error::TextureError &e) {
             std::cerr << "Bad Initialization of InputBox : " << name << std::endl;
@@ -124,7 +124,7 @@ namespace UI {
         _size = inputBox._size;
         _box = inputBox._box;
         _isClicked = inputBox._isClicked;
-    
+
         value = inputBox.value;
         return *this;
     }

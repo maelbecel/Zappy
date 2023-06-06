@@ -85,6 +85,7 @@ SRC +=	$(SRC_DIR)/command/graphic/msz.c \
 SRC +=	$(SRC_DIR)/command/ai/forward.c \
 		$(SRC_DIR)/command/ai/right.c \
 		$(SRC_DIR)/command/ai/left.c \
+		$(SRC_DIR)/command/ai/inventory.c \
 		$(SRC_DIR)/command/ai/notif_graphic.c
 
 OBJ = $(SRC:%.c=$(BUILD_DIR)/%.o)

@@ -43,6 +43,16 @@ namespace Scene {
             } else if (event.key.code == sf::Keyboard::R) {
                 _gameData.setScale(_gameData.getScale() - sf::Vector2f(0.25, 0.25));
             }
+
+            if (event.key.code == sf::Keyboard::Right)
+                _gameData.setPosition(_gameData.getPosition() - sf::Vector2f(10, 0));
+            else if (event.key.code == sf::Keyboard::Left)
+                _gameData.setPosition(_gameData.getPosition() + sf::Vector2f(10, 0));
+            else if (event.key.code == sf::Keyboard::Up)
+                _gameData.setPosition(_gameData.getPosition() + sf::Vector2f(0, 10));
+            else if (event.key.code == sf::Keyboard::Down)
+                _gameData.setPosition(_gameData.getPosition() - sf::Vector2f(0, 10));
+
         } else if (event.type == sf::Event::MouseWheelScrolled) {
             if (event.mouseWheelScroll.delta > 0) {
                 _gameData.setScale(_gameData.getScale() + sf::Vector2f(0.25, 0.25));

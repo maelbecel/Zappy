@@ -18,9 +18,9 @@ int do_pin(client_t *client, client_t *graphic)
         return 0;
     }
     dprintf(graphic->socket->fd, "pin %ld %d %d %d %d %d %d %d %d %d\n",
-    client->id, ai->x, ai->y, ai->inventory->food, ai->inventory->linemate,
-    ai->inventory->deraumere, ai->inventory->sibur, ai->inventory->mendiane,
-    ai->inventory->phiras, ai->inventory->thystame);
+    client->id, ai->x, ai->y, ai->inventory->items[0], ai->inventory->items[1],
+    ai->inventory->items[2], ai->inventory->items[3], ai->inventory->items[4],
+    ai->inventory->items[5], ai->inventory->items[6]);
     return 0;
 }
 

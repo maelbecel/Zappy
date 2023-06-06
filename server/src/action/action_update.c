@@ -39,8 +39,8 @@ static int update_food(client_t *client, uint tickDiff, server_t *server)
         return -1;
     ai->time_before_death -= tickDiff;
     if (ai->time_before_death <= 0) {
-        if (ai->inventory->food > 0) {
-            ai->inventory->food--;
+        if (ai->inventory->items[FOOD] > 0) {
+            ai->inventory->items[FOOD]--;
             ai->time_before_death += 126;
         } else {
             ai_dead(client, server, false);

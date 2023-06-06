@@ -8,18 +8,23 @@
 #include <stdlib.h>
 #include "inventory.h"
 
+const char *item_names[] = {
+    "food",
+    "linemate",
+    "deraumere",
+    "sibur",
+    "mendiane",
+    "phiras",
+    "thystame"
+};
+
 inventory_t *inventory_create(void)
 {
     inventory_t *inventory = calloc(1, sizeof(inventory_t));
 
     if (!inventory)
         return (NULL);
-    inventory->food = 0;
-    inventory->linemate = 0;
-    inventory->deraumere = 0;
-    inventory->sibur = 0;
-    inventory->mendiane = 0;
-    inventory->phiras = 0;
-    inventory->thystame = 0;
+    for (uint i = 0; i < MAX_INVENTORY; i++)
+        inventory->items[i] = 0;
     return (inventory);
 }

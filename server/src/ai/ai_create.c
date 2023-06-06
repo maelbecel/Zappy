@@ -28,7 +28,7 @@ ai_t *ai_create(uint xmax, uint ymax)
     ai->time_before_death = 0;
     ai->orientation = NORTH;
     ai->inventory = inventory_create();
-    ai->inventory->food = 10;
+    ai->inventory->items[FOOD] = 10;
     if (!ai->inventory) {
         free(ai);
         return NULL;

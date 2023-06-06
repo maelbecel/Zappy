@@ -31,6 +31,7 @@ int forward(client_t *client, server_t *server, UNUSED char **args);
 int right(client_t *client, server_t *server, UNUSED char **args);
 int left(client_t *client, server_t *server, UNUSED char **args);
 int inventory(client_t *client, UNUSED server_t *server, UNUSED char **args);
+int take(client_t *client, server_t *server, char **args);
 
 void notif_graphic(client_t *client, server_t *server,
 int (*func)(client_t *client, client_t *graphic));
@@ -39,6 +40,7 @@ int (*func)(client_t *client, client_t *graphic));
 int msz(client_t *client, server_t *server, UNUSED char **args);
 int bct(client_t *client, server_t *server, char **args);
 void print_bct(client_t *client, tile_t *tile, int x, int y);
+void print_bct_for_all(server_t *server, tile_t *tile, int x, int y);
 int mct(client_t *client, server_t *server, UNUSED char **args);
 int tna(client_t *client, server_t *server, UNUSED char **args);
 int sgt(client_t *client, server_t *server, UNUSED char **args);
@@ -51,6 +53,7 @@ int pnw(client_t *graphic, client_t *target, server_t *server);
 int welcome(client_t *client, server_t *server);
 int pin(client_t *client, server_t *server, char **args);
 int do_pin(client_t *client, client_t *graphic);
+int pgt(server_t *server, ulong client_id, item_t item);
 
 // ALL commands
 void client_disconnect(server_t *server, client_t *client);

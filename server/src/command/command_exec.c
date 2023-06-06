@@ -22,6 +22,7 @@ static const command_t graphic_commands[] = {
     {"sst", &sst},
     {"ppo", &ppo},
     {"plv", &plv},
+    {"pin", &pin},
     {NULL, NULL}
 };
 

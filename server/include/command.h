@@ -46,6 +46,8 @@ int plv(client_t *client, server_t *server, char **args);
 int do_plv(client_t *client, client_t *graphic);
 int pnw(client_t *graphic, client_t *target, server_t *server);
 int welcome(client_t *client, server_t *server);
+int pin(client_t *client, server_t *server, char **args);
+int do_pin(client_t *client, client_t *graphic);
 
 // ALL commands
 void client_disconnect(server_t *server, client_t *client);

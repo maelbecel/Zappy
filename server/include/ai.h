@@ -13,18 +13,18 @@
     #include "inventory.h"
 
 typedef enum {
-    NORTH,
-    EAST,
-    SOUTH,
-    WEST
+    NORTH = 1,
+    EAST = 2,
+    SOUTH = 3,
+    WEST = 4
 } orientation_t;
 
 typedef struct ai_s {
     ulong id;
     uint level;
     int time_before_death;
-    uint x;
-    uint y;
+    int x;
+    int y;
     orientation_t orientation;
     inventory_t *inventory;
     bool incantation;
@@ -53,6 +53,6 @@ void ai_destroy(ai_t *ai);
  * @param client
  * @param server
  */
-void ai_dead(client_t *client, server_t *server);
+void ai_dead(client_t *client, server_t *server, bool disconnect);
 
 #endif

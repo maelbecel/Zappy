@@ -30,6 +30,14 @@ static void send_infos(client_t *client, team_t *team, server_t *server)
     server->max_team_size - team->team_size);
     dprintf(client->socket->fd, "%d %d\n", server->map->width,
     server->map->height);
+
+    OLIST_FOREACH(server->clients, node) {
+        client_t *tmp = (client_t *)node->data;
+        if (!tmp)
+            continue;
+        if (tmp->type == GRAPHIC)
+            pnw(tmp, client, server);
+    }
 }
 
 static int update_team_for_client(client_t *client, team_t *team,
@@ -59,6 +67,7 @@ int select_team(client_t *client, server_t *server)
     if (strcmp(client->buffer, "GRAPHIC") == 0) {
         OLOG_DEBUG("Client %d is now a graphic client", client->socket->fd);
         client->type = GRAPHIC;
+        welcome(client, server);
         return 0;
     }
     team = get_team_by_name(server, client->buffer);

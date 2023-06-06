@@ -13,14 +13,23 @@
 #include "olog.h"
 #include "utils.h"
 
-static const graphic_command_t graphic_commands[] = {
+static const command_t graphic_commands[] = {
     {"msz", &msz},
     {"bct", &bct},
+    {"mct", &mct},
+    {"tna", &tna},
+    {"sgt", &sgt},
+    {"sst", &sst},
+    {"ppo", &ppo},
+    {"plv", &plv},
+    {"pin", &pin},
     {NULL, NULL}
 };
 
 static int command_exec_graphic(client_t *client, server_t *server, char **args)
 {
+    if (strlen(client->buffer) == 0)
+        return 0;
     OLOG_INFO("GRAPHIC id#%ld fd#%d> %s", client->id, client->socket->fd,
     client->buffer);
     for (uint i = 0; graphic_commands[i].command; i++) {

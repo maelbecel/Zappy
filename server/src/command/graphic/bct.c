@@ -25,12 +25,19 @@ static int do_bct(client_t *client, server_t *server, char **args)
         dprintf(client->socket->fd, "sbp\n");
         return 0;
     }
+    print_bct(client, tile, x, y);
+    return 0;
+}
+
+void print_bct(client_t *client, tile_t *tile, int x, int y)
+{
+    if (!tile || !client)
+        return;
     dprintf(client->socket->fd, "bct %d %d %d %d %d %d %d %d %d\n", x, y,
         tile->inventory->food, tile->inventory->linemate,
         tile->inventory->deraumere, tile->inventory->sibur,
         tile->inventory->mendiane, tile->inventory->phiras,
         tile->inventory->thystame);
-    return 0;
 }
 
 int bct(client_t *client, server_t *server, char **args)

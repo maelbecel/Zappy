@@ -13,15 +13,11 @@
     #include "ai.h"
     #include "olog.h"
 
-typedef struct ai_command_s {
-    char *command;
-    int (*func)(client_t *client, server_t *server, ai_t *ai, char **args);
-} ai_command_t;
-
-typedef struct graphic_command_s {
+typedef struct command_s {
     char *command;
     int (*func)(client_t *client, server_t *server, char **args);
-} graphic_command_t;
+} command_t;
+
 
 int command_exec(client_t *client, server_t *server);
 int command_exec_ai(client_t *client, server_t *server, char **args);
@@ -30,9 +26,28 @@ int execute_waiting_order(client_t *client, server_t *server);
 // NONE commands
 int select_team(client_t *client, server_t *server);
 
+// AI commands
+int forward(client_t *client, server_t *server, UNUSED char **args);
+
+void notif_graphic(client_t *client, server_t *server,
+int (*func)(client_t *client, client_t *graphic));
+
 // Graphic commands
 int msz(client_t *client, server_t *server, UNUSED char **args);
 int bct(client_t *client, server_t *server, char **args);
+void print_bct(client_t *client, tile_t *tile, int x, int y);
+int mct(client_t *client, server_t *server, UNUSED char **args);
+int tna(client_t *client, server_t *server, UNUSED char **args);
+int sgt(client_t *client, server_t *server, UNUSED char **args);
+int sst(client_t *client, server_t *server, char **args);
+int ppo(client_t *client, server_t *server, char **args);
+int do_ppo(client_t *client, client_t *graphic);
+int plv(client_t *client, server_t *server, char **args);
+int do_plv(client_t *client, client_t *graphic);
+int pnw(client_t *graphic, client_t *target, server_t *server);
+int welcome(client_t *client, server_t *server);
+int pin(client_t *client, server_t *server, char **args);
+int do_pin(client_t *client, client_t *graphic);
 
 // ALL commands
 void client_disconnect(server_t *server, client_t *client);

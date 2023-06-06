@@ -161,4 +161,34 @@ void time_update(time_manager_t *time);
  */
 void action_update(server_t *server);
 
+/**
+ * @brief Create a new action
+ *
+ * @param name Name of action
+ * @param server Link to server object
+ * @param client Link to client object
+ * @param duration Duration
+ * @return action_t*
+ */
+action_t *action_create(char *name, server_t *server, client_t *client,
+ulong duration);
+
+/**
+ * @brief Destroy an action object
+ * Free the action object
+ * @param action
+ */
+void action_destroy(action_t *action);
+
+/**
+ * @brief Get a client by its id
+ *
+ * @param server
+ * @param id
+ * @return client_t*
+ */
+client_t *client_get_by_id(server_t *server, ulong id);
+
+
+
 #endif /* !SERVER_H_ */

@@ -31,7 +31,7 @@ class clientAi:
         self.alive = True
         self.mapSize = [0, 0]
         self.response = None
-        self.availablePlace = 0
+        self.availablePlaces = 0
         self.teamName = teamName + "\n"
         self.client = clientServer(port, host)
         self.direction = direction()
@@ -41,7 +41,7 @@ class clientAi:
         This function parses a response from a server and extracts information
         about available places and map size.
         """
-        self.availablePlace = int(self.response[0])
+        self.availablePlaces = int(self.response[0])
         self.response = self.response[1].split(" ")
         if len(self.response) != 2:
             raise cEx.clientException("Error: map size is invalid")
@@ -83,7 +83,7 @@ class clientAi:
         """
         try:
             self.client.send(message)
-            self.response = self.client.receive()
+            self.response = self.receive()
         except Exception as e:
             print(e)
 
@@ -93,7 +93,18 @@ class clientAi:
         exceptions that occur.
         """
         try:
-            self.client.receive()
+            self.response = self.client.receive()
+            print("RESPONSE -> ", self.response)
+            if (self.response == "dead\n"):
+                self.alive = False
+                print("DEAD")
+                return
+            elif self.response.find("message") != -1:
+                print("Message: " + self.response)
+                self.receive()
+            elif self.response.find("eject") != -1:
+                # handle eject
+                ...
         except Exception as e:
             print(e)
 
@@ -141,16 +152,21 @@ class clientAi:
         """
         This function sends a command to move forward.
         """
-        self.send(cAct.FORWARD.value)
-        self.direction.updateCoord()
+        if (self.alive):
+            self.send(cAct.FORWARD.value)
+        if (self.response == "ok\n" and self.alive):
+            print("forward")
+            self.direction.updateCoord()
 
     def right(self):
         """
         This function sends a command to move the object to the right and updates
         the direction accordingly.
         """
-        self.send(cAct.RIGHT.value)
-        if self.response == "ok\n":
+        if (self.alive):
+            self.send(cAct.RIGHT.value)
+        if self.response == "ok\n" and self.alive:
+            print("right")
             self.direction.updateDirectionToRight()
 
     def left(self):
@@ -158,8 +174,10 @@ class clientAi:
         This function sends a "LEFT" command and updates the direction to the left
         if the response is "ok".
         """
-        self.send(cAct.LEFT.value)
-        if self.response == "ok\n":
+        if (self.alive):
+            self.send(cAct.LEFT.value)
+        if self.response == "ok\n" and self.alive:
+            print("left")
             self.direction.updateDirectionToLeft()
 
     def look(self):
@@ -172,16 +190,22 @@ class clientAi:
         response depends on the implementation of the server and the game being
         played.
         """
-        self.client.send(cAct.LOOK.value)
-        self.response = self.client.receive()
-        return self.response
+        if (self.alive):
+            self.send(cAct.LOOK.value)
+        if (self.isValidLook() and self.alive):
+            print("look -> %s" % self.response)
+            # make a decision
+            ...
 
     def inventory(self):
         """
         This function sends a request for inventory information.
         """
-        self.send(cAct.INVENTORY.value)
-
+        if (self.alive):
+            self.send(cAct.INVENTORY.value)
+        if (self.response == "ok\n" and self.alive):
+            print("inventory -> %s" % self.response)
+            return
     def broadcast(self, message: str):
         """
         This function sends a broadcast message with a given string message.
@@ -192,24 +216,37 @@ class clientAi:
         character, and then sent using the "send" method.
         """
         self.send(cAct.BROADCAST.value + " " + message + "\n")
+        if (self.response == "ok\n" and self.alive):
+            print("broadcast -> %s" % self.response)
+            return
 
     def connectNbr(self):
         """
         This function sends a message to connect to neighboring nodes.
         """
         self.send(cAct.CONNECT_NBR.value)
+        if (self.response.isdigit() and self.alive):
+            self.availablePlaces = int(self.response.split("\n")[0])
+            print("connect_nbr -> %s" % self.response)
+            return
 
     def fork(self):
         """
         The function sends a fork command using the cAct enum value.
         """
         self.send(cAct.FORK.value)
+        if (self.response == "ok\n" and self.alive):
+            print("fork -> %s" % self.response)
+            return
 
     def eject(self):
         """
         The function "eject" sends a command to eject something.
         """
         self.send(cAct.EJECT.value)
+        if (self.response == "ok\n" and self.alive):
+            print("eject -> %s" % self.response)
+            return
 
     def take(self, object: str):
         """
@@ -221,6 +258,10 @@ class clientAi:
         be sent to the game engine to execute the "take" action.
         """
         self.send(cAct.TAKE.value + " " + object + "\n")
+        if (self.response == "ok\n" and self.alive):
+            # handle inventory
+            print("take -> %s" % self.response)
+            return
 
     def set(self, object: str):
         """
@@ -231,6 +272,10 @@ class clientAi:
         class.
         """
         self.send(cAct.SET.value + " " + object + "\n")
+        if (self.response == "ok\n" and self.alive):
+            # handle inventory
+            print("set -> %s" % self.response)
+            return
 
     def incantation(self):
         """
@@ -238,10 +283,59 @@ class clientAi:
         cAct.INCANTATION.
         """
         self.send(cAct.INCANTATION.value)
+        if (self.response == "ok\n" and self.alive):
+            # gain level
+            print("incantation -> %s" % self.response)
+            return
 
     def run(self):
         """
         The function "run" is defined with an ellipsis as its body, indicating that
         it is not yet implemented.
         """
-        ...
+        while (self.alive):
+            self.forward()
+
+    def isValidLook(self):
+        return True
+
+    def computeQueueActions(self):
+        for element in self.queue:
+            element()
+
+    def __getGoTo(self, value):
+        x, y, max, result = 0
+        beforeSize = 1
+        it = 2
+
+        while result != value:
+            if result < value and value < max:
+                x += 1
+                result += 1
+                continue
+            elif result > value:
+                x -= 1
+                result -= 1
+                continue
+            beforeSize += 2
+            max += beforeSize
+            result += it
+            it += 2
+            y += 1
+
+        self.__fillQueue(x, y)
+
+    def __fillQueue(self, x, y):
+        left = False
+
+        if x < 0:
+            x *= -1
+            left = True
+        for i in range(0, y):
+            self.queue.append(self.forward)
+        if left:
+            self.queue.append(self.left)
+        else:
+            self.queue.append(self.right)
+        for i in range(0, x):
+            self.queue.append(self.forward)

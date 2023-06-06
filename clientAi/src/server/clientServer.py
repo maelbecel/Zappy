@@ -43,7 +43,7 @@ class clientServer:
         response = self.socket.recv(1024).decode()
         if response is None:
             print("Error: response is null")
-        print("Receive message from server: " + response + "\n")
+        # print("Receive message from server: " + response + "\n")
         return response
 
     def getSocket(self):

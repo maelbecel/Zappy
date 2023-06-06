@@ -10,6 +10,7 @@ SRC	=	./Main.cpp\
 		./Game/Game.cpp\
 		./Game/Scene/GameScene/GameScene.cpp\
 		./Game/Scene/GameScene/GameData/GameData.cpp\
+		./Game/Scene/GameScene/Map/Map.cpp\
 		./Game/Scene/GameScene/Tiles/Tile.cpp\
 		./Game/Scene/Menu/Menu.cpp\
 		./Game/Scene/Menu/HUD/MenuHUD.cpp\
@@ -20,6 +21,8 @@ SRC	=	./Main.cpp\
 		./Parser/Parser.cpp\
 		./Server/Server.cpp\
 		./Server/Socket/Socket.cpp\
+
+SRC	+=	./Tools/PerlinNoise.cpp\
 
 SRC	+=	./UI/Animation/Animation.cpp\
 		./UI/Button/Button.cpp\
@@ -41,6 +44,7 @@ INCLUDE =	-I .\
 			-I ./Game/Scene/GameScene/\
 			-I ./Game/Scene/GameScene/GameData/\
 			-I ./Game/Scene/GameScene/Tiles/\
+			-I ./Game/Scene/GameScene/Map/\
 			-I ./Game/Scene/Menu/\
 			-I ./Game/Scene/Menu/HUD/\
 			-I ./Game/Scene/Menu/HUD/Widget/\
@@ -49,6 +53,7 @@ INCLUDE =	-I .\
 			-I ./Parser/\
 			-I ./Server/\
 			-I ./Server/Socket/\
+			-I ./Tools/\
 			-I ./UI/Animation/\
 			-I ./UI/Button/\
 			-I ./UI/EventHandler/\

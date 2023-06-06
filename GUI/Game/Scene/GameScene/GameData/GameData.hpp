@@ -15,6 +15,7 @@
 
     #include "ParserError.hpp"
     #include "Tile.hpp"
+    #include "PerlinNoise.hpp"
 
 /**
  * @brief Class that store all the data of the game
@@ -99,15 +100,59 @@ class GameData {
          */
         uint getTimeUnit() const;
 
+        /**
+         * @brief Get the noise map
+         *
+         * @return double ** The game map
+         */
+        double **getNoise() const;
+
+        /**
+         * @brief Get the Scale of the game
+         * 
+         * @return sf::Vector2f The scale of the game
+         */
+        sf::Vector2f getScale() const;
+
+        /**
+         * @brief Get the Position of the game
+         * 
+         * @return sf::Vector2f The position of the game
+         */
+        sf::Vector2f getPosition() const;
+
+        /**
+         * @brief Set the Scale of the game
+         * 
+         * @param scale The scale of the game
+         */
+        void setScale(const sf::Vector2f &scale);
+
+        /**
+         * @brief Set the Position of the game
+         * 
+         * @param position The position of the game
+         */
+        void setPosition(const sf::Vector2f &position);
+
     // Attributes
     private:
         sf::Vector2i _mapSize;                    /*!< The size of the map between (10 and 50 for width and height)*/
         std::map<std::pair<int, int>, Tile> _map; /*!< The map of the game with the coordinates of the tiles and their content */
         std::vector<std::string> _teams;          /*!< The list of all the teams */
 
+        int _gameScale;                           /*!< The scale of the game */
+
+        Math::Noise _noise;
+    
+    // User Info
+    private:
+        sf::Vector2f _scale;                       /*!< The user scale (mouse scroll) */
+        sf::Vector2f _position;                    /*!< The user position (arrow key) */
+
     // Global Attributes
     public:
-        static uint timeUnit;                /*!< The time unit of the game */
+        static uint timeUnit;                     /*!< The time unit of the game */
 };
 
 #endif /* !GAMEDATA_HPP_ */

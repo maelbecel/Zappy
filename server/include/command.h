@@ -28,6 +28,8 @@ int select_team(client_t *client, server_t *server);
 
 // AI commands
 int forward(client_t *client, server_t *server, UNUSED char **args);
+int right(client_t *client, server_t *server, UNUSED char **args);
+int left(client_t *client, server_t *server, UNUSED char **args);
 
 void notif_graphic(client_t *client, server_t *server,
 int (*func)(client_t *client, client_t *graphic));

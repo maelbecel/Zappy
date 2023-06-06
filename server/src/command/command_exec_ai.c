@@ -15,6 +15,8 @@
 
 static const command_t ai_commands[] = {
     {"Forward", &forward},
+    {"Right", &right},
+    {"Left", &left},
     {NULL, NULL}
 };
 

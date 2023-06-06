@@ -47,6 +47,7 @@ typedef struct time_manager_s {
     struct timeval current;
     double secPerTick;
     uint actionLastTick;
+    uint spawnItemLastTick;
 } time_manager_t;
 
 typedef struct server_s {
@@ -189,6 +190,11 @@ void action_destroy(action_t *action);
  */
 client_t *client_get_by_id(server_t *server, ulong id);
 
-
+/**
+ * @brief Spawn items on the map
+ *
+ * @param server
+ */
+void map_spawn_items(server_t *server, bool checkTime);
 
 #endif /* !SERVER_H_ */

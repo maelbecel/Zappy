@@ -35,7 +35,8 @@ SRC += 	$(SRC_DIR)/map/tile/tile_add_player.c \
 		$(SRC_DIR)/map/tile/tile_remove_player.c \
 		$(SRC_DIR)/map/map_create.c \
 		$(SRC_DIR)/map/map_destroy.c \
-		$(SRC_DIR)/map/map_get_tile.c
+		$(SRC_DIR)/map/map_get_tile.c \
+		$(SRC_DIR)/map/map_spawn_items.c
 
 SRC +=	$(SRC_DIR)/client/client_accept.c \
 		$(SRC_DIR)/client/client_create.c \

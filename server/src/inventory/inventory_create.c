@@ -18,6 +18,16 @@ const char *item_names[] = {
     "thystame"
 };
 
+const float spawn_rate[] = {
+    0.5,
+    0.3,
+    0.15,
+    0.1,
+    0.1,
+    0.08,
+    0.05
+};
+
 inventory_t *inventory_create(void)
 {
     inventory_t *inventory = calloc(1, sizeof(inventory_t));

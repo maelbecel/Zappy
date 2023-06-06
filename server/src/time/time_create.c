@@ -20,5 +20,6 @@ time_manager_t *time_create(uint freq)
     gettimeofday(&time->current, NULL);
     time->freq = freq;
     time->actionLastTick = 0;
+    time->spawnItemLastTick = 0;
     return time;
 }

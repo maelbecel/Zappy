@@ -28,6 +28,8 @@ typedef struct inventory_s {
 
 extern const char *item_names[];
 
+extern const float spawn_rate[];
+
 /**
  * @brief Create a inventory object
  * Init all values to 0

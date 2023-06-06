@@ -18,15 +18,26 @@ namespace UI {
 
         _ip = InputBox(std::string("Ip Adress :"), sf::Vector2f(25, 50), sf::Vector2f(200, 34));
         _port = InputBox(std::string("Port :"), sf::Vector2f(25, 100), sf::Vector2f(200, 34));
+        _settingsButtonOpen = false;
 
-        ButtonWidget *button = new ButtonWidget(sf::Vector2f(35, 250), sf::Vector2f(7 * 32, 32), std::string("Connect"), 7);
+        ButtonWidget *connectButton = new ButtonWidget(sf::Vector2f(35, 250), sf::Vector2f(7 * 32, 32), std::string("Connect"), 7);
+        ButtonWidget *settingsButton = new ButtonWidget(sf::Vector2f(35, 300), sf::Vector2f(7 * 32, 32), std::string("Settings"), 7);
+        ButtonWidget *quitButton = new ButtonWidget(sf::Vector2f(35, 350), sf::Vector2f(7 * 32, 32), std::string("Quit"), 7);
+        ButtonWidget *crossSettingsButton = new ButtonWidget(sf::Vector2f((1920 - (7 * 32)) / 2, 35), sf::Vector2f(7 * 32, 32), std::string("Quit"), 7);
 
-        _connect = new Button(button);
+        _connectButton = new Button(connectButton);
+        _settingsButton = new Button(settingsButton);
+        _quitButton = new Button(quitButton);
+        _crossSettingsButton = new Button(crossSettingsButton);
+
+        _settings = Scene::Settings();
     }
 
     MenuHUD::~MenuHUD()
     {
-        delete _connect;
+        delete _connectButton;
+        delete _settingsButton;
+        delete _quitButton;
     }
 
     void MenuHUD::draw(sf::RenderWindow &window)
@@ -34,10 +45,28 @@ namespace UI {
         window.draw(_background);
         _ip.draw(window, sf::RenderStates::Default);
         _port.draw(window, sf::RenderStates::Default);
-        if (_connect->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))) {
-            _connect->render(window, ButtonState::HOVERED);
+        if (_connectButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))) {
+            _connectButton->render(window, ButtonState::HOVERED);
         } else {
-            _connect->render(window, ButtonState::IDLE);
+            _connectButton->render(window, ButtonState::IDLE);
+        }
+        if (_settingsButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))) {
+            _settingsButton->render(window, ButtonState::HOVERED);
+        } else {
+            _settingsButton->render(window, ButtonState::IDLE);
+        }
+        if (_quitButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))) {
+            _quitButton->render(window, ButtonState::HOVERED);
+        } else {
+            _quitButton->render(window, ButtonState::IDLE);
+        }
+        if (_settingsButtonOpen == true) {
+            _settings.Render(window);
+            if (_crossSettingsButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))) {
+                _crossSettingsButton->render(window, ButtonState::HOVERED);
+            } else {
+                _crossSettingsButton->render(window, ButtonState::IDLE);
+            }
         }
     }
 
@@ -46,7 +75,10 @@ namespace UI {
         if (event.type == sf::Event::MouseButtonPressed) {
             if (event.mouseButton.button != sf::Mouse::Left)
                 return;
-            if (_connect->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+            if (_crossSettingsButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                _settingsButtonOpen = false;
+            }
+            if (_connectButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
                 server.setPort(_port.value);
                 server.setMachine(_ip.value);
 
@@ -56,6 +88,11 @@ namespace UI {
                     _ip.value = std::string("");
                     _port.value = std::string("");
                 }
+                return;
+            }
+            if (_settingsButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                std::cout << "Settings" << std::endl;
+                _settingsButtonOpen = true;
                 return;
             }
             _ip.isIn(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));

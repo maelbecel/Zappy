@@ -16,6 +16,8 @@ SRC	=	./Main.cpp\
 		./Game/Scene/Menu/HUD/MenuHUD.cpp\
 		./Game/Scene/Menu/HUD/Widget/InputBox.cpp\
 		./Game/Scene/Menu/HUD/Widget/ButtonWidget.cpp\
+		./Game/Scene/Settings/Settings.cpp\
+		./Game/Scene/Settings/HUD/SettingsHUD.cpp\
 		./Parser/Parser.cpp\
 		./Server/Server.cpp\
 		./Server/Socket/Socket.cpp\
@@ -46,6 +48,8 @@ INCLUDE =	-I .\
 			-I ./Game/Scene/Menu/\
 			-I ./Game/Scene/Menu/HUD/\
 			-I ./Game/Scene/Menu/HUD/Widget/\
+			-I ./Game/Scene/Settings/\
+			-I ./Game/Scene/Settings/HUD/\
 			-I ./Parser/\
 			-I ./Server/\
 			-I ./Server/Socket/\

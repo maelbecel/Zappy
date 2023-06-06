@@ -35,6 +35,7 @@ class clientAi:
         self.teamName = teamName + "\n"
         self.client = clientServer(port, host)
         self.direction = direction()
+        self.queue = []
 
     def getConnectionResponse(self):
         """
@@ -83,7 +84,7 @@ class clientAi:
         """
         try:
             self.client.send(message)
-            self.response = self.receive()
+            self.receive()
         except Exception as e:
             print(e)
 
@@ -305,7 +306,10 @@ class clientAi:
             element()
 
     def __getGoTo(self, value):
-        x, y, max, result = 0
+        x = 0
+        y = 0
+        max = 0
+        result = 0
         beforeSize = 1
         it = 2
 
@@ -340,3 +344,7 @@ class clientAi:
             self.queue.append(self.right)
         for i in range(0, x):
             self.queue.append(self.forward)
+
+    def pickObject(self, value, object: str):
+        self.__getGoTo(value)
+        self.take(object)

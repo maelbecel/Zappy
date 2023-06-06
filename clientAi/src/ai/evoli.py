@@ -11,7 +11,6 @@ from ..ai.clientAi import clientAi as clientAI
 class evoli(clientAI):
     def __init__(self, teamName, port, host):
         super().__init__(teamName, port, host)
-        self.queue = []
 
     def run(self):
         while self.alive:

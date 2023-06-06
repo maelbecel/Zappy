@@ -46,5 +46,4 @@ jobs:
           target_repo_url:
             ${{ env.MIRROR_URL }}
           ssh_private_key:
-          echo make
             ${{ secrets.GITLAB_SSH_PRIVATE_KEY }}

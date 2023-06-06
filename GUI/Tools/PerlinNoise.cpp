@@ -15,6 +15,8 @@ namespace Math {
 
     Noise::~Noise()
     {
+        if (_width == 0 || _height == 0)
+            return;
         for (int i = 0; i < _height; i++)
             if (_noise[i])
                 delete[] _noise[i];

@@ -30,6 +30,7 @@ static void update_max_fd(server_t *server)
 
 int main_loop(server_t *server)
 {
+    map_spawn_items(server, false);
     while (server->running) {
         update_max_fd(server);
         if (select(server->select->maxfd + 1, &server->select->readfds,
@@ -43,6 +44,7 @@ int main_loop(server_t *server)
             return EXIT_FAILTEK;
         time_update(server->time);
         action_update(server);
+        map_spawn_items(server, true);
     }
     return 0;
 }

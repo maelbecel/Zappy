@@ -34,10 +34,10 @@ void print_bct(client_t *client, tile_t *tile, int x, int y)
     if (!tile || !client)
         return;
     dprintf(client->socket->fd, "bct %d %d %d %d %d %d %d %d %d\n", x, y,
-        tile->inventory->food, tile->inventory->linemate,
-        tile->inventory->deraumere, tile->inventory->sibur,
-        tile->inventory->mendiane, tile->inventory->phiras,
-        tile->inventory->thystame);
+        tile->inventory->items[0], tile->inventory->items[1],
+        tile->inventory->items[2], tile->inventory->items[3],
+        tile->inventory->items[4], tile->inventory->items[5],
+        tile->inventory->items[6]);
 }
 
 int bct(client_t *client, server_t *server, char **args)

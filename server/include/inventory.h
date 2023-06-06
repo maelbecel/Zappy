@@ -8,17 +8,27 @@
 #ifndef INVENTORY_H_
     #define INVENTORY_H_
 
+    #define MAX_INVENTORY 7
+
 typedef unsigned int uint;
 
+typedef enum item_s {
+    FOOD,
+    LINEMATE,
+    DERAUMERE,
+    SIBUR,
+    MENDIANE,
+    PHIRAS,
+    THYSTAME
+} item_t;
+
 typedef struct inventory_s {
-    uint food;
-    uint linemate;
-    uint deraumere;
-    uint sibur;
-    uint mendiane;
-    uint phiras;
-    uint thystame;
+    uint items[MAX_INVENTORY];
 } inventory_t;
+
+extern const char *item_names[];
+
+extern const float spawn_rate[];
 
 /**
  * @brief Create a inventory object

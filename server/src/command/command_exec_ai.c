@@ -38,8 +38,8 @@ int execute_waiting_order(client_t *client, server_t *server)
     if (!args)
         return EXIT_FAILTEK;
     for (uint i = 0; ai_commands[i].command; i++) {
+        olist_remove_node(client->waiting_orders, 0);
         if (strcmp(ai_commands[i].command, args[0]) == 0) {
-            olist_remove_node(client->waiting_orders, 0);
             ai_commands[i].func(client, server, args);
             found = true;
             break;
@@ -51,6 +51,8 @@ int execute_waiting_order(client_t *client, server_t *server)
 
 int command_exec_ai(client_t *client, server_t *server, char **args)
 {
+    if (strlen(client->buffer) == 0)
+        return 0;
     OLOG_INFO("AI id#%ld fd#%d> %s", client->id, client->socket->fd,
     client->buffer);
     if (client->current_action != NULL) {

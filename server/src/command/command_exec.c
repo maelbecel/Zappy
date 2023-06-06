@@ -21,11 +21,14 @@ static const command_t graphic_commands[] = {
     {"sgt", &sgt},
     {"sst", &sst},
     {"ppo", &ppo},
+    {"plv", &plv},
     {NULL, NULL}
 };
 
 static int command_exec_graphic(client_t *client, server_t *server, char **args)
 {
+    if (strlen(client->buffer) == 0)
+        return 0;
     OLOG_INFO("GRAPHIC id#%ld fd#%d> %s", client->id, client->socket->fd,
     client->buffer);
     for (uint i = 0; graphic_commands[i].command; i++) {

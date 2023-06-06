@@ -2,15 +2,14 @@
 ** EPITECH PROJECT, 2023
 ** Zappy
 ** File description:
-** ppo
+** plv
 */
 
 #include <stdlib.h>
-#include "command.h"
-#include "ai.h"
 #include "utils.h"
+#include "command.h"
 
-int do_ppo(client_t *client, client_t *graphic)
+int do_plv(client_t *client, client_t *graphic)
 {
     ai_t *ai = client->data;
 
@@ -18,12 +17,11 @@ int do_ppo(client_t *client, client_t *graphic)
         dprintf(client->socket->fd, "sbp\n");
         return 0;
     }
-    dprintf(graphic->socket->fd, "ppo %ld %d %d %d\n", client->id, ai->x, ai->y,
-    ai->orientation);
+    dprintf(graphic->socket->fd, "plv %ld %d\n", client->id, ai->level);
     return 0;
 }
 
-int ppo(client_t *client, server_t *server, char **args)
+int plv(client_t *client, server_t *server, char **args)
 {
     client_t *target = NULL;
 
@@ -36,5 +34,5 @@ int ppo(client_t *client, server_t *server, char **args)
         dprintf(client->socket->fd, "sbp\n");
         return 0;
     }
-    return do_ppo(target, client);
+    return do_plv(target, client);
 }

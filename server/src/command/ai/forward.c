@@ -27,6 +27,7 @@ static void action_forward(action_t *action)
         ai->x = (ai->x + 1 >= (int)server->map->width) ? 0 : ai->x + 1;
     if (ai->orientation == WEST)
         ai->x = (ai->x - 1 < 0) ? (int)server->map->width - 1 : ai->x - 1;
+    notif_graphic(client, server, &do_ppo);
     dprintf(client->socket->fd, "ok\n");
 }
 

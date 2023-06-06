@@ -148,7 +148,7 @@ sf::Vector2f GameData::getPosition() const
 
 void GameData::setScale(const sf::Vector2f &scale)
 {
-    if (scale.x > 18.0f || scale.y > 18.0f)
+    if (scale.x > 10.0f || scale.y > 10.0f)
         return;
     else if (scale.x < 0.0f || scale.y < 0.0f)
         return;

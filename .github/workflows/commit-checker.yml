@@ -15,10 +15,8 @@ jobs:
 
     - name: Run Python Script
       run: |
-        git log --format="%s" ${{ github.event.before }}..${{ github.event.after }} --pretty=format:%s | while read -r commit; do
-          python commit-checker.py $commit
-          if [ $? -eq 1 ]; then
-            echo "Python script returned 1. Cancelling the push..."
-            exit 1
-          fi
-        done
+        python commit-checker.py $commit
+        if [ $? -eq 1 ]; then
+          echo "Python script returned 1. Cancelling the push..."
+          exit 1
+        fi

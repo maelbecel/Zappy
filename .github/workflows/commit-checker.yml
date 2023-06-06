@@ -12,10 +12,14 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
+    - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
 
     - name: Run Python Script
       run: |
-        python commit-checker.py $commit
+        python .github/commit-checker.py $commit
         if [ $? -eq 1 ]; then
           echo "Python script returned 1. Cancelling the push..."
           exit 1

@@ -9,6 +9,15 @@
 #include "server.h"
 #include "client.h"
 
+/**
+ * This function handles the disconnection of a client from the server and
+ * removes them from the appropriate data structures.
+ * 
+ * @param server A pointer to a server_t struct, which contains information
+ * about the server.
+ * @param client A pointer to a client_t struct representing the client that
+ * has disconnected.
+ */
 void client_disconnect(server_t *server, client_t *client)
 {
     team_t *team = NULL;

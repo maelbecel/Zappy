@@ -53,6 +53,6 @@ void ai_destroy(ai_t *ai);
  * @param client
  * @param server
  */
-void ai_dead(client_t *client, server_t *server);
+void ai_dead(client_t *client, server_t *server, bool disconnect);
 
 #endif

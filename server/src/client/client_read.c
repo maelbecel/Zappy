@@ -15,7 +15,10 @@ static int handle_read(server_t *server, client_t *client)
 {
     read_socket(client);
     if (!client->buffer) {
-        client_disconnect(server, client);
+        if (client->type == AI)
+            ai_dead(client, server, true);
+        else
+            client_disconnect(server, client);
         return -1;
     }
     return 0;

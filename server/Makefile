@@ -76,7 +76,8 @@ SRC +=	$(SRC_DIR)/command/graphic/msz.c \
 		$(SRC_DIR)/command/graphic/sgt.c \
 		$(SRC_DIR)/command/graphic/sst.c \
 		$(SRC_DIR)/command/graphic/welcome_message.c \
-		$(SRC_DIR)/command/graphic/ppo.c
+		$(SRC_DIR)/command/graphic/ppo.c \
+		$(SRC_DIR)/command/graphic/pnw.c \
 
 SRC +=	$(SRC_DIR)/command/ai/forward.c
 

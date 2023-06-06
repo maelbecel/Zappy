@@ -43,7 +43,7 @@ static int update_food(client_t *client, uint tickDiff, server_t *server)
             ai->inventory->food--;
             ai->time_before_death += 126;
         } else {
-            ai_dead(client, server);
+            ai_dead(client, server, false);
             return -1;
         }
     }

@@ -65,7 +65,9 @@ SRC +=	$(SRC_DIR)/time/time_create.c \
 		$(SRC_DIR)/time/time_destroy.c \
 		$(SRC_DIR)/time/time_update.c
 
-SRC +=	$(SRC_DIR)/action/action_update.c
+SRC +=	$(SRC_DIR)/action/action_update.c \
+		$(SRC_DIR)/action/action_create.c \
+		$(SRC_DIR)/action/action_destroy.c
 
 SRC +=	$(SRC_DIR)/command/graphic/msz.c \
 		$(SRC_DIR)/command/graphic/bct.c \
@@ -75,6 +77,8 @@ SRC +=	$(SRC_DIR)/command/graphic/msz.c \
 		$(SRC_DIR)/command/graphic/sst.c \
 		$(SRC_DIR)/command/graphic/welcome_message.c \
 		$(SRC_DIR)/command/graphic/ppo.c
+
+SRC +=	$(SRC_DIR)/command/ai/forward.c
 
 OBJ = $(SRC:%.c=$(BUILD_DIR)/%.o)
 

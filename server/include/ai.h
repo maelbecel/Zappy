@@ -23,8 +23,8 @@ typedef struct ai_s {
     ulong id;
     uint level;
     int time_before_death;
-    uint x;
-    uint y;
+    int x;
+    int y;
     orientation_t orientation;
     inventory_t *inventory;
     bool incantation;

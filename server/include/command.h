@@ -13,15 +13,11 @@
     #include "ai.h"
     #include "olog.h"
 
-typedef struct ai_command_s {
-    char *command;
-    int (*func)(client_t *client, server_t *server, ai_t *ai, char **args);
-} ai_command_t;
-
-typedef struct graphic_command_s {
+typedef struct command_s {
     char *command;
     int (*func)(client_t *client, server_t *server, char **args);
-} graphic_command_t;
+} command_t;
+
 
 int command_exec(client_t *client, server_t *server);
 int command_exec_ai(client_t *client, server_t *server, char **args);
@@ -29,6 +25,9 @@ int execute_waiting_order(client_t *client, server_t *server);
 
 // NONE commands
 int select_team(client_t *client, server_t *server);
+
+// AI commands
+int forward(client_t *client, server_t *server, UNUSED char **args);
 
 // Graphic commands
 int msz(client_t *client, server_t *server, UNUSED char **args);

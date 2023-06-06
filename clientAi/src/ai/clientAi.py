@@ -142,7 +142,7 @@ class clientAi:
         This function sends a command to move forward.
         """
         self.send(cAct.FORWARD.value)
-        self.direction.upadteCoord()
+        self.direction.updateCoord()
 
     def right(self):
         """

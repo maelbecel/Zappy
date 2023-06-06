@@ -39,7 +39,7 @@ class direction:
     def updateDirectionToLeft(self):
         """
         This function updates the direction to the left based on the current
-        direction.
+        direction.updateCoord
         """
         if self.direction == enumDirection.NORTH:
             self.direction = enumDirection.EAST
@@ -56,7 +56,11 @@ class direction:
         else:
             self.direction = enumDirection(self.direction.value + 1)
 
-    def upadteCoord(self):
+    def updateCoord(self):
+        """
+        This function updates the coordinates of an object based on its current
+        direction.
+        """
         if self.direction == enumDirection.NORTH:
             self.y -= 1
         elif self.direction == enumDirection.EAST:

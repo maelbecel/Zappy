@@ -45,7 +45,7 @@ class clientAi:
         self.availablePlaces = int(self.response[0])
         self.response = self.response[1].split(" ")
         if len(self.response) != 2:
-            raise cEx.clientException("Error: map size is invalid")
+            raise cEx("Error: map size is invalid")
         self.mapSize[0] = int(self.response[0])
         self.mapSize[1] = int(self.response[1])
 
@@ -60,7 +60,7 @@ class clientAi:
             self.client.send(self.teamName)
             self.response = self.client.receive().split("\n")
             if self.response[0] == "ko" or len(self.response) != 3:
-                raise cEx.clientException("Error: team name is invalid")
+                raise cEx("Error: team name is invalid")
         except Exception as e:
             print(e)
 

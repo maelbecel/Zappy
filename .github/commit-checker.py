@@ -2,7 +2,7 @@ import re
 import sys
 
 def check_commit_format(commit):
-    pattern = r'^\w+ \([\w\s,]+\): .+ \[#(?:\w+,?\s*)+\]$'
+    pattern = r'\w+\s\([\w\s,\.\/]+\)\:\s.+\s\[\#\d+\]$'
     if re.match(pattern, commit):
         print(commit + " [OK]")
         return 0

@@ -7,6 +7,8 @@ on:
       - client-AI
       - CI/CD_#2
       - ft/clientAi
+      - IA
+
 jobs:
   format:
     name: Format code if needed
@@ -94,7 +96,7 @@ jobs:
       - name: flake8 Lint
         uses: py-actions/flake8@v2
         with:
-          ignore: E305,E266
+          ignore: E305,E266,W503
           # exclude: "src/ignoreme.py"
           max-line-length: "120"
           path: "./clientAi/src"

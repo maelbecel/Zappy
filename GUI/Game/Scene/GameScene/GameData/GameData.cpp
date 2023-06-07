@@ -152,7 +152,6 @@ void GameData::setScale(const sf::Vector2f &scale)
         return;
     else if (scale.x < 0.0f || scale.y < 0.0f)
         return;
-
     _scale = scale;
 }
 

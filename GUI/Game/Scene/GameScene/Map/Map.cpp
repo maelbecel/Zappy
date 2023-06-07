@@ -69,6 +69,8 @@ void Map::draw(sf::RenderWindow &window, GameData &gameData)
                         position.y -= 7 * scale.x;
                     else if (scale.x >= 4.0f)
                         position.y -= 6 * scale.x;
+                    else if (scale.x >= 1.25 && scale.x < 2.0f)
+                        position.y -= 8 * scale.x;
                     else if (scale.x == 1.0f)
                         position.y -= 10 * scale.x;
                     else if (scale.x < 1.0f && scale.x > 0.5f)

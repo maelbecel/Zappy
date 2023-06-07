@@ -41,4 +41,3 @@ int forward(client_t *client, server_t *server, UNUSED char **args)
     client->current_action = action;
     return 0;
 }
-

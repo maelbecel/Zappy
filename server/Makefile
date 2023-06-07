@@ -27,7 +27,8 @@ SRC +=	$(SRC_DIR)/options/del_options.c \
 		$(SRC_DIR)/options/options_getter/get_width.c
 
 SRC +=	$(SRC_DIR)/inventory/inventory_create.c \
-		$(SRC_DIR)/inventory/inventory_destroy.c
+		$(SRC_DIR)/inventory/inventory_destroy.c \
+		$(SRC_DIR)/inventory/inventory_get_item_by_name.c
 
 SRC += 	$(SRC_DIR)/map/tile/tile_add_player.c \
 		$(SRC_DIR)/map/tile/tile_create.c \
@@ -80,11 +81,16 @@ SRC +=	$(SRC_DIR)/command/graphic/msz.c \
 		$(SRC_DIR)/command/graphic/ppo.c \
 		$(SRC_DIR)/command/graphic/pnw.c \
 		$(SRC_DIR)/command/graphic/plv.c \
-		$(SRC_DIR)/command/graphic/pin.c
+		$(SRC_DIR)/command/graphic/pin.c \
+		$(SRC_DIR)/command/graphic/pgt.c \
+		$(SRC_DIR)/command/graphic/pdr.c
 
 SRC +=	$(SRC_DIR)/command/ai/forward.c \
 		$(SRC_DIR)/command/ai/right.c \
 		$(SRC_DIR)/command/ai/left.c \
+		$(SRC_DIR)/command/ai/inventory.c \
+		$(SRC_DIR)/command/ai/take.c \
+		$(SRC_DIR)/command/ai/set.c \
 		$(SRC_DIR)/command/ai/notif_graphic.c
 
 OBJ = $(SRC:%.c=$(BUILD_DIR)/%.o)

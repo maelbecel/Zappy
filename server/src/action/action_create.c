@@ -25,7 +25,7 @@
  * @param duration The duration parameter is of type ulong (unsigned long)
  * and represents the duration
  * of the action in some unit of time (e.g. seconds, milliseconds).
- * 
+ *
  * @return The function `action_create` returns a pointer to an `action_t`
  * struct. If the allocation of
  * memory for the struct or its `data` field fails, it returns `NULL`.
@@ -39,7 +39,7 @@ ulong duration)
         return NULL;
     action->name = strdup(name);
     action->duration = duration;
-    action->data = calloc(3, sizeof(void *));
+    action->data = calloc(4, sizeof(void *));
     if (!action->data)
         return NULL;
     action->data[0] = client;

@@ -18,6 +18,8 @@ static const command_t ai_commands[] = {
     {"Right", &right},
     {"Left", &left},
     {"Inventory", &inventory},
+    {"Take", &take},
+    {"Set", &set},
     {NULL, NULL}
 };
 

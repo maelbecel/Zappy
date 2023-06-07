@@ -30,8 +30,9 @@ int select_team(client_t *client, server_t *server);
 int forward(client_t *client, server_t *server, UNUSED char **args);
 int right(client_t *client, server_t *server, UNUSED char **args);
 int left(client_t *client, server_t *server, UNUSED char **args);
-int inventory(client_t *client, UNUSED server_t *server, UNUSED char **args);
+int inventory(client_t *client, server_t *server, UNUSED char **args);
 int take(client_t *client, server_t *server, char **args);
+int set(client_t *client, server_t *server, char **args);
 
 void notif_graphic(client_t *client, server_t *server,
 int (*func)(client_t *client, client_t *graphic));
@@ -54,6 +55,7 @@ int welcome(client_t *client, server_t *server);
 int pin(client_t *client, server_t *server, char **args);
 int do_pin(client_t *client, client_t *graphic);
 int pgt(server_t *server, ulong client_id, item_t item);
+int pdr(server_t *server, ulong client_id, item_t item);
 
 // ALL commands
 void client_disconnect(server_t *server, client_t *client);

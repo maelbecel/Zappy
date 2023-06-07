@@ -35,10 +35,10 @@ void ai_dead(client_t *client, server_t *server, bool disconnect)
     if (client->data)
         ai_destroy((ai_t *)client->data);
     if (!disconnect)
-        OLOG_INFO("Client id#%ld fd#%d is dead", client->id,
+        OLOG_INFO("AI id#%ld fd#%d is dead", client->id,
         client->socket->fd);
     else
-        OLOG_INFO("Client id#%ld fd#%d is dead (disconnected)", client->id,
+        OLOG_INFO("AI id#%ld fd#%d is dead (disconnected)", client->id,
         client->socket->fd);
     client_disconnect(server, client);
 }

@@ -19,7 +19,8 @@ typedef enum item_s {
     SIBUR,
     MENDIANE,
     PHIRAS,
-    THYSTAME
+    THYSTAME,
+    NO_ITEM
 } item_t;
 
 typedef struct inventory_s {
@@ -44,5 +45,13 @@ inventory_t *inventory_create(void);
  * @param inventory
  */
 void inventory_destroy(inventory_t *inventory);
+
+/**
+ * @brief Get an item enum from a string
+ *
+ * @param name
+ * @return item_t
+ */
+item_t inventory_get_item_by_name(char *name);
 
 #endif /* !INVENTORY_H_ */

@@ -6,8 +6,8 @@
 ##
 
 import sys
-import exception.clientException as cException
-import ai.clientAi as cAi
+import src.exception.clientException as cException
+import src.ai.clientAi as cAi
 
 MAX_PORT = 65535
 
@@ -23,7 +23,7 @@ def parse(argv):
     client = None
 
     if int(argv[2]) > MAX_PORT or int(argv[2]) < 0:
-        raise cException.clientException("Error: port is invalid")
+        raise cException("Error: port is invalid")
 
     client = cAi.clientAi(argv[4], argv[2], argv[6])
     return client
@@ -31,9 +31,12 @@ def parse(argv):
 
 def main(client):
     try:
-        if client == None:
-            raise cException.clientException("Error: client is null")
+        if client is None:
+            raise cException("Error: client is null")
         client.connect()
+        client.look()
+        client.pickObject(2, "food")
+        client.inventory()
         client.disconnect()
     except Exception as e:
         raise e

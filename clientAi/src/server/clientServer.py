@@ -6,7 +6,7 @@
 ##
 
 import socket
-import exception.clientException as cEx
+from ..exception.clientException import clientException as cEx
 
 
 class clientServer:
@@ -20,30 +20,30 @@ class clientServer:
         # AF_INET = IPv4 / SOCK_STREAM = TCP
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         if self.socket is None:
-            cEx.clientException("Error: socket is null")
+            cEx("Error: socket is null")
         if self.socket.connect((self.host, int(self.port))) == -1:
-            cEx.clientException("Error: socket is not connect")
+            cEx("Error: socket is not connect")
         print("Connect to server")
 
     def disconnect(self):
         self.socket.close()
         if self.socket is not None:
-            cEx.clientException("Error: socket is not close")
+            cEx("Error: socket is not close")
         print("Disconnect to server")
 
     def send(self, message):
         if self.socket is None:
-            cEx.clientException("Error: socket is null")
+            cEx("Error: socket is null")
         print("Send message to server: " + message + "\n")
         self.socket.sendall(message.encode("ascii"))
 
     def receive(self):
         if self.socket is None:
-            cEx.clientException("Error: socket is null")
+            cEx("Error: socket is null")
         response = self.socket.recv(1024).decode()
         if response is None:
             print("Error: response is null")
-        print("Receive message from server: " + response + "\n")
+        # print("Receive message from server: " + response + "\n")
         return response
 
     def getSocket(self):

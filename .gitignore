@@ -57,6 +57,7 @@ a.out
 *.pyo
 *.pyd
 __pycache__/
+.pytest_cache/
 
 # vscode stuff:
 .vscode/

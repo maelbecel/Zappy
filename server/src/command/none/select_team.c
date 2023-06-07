@@ -54,6 +54,7 @@ server_t *server)
     client->team_id = team->id;
     team->team_size++;
     client->data = ai_create(server->map->width, server->map->height);
+    tile_add_player(server->map, client);
     olist_add_node(team->clients, client);
     return 0;
 }

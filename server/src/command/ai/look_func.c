@@ -21,10 +21,10 @@ void look_north(client_t *client, server_t *server, ai_t *ai)
             y = (y >= server->map->height) ? y - server->map->height : y;
             tile = map_get_tile(server->map, x, y);
             print_tile_content(tile, client);
-            (j != i) ? dprintf(client->socket->fd, ", ") : 0;
+            (j != i) ? dprintf(client->socket->fd, ",") : 0;
         }
         if (i != (int)ai->level)
-            dprintf(client->socket->fd, ", ");
+            dprintf(client->socket->fd, ",");
     }
 }
 
@@ -43,10 +43,10 @@ void look_south(client_t *client, server_t *server, ai_t *ai)
             y = (y >= server->map->height) ? y - server->map->height : y;
             tile = map_get_tile(server->map, x, y);
             print_tile_content(tile, client);
-            (j != -i) ? dprintf(client->socket->fd, ", ") : 0;
+            (j != -i) ? dprintf(client->socket->fd, ",") : 0;
         }
         if (i != (int)ai->level)
-            dprintf(client->socket->fd, ", ");
+            dprintf(client->socket->fd, ",");
     }
 }
 
@@ -64,10 +64,10 @@ void look_west(client_t *client, server_t *server, ai_t *ai)
             y = (y >= server->map->height) ? y - server->map->height : y;
             tile = map_get_tile(server->map, x, y);
             print_tile_content(tile, client);
-            (j != -i) ? dprintf(client->socket->fd, ", ") : 0;
+            (j != -i) ? dprintf(client->socket->fd, ",") : 0;
         }
         if (i != (int)ai->level)
-            dprintf(client->socket->fd, ", ");
+            dprintf(client->socket->fd, ",");
     }
 }
 
@@ -86,9 +86,9 @@ void look_east(client_t *client, server_t *server, ai_t *ai)
             y = (y >= server->map->height) ? y - server->map->height : y;
             tile = map_get_tile(server->map, x, y);
             print_tile_content(tile, client);
-            (j != i) ? dprintf(client->socket->fd, ", ") : 0;
+            (j != i) ? dprintf(client->socket->fd, ",") : 0;
         }
         if (i != (int)ai->level)
-            dprintf(client->socket->fd, ", ");
+            dprintf(client->socket->fd, ",");
     }
 }

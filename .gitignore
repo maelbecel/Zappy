@@ -61,3 +61,14 @@ __pycache__/
 
 # vscode stuff:
 .vscode/
+# Build folder
+build/
+
+# IDE
+.idea
+.vscode
+*.code-workspace
+
+zappy_server
+zappy_gui
+*.vscode

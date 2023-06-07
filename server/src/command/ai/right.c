@@ -13,7 +13,7 @@ static void action_right(action_t *action)
     ai_t *ai = client->data;
 
     if (!ai || !action->data[1] || !client) {
-        OLOG_FATAL("Forward action: missing data for id#%ld fd#%d\n",
+        OLOG_FATAL("Right action: missing data for id#%ld fd#%d\n",
         client->id, client->socket->fd);
         dprintf(client->socket->fd, "ko\n");
         return;

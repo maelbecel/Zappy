@@ -107,6 +107,7 @@ static void update_client(client_t *client, uint tickDiff, server_t *server)
         client->current_action->duration -= tickDiff;
         if (client->current_action->duration <= 0) {
             client->current_action->callback(client->current_action);
+            action_destroy(client->current_action);
             client->current_action = NULL;
         }
     }

@@ -12,10 +12,10 @@ void print_tile_content(tile_t *tile, client_t *client)
     if (!tile || !client)
         return;
     for (uint i = 0; i < tile->players; i++)
-        dprintf(client->socket->fd, "player ");
+        dprintf(client->socket->fd, " player");
     for (uint i = 0; i < MAX_INVENTORY; i++) {
         for (uint j = 0; j < tile->inventory->items[i]; j++)
-            dprintf(client->socket->fd, "%s ", item_names[i]);
+            dprintf(client->socket->fd, " %s", item_names[i]);
     }
 }
 
@@ -30,7 +30,7 @@ static void do_look(action_t *action)
     ai = client->data;
     if (!ai)
         return;
-    dprintf(client->socket->fd, "[ ");
+    dprintf(client->socket->fd, "[");
     if (ai->orientation == NORTH)
         look_north(client, server, ai);
     if (ai->orientation == SOUTH)

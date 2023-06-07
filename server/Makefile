@@ -91,6 +91,7 @@ SRC +=	$(SRC_DIR)/command/ai/forward.c \
 		$(SRC_DIR)/command/ai/inventory.c \
 		$(SRC_DIR)/command/ai/take.c \
 		$(SRC_DIR)/command/ai/set.c \
+		$(SRC_DIR)/command/ai/connect_nbr.c \
 		$(SRC_DIR)/command/ai/notif_graphic.c
 
 OBJ = $(SRC:%.c=$(BUILD_DIR)/%.o)

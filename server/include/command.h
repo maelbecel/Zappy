@@ -33,6 +33,7 @@ int left(client_t *client, server_t *server, UNUSED char **args);
 int inventory(client_t *client, server_t *server, UNUSED char **args);
 int take(client_t *client, server_t *server, char **args);
 int set(client_t *client, server_t *server, char **args);
+int connect_nbr(client_t *client, server_t *server, UNUSED char **args);
 
 void notif_graphic(client_t *client, server_t *server,
 int (*func)(client_t *client, client_t *graphic));

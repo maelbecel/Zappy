@@ -20,6 +20,7 @@ static const command_t ai_commands[] = {
     {"Inventory", &inventory},
     {"Take", &take},
     {"Set", &set},
+    {"Connect_nbr", &connect_nbr},
     {NULL, NULL}
 };
 

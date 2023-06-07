@@ -12,7 +12,7 @@
 /**
  * This function creates an action with a given name, server, client,
  * and duration.
- * 
+ *
  * @param name A string representing the name of the action.
  * @param server The server parameter is a pointer to a server_t struct,
  * which likely contains information about the server such as its IP address,

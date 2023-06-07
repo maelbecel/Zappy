@@ -13,7 +13,7 @@
 /**
  * This function generates a random position within given x and y
  *  limits for an AI object.
- * 
+ *
  * @param ai The ai parameter is a pointer to a structure or object
  * of type ai_t. This structure likely contains information about an
  * AI agent in a game or simulation, such as its position, behavior,
@@ -33,12 +33,12 @@ static void get_random_pos(ai_t *ai, uint xmax, uint ymax)
 /**
  * The function creates a new AI with default values and a
  * random position within the given boundaries.
- * 
+ *
  * @param xmax The maximum x-coordinate value for the AI's
  * position on a grid or map.
  * @param ymax The ymax parameter represents the maximum y-coordinate
  *  value for the AI's position in a 2D grid.
- * 
+ *
  * @return The function `ai_create` returns a pointer to a newly created
  * `ai_t` struct. If the allocation of memory for the struct or its inventory
  * fails, it returns NULL.

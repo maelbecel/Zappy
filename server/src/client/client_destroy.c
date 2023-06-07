@@ -11,11 +11,12 @@
 
 /**
  * The function destroys a client and frees its associated memory.
- * 
+ *
  * @param client A pointer to a client_t struct, which represents
  * a client in a client-server communication system.
- * 
- * @return If the `client` pointer is `NULL`, the function returns without doing anything.
+ *
+ * @return If the `client` pointer is `NULL`, the function returns without
+ * doing anything.
  */
 void client_destroy(client_t *client)
 {

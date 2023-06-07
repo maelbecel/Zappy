@@ -13,7 +13,7 @@
 /**
  * The function handles the death of a client in a server and notifies
  * all graphic clients of the death.
- * 
+ *
  * @param client A pointer to the client that is dead or disconnected.
  * @param server A pointer to the server structure.
  * @param disconnect The "disconnect" parameter is a boolean value that

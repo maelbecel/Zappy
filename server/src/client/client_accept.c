@@ -11,13 +11,13 @@
 
 /**
  * The function builds a client object with a given socket.
- * 
+ *
  * @param socket The parameter `socket` is a pointer to a
  * `socket_t` structure, which likely contains information
  * about a network socket such as its file descriptor, address,
  * and port number. This function uses this parameter to create
- * a new `client_t` structure and assign the `socket` parameter 
- * 
+ * a new `client_t` structure and assign the `socket` parameter
+ *
  * @return The function `build_client` returns a pointer to a `client_t`
  * struct. If the `client_create` function fails to allocate memory for the
  * struct, the function returns `NULL`.
@@ -35,12 +35,12 @@ static client_t *build_client(socket_t *socket)
 /**
  * The function adds a new client to the server and sends a
  * welcome message to the client.
- * 
+ *
  * @param server A pointer to a server_t struct, which contains information
  * about the server.
  * @param socket A pointer to a socket_t structure representing the client's
  * socket connection to the server.
- * 
+ *
  * @return an integer value. If the client is successfully added, it
  * returns 0. If there is an error in building the client, it returns
  * EXIT_FAILTEK (which is likely a typo and should be EXIT_FAILURE).
@@ -64,11 +64,11 @@ static int add_client(server_t *server, socket_t *socket)
 /**
  * The function accepts a client connection to a server and adds
  * it to the list of clients.
- * 
+ *
  * @param server a pointer to a server_t struct, which contains information
  * about the server such as its socket and a set of file descriptors for
  * select() to monitor.
- * 
+ *
  * @return an integer value. If the socket creation or the accept call fails,
  * it returns EXIT_FAILTEK (which is likely a typo and should be
  * EXIT_FAILURE). If a client is successfully added to the server, it returns

@@ -52,9 +52,6 @@ Mkfile.old
 dkms.conf
 a.out
 
-# Project binaries
-zappy_*
-
 # Build folder
 build/
 
@@ -62,3 +59,7 @@ build/
 .idea
 .vscode
 *.code-workspace
+
+zappy_server
+zappy_gui
+*.vscode

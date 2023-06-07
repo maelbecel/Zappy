@@ -12,7 +12,7 @@
 /**
  * This function creates a new client with default values
  * and returns a pointer to it.
- * 
+ *
  * @return The function `client_create` returns a pointer to a newly allocated
  * `client_t` structure. If the allocation fails, it returns `NULL`.
  */

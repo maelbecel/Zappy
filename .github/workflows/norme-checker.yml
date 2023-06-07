@@ -9,20 +9,28 @@ jobs:
   check_norme:
     runs-on: ubuntu-latest
 
+  container: ghcr.io/epitech/coding-style-checker:latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Download norme.sh script
-        run: |
-          curl -o norme.sh https://raw.githubusercontent.com/maelbecel/Usefull-scripts/main/norme/norme.sh
-          chmod +x norme.sh
-
-      - name: Run norme.sh script
-        run: |
-          ./norme.sh -v .
-          exit_code=$?
-          if [ $exit_code -ne 0 ]; then
-            echo "The norme.sh script failed. Push has been blocked."
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - run: check.sh $(pwd) $(pwd)
+      - run: |
+          FILENAME=coding-style-reports.log
+          ERRORS=0
+          if [ -s "${FILENAME}" ]; then
+            while IFS=$'\n'; read line
+            do
+              TEMP=$(echo $line)
+              FILE=$(echo $TEMP | cut -d : -f 1)
+              LINE=$(echo $TEMP | cut -d : -f 2)
+              TITLE=$(echo $TEMP | cut -d : -f 3)
+              TITLE="$TITLE coding style error"
+              ELEMENT=$(echo $TEMP | cut -d : -f 4)
+              ERRORS=$((ERRORS+1))
+              echo "::error file=$FILE,line=$LINE,title=$TITLE::$ELEMENT"
+            done < "${FILENAME}"
+          fi
+          if [ $ERRORS -gt 0 ]; then
             exit 1
           fi

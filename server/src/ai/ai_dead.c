@@ -13,7 +13,7 @@
 /**
  * The function handles the death of a client in a server and notifies
  * all graphic clients of the death.
- * 
+ *
  * @param client A pointer to the client that is dead or disconnected.
  * @param server A pointer to the server structure.
  * @param disconnect The "disconnect" parameter is a boolean value that
@@ -35,10 +35,10 @@ void ai_dead(client_t *client, server_t *server, bool disconnect)
     if (client->data)
         ai_destroy((ai_t *)client->data);
     if (!disconnect)
-        OLOG_INFO("Client id#%ld fd#%d is dead", client->id,
+        OLOG_INFO("AI id#%ld fd#%d is dead", client->id,
         client->socket->fd);
     else
-        OLOG_INFO("Client id#%ld fd#%d is dead (disconnected)", client->id,
+        OLOG_INFO("AI id#%ld fd#%d is dead (disconnected)", client->id,
         client->socket->fd);
     client_disconnect(server, client);
 }

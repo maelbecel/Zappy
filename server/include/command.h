@@ -34,6 +34,13 @@ int inventory(client_t *client, server_t *server, UNUSED char **args);
 int take(client_t *client, server_t *server, char **args);
 int set(client_t *client, server_t *server, char **args);
 int connect_nbr(client_t *client, server_t *server, UNUSED char **args);
+int look(client_t *client, server_t *server, UNUSED char **args);
+
+void print_tile_content(tile_t *tile, client_t *client);
+void look_north(client_t *client, server_t *server, ai_t *ai);
+void look_south(client_t *client, server_t *server, ai_t *ai);
+void look_west(client_t *client, server_t *server, ai_t *ai);
+void look_east(client_t *client, server_t *server, ai_t *ai);
 
 void notif_graphic(client_t *client, server_t *server,
 int (*func)(client_t *client, client_t *graphic));

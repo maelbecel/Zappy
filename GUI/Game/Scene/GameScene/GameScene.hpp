@@ -12,6 +12,8 @@
     #include "GameData.hpp"
     #include "Map.hpp"
 
+    #include <memory>
+
 namespace Scene {
     /**
      * @brief Game scene
@@ -59,6 +61,28 @@ namespace Scene {
              * @param server The server (for network events)
              */
             void OnEvent(const sf::Event &event, Network::Server &server) override;
+
+        // Private Methods
+        private:
+
+            /**
+             * @brief Check all event link to the left mouse button
+             *
+             * @param mousePos The position of the click
+             */
+            void LeftMousePressed(sf::Vector2i mousePos);
+
+            /**
+             * @brief Check if the left click is inside the left triangle of the hexagonal tiles
+             * 
+             * @param position The mouse click position
+             * @param a        The first point of the triangle
+             * @param b        The second point of the triangle
+             * @param c        The third point of the triangle
+             * @return true    If the click is inside the triangle
+             * @return false   If the click is outside the triangle
+             */
+            bool isInsideTriangle(const sf::Vector2i &position, sf::Vector2i a, sf::Vector2i b, sf::Vector2i c);
 
         // Attributes
         private:

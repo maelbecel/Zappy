@@ -43,8 +43,12 @@ static void do_set(action_t *action)
     server_t *server = action->data[1];
     char *item = action->data[2];
 
-    if (!client || !server || !item) {
+    if (!client || !server) {
         OLOG_ERRORA("Fail to do set action. One of needed pointer is NULL");
+        return;
+    }
+    if (!item) {
+        wbuffer_add_msg(client, "ko\n");
         return;
     }
     if (set_item(client, server, item) == EXIT_FAILTEK)
@@ -56,15 +60,11 @@ static void do_set(action_t *action)
 
 int set(client_t *client, server_t *server, char **args)
 {
-    action_t *action = NULL;
+    action_t *action = action_create("Set", server, client, 7);
 
-    if (array_size(args) != 2) {
-        wbuffer_add_msg(client, "ko\n");
-        return EXIT_SUCCESS;
-    }
-    action = action_create("Set", server, client, 7);
     action->callback = &do_set;
-    action->data[2] = strdup(args[1]);
+    if (array_size(args) == 2)
+        action->data[2] = strdup(args[1]);
     client->current_action = action;
     return 0;
 }

@@ -64,6 +64,7 @@ int pin(client_t *client, server_t *server, char **args);
 int do_pin(client_t *client, client_t *graphic);
 int pgt(server_t *server, ulong client_id, item_t item);
 int pdr(server_t *server, ulong client_id, item_t item);
+int ebo(ulong egg_id, client_t *graphic);
 
 // ALL commands
 void client_disconnect(server_t *server, client_t *client);

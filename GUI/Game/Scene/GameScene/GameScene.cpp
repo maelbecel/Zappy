@@ -68,7 +68,7 @@ namespace Scene {
 
     void GameScene::LeftMousePressed(sf::Vector2i mousePos)
     {
-        std::map<std::pair<int, int>, Tile *> tiles = _gameData.getMap();
+        std::map<std::pair<int, int>, std::shared_ptr<Tile>> tiles = _gameData.getMap();
         sf::Vector2f scale = _gameData.getScale();
 
         // Loop on each tiles of the map

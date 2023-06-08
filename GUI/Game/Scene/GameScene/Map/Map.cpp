@@ -68,7 +68,7 @@ Map::~Map()
 
 void Map::draw(sf::RenderWindow &window, GameData &gameData)
 {
-    std::map<std::pair<int, int>, Tile *> map = gameData.getMap();
+    std::map<std::pair<int, int>, std::shared_ptr<Tile>> map = gameData.getMap();
     sf::Vector2i mapSize = gameData.getMapSize();
     sf::Vector2f scale = gameData.getScale();
     sf::Vector2f userPosition = gameData.getPosition();
@@ -116,7 +116,7 @@ void Map::draw(sf::RenderWindow &window, GameData &gameData)
                     sprite = _tiles["Forest"];
                 }
 
-                Tile *tile = map[std::make_pair(width - SEA_SIZE, height - SEA_SIZE)];
+                std::shared_ptr<Tile> tile = map[std::make_pair(width - SEA_SIZE, height - SEA_SIZE)];
 
                 if (tile != nullptr)
                     tile->setPosition(position);

@@ -12,6 +12,7 @@
     #include <string>
     #include <sstream>
     #include <map>
+    #include <memory>
 
     #include "ParserError.hpp"
     #include "Tile.hpp"
@@ -82,9 +83,9 @@ class GameData {
         /**
          * @brief Get the Map object
          * 
-         * @return std::map<std::pair<int, int>, Tile> 
+         * @return std::map<std::pair<int, int>, std::shared_ptr<Tile>>
          */
-        std::map<std::pair<int, int>, Tile *> getMap() const;
+        std::map<std::pair<int, int>, std::shared_ptr<Tile>> getMap() const;
 
         /**
          * @brief Get the Teams object
@@ -137,22 +138,22 @@ class GameData {
 
     // Attributes
     private:
-        sf::Vector2i _mapSize;                      /*!< The size of the map between (10 and 50 for width and height)*/
-        std::map<std::pair<int, int>, Tile *> _map; /*!< The map of the game with the coordinates of the tiles and their content */
-        std::vector<std::string> _teams;            /*!< The list of all the teams */
+        sf::Vector2i _mapSize;                                     /*!< The size of the map between (10 and 50 for width and height)*/
+        std::map<std::pair<int, int>, std::shared_ptr<Tile>> _map; /*!< The map of the game with the coordinates of the tiles and their content */
+        std::vector<std::string> _teams;                           /*!< The list of all the teams */
 
-        int _gameScale;                             /*!< The scale of the game */
+        int _gameScale;                                            /*!< The scale of the game */
 
         Math::Noise _noise;
     
     // User Info
     private:
-        sf::Vector2f _scale;                        /*!< The user scale (mouse scroll) */
-        sf::Vector2f _position;                     /*!< The user position (arrow key) */
+        sf::Vector2f _scale;                                       /*!< The user scale (mouse scroll) */
+        sf::Vector2f _position;                                    /*!< The user position (arrow key) */
 
     // Global Attributes
     public:
-        static uint timeUnit;                      /*!< The time unit of the game */
+        static uint timeUnit;                                      /*!< The time unit of the game */
 };
 
 #endif /* !GAMEDATA_HPP_ */

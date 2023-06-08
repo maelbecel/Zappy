@@ -12,7 +12,6 @@ from ..exception.clientException import clientException as cEx
 from ..server.clientServer import clientServer
 from ..direction.direction import direction
 
-
 class clientAi:
     def __init__(self, teamName: str, port: int, host: str):
         """
@@ -28,6 +27,7 @@ class clientAi:
         or hostname of the server that the client will connect to.
         """
         print("Init clientAi")
+        self.lookResult = []
         self.alive = True
         self.mapSize = [0, 0]
         self.response = None
@@ -36,6 +36,8 @@ class clientAi:
         self.client = clientServer(port, host)
         self.direction = direction()
         self.queue = []
+        self.inv = dict()
+        self.level = 1
 
     def getConnectionResponse(self):
         """
@@ -193,10 +195,8 @@ class clientAi:
         """
         if self.alive:
             self.send(cAct.LOOK.value)
-        if self.isValidLook() and self.alive:
-            print("look -> %s" % self.response)
-            # make a decision
-            ...
+        if (self.isValidArray() and self.alive):
+            self.parseLook()
 
     def inventory(self):
         """
@@ -204,8 +204,8 @@ class clientAi:
         """
         if self.alive:
             self.send(cAct.INVENTORY.value)
-        if self.response == "ok\n" and self.alive:
-            print("inventory -> %s" % self.response)
+        if (self.isValidArray() and self.alive):
+            self.checkValidityInv()
             return
 
     def broadcast(self, message: str):
@@ -220,7 +220,6 @@ class clientAi:
         self.send(cAct.BROADCAST.value + " " + message + "\n")
         if self.response == "ok\n" and self.alive:
             print("broadcast -> %s" % self.response)
-            return
 
     def connectNbr(self):
         """
@@ -229,16 +228,13 @@ class clientAi:
         self.send(cAct.CONNECT_NBR.value)
         if self.response.isdigit() and self.alive:
             self.availablePlaces = int(self.response.split("\n")[0])
-            print("connect_nbr -> %s" % self.response)
-            return
 
     def fork(self):
         """
         The function sends a fork command using the cAct enum value.
         """
         self.send(cAct.FORK.value)
-        if self.response == "ok\n" and self.alive:
-            print("fork -> %s" % self.response)
+        if (self.response == "ok\n" and self.alive):
             return
 
     def eject(self):
@@ -246,8 +242,7 @@ class clientAi:
         The function "eject" sends a command to eject something.
         """
         self.send(cAct.EJECT.value)
-        if self.response == "ok\n" and self.alive:
-            print("eject -> %s" % self.response)
+        if (self.response == "ok\n" and self.alive):
             return
 
     def take(self, object: str):
@@ -260,10 +255,8 @@ class clientAi:
         be sent to the game engine to execute the "take" action.
         """
         self.send(cAct.TAKE.value + " " + object + "\n")
-        if self.response == "ok\n" and self.alive:
-            # handle inventory
-            print("take -> %s" % self.response)
-            return
+        if (self.response == "ok\n" and self.alive):
+            self.inv[object] += 1
 
     def set(self, object: str):
         """
@@ -274,10 +267,8 @@ class clientAi:
         class.
         """
         self.send(cAct.SET.value + " " + object + "\n")
-        if self.response == "ok\n" and self.alive:
-            # handle inventory
-            print("set -> %s" % self.response)
-            return
+        if (self.response == "ok\n" and self.alive):
+            self.inv[object] -= 1
 
     def incantation(self):
         """
@@ -285,10 +276,8 @@ class clientAi:
         cAct.INCANTATION.
         """
         self.send(cAct.INCANTATION.value)
-        if self.response == "ok\n" and self.alive:
-            # gain level
-            print("incantation -> %s" % self.response)
-            return
+        if (self.response == "ok\n" and self.alive):
+            self.level += 1
 
     def run(self):
         """
@@ -298,20 +287,63 @@ class clientAi:
         while self.alive:
             self.forward()
 
-    def isValidLook(self):
+    def resetFood(self, array):
+
+        for element in array:
+            if element[0] == "food":
+                self.inv[element[0]] = element[1]
+                break
+
+    def checkValidityInv(self):
+        array = self.parseInv()
+
+        self.resetFood(array)
+        for element in array:
+            if self.inv[element[0]] != element[1]:
+                print("something wrong")
+                self.fillInv(array)
+                break
+
+    def fillInv(self, array):
+        for element in array:
+            self.inv[element[0]] = int(element[1])
+
+
+    def parseInv(self):
+        temp = []
+
+        array = self.response[1:-3].split(',')
+        for element in array:
+            temp.append(element[1:].split(' '))
+
+        return temp
+
+    def isValidArray(self):
+
+        if not self.response[-1] == '\n' and not self.response[-2] == ']':
+            return False
+        if not self.response[0] == '[':
+            return False
+
         return True
+
+    def parseLook(self):
+        # -3 to test
+        array = self.response[1:-2].split(',')
+        for element in array:
+            self.lookResult.append(element[1:-1].split(' '))
 
     def computeQueueActions(self):
         for element in self.queue:
             element()
 
-    def __getGoTo(self, value):
+    def getGoTo(self, value: int):
+        beforeSize = 1
+        result = 0
+        max = 0
+        it = 2
         x = 0
         y = 0
-        max = 0
-        result = 0
-        beforeSize = 1
-        it = 2
 
         while result != value:
             if result < value and value < max:
@@ -328,9 +360,9 @@ class clientAi:
             it += 2
             y += 1
 
-        self.__fillQueue(x, y)
+        self.fillQueue(x, y)
 
-    def __fillQueue(self, x, y):
+    def fillQueue(self, x: int, y: int):
         left = False
 
         if x < 0:

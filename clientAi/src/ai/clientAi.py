@@ -332,8 +332,12 @@ class clientAi:
     def parseLook(self):
         # -3 to test
         array = self.response[1:-2].split(",")
-        for element in array:
-            self.lookResult.append(element[1:-1].split(" "))
+        for i in range (0, len(array)):
+            print("array -> ", array[i])
+            if (i == len(array) - 1):
+                self.lookResult.append(array[i][1:-1].split(" "))
+                break
+            self.lookResult.append(array[i][1:].split(" "))
 
     def computeQueueActions(self):
         for element in self.queue:

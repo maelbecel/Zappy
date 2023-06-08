@@ -34,10 +34,12 @@ def main(client):
         if client is None:
             raise cException("Error: client is null")
         client.connect()
-        client.inventory()
         client.look()
-        client.pickObject(2, "food")
-        client.inventory()
+        print(client.lookResult)
+        for x in client.lookResult:
+            for object in x:
+                if (object == "linemate"):
+                    client.broadcast(client.teamName + " linemate")
         client.disconnect()
     except Exception as e:
         raise e

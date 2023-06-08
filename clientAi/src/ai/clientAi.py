@@ -378,7 +378,7 @@ class clientAi:
             self.queue.append(self.forward)
         if left:
             self.queue.append(self.left)
-        else:
+        elif x != 0:
             self.queue.append(self.right)
         for i in range(0, x):
             self.queue.append(self.forward)
@@ -387,4 +387,3 @@ class clientAi:
         self.getGoTo(value)
         self.computeQueueActions()
         self.take(object)
-

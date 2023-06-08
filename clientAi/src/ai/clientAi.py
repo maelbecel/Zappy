@@ -227,7 +227,7 @@ class clientAi:
         This function sends a message to connect to neighboring nodes.
         """
         self.send(cAct.CONNECT_NBR.value)
-        if self.response.isdigit() and self.alive:
+        if self.response[:-1].isdigit() and self.alive:
             self.availablePlaces = int(self.response.split("\n")[0])
 
     def fork(self):
@@ -257,7 +257,10 @@ class clientAi:
         """
         self.send(cAct.TAKE.value + " " + object + "\n")
         if self.response == "ok\n" and self.alive:
-            self.inv[object] += 1
+            if not self.inv.get(object):
+                self.inv[object] = 1
+            else:
+                self.inv[object] += 1
 
     def set(self, object: str):
         """
@@ -298,8 +301,9 @@ class clientAi:
         array = self.parseInv()
 
         self.resetFood(array)
+        print("ARRAY -> ", array)
         for element in array:
-            if self.inv[element[0]] != element[1]:
+            if element[0] and element[0] in self.inv and self.inv[element[0]] != element[1]:
                 print("something wrong")
                 self.fillInv(array)
                 break

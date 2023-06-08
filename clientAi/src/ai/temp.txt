@@ -1,0 +1,20 @@
+AI process
+
+    - Get inv
+
+    - Run loop
+
+
+        - If Incantation available (broadcast)
+            try to go there
+        - Elif all ressources for incantation on a pos:
+            go there
+        - Elif ressources that AI need to evolve:
+            go take the ressource
+        - Elif AI have all ressources needed in the inventory
+            put all the ressouces and wait for people to come join for the incantation
+        - If no ressource available:
+            If rotate 3 times without forward:
+                forward
+            Else
+                try to rotate and look

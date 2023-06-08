@@ -35,6 +35,9 @@ def main(client):
             raise cException("Error: client is null")
         client.connect()
         client.inventory()
+        client.look()
+        client.pickObject(2, "food")
+        client.inventory()
         client.disconnect()
     except Exception as e:
         raise e

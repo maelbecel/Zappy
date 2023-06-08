@@ -294,7 +294,7 @@ class clientAi:
     def resetFood(self, array):
         for element in array:
             if element[0] == "food":
-                self.inv[element[0]] = element[1]
+                self.inv[element[0]] = int(element[1])
                 break
 
     def checkValidityInv(self):
@@ -380,5 +380,7 @@ class clientAi:
             self.queue.append(self.forward)
 
     def pickObject(self, value, object: str):
-        self.__getGoTo(value)
+        self.getGoTo(value)
+        self.computeQueueActions()
         self.take(object)
+

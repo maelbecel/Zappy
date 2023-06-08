@@ -5,9 +5,9 @@
 ## main
 ##
 
-import sys
 import src.exception.clientException as cException
 import src.ai.clientAi as cAi
+import sys
 
 MAX_PORT = 65535
 
@@ -34,8 +34,6 @@ def main(client):
         if client is None:
             raise cException("Error: client is null")
         client.connect()
-        client.look()
-        client.pickObject(2, "food")
         client.inventory()
         client.disconnect()
     except Exception as e:

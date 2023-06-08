@@ -79,8 +79,52 @@ namespace Scene {
             if (mousePos.x < position.x || mousePos.y < position.y || mousePos.x > (position.x + (Tile::TILE_WIDTH * (scale.x + 2))) || mousePos.y > (position.y + (Tile::TILE_HEIGHT * (scale.y + 1.25))))
                 continue;
 
-            std::cout << "Tile clicked: " << tile.first.first << ", " << tile.first.second << std::endl;
-            break;
+            // Check if the mouse is on the rectangle
+            if ((mousePos.x >= position.x + (8 * (scale.x + 2)) && mousePos.y >= position.y) && (mousePos.x <= position.x + (Tile::TILE_WIDTH * (scale.x + 2)) - (8 * (scale.x + 2)) && mousePos.y <= position.y + (Tile::TILE_HEIGHT * (scale.y + 1.25)))) {
+                std::cout << "Rectangle clicked: " << tile.first.first << ", " << tile.first.second << std::endl;
+                break;
+            }
+
+            // Check if the mouse is on the left triangle
+            sf::Vector2f a = sf::Vector2f(position.x + (8 * (scale.x + 2)), position.y);
+            sf::Vector2f b = sf::Vector2f(position.x, position.y + ((Tile::TILE_HEIGHT / 2) * (scale.y + 1.25)));
+            sf::Vector2f c = sf::Vector2f(position.x + (8 * (scale.x + 2)), position.y + (Tile::TILE_HEIGHT * (scale.y + 1.25)));
+
+            if (isInsideTriangle(mousePos, sf::Vector2i(a.x, a.y), sf::Vector2i(b.x, b.y), sf::Vector2i(c.x, c.y))) {
+                std::cout << "Left Triangle clicked: " << tile.first.first << ", " << tile.first.second << std::endl;
+                break;
+            }
+
+            // Check if the mouse is on the right triangle
+            a = sf::Vector2f(position.x + (Tile::TILE_WIDTH * (scale.x + 2)) - (8 * (scale.x + 2)), position.y);
+            b = sf::Vector2f(position.x + (Tile::TILE_WIDTH * (scale.x + 2)), position.y + ((Tile::TILE_HEIGHT / 2) * (scale.y + 1.25)));
+            c = sf::Vector2f(position.x + (Tile::TILE_WIDTH * (scale.x + 2)) - (8 * (scale.x + 2)), position.y + (Tile::TILE_HEIGHT * (scale.y + 1.25)));
+
+            if (isInsideTriangle(mousePos, sf::Vector2i(a.x, a.y), sf::Vector2i(b.x, b.y), sf::Vector2i(c.x, c.y))) {
+                std::cout << "Right Triangle clicked: " << tile.first.first << ", " << tile.first.second << std::endl;
+                break;
+            }
+
+            // TODO: Open the book with tiles information
         }
     };
+
+    bool GameScene::isInsideTriangle(const sf::Vector2i &position, sf::Vector2i a, sf::Vector2i b, sf::Vector2i c)
+    {
+        sf::Vector2i v0 = c - a;
+        sf::Vector2i v1 = b - a;
+        sf::Vector2i v2 = position - a;
+
+        int dot00 = v0.x * v0.x + v0.y * v0.y;
+        int dot01 = v0.x * v1.x + v0.y * v1.y;
+        int dot02 = v0.x * v2.x + v0.y * v2.y;
+        int dot11 = v1.x * v1.x + v1.y * v1.y;
+        int dot12 = v1.x * v2.x + v1.y * v2.y;
+
+        float invDenominator = 1.0f / (dot00 * dot11 - dot01 * dot01);
+        float u = static_cast<float>(dot11 * dot02 - dot01 * dot12) * invDenominator;
+        float v = static_cast<float>(dot00 * dot12 - dot01 * dot02) * invDenominator;
+
+        return (u >= 0.0f) && (v >= 0.0f) && (u + v <= 1.0f);
+    }
 };

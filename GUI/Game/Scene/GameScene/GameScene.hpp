@@ -70,6 +70,18 @@ namespace Scene {
              */
             void LeftMousePressed(sf::Vector2i mousePos);
 
+            /**
+             * @brief Check if the left click is inside the left triangle of the hexagonal tiles
+             * 
+             * @param position The mouse click position
+             * @param a        The first point of the triangle
+             * @param b        The second point of the triangle
+             * @param c        The third point of the triangle
+             * @return true    If the click is inside the triangle
+             * @return false   If the click is outside the triangle
+             */
+            bool isInsideTriangle(const sf::Vector2i &position, sf::Vector2i a, sf::Vector2i b, sf::Vector2i c);
+
         // Attributes
         private:
             GameData _gameData; /*!< The game data */

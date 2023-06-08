@@ -6,6 +6,7 @@
 */
 
 #include "command.h"
+#include "wbuffer.h"
 
 int pdr(server_t *server, ulong client_id, item_t item)
 {
@@ -16,7 +17,7 @@ int pdr(server_t *server, ulong client_id, item_t item)
         if (!client)
             return EXIT_FAILTEK;
         if (client->type == GRAPHIC)
-            dprintf(client->socket->fd, "pdr %ld %d\n", client_id, item);
+            wbuffer_add_message(client, "pdr %ld %d\n", client_id, item);
     }
     return 0;
 }

@@ -44,7 +44,9 @@ SRC +=	$(SRC_DIR)/client/client_accept.c \
 		$(SRC_DIR)/client/client_destroy.c \
 		$(SRC_DIR)/client/client_read.c \
 		$(SRC_DIR)/client/client_disconnect.c \
-		$(SRC_DIR)/client/client_get_by_id.c
+		$(SRC_DIR)/client/client_get_by_id.c \
+		$(SRC_DIR)/client/write_buffer/wbuffer_add_message.c \
+		$(SRC_DIR)/client/write_buffer/wbuffer_empty.c
 
 SRC +=	$(SRC_DIR)/command/command_exec.c \
 		$(SRC_DIR)/command/command_exec_ai.c \
@@ -91,6 +93,9 @@ SRC +=	$(SRC_DIR)/command/ai/forward.c \
 		$(SRC_DIR)/command/ai/inventory.c \
 		$(SRC_DIR)/command/ai/take.c \
 		$(SRC_DIR)/command/ai/set.c \
+		$(SRC_DIR)/command/ai/connect_nbr.c \
+		$(SRC_DIR)/command/ai/look.c \
+		$(SRC_DIR)/command/ai/look_func.c \
 		$(SRC_DIR)/command/ai/notif_graphic.c
 
 OBJ = $(SRC:%.c=$(BUILD_DIR)/%.o)
@@ -129,7 +134,7 @@ fclean: clean
 
 re: fclean all
 
-debug: CFLAGS += -g
+debug: CFLAGS += -g -D DEBUG
 debug: re
 
 .PHONY: all clean fclean re debug

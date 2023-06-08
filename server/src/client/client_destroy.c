@@ -7,7 +7,7 @@
 
 #include <stdlib.h>
 #include "olog.h"
-#include "client.h"
+#include "server.h"
 
 /**
  * The function destroys a client and frees its associated memory.
@@ -25,7 +25,9 @@ void client_destroy(client_t *client)
     if (client->waiting_orders)
         olist_destroy(client->waiting_orders);
     if (client->current_action)
-        OLOG_ERRORA("Free of current action not implemented for client");
+        action_destroy(client->current_action);
+    if (client->wbuffer)
+        olist_destroy(client->wbuffer);
     if (client->buffer)
         free(client->buffer);
     odestroy_socket(client->socket);

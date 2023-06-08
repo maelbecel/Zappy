@@ -11,6 +11,7 @@
 #include "client.h"
 #include "command.h"
 #include "ai.h"
+#include "wbuffer.h"
 
 static team_t *get_team_by_name(server_t *server, char *name)
 {
@@ -26,9 +27,9 @@ static team_t *get_team_by_name(server_t *server, char *name)
 
 static void send_infos(client_t *client, team_t *team, server_t *server)
 {
-    dprintf(client->socket->fd, "%d\n",
+    wbuffer_add_message(client, "%d\n",
     server->max_team_size - team->team_size);
-    dprintf(client->socket->fd, "%d %d\n", server->map->width,
+    wbuffer_add_message(client, "%d %d\n", server->map->width,
     server->map->height);
 
     OLIST_FOREACH(server->clients, node) {
@@ -54,6 +55,7 @@ server_t *server)
     client->team_id = team->id;
     team->team_size++;
     client->data = ai_create(server->map->width, server->map->height);
+    tile_add_player(server->map, client);
     olist_add_node(team->clients, client);
     return 0;
 }
@@ -73,7 +75,7 @@ int select_team(client_t *client, server_t *server)
     team = get_team_by_name(server, client->buffer);
     if (!team) {
         client->type = NONE;
-        dprintf(client->socket->fd, "ko\n");
+        wbuffer_add_msg(client, "ko\n");
         OLOG_INFO("Client %d want to join an unknown team (%s)",
         client->socket->fd, client->buffer);
         return 0;

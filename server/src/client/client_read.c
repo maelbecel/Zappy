@@ -5,11 +5,13 @@
 ** client_read
 */
 
+#include <stdlib.h>
 #include "olog.h"
 #include "server.h"
 #include "client.h"
 #include "command.h"
 #include "utils.h"
+#include "wbuffer.h"
 
 /**
  * The function reads data from a client's socket and handles
@@ -78,12 +80,19 @@ static void handle_write(server_t *server, client_t *client)
  */
 static void client_loop(server_t *server, client_t *client)
 {
+    char *buffer = NULL;
+
     if (FD_ISSET(client->socket->fd, &server->select->readfds)) {
         if (handle_read(server, client) == -1)
             return;
     }
     if (FD_ISSET(client->socket->fd, &server->select->writefds)) {
         handle_write(server, client);
+        buffer = wbuffer_empty(client);
+        if (buffer) {
+            dprintf(client->socket->fd, "%s", buffer);
+            free(buffer);
+        }
     }
 }
 

@@ -12,6 +12,8 @@
     #include "GameData.hpp"
     #include "Map.hpp"
 
+    #include <memory>
+
 namespace Scene {
     /**
      * @brief Game scene

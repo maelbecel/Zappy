@@ -35,6 +35,7 @@ int take(client_t *client, server_t *server, char **args);
 int set(client_t *client, server_t *server, char **args);
 int connect_nbr(client_t *client, server_t *server, UNUSED char **args);
 int look(client_t *client, server_t *server, UNUSED char **args);
+int fork_cmd(client_t *client, server_t *server, UNUSED char **args);
 
 void print_tile_content(tile_t *tile, client_t *client);
 void look_north(client_t *client, server_t *server, ai_t *ai);
@@ -65,6 +66,8 @@ int do_pin(client_t *client, client_t *graphic);
 int pgt(server_t *server, ulong client_id, item_t item);
 int pdr(server_t *server, ulong client_id, item_t item);
 int ebo(ulong egg_id, client_t *graphic);
+int pfk(client_t *client, client_t *graphic);
+int enw(client_t *graphic, egg_t *egg, ulong client_id);
 
 // ALL commands
 void client_disconnect(server_t *server, client_t *client);

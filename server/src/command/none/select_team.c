@@ -15,8 +15,12 @@
 
 static void send_infos(client_t *client, team_t *team, server_t *server)
 {
+    int team_nb = server->max_team_size - team->team_size + team->eggs_size;
+
+    if (team_nb < 0)
+        team_nb = 0;
     wbuffer_add_message(client, "%d\n",
-    server->max_team_size - team->team_size);
+    team_nb);
     wbuffer_add_message(client, "%d %d\n", server->map->width,
     server->map->height);
 
@@ -68,13 +72,13 @@ static void handle_egg(server_t *server, client_t *client, team_t *team)
 static int update_team_for_client(client_t *client, team_t *team,
 server_t *server)
 {
-    client->type = AI;
     if (team->team_size >= server->max_team_size && team->eggs_size == 0) {
         OLOG_DEBUG("Client %d want to join a full team (%s)",
         client->socket->fd, client->buffer);
         wbuffer_add_msg(client, "ko\n");
         return 0;
     }
+    client->type = AI;
     handle_egg(server, client, team);
     tile_add_player(server->map, client);
     olist_add_node(team->clients, client);

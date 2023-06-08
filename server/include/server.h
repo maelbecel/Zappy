@@ -50,8 +50,7 @@ typedef struct time_manager_s {
     uint spawnItemLastTick;
 } time_manager_t;
 
-typedef struct egg_s
-{
+typedef struct egg_s {
     ulong id;
     ulong team_id;
     uint x;

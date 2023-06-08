@@ -254,4 +254,12 @@ bool egg_is_egg_in_team(ulong team_id, server_t *server);
  */
 egg_t *egg_get_one_in_team(ulong team_id, server_t *server);
 
+/**
+ * @brief Add an egg to a team
+ *
+ * @param server Link to server object
+ * @param team_id Team id
+ */
+void egg_add_to_team(server_t *server, ulong team_id);
+
 #endif /* !SERVER_H_ */

@@ -54,6 +54,15 @@ namespace UI {
             void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
             /**
+             * @brief Draw the button in hover state
+             * target represent the window where to draw the object
+             * states represent the states of the render target
+             * @param target The window where to draw the object
+             * @param states The states of the render target
+             */
+            void drawHover(UNUSED sf::RenderTarget &target, UNUSED sf::RenderStates states) const override {};
+
+            /**
              * @brief Handle the event of the widget
              *
              * @param event The event to handle
@@ -84,7 +93,7 @@ namespace UI {
              * @brief Copy this Input Box object
              *
              * @param copy        The Input Box to copy
-             * @return InputBox & A reference to the copied Input Box 
+             * @return InputBox & A reference to the copied Input Box
              */
             InputBox &operator=(const InputBox &copy);
 

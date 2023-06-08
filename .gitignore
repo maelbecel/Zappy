@@ -51,6 +51,24 @@ Module.symvers
 Mkfile.old
 dkms.conf
 a.out
+
+# python stuff:
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+.pytest_cache/
+
+# vscode stuff:
+.vscode/
+# Build folder
+build/
+
+# IDE
+.idea
+.vscode
+*.code-workspace
+
 zappy_server
 zappy_gui
 *.vscode

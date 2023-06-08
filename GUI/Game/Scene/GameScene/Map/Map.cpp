@@ -10,16 +10,49 @@
 Map::Map()
 {
     try {
+        // Load the Tiles texture
+        sf::Texture *grassTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/GrassHexP.png");
+        sf::Texture *forestTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/ForestHexP.png");
+        sf::Texture *snowTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/SnowHexP.png");
+        sf::Texture *snowForestTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/SnowForestHexP.png");
+        sf::Texture *desertTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/DesertHexP.png");
         sf::Texture *seaTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/SeaHexP.png");
-        sf::Texture *oceanTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/OceanHexP.png");
 
-        _sea = new sf::Sprite();
-        _ocean = new sf::Sprite();
+        // Create the sprites for the texture
+        sf::Sprite *grassSprite = new sf::Sprite();
+        sf::Sprite *forestSprite = new sf::Sprite();
+        sf::Sprite *snowSprite = new sf::Sprite();
+        sf::Sprite *snowForestSprite = new sf::Sprite();
+        sf::Sprite *desertSprite = new sf::Sprite();
+        sf::Sprite *seaSprite = new sf::Sprite();
 
-        _sea->setTexture(*seaTexture);
-        _ocean->setTexture(*oceanTexture);
-        _sea->setTextureRect(sf::IntRect(0, 0, Tile::TILE_WIDTH, Tile::TILE_TOTAL_HEIGHT));
-        _ocean->setTextureRect(sf::IntRect(0, 0, Tile::TILE_WIDTH, Tile::TILE_TOTAL_HEIGHT));
+        // Set the texture to the sprite
+        grassSprite->setTexture(*grassTexture);
+        grassSprite->setTextureRect(sf::IntRect(0, 0, Tile::TILE_WIDTH, Tile::TILE_TOTAL_HEIGHT));
+
+        forestSprite->setTexture(*forestTexture);
+        forestSprite->setTextureRect(sf::IntRect(0, 0, Tile::TILE_WIDTH, Tile::TILE_TOTAL_HEIGHT + 5));
+
+        snowSprite->setTexture(*snowTexture);
+        snowSprite->setTextureRect(sf::IntRect(0, 0, Tile::TILE_WIDTH, Tile::TILE_TOTAL_HEIGHT));
+
+        snowForestSprite->setTexture(*snowForestTexture);
+        snowForestSprite->setTextureRect(sf::IntRect(0, 0, Tile::TILE_WIDTH, Tile::TILE_TOTAL_HEIGHT + 5));
+
+        desertSprite->setTexture(*desertTexture);
+        desertSprite->setTextureRect(sf::IntRect(0, 0, Tile::TILE_WIDTH, Tile::TILE_TOTAL_HEIGHT));
+
+        seaSprite->setTexture(*seaTexture);
+        seaSprite->setTextureRect(sf::IntRect(0, 0, Tile::TILE_WIDTH, Tile::TILE_TOTAL_HEIGHT));
+
+        // Link the sprite to the map
+        _tiles["Grass"] = grassSprite;
+        _tiles["Forest"] = forestSprite;
+        _tiles["Snow"] = snowSprite;
+        _tiles["SnowForest"] = snowForestSprite;
+        _tiles["Desert"] = desertSprite;
+        _tiles["Sea"] = seaSprite;
+
     } catch (Error::TextureError &e) {
         std::cerr << e.what() << std::endl;
     }
@@ -27,15 +60,15 @@ Map::Map()
 
 Map::~Map()
 {
-    if (_sea)
-        delete _sea;
-    if (_ocean)
-        delete _ocean;
+    for (auto &tile : _tiles) {
+        if (tile.second)
+            delete tile.second;
+    }
 }
 
 void Map::draw(sf::RenderWindow &window, GameData &gameData)
 {
-    std::map<std::pair<int, int>, Tile> map = gameData.getMap();
+    std::map<std::pair<int, int>, Tile *> map = gameData.getMap();
     sf::Vector2i mapSize = gameData.getMapSize();
     sf::Vector2f scale = gameData.getScale();
     sf::Vector2f userPosition = gameData.getPosition();
@@ -56,14 +89,12 @@ void Map::draw(sf::RenderWindow &window, GameData &gameData)
             // Handle tiles outside the map
             if (height >= mapSize.y + SEA_SIZE || width >= mapSize.x + SEA_SIZE || height < SEA_SIZE || width < SEA_SIZE) {
                 position.y += 1;
-                sprite = _sea;
+                sprite = _tiles["Sea"];
             } else {
-                Tile tile = map[std::make_pair(width, height)];
-
                 if (noise[width - SEA_SIZE][height - SEA_SIZE] < 0.3) {
-                    sprite = tile.sprites["Desert"];
+                    sprite = _tiles["Desert"];
                 } else if (noise[width - SEA_SIZE][height - SEA_SIZE] < 0.7) {
-                    sprite = tile.sprites["Grass"];
+                    sprite = _tiles["Grass"];
                 } else {
                     if (scale.x >= 2.0f && scale.x <= 4.0f)
                         position.y -= 7 * scale.x;
@@ -82,8 +113,13 @@ void Map::draw(sf::RenderWindow &window, GameData &gameData)
                     else
                         position.y -= 6;
 
-                    sprite = tile.sprites["Forest"];
+                    sprite = _tiles["Forest"];
                 }
+
+                Tile *tile = map[std::make_pair(width - SEA_SIZE, height - SEA_SIZE)];
+
+                if (tile != nullptr)
+                    tile->setPosition(position);
             }
 
             sprite->setScale(scale.x + 2.00, scale.y + 1.25);

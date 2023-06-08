@@ -6,6 +6,7 @@
 */
 
 #include "command.h"
+#include "wbuffer.h"
 
 static void action_forward(action_t *action)
 {
@@ -14,7 +15,7 @@ static void action_forward(action_t *action)
     ai_t *ai = client->data;
 
     if (!ai || !server || !client) {
-        dprintf(client->socket->fd, "ko\n");
+        wbuffer_add_msg(client, "ko\n");
         return;
     }
     tile_remove_player(server->map, client);
@@ -27,7 +28,7 @@ static void action_forward(action_t *action)
     if (ai->orientation == WEST)
         ai->x = (ai->x - 1 < 0) ? (int)server->map->width - 1 : ai->x - 1;
     notif_graphic(client, server, &do_ppo);
-    dprintf(client->socket->fd, "ok\n");
+    wbuffer_add_msg(client, "ok\n");
     tile_add_player(server->map, client);
 }
 

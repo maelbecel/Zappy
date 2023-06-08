@@ -6,6 +6,7 @@
 */
 
 #include "command.h"
+#include "wbuffer.h"
 
 int connect_nbr(client_t *client, server_t *server, UNUSED char **args)
 {
@@ -15,6 +16,6 @@ int connect_nbr(client_t *client, server_t *server, UNUSED char **args)
     if (!team)
         return 0;
     nb = server->max_team_size - team->team_size;
-    dprintf(client->socket->fd, "%d\n", nb);
+    wbuffer_add_message(client, "%d\n", nb);
     return 0;
 }

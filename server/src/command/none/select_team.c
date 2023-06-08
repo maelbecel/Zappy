@@ -13,18 +13,6 @@
 #include "ai.h"
 #include "wbuffer.h"
 
-static team_t *get_team_by_name(server_t *server, char *name)
-{
-    team_t *team = NULL;
-
-    OLIST_FOREACH(server->teams, node) {
-        team = (team_t *)node->data;
-        if (strcmp(team->name, name) == 0)
-            return team;
-    }
-    return NULL;
-}
-
 static void send_infos(client_t *client, team_t *team, server_t *server)
 {
     wbuffer_add_message(client, "%d\n",
@@ -36,25 +24,58 @@ static void send_infos(client_t *client, team_t *team, server_t *server)
         client_t *tmp = (client_t *)node->data;
         if (!tmp)
             continue;
-        if (tmp->type == GRAPHIC)
+        if (tmp->type == GRAPHIC) {
             pnw(tmp, client, server);
+            mct(tmp, server, NULL);
+        }
     }
+}
+
+static void send_infos_for_eggs(ulong egg_id, server_t *server)
+{
+    OLIST_FOREACH(server->clients, node) {
+        client_t *tmp = (client_t *)node->data;
+        if (!tmp)
+            continue;
+        if (tmp->type == GRAPHIC)
+            ebo(egg_id, tmp);
+    }
+}
+
+static void handle_egg(server_t *server, client_t *client, team_t *team)
+{
+    ai_t *ai = ai_create(server->map->width, server->map->height);
+    egg_t *egg = NULL;
+
+    client->team_id = team->id;
+    team->team_size++;
+    client->data = ai;
+    if (team->eggs_size > 0) {
+        team->eggs_size--;
+        egg = egg_get_one_in_team(team->id, server);
+        if (!egg) {
+            wbuffer_add_msg(client, "ko\n");
+            ai_destroy(ai);
+            return;
+        }
+        ai->x = egg->x;
+        ai->y = egg->y;
+        send_infos_for_eggs(egg->id, server);
+    }
+    send_infos(client, team, server);
 }
 
 static int update_team_for_client(client_t *client, team_t *team,
 server_t *server)
 {
     client->type = AI;
-    send_infos(client, team, server);
-    if (team->team_size >= server->max_team_size) {
+    if (team->team_size >= server->max_team_size && team->eggs_size == 0) {
         OLOG_DEBUG("Client %d want to join a full team (%s)",
         client->socket->fd, client->buffer);
-        client_disconnect(server, client);
+        wbuffer_add_msg(client, "ko\n");
         return 0;
     }
-    client->team_id = team->id;
-    team->team_size++;
-    client->data = ai_create(server->map->width, server->map->height);
+    handle_egg(server, client, team);
     tile_add_player(server->map, client);
     olist_add_node(team->clients, client);
     return 0;

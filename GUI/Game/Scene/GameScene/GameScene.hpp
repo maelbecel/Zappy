@@ -60,6 +60,16 @@ namespace Scene {
              */
             void OnEvent(const sf::Event &event, Network::Server &server) override;
 
+        // Private Methods
+        private:
+
+            /**
+             * @brief Check all event link to the left mouse button
+             *
+             * @param mousePos The position of the click
+             */
+            void LeftMousePressed(sf::Vector2i mousePos);
+
         // Attributes
         private:
             GameData _gameData; /*!< The game data */

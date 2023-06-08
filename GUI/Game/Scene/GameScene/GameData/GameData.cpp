@@ -92,7 +92,7 @@ void GameData::setTileContent(const std::string &tileContent)
         int q5Int = std::stoi(q5);
         int q6Int = std::stoi(q6);
 
-        _map[std::make_pair(xInt, yInt)] = Tile(sf::Vector2i(xInt, yInt), q0Int, q1Int, q2Int, q3Int, q4Int, q5Int, q6Int);
+        _map[std::make_pair(xInt, yInt)] = new Tile(sf::Vector2i(xInt, yInt), q0Int, q1Int, q2Int, q3Int, q4Int, q5Int, q6Int);
     } catch (std::invalid_argument &e) {
         throw Error::InvalidArgument("GameData::setTileContent");
     }
@@ -121,7 +121,7 @@ std::vector<std::string> GameData::getTeams() const
     return _teams;
 }
 
-std::map<std::pair<int, int>, Tile> GameData::getMap() const
+std::map<std::pair<int, int>, Tile *> GameData::getMap() const
 {
     return _map;
 }

@@ -6,16 +6,17 @@
 */
 
 #include "command.h"
+#include "wbuffer.h"
 
 void print_tile_content(tile_t *tile, client_t *client)
 {
     if (!tile || !client)
         return;
     for (uint i = 0; i < tile->players; i++)
-        dprintf(client->socket->fd, " player");
+        wbuffer_add_msg(client, " player");
     for (uint i = 0; i < MAX_INVENTORY; i++) {
         for (uint j = 0; j < tile->inventory->items[i]; j++)
-            dprintf(client->socket->fd, " %s", item_names[i]);
+            wbuffer_add_message(client, " %s", item_names[i]);
     }
 }
 
@@ -30,7 +31,7 @@ static void do_look(action_t *action)
     ai = client->data;
     if (!ai)
         return;
-    dprintf(client->socket->fd, "[");
+    wbuffer_add_msg(client, "[");
     if (ai->orientation == NORTH)
         look_north(client, server, ai);
     if (ai->orientation == SOUTH)
@@ -39,7 +40,7 @@ static void do_look(action_t *action)
         look_west(client, server, ai);
     if (ai->orientation == EAST)
         look_east(client, server, ai);
-    dprintf(client->socket->fd, " ]\n");
+    wbuffer_add_msg(client, " ]\n");
 }
 
 int look(client_t *client, server_t *server, UNUSED char **args)

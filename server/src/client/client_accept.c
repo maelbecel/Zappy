@@ -8,6 +8,7 @@
 #include "olog.h"
 #include "server.h"
 #include "client.h"
+#include "wbuffer.h"
 
 /**
  * The function builds a client object with a given socket.
@@ -57,7 +58,7 @@ static int add_client(server_t *server, socket_t *socket)
     OLOG_DEBUG("New client connected: %s:%d id#%ld fd#%d",
     inet_ntoa(socket->addr.sin_addr), ntohs(socket->addr.sin_port), client->id,
     client->socket->fd);
-    dprintf(client->socket->fd, "WELCOME\n");
+    wbuffer_add_msg(client, "WELCOME\n");
     return 0;
 }
 

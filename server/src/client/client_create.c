@@ -29,6 +29,7 @@ client_t *client_create(void)
     client->type = NONE;
     client->data = NULL;
     client->waiting_orders = olist_create();
+    client->wbuffer = olist_create();
     client->current_action = NULL;
     return client;
 }

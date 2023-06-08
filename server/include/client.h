@@ -47,6 +47,7 @@ typedef struct client_s {
     client_type_t type;
     void *data;
     olist_t *waiting_orders;
+    olist_t *wbuffer;
     action_t *current_action;
 } client_t;
 

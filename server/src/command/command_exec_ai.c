@@ -12,6 +12,7 @@
 #include "command.h"
 #include "olog.h"
 #include "utils.h"
+#include "wbuffer.h"
 
 static const command_t ai_commands[] = {
     {"Forward", &forward},
@@ -28,7 +29,7 @@ static const command_t ai_commands[] = {
 static void ending_executing(client_t *client, char **args, bool found)
 {
     if (!found)
-        dprintf(client->socket->fd, "ko\n");
+        wbuffer_add_msg(client, "ko\n");
     for (uint i = 0; args[i]; i++)
         free(args[i]);
     free(args);
@@ -73,6 +74,6 @@ int command_exec_ai(client_t *client, server_t *server, char **args)
             return ai_commands[i].func(client, server, args);
         }
     }
-    dprintf(client->socket->fd, "ko\n");
+    wbuffer_add_msg(client, "ko\n");
     return 0;
 }

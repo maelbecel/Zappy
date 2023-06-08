@@ -44,7 +44,9 @@ SRC +=	$(SRC_DIR)/client/client_accept.c \
 		$(SRC_DIR)/client/client_destroy.c \
 		$(SRC_DIR)/client/client_read.c \
 		$(SRC_DIR)/client/client_disconnect.c \
-		$(SRC_DIR)/client/client_get_by_id.c
+		$(SRC_DIR)/client/client_get_by_id.c \
+		$(SRC_DIR)/client/write_buffer/wbuffer_add_message.c \
+		$(SRC_DIR)/client/write_buffer/wbuffer_empty.c
 
 SRC +=	$(SRC_DIR)/command/command_exec.c \
 		$(SRC_DIR)/command/command_exec_ai.c \
@@ -132,7 +134,7 @@ fclean: clean
 
 re: fclean all
 
-debug: CFLAGS += -g
+debug: CFLAGS += -g -D DEBUG
 debug: re
 
 .PHONY: all clean fclean re debug

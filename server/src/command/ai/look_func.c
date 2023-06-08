@@ -6,6 +6,7 @@
 */
 
 #include "command.h"
+#include "wbuffer.h"
 
 void look_north(client_t *client, server_t *server, ai_t *ai)
 {
@@ -21,10 +22,10 @@ void look_north(client_t *client, server_t *server, ai_t *ai)
             y = (y >= server->map->height) ? y - server->map->height : y;
             tile = map_get_tile(server->map, x, y);
             print_tile_content(tile, client);
-            (j != i) ? dprintf(client->socket->fd, ",") : 0;
+            (j != i) ? wbuffer_add_msg(client, ",") : 0;
         }
         if (i != (int)ai->level)
-            dprintf(client->socket->fd, ",");
+            wbuffer_add_msg(client, ",");
     }
 }
 
@@ -43,10 +44,10 @@ void look_south(client_t *client, server_t *server, ai_t *ai)
             y = (y >= server->map->height) ? y - server->map->height : y;
             tile = map_get_tile(server->map, x, y);
             print_tile_content(tile, client);
-            (j != -i) ? dprintf(client->socket->fd, ",") : 0;
+            (j != -i) ? wbuffer_add_msg(client, ",") : 0;
         }
         if (i != (int)ai->level)
-            dprintf(client->socket->fd, ",");
+            wbuffer_add_msg(client, ",");
     }
 }
 
@@ -64,10 +65,10 @@ void look_west(client_t *client, server_t *server, ai_t *ai)
             y = (y >= server->map->height) ? y - server->map->height : y;
             tile = map_get_tile(server->map, x, y);
             print_tile_content(tile, client);
-            (j != -i) ? dprintf(client->socket->fd, ",") : 0;
+            (j != -i) ? wbuffer_add_msg(client, ",") : 0;
         }
         if (i != (int)ai->level)
-            dprintf(client->socket->fd, ",");
+            wbuffer_add_msg(client, ",");
     }
 }
 
@@ -86,9 +87,9 @@ void look_east(client_t *client, server_t *server, ai_t *ai)
             y = (y >= server->map->height) ? y - server->map->height : y;
             tile = map_get_tile(server->map, x, y);
             print_tile_content(tile, client);
-            (j != i) ? dprintf(client->socket->fd, ",") : 0;
+            (j != i) ? wbuffer_add_msg(client, ",") : 0;
         }
         if (i != (int)ai->level)
-            dprintf(client->socket->fd, ",");
+            wbuffer_add_msg(client, ",");
     }
 }

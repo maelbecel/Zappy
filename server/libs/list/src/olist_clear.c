@@ -23,13 +23,12 @@ void olist_clear(olist_t *list)
     for (uint i = 0; i < list->size; i++) {
         if (tmp->next == NULL) {
             (tmp->data) ? free(tmp->data) : 0;
-            free(tmp);
+            (tmp) ? free(tmp) : 0;
             break;
         }
         tmp = tmp->next;
-        if (!tmp->prev->data)
-            free(tmp->prev->data);
-        free(tmp->prev);
+        (tmp->prev->data) ? free(tmp->prev->data) : 0;
+        (tmp->prev) ? free(tmp->prev) : 0;
     }
     list->head = NULL;
     list->tail = NULL;

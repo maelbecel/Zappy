@@ -15,7 +15,9 @@ int connect_nbr(client_t *client, server_t *server, UNUSED char **args)
 
     if (!team)
         return 0;
-    nb = server->max_team_size - team->team_size;
+    nb = server->max_team_size - team->team_size + team->eggs_size;
+    if (nb < 0)
+        nb = 0;
     wbuffer_add_message(client, "%d\n", nb);
     return 0;
 }

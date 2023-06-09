@@ -59,7 +59,8 @@ SRC +=	$(SRC_DIR)/utils/id_generator.c \
 
 SRC +=	$(SRC_DIR)/team/team_create.c \
 		$(SRC_DIR)/team/team_destroy.c \
-		$(SRC_DIR)/team/team_get_by_id.c
+		$(SRC_DIR)/team/team_get_by_id.c \
+		$(SRC_DIR)/team/team_get_by_name.c
 
 SRC +=	$(SRC_DIR)/ai/ai_create.c \
 		$(SRC_DIR)/ai/ai_destroy.c \
@@ -85,7 +86,10 @@ SRC +=	$(SRC_DIR)/command/graphic/msz.c \
 		$(SRC_DIR)/command/graphic/plv.c \
 		$(SRC_DIR)/command/graphic/pin.c \
 		$(SRC_DIR)/command/graphic/pgt.c \
-		$(SRC_DIR)/command/graphic/pdr.c
+		$(SRC_DIR)/command/graphic/pdr.c \
+		$(SRC_DIR)/command/graphic/ebo.c \
+		$(SRC_DIR)/command/graphic/pfk.c \
+		$(SRC_DIR)/command/graphic/enw.c
 
 SRC +=	$(SRC_DIR)/command/ai/forward.c \
 		$(SRC_DIR)/command/ai/right.c \
@@ -96,7 +100,14 @@ SRC +=	$(SRC_DIR)/command/ai/forward.c \
 		$(SRC_DIR)/command/ai/connect_nbr.c \
 		$(SRC_DIR)/command/ai/look.c \
 		$(SRC_DIR)/command/ai/look_func.c \
+		$(SRC_DIR)/command/ai/fork.c \
 		$(SRC_DIR)/command/ai/notif_graphic.c
+
+SRC +=	$(SRC_DIR)/egg/egg_create.c \
+		$(SRC_DIR)/egg/egg_destroy.c \
+		$(SRC_DIR)/egg/egg_get_one_in_team.c \
+		$(SRC_DIR)/egg/egg_is_egg_in_team.c \
+		$(SRC_DIR)/egg/egg_add_to_team.c
 
 OBJ = $(SRC:%.c=$(BUILD_DIR)/%.o)
 

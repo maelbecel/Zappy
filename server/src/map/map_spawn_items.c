@@ -30,20 +30,6 @@ static void put_item(server_t *server, int i)
     tile->inventory->items[i]++;
 }
 
-static void notif_of_refill(server_t *server)
-{
-    client_t *client = NULL;
-
-    OLIST_FOREACH(server->clients, node) {
-        client = (client_t *)node->data;
-        if (!client)
-            return;
-        if (client->type != GRAPHIC)
-            return;
-        mct(client, server, NULL);
-    }
-}
-
 void map_spawn_items(server_t *server, bool checkTime)
 {
     uint tickDiff = 0;
@@ -61,5 +47,4 @@ void map_spawn_items(server_t *server, bool checkTime)
         }
     }
     server->time->spawnItemLastTick = server->time->tick;
-    notif_of_refill(server);
 }

@@ -32,7 +32,7 @@ class Tile {
          * @param q6 The quantity of thystame
          */
         Tile(sf::Vector2i coordonates = sf::Vector2i(0, 0), int q0 = 0, int q1 = 0, int q2 = 0, int q3 = 0, int q4 = 0, int q5 = 0, int q6 = 0);
-        ~Tile() = default;
+        ~Tile();
     
     // Getters and Setters
     public:
@@ -58,9 +58,20 @@ class Tile {
          * @brief Draw the tile resources
          *
          * @param window The window where the tile will be draw
-         * @param scale The scale of the window
+         * @param scale  The scale of the window
          */
         void draw(sf::RenderWindow &window, sf::Vector2f scale);
+
+    // Private Methods
+    private:
+
+        /**
+         * @brief Set the Tile Scale object
+         *
+         * @param scale         The scale of the tile
+         * @return sf::Vector2f The correct scale of the tile
+         */
+        sf::Vector2f setTileScale(sf::Vector2f &scale);
 
     // Attributes
     private:
@@ -82,7 +93,7 @@ class Tile {
         static const int TILE_TOTAL_HEIGHT = 30;       /*!< Height of a tiles in pixel with is 3D base */
         static const int RESOURCE_WIDTH = 84;          /*!< Width of a resource in pixel */
         static const int RESOURCE_HEIGHT = 80;         /*!< Height of a resource in pixel */
-        float RESOURCE_SCALE = 0.15f;                  /*!< Scale of a resource */
+        float RESOURCE_SCALE = 0.20f;                  /*!< Scale of a resource */
 
     // Resource Sprite
     private:

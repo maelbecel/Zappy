@@ -34,21 +34,23 @@ class evoli(clientAI):
             print("The dictionaries are not equal")
         else:
             for key, value in dict1.items():
-                if key not in dict2 or dict2[key] < value:
+                if key not in dict2 or value < dict2[key]:
                     return False
             else:
                 return True
 
     # check if there is a case with all the ressouce needed to evolve
     def checkRessourcesCases(self):
-        self.objective = dict()
         index = 0
 
         self.look()
 
         for array in self.lookResult:
+            self.objective = dict()
+            for item in REQUIRED[self.level - 1]:
+                self.objective[item] = 0
             for element in array:
-                if element == "player":
+                if element == "player" or element == "food":
                     continue
                 if element in self.objective:
                     self.objective[element] += 1
@@ -61,8 +63,13 @@ class evoli(clientAI):
 
     def getDictFromCase(self, id: int):
 
+        temp = dict()
+
+        for item in REQUIRED[self.level - 1]:
+            temp[item] = 0
+
         for element in self.lookResult[id]:
-            if element == "player":
+            if element == "player" or element == "food":
                 continue
             if element in temp:
                 temp[element] += 1
@@ -75,15 +82,16 @@ class evoli(clientAI):
         temp = dict()
 
         self.look()
-        temp = self.getDictFromDict(id)
-        if compareDict(temp, REQUIRED[self.level - 1]):
+        temp = self.getDictFromCase(id)
+        if self.compareDict(temp, REQUIRED[self.level - 1]):
             return True
         return False
 
     def takeUselessRessourcesOnCase(self):
         temp = dict()
 
-        temp = self.getDictFromDict(0)
+        self.look()
+        temp = self.getDictFromCase(0)
         # remove element from case
         for (key, value) in temp.items():
             if key in self.objective and value > self.objective[key]:
@@ -94,7 +102,7 @@ class evoli(clientAI):
 
         count = 0
 
-        for element in self.lookResult[id]:
+        for element in self.lookResult[0]:
             if element == "player":
                 count += 1
         return count
@@ -117,12 +125,12 @@ class evoli(clientAI):
         if not index == -1:
             self.getGoTo(index)
             self.computeQueueActions()
-            if self.checkActualCase(): # check if the case is the good one
-                self.removeUselessRessourcesOnCase()
+            if self.checkActualCase(index): # check if the case is the good one
+                self.takeUselessRessourcesOnCase()
                 self.elevate()
 
     def run(self):
 
         while self.alive:
-            # findPlaceToElevate()
+            self.findPlaceToElevate()
             self.alive = False

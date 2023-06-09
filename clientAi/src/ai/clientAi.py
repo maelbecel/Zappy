@@ -197,6 +197,7 @@ class clientAi:
         if self.alive:
             self.send(cAct.LOOK.value)
         if self.isValidArray() and self.alive:
+            print("start to parse look")
             self.parseLook()
 
     def inventory(self):
@@ -322,11 +323,17 @@ class clientAi:
         return temp
 
     def isValidArray(self):
+        print("is valid array")
+
+        print("response = ", self.response)
+
         if not self.response[-1] == "\n" and not self.response[-2] == "]":
+            print("not valid")
             return False
         if not self.response[0] == "[":
+            print("not valid")
             return False
-
+        print("valid")
         return True
 
     def parseLook(self):
@@ -343,6 +350,7 @@ class clientAi:
     def computeQueueActions(self):
         for element in self.queue:
             element()
+        self.queue.clear()
 
     def getGoTo(self, value: int):
         beforeSize = 1
@@ -366,6 +374,9 @@ class clientAi:
             result += it
             it += 2
             y += 1
+
+        print("x = ", x)
+        print("y = ", y)
 
         self.fillQueue(x, y)
 

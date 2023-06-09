@@ -7,6 +7,7 @@
 
 import src.exception.clientException as cException
 import src.ai.clientAi as cAi
+import src.ai.evoli as evoli
 import sys
 from time import sleep
 
@@ -26,7 +27,8 @@ def parse(argv):
     if int(argv[2]) > MAX_PORT or int(argv[2]) < 0:
         raise cException("Error: port is invalid")
 
-    client = cAi.clientAi(argv[4], argv[2], argv[6])
+    # client = cAi.clientAi(argv[4], argv[2], argv[6])
+    client = evoli.evoli(argv[4], argv[2], argv[6])
     return client
 
 

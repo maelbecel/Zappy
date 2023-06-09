@@ -28,6 +28,18 @@ namespace Error {
             InvalidArgument(char const *msg) : AError(msg) {};
             ~InvalidArgument() = default;
     };
+
+    class InvalidPort : public AError {
+        public:
+            InvalidPort() : AError("Invalid port") {};
+            ~InvalidPort() = default;
+    };
+
+    class ParserException : public AError {
+        public:
+            ParserException(const char *msg) : AError(msg) {};
+            ~ParserException() = default;
+    };
 };
 
 #endif /* !PARSERERROR_HPP_ */

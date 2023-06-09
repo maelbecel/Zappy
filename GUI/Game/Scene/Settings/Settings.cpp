@@ -12,7 +12,7 @@ namespace Scene {
     // Constructor //
     /////////////////
 
-    Settings::Settings()
+    Settings::Settings() : _settingsHUD()
     {
     }
 

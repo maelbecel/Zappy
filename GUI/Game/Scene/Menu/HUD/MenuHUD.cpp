@@ -23,7 +23,7 @@ namespace UI {
         ButtonWidget *connectButton = new ButtonWidget(sf::Vector2f((1920 - (15 * 32)) / 2 - 50, 350), sf::Vector2f(7 * 32, 32), std::string("Connect"), 7);
         ButtonWidget *settingsButton = new ButtonWidget(sf::Vector2f((1920 - (15 * 32)) / 2 - 50, 400), sf::Vector2f(7 * 32, 32), std::string("Settings"), 7);
         ButtonWidget *quitButton = new ButtonWidget(sf::Vector2f((1920 - (15 * 32)) / 2 - 50, 450), sf::Vector2f(7 * 32, 32), std::string("Quit"), 7);
-        ButtonWidget *crossSettingsButton = new ButtonWidget(sf::Vector2f((1920 - (15 * 32)) / 2 - 50, 35), sf::Vector2f(7 * 32, 32), std::string("Quit"), 7);
+        CrossButtonWidget *crossSettingsButton = new CrossButtonWidget(sf::Vector2f((1920 - (15 * 32)) / 2 + 400, 200), sf::Vector2f(16 * 2.5, 16 * 2.5));
 
         _connectButton = new Button(connectButton);
         _settingsButton = new Button(settingsButton);
@@ -91,8 +91,12 @@ namespace UI {
         if (event.type == sf::Event::MouseButtonPressed) {
             if (event.mouseButton.button != sf::Mouse::Left)
                 return;
-            if (_crossSettingsButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+            if (_settingsButtonOpen == true && _crossSettingsButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
                 _settingsButtonOpen = false;
+            }
+            if (_settingsButtonOpen == true) {
+                _settings.OnEvent(event, server);
+                return;
             }
             if (_connectButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
                 server.setPort(_port.value);

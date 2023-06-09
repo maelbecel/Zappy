@@ -13,6 +13,7 @@
     #include "Server.hpp"
     #include "Button.hpp"
     #include "ButtonWidget.hpp"
+    #include "CrossButtonWidget.hpp"
     #include "NetworkError.hpp"
     #include "Settings.hpp"
 

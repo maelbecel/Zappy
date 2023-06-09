@@ -8,6 +8,9 @@
 #ifndef SETTINGSHUD_HPP_
     #define SETTINGSHUD_HPP_
 
+    #include <libconfig.h++>
+
+    #include "ParserError.hpp"
     #include "BackgroundStyle.hpp"
     #include "InputBox.hpp"
     #include "Server.hpp"
@@ -50,6 +53,8 @@ namespace UI {
             IButton *_increaseMusicButton;          /*!< Button to increase the music */
             InputBox _sound;                        /*!< Input box for the sound */
             InputBox _music;                        /*!< Input box for the music */
+            int _soundValue;                        /*!< Value of the sound */
+            int _musicValue;                        /*!< Value of the music */
     };
 };
 

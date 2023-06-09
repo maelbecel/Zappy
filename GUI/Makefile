@@ -16,6 +16,7 @@ SRC	=	./Main.cpp\
 		./Game/Scene/Menu/HUD/MenuHUD.cpp\
 		./Game/Scene/Menu/HUD/Widget/InputBox.cpp\
 		./Game/Scene/Menu/HUD/Widget/ButtonWidget.cpp\
+		./Game/Scene/Menu/HUD/Widget/CrossButtonWidget.cpp\
 		./Game/Scene/Settings/Settings.cpp\
 		./Game/Scene/Settings/HUD/SettingsHUD.cpp\
 		./Parser/Parser.cpp\
@@ -70,7 +71,7 @@ NAME	=	zappy_gui
 
 CXXFLAGS += -std=c++20 -Wall -Wextra
 
-SFML = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
+SFML = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lconfig++
 
 all:	$(NAME)
 

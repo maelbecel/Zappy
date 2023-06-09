@@ -41,5 +41,6 @@ void ai_dead(client_t *client, server_t *server, bool disconnect)
     else
         OLOG_INFO("AI id#%ld fd#%d is dead (disconnected)", client->id,
         client->socket->fd);
+    tile_remove_player(server->map, client);
     client_disconnect(server, client);
 }

@@ -293,12 +293,25 @@ class clientAi:
             self.forward()
 
     def resetFood(self, array):
+        """
+        This function resets the quantity of food in a dictionary based on the
+        input array.
+
+        @param array The parameter "array" is a list of tuples, where each tuple
+        contains two elements. The first element is a string that represents the
+        type of item (e.g. "food", "weapon", "armor"), and the second element is an
+        integer that represents the quantity of that item. The function
+        """
         for element in array:
             if element[0] == "food":
                 self.inv[element[0]] = int(element[1])
                 break
 
     def checkValidityInv(self):
+        """
+        This function checks the validity of an inventory by comparing it with the
+        current inventory and fills it if there is any discrepancy.
+        """
         array = self.parseInv()
 
         self.resetFood(array)
@@ -310,10 +323,28 @@ class clientAi:
                 break
 
     def fillInv(self, array):
+        """
+        This function fills a dictionary called "inv" with key-value pairs from a
+        given array.
+
+        @param array The parameter "array" is a list of tuples, where each tuple
+        contains two elements. The first element is a key and the second element is
+        a value. The function "fillInv" takes this array and populates the "inv"
+        dictionary of the object with the keys and values from the tuples
+        """
         for element in array:
             self.inv[element[0]] = int(element[1])
 
     def parseInv(self):
+        """
+        This function parses an inventory response and returns a list of items.
+
+        @return The function `parseInv` is returning a list of lists. Each inner
+        list contains two elements: the first element is a string representing an
+        item name, and the second element is an integer representing the quantity
+        of that item. The function is parsing a string response and extracting the
+        item names and quantities from it.
+        """
         temp = []
 
         array = self.response[1:-3].split(",")
@@ -323,31 +354,37 @@ class clientAi:
         return temp
 
     def isValidArray(self):
-        print("is valid array")
+        """
+        This function checks if a given response is a valid array in Python.
 
-        print("response = ", self.response)
-
+        @return This code defines a method called `isValidArray` that checks if a
+        given response is a valid array. It returns `True` if the response is a
+        valid array and `False` otherwise.
+        """
         if not self.response[-1] == "\n" and not self.response[-2] == "]":
-            print("not valid")
             return False
         if not self.response[0] == "[":
-            print("not valid")
             return False
-        print("valid")
         return True
 
     def parseLook(self):
-        # -3 to test
+        """
+        This function parses a response string and appends the resulting array to a
+        list.
+        """
         array = self.response[1:-2].split(",")
         self.lookResult.clear()
         for i in range (0, len(array)):
-            print("array -> ", array[i])
             if (i == len(array) - 1):
                 self.lookResult.append(array[i][1:-1].split(" "))
                 break
             self.lookResult.append(array[i][1:].split(" "))
 
     def computeQueueActions(self):
+        """
+        This function executes all the elements in a queue and then clears the
+        queue.
+        """
         for element in self.queue:
             element()
         self.queue.clear()
@@ -374,9 +411,6 @@ class clientAi:
             result += it
             it += 2
             y += 1
-
-        print("x = ", x)
-        print("y = ", y)
 
         self.fillQueue(x, y)
 

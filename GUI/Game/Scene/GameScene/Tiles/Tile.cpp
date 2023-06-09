@@ -32,7 +32,7 @@ Tile::Tile(sf::Vector2i coordonates, int q0, int q1, int q2, int q3, int q4, int
 
         // Set the texture to the sprite
         foodSprite->setTexture(*foodTexture);
-        foodSprite->setTextureRect(sf::IntRect(0, 0, RESOURCE_WIDTH, RESOURCE_HEIGHT));
+        foodSprite->setTextureRect(sf::IntRect(0, 0, 48, 48));
 
         linemateSprite->setTexture(*linemateTexture);
         linemateSprite->setTextureRect(sf::IntRect(0, 0, RESOURCE_WIDTH, RESOURCE_HEIGHT));
@@ -66,6 +66,14 @@ Tile::Tile(sf::Vector2i coordonates, int q0, int q1, int q2, int q3, int q4, int
     }
 }
 
+Tile::~Tile()
+{
+    /*for (auto &resource : _resources) {
+        if (resource.second)
+            delete resource.second;
+    }*/
+}
+
 void Tile::setPosition(sf::Vector2f &position)
 {
     _position = position;
@@ -78,46 +86,54 @@ sf::Vector2f Tile::getPosition() const
 
 void Tile::draw(sf::RenderWindow &window, sf::Vector2f scale)
 {
-    //std::cout << "Tile: " << _q0 << " " << _q1 << " " << _q2 << " " << _q3 << " " << _q4 << " " << _q5 << " " << _q6 << std::endl;
     if (_q0 > 0) {
-        _resources["Food"]->setPosition(_position + sf::Vector2f((TILE_WIDTH * scale.x / 2) - (8 * scale.x), (TILE_HEIGHT - scale.y / 2)));
-        _resources["Food"]->setScale(scale * RESOURCE_SCALE);
+        _resources["Food"]->setPosition(_position + sf::Vector2f(TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-25 * (scale.x + 2), 2 * (scale.y + 1.25f)));
+        _resources["Food"]->setScale(setTileScale(scale) * 1.15f);
         window.draw(*_resources["Food"]);
     }
 
+    if (_q3 > 0) {
+        _resources["Sibur"]->setPosition(_position + sf::Vector2f(TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-12 * (scale.x + 2), 4 * (scale.y + 1.25f)));
+        _resources["Sibur"]->setScale(setTileScale(scale));
+        window.draw(*_resources["Sibur"]);
+    }
+
     if (_q1 > 0) {
-        _resources["Linemate"]->setPosition(_position + sf::Vector2f((TILE_WIDTH * scale.x / 2), (TILE_HEIGHT - scale.y / 2))); 
-        _resources["Linemate"]->setScale(scale * RESOURCE_SCALE);
+        _resources["Linemate"]->setPosition(_position + sf::Vector2f(TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-8 * (scale.x + 2), 8 * (scale.y + 1.25f)));
+        _resources["Linemate"]->setScale(setTileScale(scale));
         window.draw(*_resources["Linemate"]);
     }
 
     if (_q2 > 0) {
-        _resources["Deraumere"]->setPosition(_position + sf::Vector2f((TILE_WIDTH * scale.x / 2), (TILE_HEIGHT - scale.y / 2))); 
-        _resources["Deraumere"]->setScale(scale * RESOURCE_SCALE);
+        _resources["Deraumere"]->setPosition(_position + sf::Vector2f(TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-10 * (scale.x + 2), 12 * (scale.y + 1.25f)));
+        _resources["Deraumere"]->setScale(setTileScale(scale));
         window.draw(*_resources["Deraumere"]);
     }
 
-    if (_q3 > 0) {
-        _resources["Sibur"]->setPosition(_position + sf::Vector2f((TILE_WIDTH * scale.x / 2), (TILE_HEIGHT - scale.y / 2))); 
-        _resources["Sibur"]->setScale(scale * RESOURCE_SCALE);
-        window.draw(*_resources["Sibur"]);
-    }
-
-    if (_q4 > 0) {
-        _resources["Mendiane"]->setPosition(_position + sf::Vector2f((TILE_WIDTH * scale.x / 2), (TILE_HEIGHT - scale.y / 2))); 
-        _resources["Mendiane"]->setScale(scale * RESOURCE_SCALE);
-        window.draw(*_resources["Mendiane"]);
-    }
-
     if (_q5 > 0) {
-        _resources["Phiras"]->setPosition(_position + sf::Vector2f((TILE_WIDTH * scale.x / 2), (TILE_HEIGHT - scale.y / 2))); 
-        _resources["Phiras"]->setScale(scale * RESOURCE_SCALE);
+        _resources["Phiras"]->setPosition(_position + sf::Vector2f(TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-16 * (scale.x + 2), 6.5 * (scale.y + 1.25f)));
+        _resources["Phiras"]->setScale(setTileScale(scale));
         window.draw(*_resources["Phiras"]);
     }
 
     if (_q6 > 0) {
-        _resources["Thystame"]->setPosition(_position + sf::Vector2f((TILE_WIDTH * scale.x / 2), (TILE_HEIGHT - scale.y / 2))); 
-        _resources["Thystame"]->setScale(scale * RESOURCE_SCALE);
+        _resources["Thystame"]->setPosition(_position + sf::Vector2f(TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-20 * (scale.x + 2), 9 * (scale.y + 1.25f)));
+        _resources["Thystame"]->setScale(setTileScale(scale));
         window.draw(*_resources["Thystame"]);
     }
+
+    if (_q4 > 0) {
+        _resources["Mendiane"]->setPosition(_position + sf::Vector2f(TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-16 * (scale.x + 2), 13.5 * (scale.y + 1.25f)));
+        _resources["Mendiane"]->setScale(setTileScale(scale));
+        window.draw(*_resources["Mendiane"]);
+    }
+}
+
+sf::Vector2f Tile::setTileScale(sf::Vector2f &scale)
+{
+    if (scale.x >= 3.5f)
+        return sf::Vector2f(0.40f, 0.40f);
+    if (scale.x >= 1.0f)
+        return sf::Vector2f(0.20f, 0.20f);
+    return sf::Vector2f(0.15f, 0.15f);
 }

@@ -12,7 +12,7 @@ Map::Map()
     try {
         // Load the Tiles texture
         sf::Texture *grassTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/GrassHexP.png");
-        sf::Texture *forestTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/ForestHexP.png");
+        sf::Texture *forestTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/BushHexP.png");
         sf::Texture *snowTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/SnowHexP.png");
         sf::Texture *snowForestTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/SnowForestHexP.png");
         sf::Texture *desertTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/DesertHexP.png");
@@ -73,6 +73,7 @@ void Map::draw(sf::RenderWindow &window, GameData &gameData)
     sf::Vector2f scale = gameData.getScale();
     sf::Vector2f userPosition = gameData.getPosition();
     double **noise = gameData.getNoise();
+    bool forest = false;
 
     for (int height = mapSize.x + SEA_SIZE * 2 - 1; height > -1; height--) {
         for (int width = mapSize.x + SEA_SIZE * 2 - 1; width > -1; width--) {
@@ -90,12 +91,31 @@ void Map::draw(sf::RenderWindow &window, GameData &gameData)
             if (height >= mapSize.y + SEA_SIZE || width >= mapSize.x + SEA_SIZE || height < SEA_SIZE || width < SEA_SIZE) {
                 position.y += 1;
                 sprite = _tiles["Sea"];
+                sprite->setPosition(position);
+                sprite->setScale(scale.x + 2.00, scale.y + 1.25);
+                window.draw(*sprite);
             } else {
                 if (noise[width - SEA_SIZE][height - SEA_SIZE] < 0.3) {
                     sprite = _tiles["Desert"];
                 } else if (noise[width - SEA_SIZE][height - SEA_SIZE] < 0.7) {
                     sprite = _tiles["Grass"];
                 } else {
+                    sprite = _tiles["Grass"];
+                    forest = true;
+                }
+
+                std::shared_ptr<Tile> tile = map[std::make_pair(width - SEA_SIZE, height - SEA_SIZE)];
+
+                sprite->setScale(scale.x + 2.00, scale.y + 1.25);
+                sprite->setPosition(position);
+                window.draw(*sprite);
+                
+                if (tile != nullptr) {
+                    tile->setPosition(position);
+                    tile->draw(window, scale);
+                }
+
+                if (forest == true) {
                     if (scale.x >= 2.0f && scale.x <= 4.0f)
                         position.y -= 7 * scale.x;
                     else if (scale.x >= 4.0f)
@@ -114,17 +134,13 @@ void Map::draw(sf::RenderWindow &window, GameData &gameData)
                         position.y -= 6;
 
                     sprite = _tiles["Forest"];
+                    sprite->setScale(scale.x + 2.00, scale.y + 1.25);
+                    sprite->setPosition(position);
+                    window.draw(*sprite);
                 }
 
-                std::shared_ptr<Tile> tile = map[std::make_pair(width - SEA_SIZE, height - SEA_SIZE)];
-
-                if (tile != nullptr)
-                    tile->setPosition(position);
             }
-
-            sprite->setScale(scale.x + 2.00, scale.y + 1.25);
-            sprite->setPosition(position);
-            window.draw(*sprite);
+            forest = false;
         }
     }
 }

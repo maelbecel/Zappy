@@ -79,6 +79,7 @@ void GameData::setTileContent(const std::string &tileContent)
     std::string q5;
     std::string q6;
 
+    std::cout << tileContent << std::endl;
     std::stringstream(tileContent) >> temp >> x >> y >> q0 >> q1 >> q2 >> q3 >> q4 >> q5 >> q6;
 
     try {

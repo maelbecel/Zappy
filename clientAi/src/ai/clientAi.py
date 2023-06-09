@@ -390,6 +390,13 @@ class clientAi:
         self.queue.clear()
 
     def getGoTo(self, value: int):
+        """
+        The function calculates the coordinates of a cell in a grid based on a given
+        value.
+
+        @param value The value parameter is an integer that represents the target
+        value to be reached in the function.
+        """
         beforeSize = 1
         result = 0
         max = 0
@@ -415,6 +422,18 @@ class clientAi:
         self.fillQueue(x, y)
 
     def fillQueue(self, x: int, y: int):
+        """
+        This function fills a queue with commands to move a robot a certain number
+        of steps to the left or right, and a certain number of steps forward.
+
+        @param x The parameter x represents the distance that the robot needs to
+        move horizontally (either to the left or to the right). If x is negative,
+        it means the robot needs to move to the left. If x is positive, it means
+        the robot needs to move to the right.
+        @param y The parameter "y" represents the number of times the robot should
+        move forward. It is used in a for loop to append the "forward" command to
+        the robot's queue.
+        """
         left = False
 
         if x < 0:
@@ -430,6 +449,17 @@ class clientAi:
             self.queue.append(self.forward)
 
     def pickObject(self, value, object: str):
+        """
+        This function picks up an object at a specified location.
+
+        @param value It seems that the `value` parameter is used as an input to the
+        `getGoTo()` method, which suggests that it might be a location or position
+        that the object needs to move to. However, without more context or
+        information about the code, it's difficult to say for sure.
+        @param object The "object" parameter in the function "pickObject" is a
+        string that represents the name or identifier of the object that the
+        function is supposed to pick up.
+        """
         self.getGoTo(value)
         self.computeQueueActions()
         self.take(object)

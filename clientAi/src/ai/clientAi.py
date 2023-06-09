@@ -33,7 +33,7 @@ class clientAi:
         self.mapSize = [0, 0]
         self.response = None
         self.availablePlaces = 0
-        self.teamName = teamName + "\n"
+        self.teamName = teamName
         self.client = clientServer(port, host)
         self.direction = direction()
         self.queue = []
@@ -60,7 +60,7 @@ class clientAi:
         try:
             self.client.connect()
             self.client.receive()
-            self.client.send(self.teamName)
+            self.client.send(self.teamName + "\n")
             self.response = self.client.receive().split("\n")
             if self.response[0] == "ko" or len(self.response) != 3:
                 raise cEx("Error: team name is invalid")
@@ -332,6 +332,7 @@ class clientAi:
     def parseLook(self):
         # -3 to test
         array = self.response[1:-2].split(",")
+        self.lookResult.clear()
         for i in range (0, len(array)):
             print("array -> ", array[i])
             if (i == len(array) - 1):

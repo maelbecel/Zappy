@@ -8,6 +8,7 @@
 import src.exception.clientException as cException
 import src.ai.clientAi as cAi
 import sys
+from time import sleep
 
 MAX_PORT = 65535
 
@@ -34,13 +35,10 @@ def main(client):
         if client is None:
             raise cException("Error: client is null")
         client.connect()
-        client.look()
-        print(client.lookResult)
-        for x in client.lookResult:
-            for object in x:
-                if (object == "linemate"):
-                    client.broadcast(client.teamName + " linemate")
-        client.disconnect()
+        while True:
+            client.take("food")
+            client.forward()
+            client.inventory()
     except Exception as e:
         raise e
 

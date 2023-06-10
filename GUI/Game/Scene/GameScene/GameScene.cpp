@@ -31,6 +31,7 @@ namespace Scene {
     void GameScene::Render(sf::RenderWindow &window)
     {
         _map.draw(window, _gameData);
+        _gameData.drawPlayer(window);
     };
 
     void GameScene::ShutDown() {};

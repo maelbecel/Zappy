@@ -35,6 +35,13 @@ void GameData::parse(std::string &line)
         return;
 }
 
+void GameData::drawPlayer(sf::RenderWindow &window)
+{
+    for (auto &player : _players) {
+        // TODO: Draw the player
+    }
+}
+
 void GameData::setMapSize(const std::string &mapSize)
 {
     if (_mapSize.x != 0 && _mapSize.y != 0)

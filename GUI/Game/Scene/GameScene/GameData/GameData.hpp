@@ -38,6 +38,13 @@ class GameData {
          */
         void parse(std::string &line);
 
+        /**
+         * @brief Draw the player on the map
+         *
+         * @param window The window to draw on
+         */
+        void drawPlayer(sf::RenderWindow &window);
+
     // Setters & Getters
     public:
 

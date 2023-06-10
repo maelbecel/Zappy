@@ -16,6 +16,16 @@ class Player {
         Player(sf::Vector2i position = sf::Vector2i(0, 0), int direction = 1, int level = 1, std::string teamName = "");
         ~Player() = default;
 
+    // Getters & Setters
+    public:
+
+        /**
+         * @brief Get the Position object
+         *
+         * @return sf::Vector2i The position of the player
+         */
+        sf::Vector2i getPosition() const;
+
     // Attributes
     private:
         sf::Vector2i _position; /*!< The position of the player */

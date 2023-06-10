@@ -17,6 +17,7 @@
     #include "ParserError.hpp"
     #include "Tile.hpp"
     #include "PerlinNoise.hpp"
+    #include "Player.hpp"
 
 /**
  * @brief Class that store all the data of the game
@@ -136,10 +137,25 @@ class GameData {
          */
         void setPosition(const sf::Vector2f &position);
 
+        /**
+         * @brief Set the Player object
+         *
+         * @param player The player
+         */
+        void setPlayer(const std::string &player);
+
+        /**
+         * @brief Remove the Player object
+         *
+         * @param player The player
+         */
+        void deletePlayer(const std::string &player);
+
     // Attributes
     private:
         sf::Vector2i _mapSize;                                     /*!< The size of the map between (10 and 50 for width and height)*/
         std::map<std::pair<int, int>, std::shared_ptr<Tile>> _map; /*!< The map of the game with the coordinates of the tiles and their content */
+        std::map<std::string, std::shared_ptr<Player>> _players;   /*!< The list of all the players */
         std::vector<std::string> _teams;                           /*!< The list of all the teams */
 
         int _gameScale;                                            /*!< The scale of the game */

@@ -149,10 +149,16 @@ namespace Network {
 
     std::string Socket::parseResponse(const std::string &response)
     {
+        // Connexion response
         if (response.compare("WELCOME\n") == 0)
             return "GRAPHIC\n";
+        // Basic response
         else if (response.compare("suc\n") == 0)
             return "ok\n";
+        else if (response.find("sbp") != std::string::npos)
+            return "ok\n";
+
+        // Map information response
         else if (response.find("msz") != std::string::npos)   // msz = map size
             return "msz\n";
         else if (response.find("sgt") != std::string::npos)   // sgt = time unit
@@ -174,9 +180,14 @@ namespace Network {
             std::stringstream(response) >> bct >> x >> y;
 
             return std::string("bct " + x + " " + y + "\n");
-        } else if (response.find("tna") != std::string::npos) // tna = team name
+        }
+        
+        // Player response
+        else if (response.find("tna") != std::string::npos) // tna = team name
             return "tna\n";
-        else if (response.find("sbp") != std::string::npos)   // sbp = command parameter
+        else if (response.find("pnw") != std::string::npos) // pnw = Connection of a new player
+            return "ok\n";
+        else if (response.find("pdi") != std::string::npos) // pdi = Death of a player
             return "ok\n";
 
         // TODO: parse response and create all the answer

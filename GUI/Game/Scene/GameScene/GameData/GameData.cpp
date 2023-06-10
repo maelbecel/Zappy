@@ -26,6 +26,10 @@ void GameData::parse(std::string &line)
         return setTileContent(line);
     else if (line.find("tna") != std::string::npos) // tna = team name
         return setTeamName(line);
+    else if (line.find("pnw") != std::string::npos) // pnw = Connection of a new player
+        return setPlayer(line);
+    else if (line.find("pdi") != std::string::npos) // pdi = Death of a player
+        return deletePlayer(line);
     // TODO: add other commands
     else
         return;
@@ -164,4 +168,50 @@ void GameData::setScale(const sf::Vector2f &scale)
 void GameData::setPosition(const sf::Vector2f &position)
 {
     _position = position;
+}
+
+void GameData::setPlayer(const std::string &player)
+{
+    std::string temp;
+    std::string name;
+    std::string x;
+    std::string y;
+    std::string orientation;
+    std::string level;
+    std::string team;
+
+    std::stringstream(player) >> temp >> name >> x >> y >> orientation >> level >> team;
+
+    try {
+        // Check if the #n players already exists
+        if (_players.find(name) != _players.end())
+            return;
+
+        int xInt = std::stoi(x);
+        int yInt = std::stoi(y);
+        int oriantationInt = std::stoi(orientation);
+        int levelInt = std::stoi(level);
+
+        _players[name] = std::make_shared<Player>(Player(sf::Vector2i(xInt, yInt), oriantationInt, levelInt, team));
+    } catch (std::invalid_argument &e) {
+        throw Error::InvalidArgument("GameData::setPlayer");
+    }
+}
+
+void GameData::deletePlayer(const std::string &player)
+{
+    std::string temp;
+    std::string name;
+
+    std::stringstream(player) >> temp >> name;
+
+    try {
+        // Check if the #n players didn't exists
+        if (_players.find(name) == _players.end())
+            return;
+
+        _players.erase(name);
+    } catch (std::invalid_argument &e) {
+        throw Error::InvalidArgument("GameData::deletePlayer");
+    }
 }

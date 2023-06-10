@@ -6,6 +6,7 @@
 ##
 
 from ..ai.clientAi import clientAi as clientAI
+from ..state.clientState import enumState as enumState
 
 # const tab that permise to know the number of ressources needed to evolve
 # level 1 to 8
@@ -27,6 +28,7 @@ class evoli(clientAI):
     def __init__(self, teamName, port, host):
         super().__init__(teamName, port, host)
         self.objective = dict()
+        self.state = enumState.NEED_FOOD
 
     def compareDict(self, dict1, dict2):
 
@@ -129,8 +131,38 @@ class evoli(clientAI):
                 self.takeUselessRessourcesOnCase()
                 self.elevate()
 
+    def gotAllNeededResource(self):
+
+        print("self.inv = ", self.inv)
+
+        for element in self.inv:
+            if element == "food":
+                continue
+            if self.inv[element] < REQUIRED[self.level - 1][element]:
+                self.state = enumState.LF_RESSOURCES
+                return False
+        self.state = enumState.FULL_RESSOUCRES
+        return True
+
+    def findNeededRessources(self):
+        id = 0
+
+        self.look()
+
+        if self.gotAllNeededResource():
+            return True
+        else:
+            for array in self.lookResult:
+                for element in array:
+                    if element == "player" or element == "food":
+                        continue
+                    if element in self.inv and self.inv[element] < REQUIRED[self.level - 1][element]:
+                        self.pickObject(id, element)
+                id += 1
+
     def run(self):
 
         while self.alive:
-            self.findPlaceToElevate()
+            # self.findPlaceToElevate()
+            # self.findNeededRessources()
             self.alive = False

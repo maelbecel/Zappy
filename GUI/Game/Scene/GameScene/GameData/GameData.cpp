@@ -92,6 +92,12 @@ void GameData::setTileContent(const std::string &tileContent)
         int q5Int = std::stoi(q5);
         int q6Int = std::stoi(q6);
 
+        
+        // Check if the map[x][y] already exists
+        if (_map.find(std::make_pair(xInt, yInt)) != _map.end()) {
+            _map[std::make_pair(xInt, yInt)]->setNewResources(q0Int, q1Int, q2Int, q3Int, q4Int, q5Int, q6Int);
+            return;
+        }
         _map[std::make_pair(xInt, yInt)] = std::make_shared<Tile>(Tile(sf::Vector2i(xInt, yInt), q0Int, q1Int, q2Int, q3Int, q4Int, q5Int, q6Int));
     } catch (std::invalid_argument &e) {
         throw Error::InvalidArgument("GameData::setTileContent");

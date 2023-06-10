@@ -84,6 +84,17 @@ sf::Vector2f Tile::getPosition() const
     return _position;
 }
 
+void Tile::setNewResources(int q0, int q1, int q2, int q3, int q4, int q5, int q6)
+{
+    _q0 = q0;
+    _q1 = q1;
+    _q2 = q2;
+    _q3 = q3;
+    _q4 = q4;
+    _q5 = q5;
+    _q6 = q6;
+}
+
 void Tile::draw(sf::RenderWindow &window, sf::Vector2f scale)
 {
     if (_q0 > 0) {

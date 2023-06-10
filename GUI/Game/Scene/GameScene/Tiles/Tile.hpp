@@ -51,6 +51,19 @@ class Tile {
          */
         sf::Vector2f getPosition() const;
 
+        /**
+         * @brief Set the New Resources object
+         * 
+         * @param q0 The quantity of food
+         * @param q1 The quantity of linemate
+         * @param q2 The quantity of deraumere
+         * @param q3 The quantity of sibur
+         * @param q4 The quantity of mendiane
+         * @param q5 The quantity of phiras
+         * @param q6 The quantity of thystame
+         */
+        void setNewResources(int q0, int q1, int q2, int q3, int q4, int q5, int q6);
+
     // Methods
     public:
 

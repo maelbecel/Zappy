@@ -80,6 +80,14 @@ class Player {
          */
         void setInventory(int q0, int q1, int q2, int q3, int q4, int q5, int q6);
 
+        /**
+         * @brief Set the scale of the player sprite
+         *
+         * @param scale         The scale of the game
+         * @return sf::Vector2f The correct scale of the player
+         */
+        sf::Vector2f setPlayerScale(sf::Vector2f scale);
+
     // Methods
     public:
 
@@ -105,6 +113,7 @@ class Player {
         int _level;                          /*!< The level of the player */
         std::string _teamName;               /*!< The team name of the player */
         int *_inventory;                     /*!< The inventory of the player */
+        int _placement;                      /*!< The placement of the player */
 
     // Animation Status Attributes
     private:

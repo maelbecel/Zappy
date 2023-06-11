@@ -64,6 +64,22 @@ class Tile {
          */
         void setNewResources(int q0, int q1, int q2, int q3, int q4, int q5, int q6);
 
+        /**
+         * @brief Get the Ressource object
+         *
+         * @param type {
+         *  0: food,
+         *  1: linemate,
+         *  2: deraumere,
+         *  3: sibur,
+         *  4: mendiane,
+         *  5: phiras,
+         *  6: thystame
+         * }
+         * @return int The quantity of the resource
+         */
+        int getResource(int type);
+
     // Methods
     public:
 
@@ -74,6 +90,36 @@ class Tile {
          * @param scale  The scale of the window
          */
         void draw(sf::RenderWindow &window, sf::Vector2f scale);
+
+        /**
+         * @brief Add a resource to the tile
+         *
+         * @param type {
+         *    0: food,
+         *    1: linemate,
+         *    2: deraumere,
+         *    3: sibur,
+         *    4: mendiane,
+         *    5: phiras,
+         *    6: thystame
+         * }
+         */
+        void addResource(int type);
+
+        /**
+         * @brief Remove a resource to the tile
+         *
+         * @param type {
+         *    0: food,
+         *    1: linemate,
+         *    2: deraumere,
+         *    3: sibur,
+         *    4: mendiane,
+         *    5: phiras,
+         *    6: thystame
+         * }
+         */
+        void removeResource(int type);
 
     // Private Methods
     private:

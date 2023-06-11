@@ -202,6 +202,20 @@ class GameData {
          */
         std::map<std::string, std::shared_ptr<Player>> getPlayers() const;
 
+        /**
+         * @brief Realize the player's action
+         * The action is drop.
+         * @param player The player
+         */
+        void PlayerDropResource(const std::string &player);
+
+        /**
+         * @brief Realize the player's action
+         * The action is take.
+         * @param player The player
+         */
+        void PlayerCollectResource(const std::string &player);
+
     // Attributes
     private:
         sf::Vector2i _mapSize;                                     /*!< The size of the map between (10 and 50 for width and height)*/

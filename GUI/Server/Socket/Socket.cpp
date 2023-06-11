@@ -152,46 +152,8 @@ namespace Network {
         // Connexion response
         if (response.compare("WELCOME\n") == 0)
             return "GRAPHIC\n";
-        // Basic response
-        else if (response.compare("suc\n") == 0)
-            return "ok\n";
-        else if (response.find("sbp") != std::string::npos)
-            return "ok\n";
-
-        // Map information response
-        else if (response.find("msz") != std::string::npos)   // msz = map size
-            return "msz\n";
-        else if (response.find("sgt") != std::string::npos)   // sgt = time unit
-            return "sgt\n";
-        else if (response.find("bct") != std::string::npos) { // bct = content of a tile
-            // Exemple of bct response : bct X Y q0 q1 q2 q3 q4 q5 q6
-            //                           q0 = food
-            //                           q1 = linemate
-            //                           q2 = deraumere
-            //                           q3 = sibur
-            //                           q4 = mendiane
-            //                           q5 = phiras
-            //                           q6 = thystame
-
-            std::string bct;
-            std::string x;
-            std::string y;
-
-            std::stringstream(response) >> bct >> x >> y;
-
-            return std::string("bct " + x + " " + y + "\n");
-        }
-        
-        // Player response
-        else if (response.find("tna") != std::string::npos) // tna = team name
-            return "tna\n";
-        else if (response.find("pnw") != std::string::npos) // pnw = Connection of a new player
-            return "ok\n";
-        else if (response.find("pdi") != std::string::npos) // pdi = Death of a player
-            return "ok\n";
-
-        // TODO: parse response and create all the answer
-        std::cout << response << std::endl;
         return "ok\n";
     }
+
+    // TODO: Send a message to the server
 };

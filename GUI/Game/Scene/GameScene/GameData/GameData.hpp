@@ -38,13 +38,6 @@ class GameData {
          */
         void parse(std::string &line);
 
-        /**
-         * @brief Draw the player on the map
-         *
-         * @param window The window to draw on
-         */
-        void drawPlayer(sf::RenderWindow &window);
-
     // Setters & Getters
     public:
 
@@ -94,6 +87,15 @@ class GameData {
          * @return std::map<std::pair<int, int>, std::shared_ptr<Tile>>
          */
         std::map<std::pair<int, int>, std::shared_ptr<Tile>> getMap() const;
+
+        /**
+         * @brief Get the Tile object
+         *
+         * @param x                      The x coordinate of the tile
+         * @param y                      The y coordinate of the tile
+         * @return std::shared_ptr<Tile> The tile at the position (x, y)
+         */
+        std::shared_ptr<Tile> getTile(int x, int y) const;
 
         /**
          * @brief Get the Teams object
@@ -152,11 +154,53 @@ class GameData {
         void setPlayer(const std::string &player);
 
         /**
+         * @brief Set the Player Position object
+         * 
+         * @param player The player
+         */
+        void setPlayerMovement(const std::string &player);
+
+        /**
+         * @brief Set the Player Level object
+         *
+         * @param player The player
+         */
+        void setPlayerLevel(const std::string &player);
+
+        /**
          * @brief Remove the Player object
          *
          * @param player The player
          */
         void deletePlayer(const std::string &player);
+
+        /**
+         * @brief Set the Player Inventory object
+         *
+         * @param player The player
+         */
+        void setPlayerInventory(const std::string &player);
+
+        /**
+         * @brief Set the Player Expulsion object
+         *
+         * @param player The player
+         */
+        void PlayerExpulsion(const std::string &player);
+
+        /**
+         * @brief Set the Player Broadcast object
+         *
+         * @param player The player
+         */
+        void PlayerBroadcast(const std::string &player);
+
+        /**
+         * @brief Get the Players object
+         *
+         * @return std::map<std::string, std::shared_ptr<Player>> The players
+         */
+        std::map<std::string, std::shared_ptr<Player>> getPlayers() const;
 
     // Attributes
     private:

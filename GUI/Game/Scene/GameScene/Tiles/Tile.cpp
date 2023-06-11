@@ -148,3 +148,83 @@ sf::Vector2f Tile::setTileScale(sf::Vector2f &scale)
         return sf::Vector2f(0.20f, 0.20f);
     return sf::Vector2f(0.15f, 0.15f);
 }
+
+int Tile::getResource(int type)
+{
+    switch (type) {
+        case 0:
+            return _q0;
+        case 1:
+            return _q1;
+        case 2:
+            return _q2;
+        case 3:
+            return _q3;
+        case 4:
+            return _q4;
+        case 5:
+            return _q5;
+        case 6:
+            return _q6;
+        default:
+            return 0;
+    }
+}
+
+void Tile::addResource(int type)
+{
+    switch (type) {
+        case 0:
+            _q0++;
+            break;
+        case 1:
+            _q1++;
+            break;
+        case 2:
+            _q2++;
+            break;
+        case 3:
+            _q3++;
+            break;
+        case 4:
+            _q4++;
+            break;
+        case 5:
+            _q5++;
+            break;
+        case 6:
+            _q6++;
+            break;
+        default:
+            break;
+    }
+}
+
+void Tile::removeResource(int type)
+{
+    switch (type) {
+        case 0:
+            _q0--;
+            break;
+        case 1:
+            _q1--;
+            break;
+        case 2:
+            _q2--;
+            break;
+        case 3:
+            _q3--;
+            break;
+        case 4:
+            _q4--;
+            break;
+        case 5:
+            _q5--;
+            break;
+        case 6:
+            _q6--;
+            break;
+        default:
+            break;
+    }
+}

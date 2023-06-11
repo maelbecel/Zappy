@@ -40,6 +40,10 @@ void GameData::parse(std::string &line)
         return PlayerExpulsion(line);
     else if (line.find("pbc") != std::string::npos) // pbc = Broadcast
         return PlayerBroadcast(line);
+    else if (line.find("pdr") != std::string::npos) // pdr = Player drop resources
+        return PlayerDropResource(line);
+    else if (line.find("pgt") != std::string::npos) // pgt = Player collecting resources
+        return PlayerCollectResource(line);
     // TODO: add other commands
     else
         return;
@@ -341,6 +345,49 @@ void GameData::PlayerBroadcast(const std::string &player)
         _players[name]->setBroadcast(true);
     } catch (std::invalid_argument &e) {
         throw Error::InvalidArgument("GameData::setPlayerBroadcast");
+    }
+}
+
+void GameData::PlayerCollectResource(const std::string &player)
+{
+    std::string temp;
+    std::string name;
+    std::string nomber;
+
+    std::stringstream(player) >> temp >> name >> nomber;
+
+    try {
+        // Check if the #n players didn't exists
+        if (_players.find(name) == _players.end())
+            return;
+
+        std::shared_ptr<Tile> tile = getTile(_players[name]->getPosition().x, _players[name]->getPosition().y);
+
+        _players[name]->collectResource(std::stoi(nomber), tile);
+
+    } catch (std::invalid_argument &e) {
+        throw Error::InvalidArgument("GameData::setPlayerCollectResource");
+    }
+}
+
+void GameData::PlayerDropResource(const std::string &player)
+{
+    std::string temp;
+    std::string name;
+    std::string nomber;
+
+    std::stringstream(player) >> temp >> name >> nomber;
+
+    try {
+        // Check if the #n players didn't exists
+        if (_players.find(name) == _players.end())
+            return;
+
+        std::shared_ptr<Tile> tile = getTile(_players[name]->getPosition().x, _players[name]->getPosition().y);
+
+        _players[name]->dropResource(std::stoi(nomber), tile);
+    } catch (std::invalid_argument &e) {
+        throw Error::InvalidArgument("GameData::setPlayerDropResource");
     }
 }
 

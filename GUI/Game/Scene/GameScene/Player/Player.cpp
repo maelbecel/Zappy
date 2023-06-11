@@ -7,6 +7,7 @@
 
 #include "Player.hpp"
 #include "GameData.hpp"
+#include "Tile.hpp"
 #include <iostream>
 
 Player::Player(sf::Vector2i position, int direction, int level, std::string teamName) : _position(position), _direction(direction), _level(level), _teamName(teamName), _idle(true), _expulsion(false), _broadcast(false)
@@ -146,4 +147,30 @@ sf::Vector2f Player::setPlayerScale(sf::Vector2f scale)
     if (scale.x >= 2.0f)
         return sf::Vector2f(2.0f, 2.0f);
     return sf::Vector2f(1.0f, 1.0f);
+}
+
+void Player::dropResource(int nomber, std::shared_ptr<Tile> &tile)
+{
+    for (int i = 0; i < 7; i++) {
+        while (nomber > 0 && _inventory[i] > 0) {
+            tile->addResource(i);
+            _inventory[i]--;
+            nomber--;
+        }
+        if (nomber == 0)
+            break;
+    }
+}
+
+void Player::collectResource(int nomber, std::shared_ptr<Tile> &tile)
+{
+    for (int i = 0; i < 7; i++) {
+        while (nomber > 0 && tile->getResource(i) > 0) {
+            _inventory[i]++;
+            tile->removeResource(i);
+            nomber--;
+        }
+        if (nomber == 0)
+            break;
+    }
 }

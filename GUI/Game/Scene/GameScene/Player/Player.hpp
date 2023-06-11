@@ -9,11 +9,13 @@
     #define PLAYER_HPP_
 
     #include <SFML/Graphics.hpp>
+    #include <memory>
 
     #include "TextureError.hpp"
     #include "TextureManager.hpp"
 
 class GameData;
+class Tile;
 
 class Player {
     // Constructor & Destructor
@@ -105,6 +107,22 @@ class Player {
          * Move the player in the direction he is facing
          */
         void expulse();
+
+        /**
+         * @brief The player drop "nomber" of resource on his actual tile
+         *
+         * @param nomber The nomber of resource to drop
+         * @param tile   The tile that the player is on
+         */
+        void dropResource(int nomber, std::shared_ptr<Tile> &tile);
+
+        /**
+         * @brief The player collect "nomber" of resource on his actual tile
+         *
+         * @param nomber The nomber of resource to collect
+         * @param tile   The tile that the player is on
+         */
+        void collectResource(int nomber, std::shared_ptr<Tile> &tile);
 
     // Attributes
     private:

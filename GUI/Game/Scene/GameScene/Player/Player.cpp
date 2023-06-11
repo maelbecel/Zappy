@@ -27,6 +27,12 @@ Player::Player(sf::Vector2i position, int direction, int level, std::string team
 
     for (int i = 0; i < 7; i++)
         _inventory[i] = 0;
+    
+    srand(time(NULL));
+
+    _placement = rand() % 5 + 1;
+
+    std::cout << "Player position: " << _position.x << ", " << _position.y << std::endl;
 }
 
 Player::~Player()
@@ -96,8 +102,30 @@ void Player::setBroadcast(bool broadcast)
 void Player::draw(GameData &gameData, sf::RenderWindow &window)
 {
     sf::Vector2f position = gameData.getTile(_position.x, _position.y)->getPosition();
+    sf::Vector2f scale = gameData.getScale();
 
-    _playerSprite->setPosition(position.x - (Tile::TILE_WIDTH / 2 * gameData.getScale().x), position.y - (Tile::TILE_HEIGHT / 2 * gameData.getScale().y));
+    _playerSprite->setScale(setPlayerScale(scale));
+
+    switch (_placement) {
+        case 1:
+            _playerSprite->setPosition(position + sf::Vector2f(Tile::TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-(Tile::TILE_WIDTH / 2) * (scale.x + 2), 2 * (scale.y + 1.25f)));
+            break;
+        case 2:
+            _playerSprite->setPosition(position + sf::Vector2f(Tile::TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-(Tile::TILE_WIDTH / 4) * (scale.x + 2), (Tile::TILE_HEIGHT / 3) + 2 * (scale.y + 1.25f)));
+            break;
+        case 3:
+            _playerSprite->setPosition(position + sf::Vector2f(Tile::TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-(Tile::TILE_WIDTH / 4) * 3 * (scale.x + 2), (Tile::TILE_HEIGHT / 3) + 2 * (scale.y + 1.25f)));
+            break;
+        case 4:
+            _playerSprite->setPosition(position + sf::Vector2f(Tile::TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-(Tile::TILE_WIDTH / 4) * 2.5 * (scale.x + 2), (Tile::TILE_HEIGHT) - 5 + 2 * (scale.y + 1.25f)));
+            break;
+        case 5:
+            _playerSprite->setPosition(position + sf::Vector2f(Tile::TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-(Tile::TILE_WIDTH / 4) * 1.5 * (scale.x + 2), (Tile::TILE_HEIGHT) - 5 + 2 * (scale.y + 1.25f)));
+            break;
+        default:
+            return;
+    }
+
     window.draw(*_playerSprite);
 }
 
@@ -111,4 +139,11 @@ void Player::expulse()
         _position.y--;
     else if (_direction == 4) // West
         _position.x++;
+}
+
+sf::Vector2f Player::setPlayerScale(sf::Vector2f scale)
+{
+    if (scale.x >= 2.0f)
+        return sf::Vector2f(2.0f, 2.0f);
+    return sf::Vector2f(1.0f, 1.0f);
 }

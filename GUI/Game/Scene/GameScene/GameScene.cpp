@@ -25,12 +25,17 @@ namespace Scene {
     {
         server.Run();
 
+        std::cout << "Response: " << server.getSocket().response << std::endl;
+
         _gameData.parse(server.getSocket().response);
     };
 
     void GameScene::Render(sf::RenderWindow &window)
     {
         _map.draw(window, _gameData);
+
+        for (auto &player : _gameData.getPlayers())
+            player.second->draw(_gameData, window);
     };
 
     void GameScene::ShutDown() {};

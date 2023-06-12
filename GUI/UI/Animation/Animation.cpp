@@ -11,15 +11,20 @@ namespace UI {
     /////////////////
     // Constructor //
     /////////////////
-    Animation::Animation(sf::Sprite &sprite, double frameDuration, bool looped) : _sprite(sprite), _frameDuration(frameDuration), _looped(looped), _isPlaying(false), _elapsedTime(0.0f), _currentFrame(0) {};
+    Animation::Animation(std::vector<sf::Sprite> &sprites, double frameDuration, bool looped) : _sprites(sprites), _frameDuration(frameDuration), _looped(looped), _isPlaying(false), _elapsedTime(0.0f), _currentFrame(0)
+    {
+        if (_sprites.empty())
+            return;
+        _currentSprite = _sprites[0];
+    };
 
     ////////////////////
     // Public methods //
     ////////////////////
 
-    void Animation::addFrame(const sf::IntRect& frameRect)
+    void Animation::addFrame(const sf::Sprite& frame)
     {
-        _frames.push_back(frameRect);
+        _sprites.push_back(frame);
     }
 
     void Animation::play()
@@ -53,18 +58,18 @@ namespace UI {
             _currentFrame++;
  
             // Check if the animation is finished
-            if (_currentFrame >= (int)_frames.size()) {
+            if (_currentFrame >= (int)_sprites.size()) {
                 // Check if the animation is looped
                 if (_looped)
                     _currentFrame = 0;
                 else {
-                    _currentFrame = _frames.size() - 1;
+                    _currentFrame = _sprites.size() - 1;
                     _isPlaying = false;
                 }
             }
 
             // Update the sprite with the new current frame
-            _sprite.setTextureRect(_frames[_currentFrame]);
+            _currentSprite = _sprites[_currentFrame];
             _elapsedTime = 0.0f;
         }
     }

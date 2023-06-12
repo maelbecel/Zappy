@@ -12,6 +12,11 @@ from ..exception.clientException import clientException as cEx
 from ..server.clientServer import clientServer
 from ..direction.direction import direction
 
+import time as time
+
+EAT_TIME = 126
+MIN_FOOD = 7
+PERCENTAGE_OF_FOOD = 0.5
 
 class clientAi:
     def __init__(self, teamName: str, port: int, host: str):
@@ -39,6 +44,7 @@ class clientAi:
         self.queue = []
         self.inv = dict()
         self.level = 1
+        self.lookingForFood = False
 
     def getConnectionResponse(self):
         """
@@ -281,8 +287,12 @@ class clientAi:
         cAct.INCANTATION.
         """
         self.send(cAct.INCANTATION.value)
-        if self.response == "ok\n" and self.alive:
+        self.receive()
+        if self.response != "ko\n" and self.alive:
             self.level += 1
+            return True
+        return False
+
 
     def run(self):
         """
@@ -317,8 +327,9 @@ class clientAi:
         self.resetFood(array)
         print("ARRAY -> ", array)
         for element in array:
+            if element[0] == "food":
+                continue
             if element[0] and element[0] in self.inv and self.inv[element[0]] != element[1]:
-                print("something wrong")
                 self.fillInv(array)
                 break
 
@@ -386,6 +397,8 @@ class clientAi:
         queue.
         """
         for element in self.queue:
+            if (self.alive == False):
+                return
             element()
         self.queue.clear()
 
@@ -463,3 +476,87 @@ class clientAi:
         self.getGoTo(value)
         self.computeQueueActions()
         self.take(object)
+
+    def findFood(self):
+        id = 0
+
+        for array in self.lookResult:
+            for element in array:
+                if element == "food":
+                    return id
+            id += 1
+        return -1
+
+    def goElsewhere(self):
+        rotateId = 0
+
+        while (self.lookingForFood):
+            if (rotateId % 4 == 0):
+                self.forward()
+            self.left()
+            self.look()
+            result = self.findFood()
+            if (result != -1):
+                print("FIND WHAT WE NEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEED")
+                self.getGoTo(result)
+                self.computeQueueActions()
+                return
+            rotateId += 1
+
+
+    def grabFood(self):
+        """
+        This function helps a character in a game grab food based on a certain
+        percentage and their surroundings.
+
+        @return If the condition in the if statement is true (meaning the agent
+        does not need food), then nothing is returned and the function ends. If the
+        condition is false, then the function executes the code block and takes
+        food from the environment. No value is explicitly returned in this case.
+        """
+        count = 0
+        result = 0
+
+        if (self.alive == False):
+            return
+        if not self.needFood():
+            return
+        self.look()
+        for element in self.lookResult[0]:
+            if element == "food":
+                count += 1
+        if not count < 1:
+            if count != 1:
+                count *= PERCENTAGE_OF_FOOD
+                count = round(count, 0)
+            for i in range(0, int(count)):
+                self.take("food")
+                self.lookingForFood = False
+                return
+        else:
+            result = self.findFood()
+            if (result == -1):
+                self.getGoTo(result)
+                self.computeQueueActions()
+                self.grabFood()
+                return
+        self.goElsewhere()
+        print("go elsewhere")
+        self.grabFood()
+
+    def needFood(self):
+        """
+        This function checks if the player's inventory has enough food.
+
+        @return a boolean value. If the value of "food" in the inventory is less
+        than the minimum required amount (MIN_FOOD), then it returns True,
+        indicating that the player needs food. Otherwise, it returns False,
+        indicating that the player does not need food.
+        """
+        print("##################***********##################")
+        self.inventory()
+
+        if (self.inv["food"] < MIN_FOOD):
+            self.lookingForFood = True
+            return True
+        return False

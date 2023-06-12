@@ -113,7 +113,10 @@ class evoli(clientAI):
         count = self.countPlayerOnCase()
 
         if count == REQUIRED_PLAYER[self.level - 1]:
-            self.incantation()
+            if self.incantation() == False:
+                self.takeUselessRessourcesOnCase()
+                self.elevate()
+                return
         else:
             self.broadcast("need more player " + self.teamName)
 
@@ -163,6 +166,10 @@ class evoli(clientAI):
     def run(self):
 
         while self.alive:
-            # self.findPlaceToElevate()
+            self.findPlaceToElevate()
             # self.findNeededRessources()
-            self.alive = False
+            self.grabFood()
+            # self.alive = False
+
+
+    # 1 2 et 3 secondes combien il a perdu de food pour savoir combien il doit en ramasser tout les x temps

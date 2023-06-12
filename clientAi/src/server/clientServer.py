@@ -8,6 +8,7 @@
 import socket
 from ..exception.clientException import clientException as cEx
 
+LOOK_MESSAGE = "Look\n"
 
 class clientServer:
     def __init__(self, port, host):
@@ -40,10 +41,11 @@ class clientServer:
     def receive(self):
         if self.socket is None:
             cEx("Error: socket is null")
-        response = self.socket.recv(1024).decode()
+        response = self.socket.recv(8192).decode()
+        while (response[-1] != '\n'):
+            response = self.socket.recv(8192).decode()
         if response is None:
             print("Error: response is null")
-        # print("Receive message from server: " + response + "\n")
         return response
 
     def getSocket(self):

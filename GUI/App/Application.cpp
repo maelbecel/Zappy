@@ -6,10 +6,12 @@
 */
 
 #include "Application.hpp"
+#include "Window.hpp"
 
 Application::Application()
 {
-    _window.create(sf::VideoMode(1600, 900), "Zappy");
+    Window::readConfigFile();
+    _window.create(sf::VideoMode(Window::width, Window::height), "Zappy");
 
     if (!_window.isOpen())
         throw Error::ApplicationError("Error while creating window...");

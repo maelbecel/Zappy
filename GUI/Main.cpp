@@ -29,6 +29,9 @@ int main(int ac, char **av)
     } catch (Error::ApplicationError &error) {
         std::cerr << error.what() << std::endl;
         return 84;
+    } catch (Error::ParserException &error) {
+        std::cerr << error.what() << std::endl;
+        return 84;
     }
 
     return 0;

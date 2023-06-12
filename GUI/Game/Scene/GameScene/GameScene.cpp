@@ -25,6 +25,8 @@ namespace Scene {
     {
         server.Run();
 
+        std::cout << "Response: " << server.getSocket().response << std::endl;
+
         _gameData.parse(server.getSocket().response);
     };
 

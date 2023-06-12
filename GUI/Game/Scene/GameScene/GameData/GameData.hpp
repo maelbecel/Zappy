@@ -17,6 +17,7 @@
     #include "ParserError.hpp"
     #include "Tile.hpp"
     #include "PerlinNoise.hpp"
+    #include "Player.hpp"
 
 /**
  * @brief Class that store all the data of the game
@@ -88,6 +89,15 @@ class GameData {
         std::map<std::pair<int, int>, std::shared_ptr<Tile>> getMap() const;
 
         /**
+         * @brief Get the Tile object
+         *
+         * @param x                      The x coordinate of the tile
+         * @param y                      The y coordinate of the tile
+         * @return std::shared_ptr<Tile> The tile at the position (x, y)
+         */
+        std::shared_ptr<Tile> getTile(int x, int y) const;
+
+        /**
          * @brief Get the Teams object
          * 
          * @return std::vector<std::string> 
@@ -136,10 +146,81 @@ class GameData {
          */
         void setPosition(const sf::Vector2f &position);
 
+        /**
+         * @brief Set the Player object
+         *
+         * @param player The player
+         */
+        void setPlayer(const std::string &player);
+
+        /**
+         * @brief Set the Player Position object
+         * 
+         * @param player The player
+         */
+        void setPlayerMovement(const std::string &player);
+
+        /**
+         * @brief Set the Player Level object
+         *
+         * @param player The player
+         */
+        void setPlayerLevel(const std::string &player);
+
+        /**
+         * @brief Remove the Player object
+         *
+         * @param player The player
+         */
+        void deletePlayer(const std::string &player);
+
+        /**
+         * @brief Set the Player Inventory object
+         *
+         * @param player The player
+         */
+        void setPlayerInventory(const std::string &player);
+
+        /**
+         * @brief Set the Player Expulsion object
+         *
+         * @param player The player
+         */
+        void PlayerExpulsion(const std::string &player);
+
+        /**
+         * @brief Set the Player Broadcast object
+         *
+         * @param player The player
+         */
+        void PlayerBroadcast(const std::string &player);
+
+        /**
+         * @brief Get the Players object
+         *
+         * @return std::map<std::string, std::shared_ptr<Player>> The players
+         */
+        std::map<std::string, std::shared_ptr<Player>> getPlayers() const;
+
+        /**
+         * @brief Realize the player's action
+         * The action is drop.
+         * @param player The player
+         */
+        void PlayerDropResource(const std::string &player);
+
+        /**
+         * @brief Realize the player's action
+         * The action is take.
+         * @param player The player
+         */
+        void PlayerCollectResource(const std::string &player);
+
     // Attributes
     private:
         sf::Vector2i _mapSize;                                     /*!< The size of the map between (10 and 50 for width and height)*/
         std::map<std::pair<int, int>, std::shared_ptr<Tile>> _map; /*!< The map of the game with the coordinates of the tiles and their content */
+        std::map<std::string, std::shared_ptr<Player>> _players;   /*!< The list of all the players */
         std::vector<std::string> _teams;                           /*!< The list of all the teams */
 
         int _gameScale;                                            /*!< The scale of the game */

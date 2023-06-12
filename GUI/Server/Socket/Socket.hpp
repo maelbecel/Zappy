@@ -129,14 +129,6 @@ namespace Network {
         private:
 
             /**
-             * @brief Parse the response of the server
-             *
-             * @param response     The response of the server
-             * @return std::string The great answer
-             */
-            std::string parseResponse(std::string const &response);
-
-                        /**
              * @brief Read and parse information that the server read
              * 
              * @return std::string The information read by the server

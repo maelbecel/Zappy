@@ -92,13 +92,13 @@ namespace Network {
         FD_ZERO(&_read);
         FD_SET(STDIN_FILENO, &_read);
         FD_SET(_socket, &_read);
+    
+        FD_ZERO(&_write);
+        FD_SET(STDIN_FILENO, &_write);
+        FD_SET(_socket, &_write);
 
-        //FD_ZERO(&_write);
-        //FD_SET(STDIN_FILENO, &_write);
-        //FD_SET(_socket, &_write);
-
-        //return select(_socket + 1, &_read, &_write, NULL, NULL);
-        return select(_socket + 1, &_read, NULL, NULL, NULL);
+        return select(_socket + 1, &_read, &_write, NULL, NULL);
+        //return select(_socket + 1, &_read, NULL, NULL, NULL);
     }
 
     void Socket::processClient()
@@ -128,10 +128,10 @@ namespace Network {
     {
         if (response.compare("") == 0 || response.compare("\n") == 0 || response.compare("ko\n") == 0)
             return;
-        
-        std::string answer = parseResponse(response);
 
-        ::send(_socket, answer.c_str(), answer.size(), 0);
+        // Connexion response
+        if (response.compare("WELCOME\n") == 0)
+            ::send(_socket, "GRAPHIC\n", 9, 0);
     }
 
     /////////////
@@ -142,18 +142,4 @@ namespace Network {
     {
         _socket = socket;
     }
-
-    /////////////////////
-    // Private Methods //
-    /////////////////////
-
-    std::string Socket::parseResponse(const std::string &response)
-    {
-        // Connexion response
-        if (response.compare("WELCOME\n") == 0)
-            return "GRAPHIC\n";
-        return "ok\n";
-    }
-
-    // TODO: Send a message to the server
-};
+}

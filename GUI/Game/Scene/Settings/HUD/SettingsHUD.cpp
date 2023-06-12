@@ -6,9 +6,10 @@
 */
 
 #include "SettingsHUD.hpp"
+#include "Window.hpp"
 
 namespace UI {
-    SettingsHUD::SettingsHUD() : _background(sf::Vector2f(1920, 1080))
+    SettingsHUD::SettingsHUD() : _background(sf::Vector2f(Window::getWindowWidth(), Window::getWindowHeight()))
     {
         BackgroundStyle RectangleColorBg(sf::Color(0, 0, 0, 220));
 
@@ -18,11 +19,11 @@ namespace UI {
 
         sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Paper UI Pack/Paper UI/Folding & Cutout/10 Calander/1.png");
         _backgroundSprite = sf::Sprite(*texture);
-        _backgroundSprite.setPosition(sf::Vector2f((1920 - (656 * 1.5) - 300) / 2, (1080 - (544 * 1.5) - 100) / 2));
+        _backgroundSprite.setPosition(sf::Vector2f((Window::getWindowWidth() - (656 * 1.5)) / 2, (Window::getWindowHeight() - (544 * 1.5)) / 2));
         _backgroundSprite.setScale(sf::Vector2f(1.5f, 1.5f));
 
-        _sound = InputBox(std::string("Sound :"), sf::Vector2f((1920 - (15 * 32)) / 2 - 30, 250), sf::Vector2f(200, 34));
-        _music = InputBox(std::string("Music :"), sf::Vector2f((1920 - (15 * 32)) / 2 - 30, 350), sf::Vector2f(200, 34));
+        _sound = InputBox(std::string("Sound :"), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 250), BUTTON_STD_SIZE);
+        _music = InputBox(std::string("Music :"), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 350), BUTTON_STD_SIZE);
 
         libconfig::Config cfg;
 

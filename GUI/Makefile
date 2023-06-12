@@ -7,6 +7,7 @@
 
 SRC	=	./Main.cpp\
 		./App/Application.cpp\
+		./App/Window.cpp\
 		./Game/Game.cpp\
 		./Game/Scene/GameScene/GameScene.cpp\
 		./Game/Scene/GameScene/GameData/GameData.cpp\

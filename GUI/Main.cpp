@@ -14,6 +14,7 @@ int main(int ac, char **av)
 {
     try {
         Parser parser(ac, av);
+        Window::readConfigFile();
 
         Application App;
 

@@ -6,9 +6,10 @@
 */
 
 #include "MenuHUD.hpp"
+#include "Window.hpp"
 
 namespace UI {
-    MenuHUD::MenuHUD() : _background(sf::Vector2f(1600 / 6, 1080))
+    MenuHUD::MenuHUD() : _background(sf::Vector2f(Window::getWindowWidth() / 6, Window::getWindowHeight()))
     {
         BackgroundStyle RectangleColorBg(sf::Color(255, 255, 255, 155));
 
@@ -16,14 +17,14 @@ namespace UI {
 
         _background.setPosition(sf::Vector2f(0.0f, 0.0f));
 
-        _ip = InputBox(std::string("Ip Adress :"), sf::Vector2f((1920 - (15 * 32)) / 2 - 30, 200), sf::Vector2f(200, 34));
-        _port = InputBox(std::string("Port :"), sf::Vector2f((1920 - (15 * 32)) / 2 - 30, 250), sf::Vector2f(200, 34));
+        _ip = InputBox(std::string("Ip Adress :"), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 15, 250), BUTTON_STD_SIZE);
+        _port = InputBox(std::string("Port :"), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 15, 300), BUTTON_STD_SIZE);
         _settingsButtonOpen = false;
 
-        ButtonWidget *connectButton = new ButtonWidget(sf::Vector2f((1920 - (15 * 32)) / 2 - 50, 350), sf::Vector2f(7 * 32, 32), std::string("Connect"), 7);
-        ButtonWidget *settingsButton = new ButtonWidget(sf::Vector2f((1920 - (15 * 32)) / 2 - 50, 400), sf::Vector2f(7 * 32, 32), std::string("Settings"), 7);
-        ButtonWidget *quitButton = new ButtonWidget(sf::Vector2f((1920 - (15 * 32)) / 2 - 50, 450), sf::Vector2f(7 * 32, 32), std::string("Quit"), 7);
-        CrossButtonWidget *crossSettingsButton = new CrossButtonWidget(sf::Vector2f((1920 - (15 * 32)) / 2 + 400, 200), sf::Vector2f(16 * 2.5, 16 * 2.5));
+        ButtonWidget *connectButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 375), BUTTON_STD_SIZE, std::string("Connect"), 7);
+        ButtonWidget *settingsButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450), BUTTON_STD_SIZE, std::string("Settings"), 7);
+        ButtonWidget *quitButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 525), BUTTON_STD_SIZE, std::string("Quit"), 7);
+        CrossButtonWidget *crossSettingsButton = new CrossButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 450, 150), sf::Vector2f(16 * 2.5, 16 * 2.5));
 
         _connectButton = new Button(connectButton);
         _settingsButton = new Button(settingsButton);
@@ -35,7 +36,7 @@ namespace UI {
         sf::Texture *titleTexture = TextureManager::getTexture("./Assets/UI_UX/Paper UI Pack/Paper UI/Folding & Cutout/2 Headers/4.png");
         _titleHeader = sf::Sprite();
         _titleHeader.setTexture(*titleTexture);
-        _titleHeader.setPosition(sf::Vector2f(1920 / 2 - 448 - (448 / 2) + 50, 0));
+        _titleHeader.setPosition(sf::Vector2f(Window::getWindowWidth() / 2 - 448, 0));
         _titleHeader.setScale(sf::Vector2f(2, 2));
 
         sf::Font *font = FontManager::getFont(UI::ARIAL);
@@ -44,7 +45,7 @@ namespace UI {
         _titleText.setString("Zappy");
         _titleText.setCharacterSize(50);
         _titleText.setFillColor(sf::Color(15, 143, 104, 255));
-        _titleText.setPosition(sf::Vector2f(1920 / 2 - 448 + (448 / 4), 75));
+        _titleText.setPosition(sf::Vector2f(Window::getWindowWidth() / 2 - (448 / 2.65), 75));
     }
 
     MenuHUD::~MenuHUD()

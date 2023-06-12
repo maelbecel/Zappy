@@ -16,6 +16,9 @@
 
     #include <iostream>
 
+    #define BUTTON_STD_TILES 7 * 32
+    #define BUTTON_STD_SIZE sf::Vector2f(BUTTON_STD_TILES, 32)
+
 namespace UI {
     class ButtonWidget : public AWidget {
         // Define for ButtonWidget

@@ -55,7 +55,7 @@ int fork_cmd(client_t *client, server_t *server, UNUSED char **args)
     if (!action)
         return 84;
     action->callback = &do_fork;
-    client->current_action = action;
+    action_set_to_client(server, client, action);
     notif_graphic(client, server, &pfk);
     return 0;
 }

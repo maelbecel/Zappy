@@ -29,6 +29,6 @@ int inventory(client_t *client, server_t *server, UNUSED char **args)
     action_t *action = action_create("Inventory", server, client, 1);
 
     action->callback = &do_inventory;
-    client->current_action = action;
+    action_set_to_client(server, client, action);
     return 0;
 }

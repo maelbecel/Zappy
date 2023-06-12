@@ -68,11 +68,13 @@ SRC +=	$(SRC_DIR)/ai/ai_create.c \
 
 SRC +=	$(SRC_DIR)/time/time_create.c \
 		$(SRC_DIR)/time/time_destroy.c \
-		$(SRC_DIR)/time/time_update.c
+		$(SRC_DIR)/time/time_update.c \
+		$(SRC_DIR)/time/time_update_timeout.c
 
 SRC +=	$(SRC_DIR)/action/action_update.c \
 		$(SRC_DIR)/action/action_create.c \
-		$(SRC_DIR)/action/action_destroy.c
+		$(SRC_DIR)/action/action_destroy.c \
+		$(SRC_DIR)/action/action_set_to_client.c
 
 SRC +=	$(SRC_DIR)/command/graphic/msz.c \
 		$(SRC_DIR)/command/graphic/bct.c \

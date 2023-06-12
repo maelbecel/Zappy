@@ -50,6 +50,6 @@ int look(client_t *client, server_t *server, UNUSED char **args)
     if (!action)
         return EXIT_FAILTEK;
     action->callback = &do_look;
-    client->current_action = action;
+    action_set_to_client(server, client, action);
     return EXIT_SUCCESS;
 }

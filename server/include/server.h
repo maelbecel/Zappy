@@ -45,6 +45,7 @@ typedef struct time_manager_s {
     uint freq;
     struct timeval last;
     struct timeval current;
+    struct timeval timeout;
     double secPerTick;
     uint actionLastTick;
     uint spawnItemLastTick;
@@ -260,5 +261,8 @@ egg_t *egg_get_one_in_team(ulong team_id, server_t *server);
  * @param team_id Team id
  */
 void egg_add_to_team(server_t *server, ulong team_id);
+
+void action_set_to_client(server_t *server, client_t *client, action_t *action);
+void time_update_timeout(server_t *server, double action_time);
 
 #endif /* !SERVER_H_ */

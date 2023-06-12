@@ -18,6 +18,8 @@ time_manager_t *time_create(uint freq)
     time->secPerTick = 1.0 / freq;
     gettimeofday(&time->last, NULL);
     gettimeofday(&time->current, NULL);
+    time->timeout.tv_sec = 0;
+    time->timeout.tv_usec = 0;
     time->freq = freq;
     time->actionLastTick = 0;
     time->spawnItemLastTick = 0;

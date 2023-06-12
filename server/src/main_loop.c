@@ -58,7 +58,9 @@ int main_loop(server_t *server)
     while (server->running) {
         update_max_fd(server);
         if (select(server->select->maxfd + 1, &server->select->readfds,
-            &server->select->writefds, NULL, NULL) == -1) {
+            &server->select->writefds, NULL, (server->time->timeout.tv_sec > 0
+            || server->time->timeout.tv_usec > 0) ?
+            &server->time->timeout : NULL) == -1) {
             perror("select");
             break;
         }

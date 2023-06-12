@@ -73,6 +73,7 @@ static int update_food(client_t *client, uint tickDiff, server_t *server)
         if (ai->inventory->items[FOOD] > 0) {
             ai->inventory->items[FOOD]--;
             ai->time_before_death += 126;
+            time_update_timeout(server, 126 / server->time->freq);
         } else {
             ai_dead(client, server, false);
             return -1;

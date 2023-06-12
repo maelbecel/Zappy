@@ -36,6 +36,6 @@ int right(client_t *client, server_t *server, UNUSED char **args)
     if (!action)
         return 84;
     action->callback = &action_right;
-    client->current_action = action;
+    action_set_to_client(server, client, action);
     return 0;
 }

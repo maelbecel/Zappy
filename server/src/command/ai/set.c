@@ -65,6 +65,6 @@ int set(client_t *client, server_t *server, char **args)
     action->callback = &do_set;
     if (array_size(args) == 2)
         action->data[2] = strdup(args[1]);
-    client->current_action = action;
+    action_set_to_client(server, client, action);
     return 0;
 }

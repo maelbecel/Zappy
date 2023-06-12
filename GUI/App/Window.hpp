@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2023
+** Zappy
+** File description:
+** Window
+*/
+
 #ifndef WINDOW_H_
 #define WINDOW_H_
 

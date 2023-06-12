@@ -18,6 +18,7 @@ SRC	=	./Main.cpp\
 		./Game/Scene/Menu/HUD/MenuHUD.cpp\
 		./Game/Scene/Menu/HUD/Widget/InputBox.cpp\
 		./Game/Scene/Menu/HUD/Widget/ButtonWidget.cpp\
+		./Game/Scene/Menu/HUD/Widget/ArrowButtonWidget.cpp\
 		./Game/Scene/Menu/HUD/Widget/CrossButtonWidget.cpp\
 		./Game/Scene/Settings/Settings.cpp\
 		./Game/Scene/Settings/HUD/SettingsHUD.cpp\

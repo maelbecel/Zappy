@@ -1,3 +1,10 @@
+/*
+** EPITECH PROJECT, 2023
+** Zappy
+** File description:
+** Window
+*/
+
 #include "Window.hpp"
 #include <iostream>
 

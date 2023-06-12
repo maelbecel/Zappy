@@ -7,6 +7,7 @@
 
 #include "SettingsHUD.hpp"
 #include "Window.hpp"
+#include "ArrowButtonWidget.hpp"
 
 namespace UI {
     SettingsHUD::SettingsHUD() : _background(sf::Vector2f(Window::getWindowWidth(), Window::getWindowHeight()))
@@ -24,6 +25,16 @@ namespace UI {
 
         _sound = InputBox(std::string("Sound :"), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 250), BUTTON_STD_SIZE);
         _music = InputBox(std::string("Music :"), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 350), BUTTON_STD_SIZE);
+
+        ArrowButtonWidget *decreaseSoundButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 - 75, 248), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
+        ArrowButtonWidget *increaseSoundButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 250, 248), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
+        ArrowButtonWidget *decreaseMusicButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 - 75, 348), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
+        ArrowButtonWidget *increaseMusicButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 250, 348), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
+
+        _decreaseSoundButton = new Button(decreaseSoundButton);
+        _increaseSoundButton = new Button(increaseSoundButton);
+        _decreaseMusicButton = new Button(decreaseMusicButton);
+        _increaseMusicButton = new Button(increaseMusicButton);
 
         libconfig::Config cfg;
 
@@ -69,6 +80,22 @@ namespace UI {
         _music.value = std::to_string(_musicValue);
         _sound.draw(window, sf::RenderStates::Default);
         _music.draw(window, sf::RenderStates::Default);
+        if (_decreaseMusicButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
+            _decreaseMusicButton->render(window, ButtonState::HOVERED);
+        else
+            _decreaseMusicButton->render(window, ButtonState::IDLE);
+        if (_increaseMusicButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
+            _increaseMusicButton->render(window, ButtonState::HOVERED);
+        else
+            _increaseMusicButton->render(window, ButtonState::IDLE);
+        if (_decreaseSoundButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
+            _decreaseSoundButton->render(window, ButtonState::HOVERED);
+        else
+            _decreaseSoundButton->render(window, ButtonState::IDLE);
+        if (_increaseSoundButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
+            _increaseSoundButton->render(window, ButtonState::HOVERED);
+        else
+            _increaseSoundButton->render(window, ButtonState::IDLE);
     }
 
     void SettingsHUD::handleEvent(sf::Event event, Network::Server &server)

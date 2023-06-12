@@ -325,7 +325,6 @@ class clientAi:
         array = self.parseInv()
 
         self.resetFood(array)
-        print("ARRAY -> ", array)
         for element in array:
             if element[0] == "food":
                 continue
@@ -497,7 +496,6 @@ class clientAi:
             self.look()
             result = self.findFood()
             if (result != -1):
-                print("FIND WHAT WE NEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEED")
                 self.getGoTo(result)
                 self.computeQueueActions()
                 return
@@ -541,7 +539,6 @@ class clientAi:
                 self.grabFood()
                 return
         self.goElsewhere()
-        print("go elsewhere")
         self.grabFood()
 
     def needFood(self):
@@ -553,7 +550,6 @@ class clientAi:
         indicating that the player needs food. Otherwise, it returns False,
         indicating that the player does not need food.
         """
-        print("##################***********##################")
         self.inventory()
 
         if (self.inv["food"] < MIN_FOOD):

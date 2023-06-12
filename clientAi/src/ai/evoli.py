@@ -136,8 +136,6 @@ class evoli(clientAI):
 
     def gotAllNeededResource(self):
 
-        print("self.inv = ", self.inv)
-
         for element in self.inv:
             if element == "food":
                 continue
@@ -170,6 +168,3 @@ class evoli(clientAI):
             # self.findNeededRessources()
             self.grabFood()
             # self.alive = False
-
-
-    # 1 2 et 3 secondes combien il a perdu de food pour savoir combien il doit en ramasser tout les x temps

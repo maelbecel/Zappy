@@ -10,6 +10,8 @@
 
     #include "GameData.hpp"
     #include "PerlinNoise.hpp"
+    #include "TextureManager.hpp"
+    #include "TextureError.hpp"
 
 class Map {
     // Constructor and Destructor (default)
@@ -26,11 +28,11 @@ class Map {
             * @param gameData The game data for map information
             */
             void draw(sf::RenderWindow &window, GameData &gameData);
+            void drawBiome(sf::RenderWindow &window, GameData &gameData);
 
     // Attributes
     private:
-        sf::Sprite *_sea;              /*!< The sea Tiles for the map */
-        sf::Sprite *_ocean;            /*!< The Ocean Tiles for the map */
+        std::map<std::string, sf::Sprite *> _tiles; /*!< The tiles for the map */
 
     // Define
     public:

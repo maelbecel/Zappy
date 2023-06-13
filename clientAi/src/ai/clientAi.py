@@ -12,9 +12,6 @@ from ..exception.clientException import clientException as cEx
 from ..server.clientServer import clientServer
 from ..direction.direction import direction
 
-import time as time
-
-EAT_TIME = 126
 MIN_FOOD = 7
 PERCENTAGE_OF_FOOD = 0.5
 
@@ -400,7 +397,7 @@ class clientAi:
         queue.
         """
         for element in self.queue:
-            if self.alive == False:
+            if not self.alive:
                 return
             element()
         self.queue.clear()
@@ -538,7 +535,7 @@ class clientAi:
         count = 0
         result = 0
 
-        if self.alive == False:
+        if not self.alive:
             return
         if not self.needFood():
             return

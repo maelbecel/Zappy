@@ -253,7 +253,7 @@ class evoli(clientAI):
         count = self.countPlayerOnCase()
 
         if count == REQUIRED_PLAYER[self.level - 1]:
-            if self.incantation() == False:
+            if not self.incantation():
                 self.takeUselessRessourcesOnCase()
                 self.elevate()
                 return

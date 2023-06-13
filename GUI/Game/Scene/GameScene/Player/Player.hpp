@@ -140,7 +140,6 @@ class Player {
         bool _expulsion;                    /*!< The expulsion of the player */
         bool _broadcast;                    /*!< The broadcast of the player */
         UI::Animation *_idleAnim;           /*!< Animation of the player when he is idle */
-        sf::Clock _idleClock;               /*!< The clock of the idle animation */
 
     // Sprites
     private:

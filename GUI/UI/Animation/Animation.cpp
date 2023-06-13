@@ -50,58 +50,29 @@ namespace UI {
         _elapsedTime = 0.0f;
     }
 
-    void Animation::update(double dt)
+    void Animation::update()
     {
         // Check if the animation is playing
         if (!_isPlaying)
             return;
+        sf::Time time = _clock.getElapsedTime();
+        double seconds = time.asMicroseconds() / 1000000.0f;
 
-        _elapsedTime += dt;
-
-        // Check if the frame duration is elapsed
-        // elpased is the time between two frames
-        if (_elapsedTime >= _frameDuration) {
-            _currentFrame++;
- 
-            // Check if the animation is finished
-            if (_currentFrame >= (int)_sprites.size()) {
-                // Check if the animation is looped
-                if (_looped)
-                    _currentFrame = 0;
-                else {
-                    _currentFrame = _sprites.size() - 1;
-                    _isPlaying = false;
-                }
-            }
-
-            // Update the sprite with the new current frame
-            _currentSprite = _sprites[_currentFrame];
-            _elapsedTime = 0.0f;
-        }
-    }
-
-    void Animation::update()
-    {
-        if (!_isPlaying)
+        if (_frameDuration > seconds)
             return;
-        
-        _elapsedTime += 1.0f;
+        _clock.restart();
+        _currentFrame++;
 
-        if (_elapsedTime >= _frameDuration) {
-            _currentFrame++;
-
-            if (_currentFrame >= (int)_sprites.size()) {
-                if (_looped)
-                    _currentFrame = 0;
-                else {
-                    _currentFrame = _sprites.size() - 1;
-                    _isPlaying = false;
-                }
+        if (_currentFrame >= (int)_sprites.size()) {
+            // Check if the animation is looped
+            if (_looped)
+                _currentFrame = 0;
+            else {
+                _currentFrame = _sprites.size() - 1;
+                _isPlaying = false;
             }
-
-            _currentSprite = _sprites[_currentFrame];
-            _elapsedTime = 0.0f;
         }
+        _currentSprite = _sprites[_currentFrame];
     }
 
     /////////////////////

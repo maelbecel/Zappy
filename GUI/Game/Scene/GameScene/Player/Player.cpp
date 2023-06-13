@@ -26,7 +26,6 @@ Player::Player(sf::Vector2i position, int direction, int level, std::string team
         }
         _idleAnim = new UI::Animation(idle, 0.1, true);
         _idleAnim->play();
-
     } catch (Error::TextureError &error) {
         std::cerr << error.what() << std::endl;
     }
@@ -101,7 +100,7 @@ void Player::setBroadcast(bool broadcast)
 
 void Player::draw(GameData &gameData, sf::RenderWindow &window)
 {
-    _idleAnim->update(_idleClock.getElapsedTime().asSeconds());
+    _idleAnim->update();
 
     sf::Vector2f position = gameData.getTile(_position.x, _position.y)->getPosition();
     sf::Vector2f scale = gameData.getScale();

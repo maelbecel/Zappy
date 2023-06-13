@@ -71,9 +71,7 @@ namespace UI {
              * @brief Update the animation
              * Call this method for update the animation
              * Update is for change the frame of the animation
-             * @param dt The time between two frames
              */
-            void update(double dt);
             void update();
         
         // Getters & Setters
@@ -95,6 +93,7 @@ namespace UI {
             bool _isPlaying;                   /*!< If the animation is playing or not */
             double _elapsedTime;               /*!< The elapsed time since the animation started */
             int _currentFrame;                 /*!< The current frame of the animation */
+            sf::Clock _clock;                  /*!< The clock of the animation */
     };
 };
 

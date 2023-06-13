@@ -92,12 +92,15 @@ class evoli(clientAI):
     def takeUselessRessourcesOnCase(self):
         temp = dict()
 
-        self.look()
+        # self.look()
         temp = self.getDictFromCase(0)
+
+        print("takeUselessRessourcesOnCase, self.objective ", self.objective)
+
         # remove element from case
         for (key, value) in temp.items():
-            if key in self.objective and value > self.objective[key]:
-                for i in range(value - self.objective[key]):
+            if key in temp and value > REQUIRED[self.level - 1][key]:
+                for i in range(value - REQUIRED[self.level - 1][key]):
                     self.take(key)
 
     def countPlayerOnCase(self):
@@ -127,10 +130,10 @@ class evoli(clientAI):
 
         print("index = ", index)
 
-        if not index == -1:
+        if index != -1:
             self.getGoTo(index)
             self.computeQueueActions()
-            if self.checkActualCase(index): # check if the case is the good one
+            if self.checkActualCase(0): # check if the case is the good one
                 self.takeUselessRessourcesOnCase()
                 self.elevate()
 
@@ -150,6 +153,8 @@ class evoli(clientAI):
 
         self.look()
 
+        print("findNeededRessources, acrtual level = ", self.level, " ####################")
+
         if self.gotAllNeededResource():
             return True
         else:
@@ -167,4 +172,5 @@ class evoli(clientAI):
             self.findPlaceToElevate()
             # self.findNeededRessources()
             self.grabFood()
+
             # self.alive = False

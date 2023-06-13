@@ -417,6 +417,10 @@ class clientAi:
         y = 0
 
         while result != value:
+            if value == max:
+                x += 1
+                result += 1
+                continue
             if result < value and value < max:
                 x += 1
                 result += 1
@@ -477,6 +481,14 @@ class clientAi:
         self.take(object)
 
     def findFood(self):
+        """
+        The function finds the index of the first occurrence of the string "food"
+        in a 2D array and returns it, or returns -1 if "food" is not found.
+
+        @return The function `findFood` returns the index of the first occurrence
+        of the string "food" in the 2D list `self.lookResult`. If "food" is not
+        found in the list, it returns -1.
+        """
         id = 0
 
         for array in self.lookResult:
@@ -487,6 +499,14 @@ class clientAi:
         return -1
 
     def goElsewhere(self):
+        """
+        The function makes a robot move in a square pattern while searching for
+        food and stops when it finds food.
+
+        @return nothing (i.e., it does not have a return statement). It is using
+        the `return` keyword inside a loop to exit the function early if certain
+        conditions are met.
+        """
         rotateId = 0
 
         while (self.lookingForFood):

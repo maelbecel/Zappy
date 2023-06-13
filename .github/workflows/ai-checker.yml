@@ -4,10 +4,9 @@ on:
   push:
     branches:
       - dev
-      - client-AI
       - CI/CD_#2
-      - ft/clientAi
       - IA
+      - feat/clientAi-EvolutiveAi
 
 jobs:
   format:
@@ -69,7 +68,8 @@ jobs:
       - name: Run unit tests
         run: |
           pip install pytest
-          pytest clientAi/tests/ai/*
+          # pytest clientAi/tests/ai/*
+          clientAi/run_test.sh
   flake8-lint:
     needs: tests
     runs-on: ubuntu-latest

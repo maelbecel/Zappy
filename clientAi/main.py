@@ -5,9 +5,11 @@
 ## main
 ##
 
-import sys
 import src.exception.clientException as cException
 import src.ai.clientAi as cAi
+import src.ai.evoli as evoli
+import sys
+from time import sleep
 
 MAX_PORT = 65535
 
@@ -25,7 +27,8 @@ def parse(argv):
     if int(argv[2]) > MAX_PORT or int(argv[2]) < 0:
         raise cException("Error: port is invalid")
 
-    client = cAi.clientAi(argv[4], argv[2], argv[6])
+    # client = cAi.clientAi(argv[4], argv[2], argv[6])
+    client = evoli.evoli(argv[4], argv[2], argv[6])
     return client
 
 
@@ -34,9 +37,7 @@ def main(client):
         if client is None:
             raise cException("Error: client is null")
         client.connect()
-        client.look()
-        client.pickObject(2, "food")
-        client.inventory()
+        client.run()
         client.disconnect()
     except Exception as e:
         raise e

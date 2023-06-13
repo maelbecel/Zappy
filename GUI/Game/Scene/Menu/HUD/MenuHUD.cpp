@@ -19,17 +19,14 @@ namespace UI {
 
         _ip = InputBox(std::string("Ip Adress :"), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 15, 250), BUTTON_STD_SIZE);
         _port = InputBox(std::string("Port :"), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 15, 300), BUTTON_STD_SIZE);
-        _settingsButtonOpen = false;
 
         ButtonWidget *connectButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 375), BUTTON_STD_SIZE, std::string("Connect"), 7);
         ButtonWidget *settingsButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450), BUTTON_STD_SIZE, std::string("Settings"), 7);
         ButtonWidget *quitButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 525), BUTTON_STD_SIZE, std::string("Quit"), 7);
-        CrossButtonWidget *crossSettingsButton = new CrossButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 450, 150), sf::Vector2f(16 * 2.5, 16 * 2.5));
 
         _connectButton = new Button(connectButton);
         _settingsButton = new Button(settingsButton);
         _quitButton = new Button(quitButton);
-        _crossSettingsButton = new Button(crossSettingsButton);
 
         _settings = Scene::Settings();
 
@@ -77,25 +74,22 @@ namespace UI {
         } else {
             _quitButton->render(window, ButtonState::IDLE);
         }
-        if (_settingsButtonOpen == true) {
+        if (_settings.IsRunning() == true) {
             _settings.Render(window);
-            if (_crossSettingsButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))) {
-                _crossSettingsButton->render(window, ButtonState::HOVERED);
-            } else {
-                _crossSettingsButton->render(window, ButtonState::IDLE);
-            }
         }
     }
 
     void MenuHUD::handleEvent(sf::Event event, Network::Server &server)
     {
+        if (event.type == sf::Event::KeyPressed && _settings.IsRunning() == true) {
+            if (event.key.code == sf::Keyboard::Escape) {
+                _settings.SetRunning(false);
+            }
+        }
         if (event.type == sf::Event::MouseButtonPressed) {
             if (event.mouseButton.button != sf::Mouse::Left)
                 return;
-            if (_settingsButtonOpen == true && _crossSettingsButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
-                _settingsButtonOpen = false;
-            }
-            if (_settingsButtonOpen == true) {
+            if (_settings.IsRunning() == true) {
                 _settings.OnEvent(event, server);
                 return;
             }
@@ -112,7 +106,7 @@ namespace UI {
                 return;
             }
             if (_settingsButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
-                _settingsButtonOpen = true;
+                _settings.SetRunning(true);
                 return;
             }
             if (_quitButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {

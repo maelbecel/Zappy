@@ -59,6 +59,18 @@ namespace Scene {
              */
             void OnEvent(const sf::Event &event, Network::Server &server) override;
 
+            /**
+             * @brief Check if the menu is running
+             * @return true if the menu is running, false otherwise
+             */
+            bool IsRunning();
+
+            /**
+             * @brief Set the running state of the menu
+             * @param state The state of the menu
+             */
+            void SetRunning(bool state);
+
         // Attributes
         private:
             UI::SettingsHUD _settingsHUD; /*!< The settings HUD */

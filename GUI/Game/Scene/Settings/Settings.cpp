@@ -41,4 +41,14 @@ namespace Scene {
     {
         _settingsHUD.handleEvent(event, server);
     }
+
+    bool Settings::IsRunning()
+    {
+        return _settingsHUD.isOpened();
+    }
+
+    void Settings::SetRunning(bool running)
+    {
+        _settingsHUD.setOpened(running);
+    }
 };

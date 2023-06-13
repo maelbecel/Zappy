@@ -8,6 +8,7 @@
 #include "SettingsHUD.hpp"
 #include "Window.hpp"
 #include "ArrowButtonWidget.hpp"
+#include "CrossButtonWidget.hpp"
 
 namespace UI {
     SettingsHUD::SettingsHUD() : _background(sf::Vector2f(Window::getWindowWidth(), Window::getWindowHeight()))
@@ -30,11 +31,13 @@ namespace UI {
         ArrowButtonWidget *increaseSoundButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 250, 248), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
         ArrowButtonWidget *decreaseMusicButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 - 75, 348), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
         ArrowButtonWidget *increaseMusicButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 250, 348), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
+        CrossButtonWidget *crossSettingsButton = new CrossButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 450, 150), sf::Vector2f(16 * 2.5, 16 * 2.5));
 
         _decreaseSoundButton = new Button(decreaseSoundButton);
         _increaseSoundButton = new Button(increaseSoundButton);
         _decreaseMusicButton = new Button(decreaseMusicButton);
         _increaseMusicButton = new Button(increaseMusicButton);
+        _crossSettingsButton = new Button(crossSettingsButton);
 
         libconfig::Config cfg;
 
@@ -63,6 +66,8 @@ namespace UI {
             _soundValue = 50;
         if (_musicValue < 0 || _musicValue > 100)
             _musicValue = 50;
+
+        _isOpened = false;
     }
 
     SettingsHUD::~SettingsHUD()
@@ -100,6 +105,10 @@ namespace UI {
             _increaseSoundButton->render(window, ButtonState::HOVERED);
         else
             _increaseSoundButton->render(window, ButtonState::IDLE);
+        if (_crossSettingsButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
+            _crossSettingsButton->render(window, ButtonState::HOVERED);
+        else
+            _crossSettingsButton->render(window, ButtonState::IDLE);
     }
 
     void SettingsHUD::handleEvent(sf::Event event, Network::Server &server)
@@ -137,9 +146,25 @@ namespace UI {
                     _musicValue += 1;
                 return;
             }
+            if (_crossSettingsButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                _isOpened = false;
+                return;
+            }
+            _sound.isIn(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
+            _music.isIn(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
             return;
         }
         _sound.handleEvent(event);
         _music.handleEvent(event);
+    }
+
+    bool SettingsHUD::isOpened() const
+    {
+        return _isOpened;
+    }
+
+    void SettingsHUD::setOpened(bool isOpened)
+    {
+        _isOpened = isOpened;
     }
 };

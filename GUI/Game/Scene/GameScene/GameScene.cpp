@@ -7,6 +7,7 @@
 
 #include "GameScene.hpp"
 #include <iostream>
+#include "Window.hpp"
 
 namespace Scene {
     /////////////////
@@ -87,6 +88,12 @@ namespace Scene {
             // Check if the mouse is on the rectangle
             if ((mousePos.x >= position.x + (8 * (scale.x + 2)) && mousePos.y >= position.y) && (mousePos.x <= position.x + (Tile::TILE_WIDTH * (scale.x + 2)) - (8 * (scale.x + 2)) && mousePos.y <= position.y + (Tile::TILE_HEIGHT * (scale.y + 1.25)))) {
                 std::cout << "Rectangle clicked: " << tile.first.first << ", " << tile.first.second << std::endl;
+                // Check if the mouse is on the half left of the screen or the half right
+                if (mousePos.x < (Window::getWindowWidth()) / 2) {
+                    std::cout << "Left" << std::endl;
+                } else {
+                    std::cout << "Right" << std::endl;
+                }
                 break;
             }
 

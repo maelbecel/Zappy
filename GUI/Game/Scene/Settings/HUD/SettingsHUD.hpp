@@ -43,6 +43,16 @@ namespace UI {
              */
             void handleEvent(sf::Event event, Network::Server &server);
 
+            /**
+             * @brief Check if the Settings HUD is opened
+             */
+            bool isOpened() const;
+
+            /**
+             * @brief Set the Settings HUD opened or not
+             */
+            void setOpened(bool opened);
+
         // Attributes
         private:
             sf::RectangleShape _background;         /*!< Background of the Settings HUD */
@@ -51,10 +61,12 @@ namespace UI {
             IButton *_increaseSoundButton;          /*!< Button to increase the sound */
             IButton *_decreaseMusicButton;          /*!< Button to decrease the music */
             IButton *_increaseMusicButton;          /*!< Button to increase the music */
+            IButton *_crossSettingsButton;          /*!< Button to close the settings */
             InputBox _sound;                        /*!< Input box for the sound */
             InputBox _music;                        /*!< Input box for the music */
             int _soundValue;                        /*!< Value of the sound */
             int _musicValue;                        /*!< Value of the music */
+            bool _isOpened;                         /*!< Is the Settings HUD opened */
     };
 };
 

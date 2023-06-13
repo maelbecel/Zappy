@@ -6,6 +6,7 @@
 */
 
 #include "command.h"
+#include "wbuffer.h"
 
 static void do_inventory(action_t *action)
 {
@@ -17,7 +18,7 @@ static void do_inventory(action_t *action)
     ai = client->data;
     if (!ai)
         return;
-    dprintf(client->socket->fd, "[ food %d, linemate %d, deraumere %d, \
+    wbuffer_add_message(client, "[ food %d, linemate %d, deraumere %d, \
 sibur %d, mendiane %d, phiras %d, thystame %d ]\n", ai->inventory->items[0],
     ai->inventory->items[1], ai->inventory->items[2], ai->inventory->items[3],
     ai->inventory->items[4], ai->inventory->items[5], ai->inventory->items[6]);

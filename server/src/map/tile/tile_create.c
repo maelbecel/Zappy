@@ -16,11 +16,9 @@ tile_t *tile_create(uint x, uint y)
         return NULL;
     tile->x = x;
     tile->y = y;
-    tile->players = olist_create();
-    tile->players->destructor = &default_destructor_no_free;
+    tile->players = 0;
     tile->inventory = inventory_create();
     if (!tile->inventory) {
-        olist_destroy(tile->players);
         free(tile);
         return NULL;
     }

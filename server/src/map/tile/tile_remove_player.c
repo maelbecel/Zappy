@@ -6,17 +6,17 @@
 */
 
 #include "map.h"
+#include "ai.h"
 
-void tile_remove_player(tile_t *tile, client_t *player)
+void tile_remove_player(map_t *map, client_t *client)
 {
-    uint index = 0;
+    ai_t *ai = client->data;
+    tile_t *tile = NULL;
 
-    OLIST_FOREACH(tile->players, node) {
-        client_t *tmp = node->data;
-        if (tmp->id == player->id) {
-            index = olist_index_of(tile->players, node->data);
-            olist_remove_node_wfree(tile->players, index);
-            return;
-        }
-    }
+    if (!map || !client || !ai)
+        return;
+    tile = map_get_tile(map, ai->x, ai->y);
+    if (!tile)
+        return;
+    tile->players--;
 }

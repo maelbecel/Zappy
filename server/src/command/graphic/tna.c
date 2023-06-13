@@ -6,6 +6,7 @@
 */
 
 #include "command.h"
+#include "wbuffer.h"
 
 int tna(client_t *client, server_t *server, UNUSED char **args)
 {
@@ -15,7 +16,7 @@ int tna(client_t *client, server_t *server, UNUSED char **args)
         team = node->data;
         if (!team)
             continue;
-        dprintf(client->socket->fd, "tna %s\n", team->name);
+        wbuffer_add_message(client, "tna %s\n", team->name);
     }
     return 0;
 }

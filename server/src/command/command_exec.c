@@ -12,6 +12,7 @@
 #include "client.h"
 #include "olog.h"
 #include "utils.h"
+#include "wbuffer.h"
 
 static const command_t graphic_commands[] = {
     {"msz", &msz},
@@ -37,7 +38,7 @@ static int command_exec_graphic(client_t *client, server_t *server, char **args)
             return graphic_commands[i].func(client, server, args);
         }
     }
-    dprintf(client->socket->fd, "suc\n");
+    wbuffer_add_msg(client, "suc\n");
     return 0;
 }
 

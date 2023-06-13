@@ -92,13 +92,13 @@ namespace Network {
         FD_ZERO(&_read);
         FD_SET(STDIN_FILENO, &_read);
         FD_SET(_socket, &_read);
+    
+        FD_ZERO(&_write);
+        FD_SET(STDIN_FILENO, &_write);
+        FD_SET(_socket, &_write);
 
-        //FD_ZERO(&_write);
-        //FD_SET(STDIN_FILENO, &_write);
-        //FD_SET(_socket, &_write);
-
-        //return select(_socket + 1, &_read, &_write, NULL, NULL);
-        return select(_socket + 1, &_read, NULL, NULL, NULL);
+        return select(_socket + 1, &_read, &_write, NULL, NULL);
+        //return select(_socket + 1, &_read, NULL, NULL, NULL);
     }
 
     void Socket::processClient()
@@ -128,10 +128,10 @@ namespace Network {
     {
         if (response.compare("") == 0 || response.compare("\n") == 0 || response.compare("ko\n") == 0)
             return;
-        
-        std::string answer = parseResponse(response);
 
-        ::send(_socket, answer.c_str(), answer.size(), 0);
+        // Connexion response
+        if (response.compare("WELCOME\n") == 0)
+            ::send(_socket, "GRAPHIC\n", 9, 0);
     }
 
     /////////////
@@ -142,45 +142,4 @@ namespace Network {
     {
         _socket = socket;
     }
-
-    /////////////////////
-    // Private Methods //
-    /////////////////////
-
-    std::string Socket::parseResponse(const std::string &response)
-    {
-        if (response.compare("WELCOME\n") == 0)
-            return "GRAPHIC\n";
-        else if (response.compare("suc\n") == 0)
-            return "ok\n";
-        else if (response.find("msz") != std::string::npos)   // msz = map size
-            return "msz\n";
-        else if (response.find("sgt") != std::string::npos)   // sgt = time unit
-            return "sgt\n";
-        else if (response.find("bct") != std::string::npos) { // bct = content of a tile
-            // Exemple of bct response : bct X Y q0 q1 q2 q3 q4 q5 q6
-            //                           q0 = food
-            //                           q1 = linemate
-            //                           q2 = deraumere
-            //                           q3 = sibur
-            //                           q4 = mendiane
-            //                           q5 = phiras
-            //                           q6 = thystame
-
-            std::string bct;
-            std::string x;
-            std::string y;
-
-            std::stringstream(response) >> bct >> x >> y;
-
-            return std::string("bct " + x + " " + y + "\n");
-        } else if (response.find("tna") != std::string::npos) // tna = team name
-            return "tna\n";
-        else if (response.find("sbp") != std::string::npos)   // sbp = command parameter
-            return "ok\n";
-
-        // TODO: parse response and create all the answer
-        std::cout << response << std::endl;
-        return "ok\n";
-    }
-};
+}

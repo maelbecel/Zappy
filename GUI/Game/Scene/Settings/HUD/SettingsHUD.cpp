@@ -59,6 +59,10 @@ namespace UI {
             const std::string &error = "Parse error at " + file + ":" + line + " - " + ex.getError();
             throw Error::ParserException(error.c_str());
         }
+        if (_soundValue < 0 || _soundValue > 100)
+            _soundValue = 50;
+        if (_musicValue < 0 || _musicValue > 100)
+            _musicValue = 50;
     }
 
     SettingsHUD::~SettingsHUD()
@@ -111,6 +115,26 @@ namespace UI {
             if (_music.isIn(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
                 std::cout << "Music" << std::endl;
                 _musicValue = std::stoi(_music.value);
+                return;
+            }
+            if (_decreaseSoundButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                if (_soundValue > 0)
+                    _soundValue -= 1;
+                return;
+            }
+            if (_increaseSoundButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                if (_soundValue < 100)
+                    _soundValue += 1;
+                return;
+            }
+            if (_decreaseMusicButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                if (_musicValue > 0)
+                    _musicValue -= 1;
+                return;
+            }
+            if (_increaseMusicButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                if (_musicValue < 100)
+                    _musicValue += 1;
                 return;
             }
             return;

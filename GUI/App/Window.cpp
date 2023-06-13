@@ -38,4 +38,8 @@ void Window::readConfigFile() {
             Window::height = screen["height"];
         }
     }
+    if (Window::width == 0 || Window::height == 0) {
+        Window::width = 1920;
+        Window::height = 1080;
+    }
 }

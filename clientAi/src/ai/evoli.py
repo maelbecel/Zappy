@@ -95,8 +95,6 @@ class evoli(clientAI):
         # self.look()
         temp = self.getDictFromCase(0)
 
-        print("takeUselessRessourcesOnCase, self.objective ", self.objective)
-
         # remove element from case
         for (key, value) in temp.items():
             if key in temp and value > REQUIRED[self.level - 1][key]:
@@ -128,8 +126,6 @@ class evoli(clientAI):
 
         index = self.checkRessourcesCases()
 
-        print("index = ", index)
-
         if index != -1:
             self.getGoTo(index)
             self.computeQueueActions()
@@ -152,8 +148,6 @@ class evoli(clientAI):
         id = 0
 
         self.look()
-
-        print("findNeededRessources, acrtual level = ", self.level, " ####################")
 
         if self.gotAllNeededResource():
             return True

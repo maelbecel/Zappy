@@ -68,8 +68,9 @@ jobs:
       - name: Run unit tests
         run: |
           pip install pytest
-          # pytest clientAi/tests/ai/*
-          clientAi/run_test.sh
+          cd ./clientAi/
+          ./run_test.sh
+          cd ..
   flake8-lint:
     needs: tests
     runs-on: ubuntu-latest

@@ -60,7 +60,7 @@ namespace Scene {
              * @param event The event to handle
              * @param server The server (for network events)
              */
-            void OnEvent(const sf::Event &event, Network::Server &server) override;
+            void OnEvent(const sf::Event &event, Network::Server &server, sf::RenderWindow &window) override;
 
         // Private Methods
         private:
@@ -74,7 +74,7 @@ namespace Scene {
 
             /**
              * @brief Check if the left click is inside the left triangle of the hexagonal tiles
-             * 
+             *
              * @param position The mouse click position
              * @param a        The first point of the triangle
              * @param b        The second point of the triangle

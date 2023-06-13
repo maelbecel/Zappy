@@ -14,6 +14,7 @@ int main(int ac, char **av)
 {
     try {
         Parser parser(ac, av);
+        Window::readConfigFile();
 
         Application App;
 
@@ -27,6 +28,9 @@ int main(int ac, char **av)
         std::cerr << error.what() << std::endl;
         return 84;
     } catch (Error::ApplicationError &error) {
+        std::cerr << error.what() << std::endl;
+        return 84;
+    } catch (Error::ParserException &error) {
         std::cerr << error.what() << std::endl;
         return 84;
     }

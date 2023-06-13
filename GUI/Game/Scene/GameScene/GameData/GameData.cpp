@@ -403,7 +403,7 @@ void GameData::deletePlayer(const std::string &player)
         if (_players.find(name) == _players.end())
             return;
 
-        _players.erase(name);
+        //_players.erase(name);
     } catch (std::invalid_argument &e) {
         throw Error::InvalidArgument("GameData::deletePlayer");
     }

@@ -34,6 +34,7 @@ SRC += 	$(SRC_DIR)/map/tile/tile_add_player.c \
 		$(SRC_DIR)/map/tile/tile_create.c \
 		$(SRC_DIR)/map/tile/tile_destroy.c \
 		$(SRC_DIR)/map/tile/tile_remove_player.c \
+		$(SRC_DIR)/map/tile/tile_get_players.c \
 		$(SRC_DIR)/map/map_create.c \
 		$(SRC_DIR)/map/map_destroy.c \
 		$(SRC_DIR)/map/map_get_tile.c \
@@ -64,7 +65,8 @@ SRC +=	$(SRC_DIR)/team/team_create.c \
 
 SRC +=	$(SRC_DIR)/ai/ai_create.c \
 		$(SRC_DIR)/ai/ai_destroy.c \
-		$(SRC_DIR)/ai/ai_dead.c
+		$(SRC_DIR)/ai/ai_dead.c \
+		$(SRC_DIR)/ai/ai_get_direction_from_orientation.c
 
 SRC +=	$(SRC_DIR)/time/time_create.c \
 		$(SRC_DIR)/time/time_destroy.c \
@@ -89,7 +91,9 @@ SRC +=	$(SRC_DIR)/command/graphic/msz.c \
 		$(SRC_DIR)/command/graphic/pdr.c \
 		$(SRC_DIR)/command/graphic/ebo.c \
 		$(SRC_DIR)/command/graphic/pfk.c \
-		$(SRC_DIR)/command/graphic/enw.c
+		$(SRC_DIR)/command/graphic/enw.c \
+		$(SRC_DIR)/command/graphic/pex.c \
+		$(SRC_DIR)/command/graphic/edi.c
 
 SRC +=	$(SRC_DIR)/command/ai/forward.c \
 		$(SRC_DIR)/command/ai/right.c \
@@ -101,6 +105,8 @@ SRC +=	$(SRC_DIR)/command/ai/forward.c \
 		$(SRC_DIR)/command/ai/look.c \
 		$(SRC_DIR)/command/ai/look_func.c \
 		$(SRC_DIR)/command/ai/fork.c \
+		$(SRC_DIR)/command/ai/eject.c \
+		$(SRC_DIR)/command/ai/eject_eggs.c \
 		$(SRC_DIR)/command/ai/notif_graphic.c
 
 SRC +=	$(SRC_DIR)/egg/egg_create.c \

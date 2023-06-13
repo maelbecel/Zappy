@@ -75,7 +75,7 @@ void Map::draw(sf::RenderWindow &window, GameData &gameData)
     double **noise = gameData.getNoise();
     bool forest = false;
 
-    for (int height = mapSize.x + SEA_SIZE * 2 - 1; height > -1; height--) {
+    for (int height = mapSize.y + SEA_SIZE * 2 - 1; height > -1; height--) {
         for (int width = mapSize.x + SEA_SIZE * 2 - 1; width > -1; width--) {
             // Hexagonal to isometric projection
             sf::Vector2f position(

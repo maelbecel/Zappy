@@ -94,7 +94,7 @@ void Map::draw(sf::RenderWindow &window, GameData &gameData)
                 sprite->setScale(scale.x + 2.00, scale.y + 1.25);
                 window.draw(*sprite);
             } else {
-                if (noise[width - SEA_SIZE][height - SEA_SIZE] < 0.3)
+                if (noise[height - SEA_SIZE][width - SEA_SIZE] < 0.3)
                     sprite = _tiles["Desert"];
                 else
                     sprite = _tiles["Grass"];
@@ -126,7 +126,7 @@ void Map::drawBiome(sf::RenderWindow &window, GameData &gameData)
             // Handle tiles outside the map
             if (height >= mapSize.y + SEA_SIZE || width >= mapSize.x + SEA_SIZE || height < SEA_SIZE || width < SEA_SIZE)
                 continue;
-            if (noise[width - SEA_SIZE][height - SEA_SIZE] < 0.7)
+            if (noise[height - SEA_SIZE][width - SEA_SIZE] < 0.7)
                 continue;
 
             sf::Vector2f position(

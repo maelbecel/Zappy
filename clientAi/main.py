@@ -37,10 +37,8 @@ def main(client):
         if client is None:
             raise cException("Error: client is null")
         client.connect()
-        while True:
-            client.take("food")
-            client.forward()
-            client.inventory()
+        client.run()
+        client.disconnect()
     except Exception as e:
         raise e
 

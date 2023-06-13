@@ -42,7 +42,7 @@ namespace Scene {
 
     void GameScene::ShutDown() {};
 
-    void GameScene::OnEvent(const sf::Event &event, Network::Server &server)
+    void GameScene::OnEvent(const sf::Event &event, Network::Server &server, UNUSED sf::RenderWindow &window)
     {
         if (event.type == sf::Event::KeyPressed) {
             if (event.key.code == sf::Keyboard::Z) {

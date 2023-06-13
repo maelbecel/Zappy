@@ -79,7 +79,7 @@ namespace UI {
         }
     }
 
-    void MenuHUD::handleEvent(sf::Event event, Network::Server &server)
+    void MenuHUD::handleEvent(sf::Event event, Network::Server &server, sf::RenderWindow &window)
     {
         if (event.type == sf::Event::KeyPressed && _settings.IsRunning() == true) {
             if (event.key.code == sf::Keyboard::Escape) {
@@ -90,7 +90,7 @@ namespace UI {
             if (event.mouseButton.button != sf::Mouse::Left)
                 return;
             if (_settings.IsRunning() == true) {
-                _settings.OnEvent(event, server);
+                _settings.OnEvent(event, server, window);
                 return;
             }
             if (_connectButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
@@ -110,8 +110,7 @@ namespace UI {
                 return;
             }
             if (_quitButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
-                std::cout << "Quit" << std::endl;
-                // Need to quit the game
+                window.close();
             }
             _ip.isIn(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
             _port.isIn(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));

@@ -9,6 +9,7 @@
 #define WINDOW_H_
 
 #include <libconfig.h++>
+#define UNUSED __attribute__((unused))
 
 class Window {
 public:

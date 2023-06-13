@@ -38,7 +38,7 @@ void Application::appEventManager()
     while (_window.pollEvent(_event)) {
         if (_event.type == sf::Event::Closed)
             _window.close();
-        _game.OnEvent(_event);
+        _game.OnEvent(_event, _window);
     }
 }
 

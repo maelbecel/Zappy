@@ -57,7 +57,7 @@ namespace Scene {
              * @param event The event to handle
              * @param server The server (for network events)
              */
-            void OnEvent(const sf::Event &event, Network::Server &server) override;
+            void OnEvent(const sf::Event &event, Network::Server &server, sf::RenderWindow &window) override;
 
             /**
              * @brief Check if the menu is running

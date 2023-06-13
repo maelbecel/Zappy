@@ -37,9 +37,9 @@ namespace Scene {
     {
     }
 
-    void Settings::OnEvent(const sf::Event &event, Network::Server &server)
+    void Settings::OnEvent(const sf::Event &event, Network::Server &server, sf::RenderWindow &window)
     {
-        _settingsHUD.handleEvent(event, server);
+        _settingsHUD.handleEvent(event, server, window);
     }
 
     bool Settings::IsRunning()

@@ -41,7 +41,7 @@ namespace UI {
              * @param event  The event to handle
              * @param server The server to connect to
              */
-            void handleEvent(sf::Event event, Network::Server &server);
+            void handleEvent(sf::Event event, Network::Server &server, sf::RenderWindow &window);
 
             /**
              * @brief Check if the Settings HUD is opened

@@ -8,9 +8,9 @@
 #ifndef OLOG_H_
     #define OLOG_H_
 
-    #include <stdio.h>
+    #define _GNU_SOURCE
 
-    #define DEBUG 1
+    #include <stdio.h>
 
     // Add colors to the logs
     #define OLOG_COLOR_RED "\033[0;31m"
@@ -51,7 +51,7 @@
         fprintf(stderr, OLOG_COLOR_RED "[FATAL] " fmt OLOG_COLOR_RESET "\n")
 
     // Check if the debug mode is enabled
-    #if DEBUG == 1
+    #ifdef DEBUG
         #define OLOG_DEBUG(fmt, ...) \
             fprintf(stdout, OLOG_COLOR_MAGENTA "[DEBUG] " OLOG_COLOR_RESET fmt \
             "\n", __VA_ARGS__)
@@ -61,7 +61,7 @@
             "\n")
     #else
         #define OLOG_DEBUG(fmt, ...)
-        #define OLOG_DEBUG(fmt)
+        #define OLOG_DEBUGA(fmt)
     #endif /* DEBUG */
 
 #endif /* !OLOG_H_ */

@@ -50,11 +50,21 @@ typedef struct time_manager_s {
     uint spawnItemLastTick;
 } time_manager_t;
 
+typedef struct egg_s {
+    ulong id;
+    ulong team_id;
+    uint x;
+    uint y;
+    ulong player_id;
+    bool hatched;
+} egg_t;
+
 typedef struct server_s {
     socket_t *socket;
     bool running;
     olist_t *clients;
     olist_t *teams;
+    olist_t *eggs;
     uint max_team_size;
     map_t *map;
     select_t *select;
@@ -66,6 +76,7 @@ typedef struct team_s {
     olist_t *clients;
     char *name;
     uint team_size;
+    uint eggs_size;
 } team_t;
 
 int main_loop(server_t *server);
@@ -134,6 +145,15 @@ void team_destroy(team_t *team);
 team_t *team_get_by_id(server_t *server, ulong id);
 
 /**
+ * @brief Get the team by name
+ *
+ * @param server Link to server object
+ * @param name Name of team
+ * @return team_t* Return NULL if not found
+ */
+team_t *get_team_by_name(server_t *server, char *name);
+
+/**
  * @brief Create a time manager object
  *
  * @param freq Frequency of ticks
@@ -196,5 +216,58 @@ client_t *client_get_by_id(server_t *server, ulong id);
  * @param server
  */
 void map_spawn_items(server_t *server, bool checkTime);
+
+/**
+ * @brief Create a new egg
+ *
+ * @param team_id Team which create the egg
+ * @param x pos x of egg
+ * @param y pos y of egg
+ * @return egg_t* Allocated egg object
+ */
+egg_t *egg_create(ulong team_id, uint x, uint y, ulong player_id);
+
+/**
+ * @brief Destroy an egg object
+ *
+ * @param egg
+ */
+void egg_destroy(egg_t *egg);
+
+/**
+ * @brief Check if at least one egg is in the team
+ *
+ * @param team_id Team id
+ * @param server Link to server object
+ * @return true If at least one egg is in the team
+ * @return false If no egg is in the team
+ */
+bool egg_is_egg_in_team(ulong team_id, server_t *server);
+
+/**
+ * @brief Get random egg in team
+ *
+ * @param team_id Team id
+ * @param server Link to server object
+ * @return egg_t* Return NULL if no egg is in the team
+ */
+egg_t *egg_get_one_in_team(ulong team_id, server_t *server);
+
+/**
+ * @brief Add an egg to a team
+ *
+ * @param server Link to server object
+ * @param team_id Team id
+ */
+void egg_add_to_team(server_t *server, ulong team_id);
+
+/**
+ * @brief Get list of clients on a tile
+ *
+ * @param server
+ * @param tile
+ * @return olist_t*
+ */
+olist_t *tile_get_players(server_t *server, tile_t *tile);
 
 #endif /* !SERVER_H_ */

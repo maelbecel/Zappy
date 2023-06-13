@@ -16,13 +16,13 @@ typedef unsigned int uint;
 typedef struct tile_s {
     uint x;
     uint y;
-    olist_t *players;
+    uint players;
     inventory_t *inventory;
 } tile_t;
 
 typedef struct map_s {
-    uint width;
-    uint height;
+    int width;
+    int height;
     olist_t *tiles;
 } map_t;
 
@@ -73,17 +73,17 @@ void tile_destroy(tile_t *tile);
 /**
  * @brief Add a player to a tile
  *
- * @param tile Tile to add the player to
+ * @param map Map object
  * @param client Player to add
  */
-void tile_add_player(tile_t *tile, client_t *client);
+void tile_add_player(map_t *map, client_t *client);
 
 /**
  * @brief Remove a player from a tile
  *
- * @param tile Tile to remove the player from
+ * @param tile Map object
  * @param client Player to remove
  */
-void tile_remove_player(tile_t *tile, client_t *client);
+void tile_remove_player(map_t *map, client_t *client);
 
 #endif /* !MAP_H_ */

@@ -39,6 +39,7 @@ server_t *server_create(options_t *options)
         return NULL;
     server->running = true;
     server->clients = olist_create();
+    server->eggs = olist_create();
     server->max_team_size = options->clients_nb;
     server->map = map_create(options->width, options->height);
     if (!server->map) {

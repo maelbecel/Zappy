@@ -121,7 +121,7 @@ void Map::drawBiome(sf::RenderWindow &window, GameData &gameData)
     sf::Vector2f userPosition = gameData.getPosition();
     double **noise = gameData.getNoise();
 
-    for (int height = mapSize.x + SEA_SIZE * 2 - 1; height > -1; height--) {
+    for (int height = mapSize.y + SEA_SIZE * 2 - 1; height > -1; height--) {
         for (int width = mapSize.x + SEA_SIZE * 2 - 1; width > -1; width--) {
             // Handle tiles outside the map
             if (height >= mapSize.y + SEA_SIZE || width >= mapSize.x + SEA_SIZE || height < SEA_SIZE || width < SEA_SIZE)

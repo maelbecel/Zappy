@@ -36,6 +36,7 @@ namespace Scene {
 
         for (auto &player : _gameData.getPlayers())
             player.second->draw(_gameData, window);
+        _map.drawBiome(window, _gameData);
     };
 
     void GameScene::ShutDown() {};

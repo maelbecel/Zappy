@@ -18,6 +18,7 @@ EAT_TIME = 126
 MIN_FOOD = 7
 PERCENTAGE_OF_FOOD = 0.5
 
+
 class clientAi:
     def __init__(self, teamName: str, port: int, host: str):
         """
@@ -293,7 +294,6 @@ class clientAi:
             return True
         return False
 
-
     def run(self):
         """
         The function "run" is defined with an ellipsis as its body, indicating that
@@ -328,7 +328,11 @@ class clientAi:
         for element in array:
             if element[0] == "food":
                 continue
-            if element[0] and element[0] in self.inv and self.inv[element[0]] != element[1]:
+            if (
+                element[0]
+                and element[0] in self.inv
+                and self.inv[element[0]] != element[1]
+            ):
                 self.fillInv(array)
                 break
 
@@ -384,8 +388,8 @@ class clientAi:
         """
         array = self.response[1:-2].split(",")
         self.lookResult.clear()
-        for i in range (0, len(array)):
-            if (i == len(array) - 1):
+        for i in range(0, len(array)):
+            if i == len(array) - 1:
                 self.lookResult.append(array[i][1:-1].split(" "))
                 break
             self.lookResult.append(array[i][1:].split(" "))
@@ -396,7 +400,7 @@ class clientAi:
         queue.
         """
         for element in self.queue:
-            if (self.alive == False):
+            if self.alive == False:
                 return
             element()
         self.queue.clear()
@@ -509,18 +513,17 @@ class clientAi:
         """
         rotateId = 0
 
-        while (self.lookingForFood):
-            if (rotateId % 4 == 0):
+        while self.lookingForFood:
+            if rotateId % 4 == 0:
                 self.forward()
             self.left()
             self.look()
             result = self.findFood()
-            if (result != -1):
+            if result != -1:
                 self.getGoTo(result)
                 self.computeQueueActions()
                 return
             rotateId += 1
-
 
     def grabFood(self):
         """
@@ -535,7 +538,7 @@ class clientAi:
         count = 0
         result = 0
 
-        if (self.alive == False):
+        if self.alive == False:
             return
         if not self.needFood():
             return
@@ -553,7 +556,7 @@ class clientAi:
                 return
         else:
             result = self.findFood()
-            if (result == -1):
+            if result == -1:
                 self.getGoTo(result)
                 self.computeQueueActions()
                 self.grabFood()
@@ -572,7 +575,7 @@ class clientAi:
         """
         self.inventory()
 
-        if (self.inv["food"] < MIN_FOOD):
+        if self.inv["food"] < MIN_FOOD:
             self.lookingForFood = True
             return True
         return False

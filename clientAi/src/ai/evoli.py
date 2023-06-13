@@ -11,18 +11,74 @@ from ..state.clientState import enumState as enumState
 # const tab that permise to know the number of ressources needed to evolve
 # level 1 to 8
 REQUIRED = [
-    {"linemate": 1, "deraumere": 0, "sibur": 0, "mendiane": 0, "phiras": 0, "thystame": 0},
-    {"linemate": 1, "deraumere": 1, "sibur": 1, "mendiane": 0, "phiras": 0, "thystame": 0},
-    {"linemate": 2, "deraumere": 0, "sibur": 1, "mendiane": 0, "phiras": 2, "thystame": 0},
-    {"linemate": 1, "deraumere": 1, "sibur": 2, "mendiane": 0, "phiras": 1, "thystame": 0},
-    {"linemate": 1, "deraumere": 2, "sibur": 1, "mendiane": 3, "phiras": 0, "thystame": 0},
-    {"linemate": 1, "deraumere": 2, "sibur": 3, "mendiane": 0, "phiras": 1, "thystame": 0},
-    {"linemate": 2, "deraumere": 2, "sibur": 2, "mendiane": 2, "phiras": 2, "thystame": 1}
+    {
+        "linemate": 1,
+        "deraumere": 0,
+        "sibur": 0,
+        "mendiane": 0,
+        "phiras": 0,
+        "thystame": 0,
+    },
+    {
+        "linemate": 1,
+        "deraumere": 1,
+        "sibur": 1,
+        "mendiane": 0,
+        "phiras": 0,
+        "thystame": 0,
+    },
+    {
+        "linemate": 2,
+        "deraumere": 0,
+        "sibur": 1,
+        "mendiane": 0,
+        "phiras": 2,
+        "thystame": 0,
+    },
+    {
+        "linemate": 1,
+        "deraumere": 1,
+        "sibur": 2,
+        "mendiane": 0,
+        "phiras": 1,
+        "thystame": 0,
+    },
+    {
+        "linemate": 1,
+        "deraumere": 2,
+        "sibur": 1,
+        "mendiane": 3,
+        "phiras": 0,
+        "thystame": 0,
+    },
+    {
+        "linemate": 1,
+        "deraumere": 2,
+        "sibur": 3,
+        "mendiane": 0,
+        "phiras": 1,
+        "thystame": 0,
+    },
+    {
+        "linemate": 2,
+        "deraumere": 2,
+        "sibur": 2,
+        "mendiane": 2,
+        "phiras": 2,
+        "thystame": 1,
+    },
 ]
 
 REQUIRED_PLAYER = [
-    1, 2, 2, 4, 4, 6, 6,
+    1,
+    2,
+    2,
+    4,
+    4,
+    6,
+    6,
 ]
+
 
 class evoli(clientAI):
     def __init__(self, teamName, port, host):
@@ -166,7 +222,7 @@ class evoli(clientAI):
         temp = self.getDictFromCase(0)
 
         # remove element from case
-        for (key, value) in temp.items():
+        for key, value in temp.items():
             if key in temp and value > REQUIRED[self.level - 1][key]:
                 for i in range(value - REQUIRED[self.level - 1][key]):
                     self.take(key)
@@ -215,7 +271,7 @@ class evoli(clientAI):
         if index != -1:
             self.getGoTo(index)
             self.computeQueueActions()
-            if self.checkActualCase(0): # check if the case is the good one
+            if self.checkActualCase(0):  # check if the case is the good one
                 self.takeUselessRessourcesOnCase()
                 self.elevate()
 
@@ -259,7 +315,10 @@ class evoli(clientAI):
                 for element in array:
                     if element == "player" or element == "food":
                         continue
-                    if element in self.inv and self.inv[element] < REQUIRED[self.level - 1][element]:
+                    if (
+                        element in self.inv
+                        and self.inv[element] < REQUIRED[self.level - 1][element]
+                    ):
                         self.pickObject(id, element)
                 id += 1
 

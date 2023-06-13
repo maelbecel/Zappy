@@ -67,4 +67,11 @@ client_t *client_create(void);
  */
 void client_destroy(client_t *client);
 
+/**
+ * @brief Destroy a list of client_t structure
+ *
+ * @param list
+ */
+void client_list_destroy(olist_t *list);
+
 #endif /* !CLIENT_H_ */

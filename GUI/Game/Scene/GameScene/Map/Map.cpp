@@ -73,7 +73,6 @@ void Map::draw(sf::RenderWindow &window, GameData &gameData)
     sf::Vector2f scale = gameData.getScale();
     sf::Vector2f userPosition = gameData.getPosition();
     double **noise = gameData.getNoise();
-    bool forest = false;
 
     for (int height = mapSize.y + SEA_SIZE * 2 - 1; height > -1; height--) {
         for (int width = mapSize.x + SEA_SIZE * 2 - 1; width > -1; width--) {
@@ -95,14 +94,10 @@ void Map::draw(sf::RenderWindow &window, GameData &gameData)
                 sprite->setScale(scale.x + 2.00, scale.y + 1.25);
                 window.draw(*sprite);
             } else {
-                if (noise[width - SEA_SIZE][height - SEA_SIZE] < 0.3) {
+                if (noise[width - SEA_SIZE][height - SEA_SIZE] < 0.3)
                     sprite = _tiles["Desert"];
-                } else if (noise[width - SEA_SIZE][height - SEA_SIZE] < 0.7) {
+                else
                     sprite = _tiles["Grass"];
-                } else {
-                    sprite = _tiles["Grass"];
-                    forest = true;
-                }
 
                 std::shared_ptr<Tile> tile = map[std::make_pair(width - SEA_SIZE, height - SEA_SIZE)];
 
@@ -114,33 +109,56 @@ void Map::draw(sf::RenderWindow &window, GameData &gameData)
                     tile->setPosition(position);
                     tile->draw(window, scale);
                 }
-
-                if (forest == true) {
-                    if (scale.x >= 2.0f && scale.x <= 4.0f)
-                        position.y -= 7 * scale.x;
-                    else if (scale.x >= 4.0f)
-                        position.y -= 6 * scale.x;
-                    else if (scale.x >= 1.25 && scale.x < 2.0f)
-                        position.y -= 8 * scale.x;
-                    else if (scale.x == 1.0f)
-                        position.y -= 10 * scale.x;
-                    else if (scale.x < 1.0f && scale.x > 0.5f)
-                        position.y -= 14 * scale.x;
-                    else if (scale.x == 0.5f)
-                        position.y -= 20 * scale.x;
-                    else if (scale.x == 0.25f)
-                        position.y -= 27 * scale.x;
-                    else
-                        position.y -= 6;
-
-                    sprite = _tiles["Forest"];
-                    sprite->setScale(scale.x + 2.00, scale.y + 1.25);
-                    sprite->setPosition(position);
-                    window.draw(*sprite);
-                }
-
             }
-            forest = false;
         }
     }
 }
+
+void Map::drawBiome(sf::RenderWindow &window, GameData &gameData)
+{
+    sf::Vector2i mapSize = gameData.getMapSize();
+    sf::Vector2f scale = gameData.getScale();
+    sf::Vector2f userPosition = gameData.getPosition();
+    double **noise = gameData.getNoise();
+
+    for (int height = mapSize.x + SEA_SIZE * 2 - 1; height > -1; height--) {
+        for (int width = mapSize.x + SEA_SIZE * 2 - 1; width > -1; width--) {
+            // Handle tiles outside the map
+            if (height >= mapSize.y + SEA_SIZE || width >= mapSize.x + SEA_SIZE || height < SEA_SIZE || width < SEA_SIZE)
+                continue;
+            if (noise[width - SEA_SIZE][height - SEA_SIZE] < 0.7)
+                continue;
+
+            sf::Vector2f position(
+                (width + height) * (25 * (scale.x + 2)),
+                (width - height) * ((Tile::TILE_WIDTH - 3) * (scale.y + 1.25) / 2)
+            );
+            sf::Sprite *sprite = _tiles["Forest"];
+
+            position.x += userPosition.x;
+            position.y += userPosition.y;
+
+            if (scale.x >= 2.0f && scale.x <= 4.0f)
+                position.y -= 7 * scale.x;
+            else if (scale.x >= 4.0f)
+                position.y -= 6 * scale.x;
+            else if (scale.x >= 1.25 && scale.x < 2.0f)
+                position.y -= 8 * scale.x;
+            else if (scale.x == 1.0f)
+                position.y -= 10 * scale.x;
+            else if (scale.x < 1.0f && scale.x > 0.5f)
+                position.y -= 14 * scale.x;
+            else if (scale.x == 0.5f)
+                position.y -= 20 * scale.x;
+            else if (scale.x == 0.25f)
+                position.y -= 27 * scale.x;
+            else
+                position.y -= 6;
+
+            sprite->setScale(scale.x + 2.00, scale.y + 1.25);
+            sprite->setPosition(position);
+            window.draw(*sprite);
+        }
+    }
+}
+

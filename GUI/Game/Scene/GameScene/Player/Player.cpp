@@ -13,11 +13,19 @@
 Player::Player(sf::Vector2i position, int direction, int level, std::string teamName) : _position(position), _direction(direction), _level(level), _teamName(teamName), _idle(true), _expulsion(false), _broadcast(false)
 {
     try {
-        sf::Texture *texture = UI::TextureManager::getTexture("./Assets/UI_UX/Characters/Idle/Frame#1.png");
+        std::vector<sf::Sprite> idle;
 
-        _playerSprite = new sf::Sprite(*texture);
-        _playerSprite->setTextureRect(sf::IntRect(0, 0, PLAYER_WIDTH, PLAYER_HEIGHT));
-        _playerSprite->setOrigin(PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2);
+        for (size_t i = 1; i <= IDLE_FRAME; i++) {
+            std::string path = "./Assets/UI_UX/Characters/Idle/Frame#" + std::to_string(i) + ".png";
+            sf::Sprite sprite(*UI::TextureManager::getTexture(path));
+
+            sprite.setTextureRect(sf::IntRect(0, 0, PLAYER_WIDTH, PLAYER_HEIGHT));
+            sprite.setOrigin(PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2);
+
+            idle.push_back(sf::Sprite(*UI::TextureManager::getTexture(path)));
+        }
+        _idleAnim = new UI::Animation(idle, 0.1, true);
+        _idleAnim->play();
 
     } catch (Error::TextureError &error) {
         std::cerr << error.what() << std::endl;
@@ -31,17 +39,9 @@ Player::Player(sf::Vector2i position, int direction, int level, std::string team
     srand(time(NULL));
 
     _placement = rand() % 5 + 1;
-
-    std::cout << "Player position: " << _position.x << ", " << _position.y << std::endl;
 }
 
-Player::~Player()
-{
-    /*if (_playerSprite)
-        delete _playerSprite;
-    if (_inventory)
-        delete _inventory;*/
-}
+Player::~Player() {}
 
 sf::Vector2i Player::getPosition() const
 {
@@ -101,32 +101,35 @@ void Player::setBroadcast(bool broadcast)
 
 void Player::draw(GameData &gameData, sf::RenderWindow &window)
 {
+    _idleAnim->update(_idleClock.getElapsedTime().asSeconds());
+
     sf::Vector2f position = gameData.getTile(_position.x, _position.y)->getPosition();
     sf::Vector2f scale = gameData.getScale();
 
-    _playerSprite->setScale(setPlayerScale(scale));
+    sf::Sprite player = _idleAnim->getCurrentSprite();
+    player.setScale(setPlayerScale(scale));
 
     switch (_placement) {
         case 1:
-            _playerSprite->setPosition(position + sf::Vector2f(Tile::TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-(Tile::TILE_WIDTH / 2) * (scale.x + 2), 2 * (scale.y + 1.25f)));
+            player.setPosition(position + sf::Vector2f(Tile::TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-(Tile::TILE_WIDTH / 2) * (scale.x + 2), 2 * (scale.y + 1.25f)));
             break;
         case 2:
-            _playerSprite->setPosition(position + sf::Vector2f(Tile::TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-(Tile::TILE_WIDTH / 4) * (scale.x + 2), (Tile::TILE_HEIGHT / 3) + 2 * (scale.y + 1.25f)));
+            player.setPosition(position + sf::Vector2f(Tile::TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-(Tile::TILE_WIDTH / 3.5) * (scale.x + 2), (Tile::TILE_HEIGHT / 3) + 2 * (scale.y + 1.25f)));
             break;
         case 3:
-            _playerSprite->setPosition(position + sf::Vector2f(Tile::TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-(Tile::TILE_WIDTH / 4) * 3 * (scale.x + 2), (Tile::TILE_HEIGHT / 3) + 2 * (scale.y + 1.25f)));
+            player.setPosition(position + sf::Vector2f(Tile::TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-(Tile::TILE_WIDTH / 4) * 3 * (scale.x + 2), (Tile::TILE_HEIGHT / 3) + 2 * (scale.y + 1.25f)));
             break;
         case 4:
-            _playerSprite->setPosition(position + sf::Vector2f(Tile::TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-(Tile::TILE_WIDTH / 4) * 2.5 * (scale.x + 2), (Tile::TILE_HEIGHT) - 5 + 2 * (scale.y + 1.25f)));
+            player.setPosition(position + sf::Vector2f(Tile::TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-(Tile::TILE_WIDTH / 4) * 2.5 * (scale.x + 2), (Tile::TILE_HEIGHT) - 4 + 2 * (scale.y + 1.25f)));
             break;
         case 5:
-            _playerSprite->setPosition(position + sf::Vector2f(Tile::TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-(Tile::TILE_WIDTH / 4) * 1.5 * (scale.x + 2), (Tile::TILE_HEIGHT) - 5 + 2 * (scale.y + 1.25f)));
+            player.setPosition(position + sf::Vector2f(Tile::TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-(Tile::TILE_WIDTH / 4) * 1.5 * (scale.x + 2), (Tile::TILE_HEIGHT) - 4 + 2 * (scale.y + 1.25f)));
             break;
         default:
             return;
     }
 
-    window.draw(*_playerSprite);
+    window.draw(player);
 }
 
 void Player::expulse()
@@ -144,8 +147,8 @@ void Player::expulse()
 sf::Vector2f Player::setPlayerScale(sf::Vector2f scale)
 {
     if (scale.x >= 2.0f)
-        return sf::Vector2f(2.10f, 2.10f);
-    return sf::Vector2f(1.15f, 1.15f);
+        return sf::Vector2f(2.0f, 2.00f);
+    return sf::Vector2f(1.0f, 1.0f);
 }
 
 void Player::dropResource(int nomber, std::shared_ptr<Tile> &tile)

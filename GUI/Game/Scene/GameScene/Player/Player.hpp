@@ -13,6 +13,7 @@
 
     #include "TextureError.hpp"
     #include "TextureManager.hpp"
+    #include "Animation.hpp"
 
 class GameData;
 class Tile;
@@ -138,6 +139,8 @@ class Player {
         bool _idle;                         /*!< The idle of the player */
         bool _expulsion;                    /*!< The expulsion of the player */
         bool _broadcast;                    /*!< The broadcast of the player */
+        UI::Animation *_idleAnim;           /*!< Animation of the player when he is idle */
+        sf::Clock _idleClock;               /*!< The clock of the idle animation */
 
     // Sprites
     private:
@@ -147,6 +150,7 @@ class Player {
     public:
         static const int PLAYER_HEIGHT = 19; /*!< The height of the player */
         static const int PLAYER_WIDTH = 28;  /*!< The width of the player */
+        static const int IDLE_FRAME = 5;     /*!< The number of frame of the idle animation */
 };
 
 #endif /* !PLAYER_HPP_ */

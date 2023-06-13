@@ -104,7 +104,7 @@ void Map::draw(sf::RenderWindow &window, GameData &gameData)
                 sprite->setScale(scale.x + 2.00, scale.y + 1.25);
                 sprite->setPosition(position);
                 window.draw(*sprite);
-                
+
                 if (tile != nullptr) {
                     tile->setPosition(position);
                     tile->draw(window, scale);

@@ -43,6 +43,13 @@ namespace UI {
             void addFrame(const sf::Sprite& frame);
 
             /**
+             * @brief Add all the frames to the animation
+             * Call this method for add all the frames to the animation
+             * @param frames A list of frames to add
+             */
+            void addFrames(const std::vector<sf::Sprite>& frames);
+
+            /**
              * @brief Play the animation
              * Call this method for play the animation
              */
@@ -67,6 +74,17 @@ namespace UI {
              * @param dt The time between two frames
              */
             void update(double dt);
+            void update();
+        
+        // Getters & Setters
+        public:
+
+            /**
+             * @brief Get the Current Sprite object
+             * Call this method for get the current sprite of the animation and draw it in the future
+             * @return sf::Sprite The current sprite of the animation
+             */
+            sf::Sprite getCurrentSprite() const;
 
         // Attributes
         private:

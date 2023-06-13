@@ -6,6 +6,7 @@
 */
 
 #include "Animation.hpp"
+#include <iostream>
 
 namespace UI {
     /////////////////
@@ -25,6 +26,11 @@ namespace UI {
     void Animation::addFrame(const sf::Sprite& frame)
     {
         _sprites.push_back(frame);
+    }
+
+    void Animation::addFrames(const std::vector<sf::Sprite>& frames)
+    {
+        _sprites = frames;
     }
 
     void Animation::play()
@@ -72,5 +78,38 @@ namespace UI {
             _currentSprite = _sprites[_currentFrame];
             _elapsedTime = 0.0f;
         }
+    }
+
+    void Animation::update()
+    {
+        if (!_isPlaying)
+            return;
+        
+        _elapsedTime += 1.0f;
+
+        if (_elapsedTime >= _frameDuration) {
+            _currentFrame++;
+
+            if (_currentFrame >= (int)_sprites.size()) {
+                if (_looped)
+                    _currentFrame = 0;
+                else {
+                    _currentFrame = _sprites.size() - 1;
+                    _isPlaying = false;
+                }
+            }
+
+            _currentSprite = _sprites[_currentFrame];
+            _elapsedTime = 0.0f;
+        }
+    }
+
+    /////////////////////
+    // Getter & Setter //
+    /////////////////////
+
+    sf::Sprite Animation::getCurrentSprite() const
+    {
+        return _currentSprite;
     }
 };

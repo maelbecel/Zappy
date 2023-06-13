@@ -3,7 +3,7 @@ name: Allow Only One User to Push from Dev to Main
 on:
   push:
     branches:
-      - dev
+      - main
 
 jobs:
   restrict-push:

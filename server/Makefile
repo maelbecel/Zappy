@@ -120,7 +120,7 @@ OBJ = $(SRC:%.c=$(BUILD_DIR)/%.o)
 
 NAME = zappy_server
 
-CFLAGS += -Wall -Wextra
+CFLAGS += -Wall -Wextra -D _GNU_SOURCE
 
 CFLAGS += -I include -I libs/list/include -I libs/socket/include
 

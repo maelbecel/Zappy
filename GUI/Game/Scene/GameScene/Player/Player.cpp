@@ -32,7 +32,7 @@ Player::Player(sf::Vector2i position, int direction, int level, std::string team
 
     _placement = rand() % 5 + 1;
 
-    std::cout << "Player position: " << _position.x << ", " << _position.y << std::endl;
+    std::cout << "Player " << _teamName << " created at position: " << _position.x << ", " << _position.y << std::endl;
 }
 
 Player::~Player()
@@ -159,6 +159,11 @@ void Player::dropResource(int nomber, std::shared_ptr<Tile> &tile)
         if (nomber == 0)
             break;
     }
+
+    std::cout << "Player " << _teamName << " dropped " << nomber << " resources" << std::endl;
+    std::cout << "Player " << _teamName << " inventory: " << std::endl;
+    std::cout << "Food Linemate Deraumere Sibur Mendiane Phiras Thystame" << std::endl;
+    std::cout << _inventory[0] << " " << _inventory[1] << " " << _inventory[2] << " " << _inventory[3] << " " << _inventory[4] << " " << _inventory[5] << " " << _inventory[6] << std::endl;
 }
 
 void Player::collectResource(int nomber, std::shared_ptr<Tile> &tile)
@@ -172,4 +177,9 @@ void Player::collectResource(int nomber, std::shared_ptr<Tile> &tile)
         if (nomber == 0)
             break;
     }
+
+    std::cout << "Player " << _teamName << " dropped " << nomber << " resources" << std::endl;
+    std::cout << "Player " << _teamName << " inventory: " << std::endl;
+    std::cout << "Food Linemate Deraumere Sibur Mendiane Phiras Thystame" << std::endl;
+    std::cout << _inventory[0] << " " << _inventory[1] << " " << _inventory[2] << " " << _inventory[3] << " " << _inventory[4] << " " << _inventory[5] << " " << _inventory[6] << std::endl;
 }

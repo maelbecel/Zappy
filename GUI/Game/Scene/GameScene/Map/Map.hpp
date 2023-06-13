@@ -28,6 +28,7 @@ class Map {
             * @param gameData The game data for map information
             */
             void draw(sf::RenderWindow &window, GameData &gameData);
+            void drawBiome(sf::RenderWindow &window, GameData &gameData);
 
     // Attributes
     private:

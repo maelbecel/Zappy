@@ -13,19 +13,20 @@
 Player::Player(sf::Vector2i position, int direction, int level, std::string teamName) : _position(position), _direction(direction), _level(level), _teamName(teamName), _idle(true), _expulsion(false), _broadcast(false)
 {
     try {
-        std::vector<sf::Sprite> idle;
+        std::vector<sf::Sprite *> idle;
 
         for (size_t i = 1; i <= IDLE_FRAME; i++) {
             std::string path = "./Assets/UI_UX/Characters/Idle/Frame#" + std::to_string(i) + ".png";
-            sf::Sprite sprite(*UI::TextureManager::getTexture(path));
+            sf::Sprite *sprite = new sf::Sprite(*UI::TextureManager::getTexture(path));
 
-            sprite.setTextureRect(sf::IntRect(0, 0, PLAYER_WIDTH, PLAYER_HEIGHT));
-            sprite.setOrigin(PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2);
+            sprite->setTextureRect(sf::IntRect(0, 0, PLAYER_WIDTH, PLAYER_HEIGHT));
+            sprite->setOrigin(PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2);
 
-            idle.push_back(sf::Sprite(*UI::TextureManager::getTexture(path)));
+            idle.push_back(sprite);
         }
-        _idleAnim = new UI::Animation(idle, 0.1, true);
+        _idleAnim = new UI::Animation(idle, 5, 0.30f, true);
         _idleAnim->play();
+
     } catch (Error::TextureError &error) {
         std::cerr << error.what() << std::endl;
     }
@@ -105,30 +106,30 @@ void Player::draw(GameData &gameData, sf::RenderWindow &window)
     sf::Vector2f position = gameData.getTile(_position.x, _position.y)->getPosition();
     sf::Vector2f scale = gameData.getScale();
 
-    sf::Sprite player = _idleAnim->getCurrentSprite();
-    player.setScale(setPlayerScale(scale));
+    sf::Sprite *player = _idleAnim->getCurrentSprite();
+    player->setScale(setPlayerScale(scale));
 
     switch (_placement) {
         case 1:
-            player.setPosition(position + sf::Vector2f(Tile::TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-(Tile::TILE_WIDTH / 2) * (scale.x + 2), 2 * (scale.y + 1.25f)));
+            player->setPosition(position + sf::Vector2f(Tile::TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-(Tile::TILE_WIDTH / 2) * (scale.x + 2), 2 * (scale.y + 1.25f)));
             break;
         case 2:
-            player.setPosition(position + sf::Vector2f(Tile::TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-(Tile::TILE_WIDTH / 3.5) * (scale.x + 2), (Tile::TILE_HEIGHT / 3) + 2 * (scale.y + 1.25f)));
+            player->setPosition(position + sf::Vector2f(Tile::TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-(Tile::TILE_WIDTH / 3.5) * (scale.x + 2), (Tile::TILE_HEIGHT / 3) + 2 * (scale.y + 1.25f)));
             break;
         case 3:
-            player.setPosition(position + sf::Vector2f(Tile::TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-(Tile::TILE_WIDTH / 4) * 3 * (scale.x + 2), (Tile::TILE_HEIGHT / 3) + 2 * (scale.y + 1.25f)));
+            player->setPosition(position + sf::Vector2f(Tile::TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-(Tile::TILE_WIDTH / 4) * 3 * (scale.x + 2), (Tile::TILE_HEIGHT / 3) + 2 * (scale.y + 1.25f)));
             break;
         case 4:
-            player.setPosition(position + sf::Vector2f(Tile::TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-(Tile::TILE_WIDTH / 4) * 2.5 * (scale.x + 2), (Tile::TILE_HEIGHT) - 4 + 2 * (scale.y + 1.25f)));
+            player->setPosition(position + sf::Vector2f(Tile::TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-(Tile::TILE_WIDTH / 4) * 2.5 * (scale.x + 2), (Tile::TILE_HEIGHT) - 4 + 2 * (scale.y + 1.25f)));
             break;
         case 5:
-            player.setPosition(position + sf::Vector2f(Tile::TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-(Tile::TILE_WIDTH / 4) * 1.5 * (scale.x + 2), (Tile::TILE_HEIGHT) - 4 + 2 * (scale.y + 1.25f)));
+            player->setPosition(position + sf::Vector2f(Tile::TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-(Tile::TILE_WIDTH / 4) * 1.5 * (scale.x + 2), (Tile::TILE_HEIGHT) - 4 + 2 * (scale.y + 1.25f)));
             break;
         default:
             return;
     }
 
-    window.draw(player);
+    window.draw(*player);
 }
 
 void Player::expulse()

@@ -52,7 +52,6 @@ static void handle_egg(server_t *server, client_t *client, team_t *team)
     egg_t *egg = NULL;
 
     client->team_id = team->id;
-    team->team_size++;
     client->data = ai;
     if (team->eggs_size > 0) {
         team->eggs_size--;
@@ -67,6 +66,7 @@ static void handle_egg(server_t *server, client_t *client, team_t *team)
         send_infos_for_eggs(egg->id, server);
     }
     send_infos(client, team, server);
+    team->team_size++;
 }
 
 static int update_team_for_client(client_t *client, team_t *team,

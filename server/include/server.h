@@ -261,4 +261,13 @@ egg_t *egg_get_one_in_team(ulong team_id, server_t *server);
  */
 void egg_add_to_team(server_t *server, ulong team_id);
 
+/**
+ * @brief Get list of clients on a tile
+ *
+ * @param server
+ * @param tile
+ * @return olist_t*
+ */
+olist_t *tile_get_players(server_t *server, tile_t *tile);
+
 #endif /* !SERVER_H_ */

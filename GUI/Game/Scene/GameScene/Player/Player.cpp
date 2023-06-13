@@ -18,7 +18,6 @@ Player::Player(sf::Vector2i position, int direction, int level, std::string team
         _playerSprite = new sf::Sprite(*texture);
         _playerSprite->setTextureRect(sf::IntRect(0, 0, PLAYER_WIDTH, PLAYER_HEIGHT));
         _playerSprite->setOrigin(PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2);
-        _playerSprite->setScale(2.0f, 2.0f);
 
     } catch (Error::TextureError &error) {
         std::cerr << error.what() << std::endl;
@@ -145,8 +144,8 @@ void Player::expulse()
 sf::Vector2f Player::setPlayerScale(sf::Vector2f scale)
 {
     if (scale.x >= 2.0f)
-        return sf::Vector2f(2.0f, 2.0f);
-    return sf::Vector2f(1.0f, 1.0f);
+        return sf::Vector2f(2.10f, 2.10f);
+    return sf::Vector2f(1.15f, 1.15f);
 }
 
 void Player::dropResource(int nomber, std::shared_ptr<Tile> &tile)

@@ -51,27 +51,31 @@ namespace UI {
         _elapsedTime = 0.0f;
     }
 
-    void Animation::update()
+    bool Animation::update()
     {
+        bool end = false;
+
         // Check if the animation is playing
         if (!_isPlaying)
-            return;
+            return end;
         sf::Time time = _clock.getElapsedTime();
         double seconds = time.asMicroseconds() / 1000000.0f;
 
         if (_frameDuration > seconds)
-            return;
+            return end;
         _clock.restart();
         _currentFrame++;
 
         if (_currentFrame == _frames) {
             _currentFrame = 0;
+            end = true;
 
             // Check if the animation is looped
             if (!_looped)
                 _isPlaying = false;
         }
         _currentSprite = _sprites[_currentFrame];
+        return end;
     }
 
     /////////////////////

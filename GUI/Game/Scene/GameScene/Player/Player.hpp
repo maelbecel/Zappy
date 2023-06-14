@@ -125,6 +125,26 @@ class Player {
          */
         void collectResource(int nomber, std::shared_ptr<Tile> &tile);
 
+        /**
+         * @brief Update the player
+         * Call this function for update the player animation
+         * @return sf::Sprite* The sprite of the player
+         */
+        sf::Sprite *update();
+
+    // Private Methods
+    private:
+
+        /**
+         * @brief Fill the animation of the player with the correct frame
+         *
+         * @param list  The list where the frame are
+         * @param frame The number of frame
+         * @param color The color of the player
+         * @param type  The type of the animation
+         */
+        void fillFrame(std::vector<sf::Sprite *> list, int frame, int color, const std::string &type);
+
     // Attributes
     private:
         sf::Vector2i _position;              /*!< The position of the player */
@@ -140,6 +160,8 @@ class Player {
         bool _expulsion;                    /*!< The expulsion of the player */
         bool _broadcast;                    /*!< The broadcast of the player */
         UI::Animation *_idleAnim;           /*!< Animation of the player when he is idle */
+        UI::Animation *_pushAnim;           /*!< Animation of the player when he is pushing */
+        UI::Animation *_broadcastAnim;      /*!< Animation of the player when he is broadcasting */
 
     // Sprites
     private:
@@ -150,6 +172,8 @@ class Player {
         static const int PLAYER_HEIGHT = 19; /*!< The height of the player */
         static const int PLAYER_WIDTH = 28;  /*!< The width of the player */
         static const int IDLE_FRAME = 5;     /*!< The number of frame of the idle animation */
+        static const int PUSH_FRAME = 4;     /*!< The number of frame of the push animation */
+        static const int BROADCAST_FRAME = 7 /*!< The number of frame of the broadcast animation */;
 };
 
 #endif /* !PLAYER_HPP_ */

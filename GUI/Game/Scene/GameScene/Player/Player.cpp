@@ -14,19 +14,18 @@ Player::Player(sf::Vector2i position, int direction, int level, std::string team
 {
     try {
         std::vector<sf::Sprite *> idle;
+        std::vector<sf::Sprite *> push;
+        std::vector<sf::Sprite *> broadcast;
 
-        for (size_t i = 1; i <= IDLE_FRAME; i++) {
-            std::string path = "./Assets/UI_UX/Characters/" + std::to_string(color) + "/Idle/Frame#" + std::to_string(i) + ".png";
-            sf::Sprite *sprite = new sf::Sprite(*UI::TextureManager::getTexture(path));
+        fillFrame(idle, IDLE_FRAME, color, std::string("Idle"));
+        fillFrame(push, PUSH_FRAME, color, std::string("Push"));
+        fillFrame(broadcast, BROADCAST_FRAME, color, std::string("Broadcast"));
 
-            sprite->setTextureRect(sf::IntRect(0, 0, PLAYER_WIDTH, PLAYER_HEIGHT));
-            sprite->setOrigin(PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2);
-
-            idle.push_back(sprite);
-        }
         _idleAnim = new UI::Animation(idle, 5, 0.30f, true);
-        _idleAnim->play();
+        _pushAnim = new UI::Animation(push, 4, 0.15f, false);
+        _broadcastAnim = new UI::Animation(broadcast, 7, 0.20f, false);
 
+        _idleAnim->play();
     } catch (Error::TextureError &error) {
         std::cerr << error.what() << std::endl;
     }
@@ -39,6 +38,19 @@ Player::Player(sf::Vector2i position, int direction, int level, std::string team
     srand(time(NULL));
 
     _placement = rand() % 5 + 1;
+}
+
+void Player::fillFrame(std::vector<sf::Sprite *> list, int frame, int color, const std::string &type)
+{
+    for (size_t i = 1; i <= frame; i++) {
+        std::string path = "./Assets/UI_UX/Characters/" + std::to_string(color) + "/" + type + "/Frame#" + std::to_string(i) + ".png";
+        sf::Sprite *sprite = new sf::Sprite(*UI::TextureManager::getTexture(path));
+
+        sprite->setTextureRect(sf::IntRect(0, 0, PLAYER_WIDTH, PLAYER_HEIGHT));
+        sprite->setOrigin(PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2);
+
+        list.push_back(sprite);
+    }
 }
 
 Player::~Player() {}
@@ -79,11 +91,17 @@ void Player::setExpulsion(bool expulsion)
 {
     _expulsion = expulsion;
 
-    if (expulsion == false)
+    if (expulsion == false) {
         _idle = true;
-    else {
+        _broadcast = false;
+        _pushAnim->stop();
+        _idleAnim->play();
+    } else {
         _idle = false;
         _broadcast = false;
+        _pushAnim->play();
+        _idleAnim->stop();
+//        _broadcastAnim->stop();
     }
 }
 
@@ -91,22 +109,47 @@ void Player::setBroadcast(bool broadcast)
 {
     _broadcast = broadcast;
 
-    if (broadcast == false)
+    if (broadcast == false) {
         _idle = true;
-    else {
+        _expulsion = false;
+        //_broadcastAnim->stop();
+        _idleAnim->play();
+    } else {
         _idle = false;
         _expulsion = false;
+        //_broadcastAnim->play();
+        _idleAnim->stop();
+        _pushAnim->stop();
     }
+}
+
+sf::Sprite *Player::update()
+{
+    if (_idle == true) {
+        _idleAnim->update();
+        return _idleAnim->getCurrentSprite();
+    } else if (_expulsion == true) {
+        if (_pushAnim->update() == true) {
+            setExpulsion(false);
+            return _idleAnim->getCurrentSprite();
+        }
+        return _pushAnim->getCurrentSprite();
+    } /*else if (_broadcast == true) {
+        (_broadcastAnim->update() == true) {
+            setBroadcast(false);
+            return _idleAnim->getCurrentSprite();
+        }
+        return _broadcastAnim->getCurrentSprite();
+    }*/
+    return _idleAnim->getCurrentSprite();
 }
 
 void Player::draw(GameData &gameData, sf::RenderWindow &window)
 {
-    _idleAnim->update();
-
     sf::Vector2f position = gameData.getTile(_position.x, _position.y)->getPosition();
     sf::Vector2f scale = gameData.getScale();
 
-    sf::Sprite *player = _idleAnim->getCurrentSprite();
+    sf::Sprite *player = update();
     player->setScale(setPlayerScale(scale));
 
     switch (_placement) {

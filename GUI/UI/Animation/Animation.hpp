@@ -73,8 +73,8 @@ namespace UI {
              * Call this method for update the animation
              * Update is for change the frame of the animation
              */
-            void update();
-        
+            bool update();
+
         // Getters & Setters
         public:
 

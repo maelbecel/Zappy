@@ -18,38 +18,41 @@ Player::Player(sf::Vector2i position, int direction, int level, std::string team
         std::vector<sf::Sprite *> broadcast;
 
         for (size_t i = 1; i <= IDLE_FRAME; i++) {
-            std::string path = "./Assets/UI_UX/Characters/" + std::to_string(color) + "/Idle/Frame#" + std::to_string(i) + ".png";
+            std::string path = "./Assets/UI_UX/Characters/Idle/Frame#" + std::to_string(i) + ".png";
             sf::Sprite *sprite = new sf::Sprite(*UI::TextureManager::getTexture(path));
 
             sprite->setTextureRect(sf::IntRect(0, 0, PLAYER_WIDTH, PLAYER_HEIGHT));
             sprite->setOrigin(PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2);
+            sprite->setColor(setColor(color));
 
             idle.push_back(sprite);
         }
 
-        for (size_t i = 1; i <= PUSH_FRAME; i++) {
+        /*for (size_t i = 1; i <= PUSH_FRAME; i++) {
             std::string path = "./Assets/UI_UX/Characters/" + std::to_string(color) + "/Push/Frame#" + std::to_string(i) + ".png";
             sf::Sprite *sprite = new sf::Sprite(*UI::TextureManager::getTexture(path));
 
             sprite->setTextureRect(sf::IntRect(0, 0, PLAYER_WIDTH, PLAYER_HEIGHT));
             sprite->setOrigin(PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2);
+            sprite->setColor(setColor(color));
 
             push.push_back(sprite);
-        }
+        }*/
 
-        for (size_t i = 1; i <= BROADCAST_FRAME; i++) {
+        /*for (size_t i = 1; i <= BROADCAST_FRAME; i++) {
             std::string path = "./Assets/UI_UX/Characters/" + std::to_string(color) + "/Broadcast/Frame#" + std::to_string(i) + ".png";
             sf::Sprite *sprite = new sf::Sprite(*UI::TextureManager::getTexture(path));
 
             sprite->setTextureRect(sf::IntRect(0, 0, PLAYER_WIDTH, PLAYER_HEIGHT));
             sprite->setOrigin(PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2);
+            sprite->setColor(setColor(color));
 
             broadcast.push_back(sprite);
-        }
+        }*/
 
         _idleAnim = new UI::Animation(idle, 5, 0.30f, true);
-        _pushAnim = new UI::Animation(push, 4, 0.15f, false);
-        _broadcastAnim = new UI::Animation(broadcast, 7, 0.20f, false);
+        //_pushAnim = new UI::Animation(push, 4, 0.15f, false);
+        //_broadcastAnim = new UI::Animation(broadcast, 7, 0.20f, false);
 
         _idleAnim->play();
     } catch (Error::TextureError &error) {
@@ -134,6 +137,27 @@ void Player::setBroadcast(bool broadcast)
         _idleAnim->stop();
         _pushAnim->stop();
     }
+}
+
+sf::Color Player::setColor(int color)
+{
+    if (color == 1)
+        return sf::Color(220, 136, 85, 255);
+    else if (color == 2)
+        return sf::Color(202, 102, 213, 255);
+    else if (color == 3)
+        return sf::Color::Blue;
+    else if (color == 4)
+        return sf::Color::Green;
+    else if (color == 5)
+        return sf::Color::Magenta;
+    else if (color == 6)
+        return sf::Color::Red;
+    else if (color == 7)
+        return sf::Color::Yellow;
+    else if (color == 8)
+        return sf::Color::Cyan;
+    return setColor(color - 8);
 }
 
 void Player::update()

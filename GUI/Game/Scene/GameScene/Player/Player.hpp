@@ -130,6 +130,17 @@ class Player {
          * Call this function for update the player animation
          */
         void update();
+    
+    // Private Methods
+    private:
+
+        /**
+         * @brief Set the Color object
+         * Call this function for set the color of the player
+         * @param color      The color of the team for the player
+         * @return sf::Color The color of the player
+         */
+        sf::Color setColor(int color);
 
     // Attributes
     private:

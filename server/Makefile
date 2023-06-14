@@ -94,7 +94,9 @@ SRC +=	$(SRC_DIR)/command/graphic/msz.c \
 		$(SRC_DIR)/command/graphic/pfk.c \
 		$(SRC_DIR)/command/graphic/enw.c \
 		$(SRC_DIR)/command/graphic/pex.c \
-		$(SRC_DIR)/command/graphic/edi.c
+		$(SRC_DIR)/command/graphic/edi.c \
+		$(SRC_DIR)/command/graphic/pic.c \
+		$(SRC_DIR)/command/graphic/pie.c
 
 SRC +=	$(SRC_DIR)/command/ai/forward.c \
 		$(SRC_DIR)/command/ai/right.c \
@@ -109,6 +111,7 @@ SRC +=	$(SRC_DIR)/command/ai/forward.c \
 		$(SRC_DIR)/command/ai/eject.c \
 		$(SRC_DIR)/command/ai/eject_eggs.c \
 		$(SRC_DIR)/command/ai/incantation.c \
+		$(SRC_DIR)/command/ai/incantation_utils.c \
 		$(SRC_DIR)/command/ai/notif_graphic.c \
 		$(SRC_DIR)/command/ai/notif_ai.c
 

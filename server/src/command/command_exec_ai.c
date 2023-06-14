@@ -61,21 +61,24 @@ int execute_waiting_order(client_t *client, server_t *server)
 
 int command_exec_ai(client_t *client, server_t *server, char **args)
 {
+    ai_t *ai = client->data;
+
+    if (!ai)
+        return EXIT_FAILTEK;
     if (strlen(client->buffer) == 0)
         return 0;
     OLOG_INFO("AI id#%ld fd#%d> %s", client->id, client->socket->fd,
     client->buffer);
-    if (client->current_action != NULL && client->waiting_orders->size < 10) {
+    if ((client->current_action != NULL || ai->incantation)
+    && client->waiting_orders->size < 10) {
         olist_add_node(client->waiting_orders, strdup(client->buffer));
         return 0;
     }
     if (client->waiting_orders->size >= 10)
         return 0;
-    for (uint i = 0; ai_commands[i].command; i++) {
-        if (strcmp(ai_commands[i].command, args[0]) == 0) {
+    for (uint i = 0; ai_commands[i].command; i++)
+        if (strcmp(ai_commands[i].command, args[0]) == 0)
             return ai_commands[i].func(client, server, args);
-        }
-    }
     wbuffer_add_msg(client, "ko\n");
     return 0;
 }

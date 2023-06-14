@@ -107,7 +107,9 @@ SRC +=	$(SRC_DIR)/command/ai/forward.c \
 		$(SRC_DIR)/command/ai/fork.c \
 		$(SRC_DIR)/command/ai/eject.c \
 		$(SRC_DIR)/command/ai/eject_eggs.c \
-		$(SRC_DIR)/command/ai/notif_graphic.c
+		$(SRC_DIR)/command/ai/incantation.c \
+		$(SRC_DIR)/command/ai/notif_graphic.c \
+		$(SRC_DIR)/command/ai/notif_ai.c
 
 SRC +=	$(SRC_DIR)/egg/egg_create.c \
 		$(SRC_DIR)/egg/egg_destroy.c \
@@ -119,7 +121,7 @@ OBJ = $(SRC:%.c=$(BUILD_DIR)/%.o)
 
 NAME = zappy_server
 
-CFLAGS += -Wall -Wextra
+CFLAGS += -Wall -Wextra -D _GNU_SOURCE
 
 CFLAGS += -I include -I libs/list/include -I libs/socket/include
 

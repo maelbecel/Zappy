@@ -18,6 +18,17 @@ typedef struct command_s {
     int (*func)(client_t *client, server_t *server, char **args);
 } command_t;
 
+typedef struct incantation_resources_s {
+    uint level;
+    uint players_needed;
+    uint linemate;
+    uint deraumere;
+    uint sibur;
+    uint mendiane;
+    uint phiras;
+    uint thystame;
+} incantation_resources_t;
+
 
 int command_exec(client_t *client, server_t *server);
 int command_exec_ai(client_t *client, server_t *server, char **args);
@@ -37,6 +48,7 @@ int connect_nbr(client_t *client, server_t *server, UNUSED char **args);
 int look(client_t *client, server_t *server, UNUSED char **args);
 int fork_cmd(client_t *client, server_t *server, UNUSED char **args);
 int eject(client_t *client, server_t *server, UNUSED char **args);
+int incantation(client_t *client, server_t *server, UNUSED char **args);
 
 void print_tile_content(tile_t *tile, client_t *client);
 void look_north(client_t *client, server_t *server, ai_t *ai);
@@ -48,6 +60,7 @@ void eject_all_eggs(server_t *server, tile_t *tile);
 
 void notif_graphic(client_t *client, server_t *server,
 int (*func)(client_t *client, client_t *graphic));
+void notif_ai(olist_t *players, char *msg);
 
 // Graphic commands
 int msz(client_t *client, server_t *server, UNUSED char **args);

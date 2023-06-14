@@ -136,6 +136,13 @@ team_t *team_create(char *name);
 void team_destroy(team_t *team);
 
 /**
+ * @brief Destructor for team list
+ *
+ * @param list
+ */
+void team_list_destructor(olist_t *list);
+
+/**
  * @brief Get a team by its id
  *
  * @param server
@@ -235,6 +242,13 @@ egg_t *egg_create(ulong team_id, uint x, uint y, ulong player_id);
 void egg_destroy(egg_t *egg);
 
 /**
+ * @brief Destructor for egg list
+ *
+ * @param list
+ */
+void egg_list_destructor(olist_t *list);
+
+/**
  * @brief Check if at least one egg is in the team
  *
  * @param team_id Team id
@@ -269,5 +283,13 @@ void egg_add_to_team(server_t *server, ulong team_id);
  * @return olist_t*
  */
 olist_t *tile_get_players(server_t *server, tile_t *tile);
+
+/**
+ * @brief Handle ctrl+c signal
+ *
+ * @param stop
+ * @return int
+ */
+int catch_sigint(server_t *stop);
 
 #endif /* !SERVER_H_ */

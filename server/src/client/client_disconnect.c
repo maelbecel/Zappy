@@ -5,6 +5,7 @@
 ** client_disconnect
 */
 
+#include <stdlib.h>
 #include "olog.h"
 #include "server.h"
 #include "client.h"
@@ -14,7 +15,10 @@ static void send_missing_buffer(client_t *client)
 {
     char *buffer = wbuffer_empty(client);
 
+    if (!buffer)
+        return;
     dprintf(client->socket->fd, "%s", buffer);
+    free(buffer);
 }
 
 /**

@@ -8,8 +8,6 @@
 #ifndef OLOG_H_
     #define OLOG_H_
 
-    #define _GNU_SOURCE
-
     #include <stdio.h>
 
     // Add colors to the logs

@@ -28,8 +28,8 @@ Player::Player(sf::Vector2i position, int direction, int level, std::string team
             idle.push_back(sprite);
         }
 
-        /*for (size_t i = 1; i <= PUSH_FRAME; i++) {
-            std::string path = "./Assets/UI_UX/Characters/" + std::to_string(color) + "/Push/Frame#" + std::to_string(i) + ".png";
+        for (size_t i = 1; i <= PUSH_FRAME; i++) {
+            std::string path = "./Assets/UI_UX/Characters/Push/Frame#" + std::to_string(i) + ".png";
             sf::Sprite *sprite = new sf::Sprite(*UI::TextureManager::getTexture(path));
 
             sprite->setTextureRect(sf::IntRect(0, 0, PLAYER_WIDTH, PLAYER_HEIGHT));
@@ -37,10 +37,10 @@ Player::Player(sf::Vector2i position, int direction, int level, std::string team
             sprite->setColor(setColor(color));
 
             push.push_back(sprite);
-        }*/
+        }
 
-        /*for (size_t i = 1; i <= BROADCAST_FRAME; i++) {
-            std::string path = "./Assets/UI_UX/Characters/" + std::to_string(color) + "/Broadcast/Frame#" + std::to_string(i) + ".png";
+        for (size_t i = 1; i <= BROADCAST_FRAME; i++) {
+            std::string path = "./Assets/UI_UX/Characters/Broadcast/Frame#" + std::to_string(i) + ".png";
             sf::Sprite *sprite = new sf::Sprite(*UI::TextureManager::getTexture(path));
 
             sprite->setTextureRect(sf::IntRect(0, 0, PLAYER_WIDTH, PLAYER_HEIGHT));
@@ -48,11 +48,11 @@ Player::Player(sf::Vector2i position, int direction, int level, std::string team
             sprite->setColor(setColor(color));
 
             broadcast.push_back(sprite);
-        }*/
+        }
 
         _idleAnim = new UI::Animation(idle, 5, 0.30f, true);
-        //_pushAnim = new UI::Animation(push, 4, 0.15f, false);
-        //_broadcastAnim = new UI::Animation(broadcast, 7, 0.20f, false);
+        _pushAnim = new UI::Animation(push, 4, 0.15f, false);
+        _broadcastAnim = new UI::Animation(broadcast, 7, 0.20f, false);
 
         _idleAnim->play();
     } catch (Error::TextureError &error) {

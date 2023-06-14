@@ -29,6 +29,19 @@ static void setup_teams(server_t *server, options_t *options)
         team = team_create(options->teams_name[i]);
         olist_add_node(server->teams, team);
     }
+    server->teams->destructor = &team_list_destructor;
+}
+
+static void setup_clients(server_t *server)
+{
+    server->clients = olist_create();
+    server->clients->destructor = &client_list_destroy;
+}
+
+static void setup_eggs(server_t *server)
+{
+    server->eggs = olist_create();
+    server->eggs->destructor = &egg_list_destructor;
 }
 
 server_t *server_create(options_t *options)
@@ -38,8 +51,8 @@ server_t *server_create(options_t *options)
     if (!server)
         return NULL;
     server->running = true;
-    server->clients = olist_create();
-    server->eggs = olist_create();
+    setup_clients(server);
+    setup_eggs(server);
     server->max_team_size = options->clients_nb;
     server->map = map_create(options->width, options->height);
     if (!server->map) {

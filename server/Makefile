@@ -11,7 +11,8 @@ BUILD_DIR = build
 
 SRC = 	$(SRC_DIR)/main.c \
 		$(SRC_DIR)/server.c \
-		$(SRC_DIR)/main_loop.c
+		$(SRC_DIR)/main_loop.c \
+		$(SRC_DIR)/sigint_handler.c
 
 SRC +=	$(SRC_DIR)/server/server_create.c \
 		$(SRC_DIR)/server/server_destroy.c

@@ -28,6 +28,7 @@ void ai_dead(client_t *client, server_t *server, bool disconnect)
 
     if (!disconnect)
         wbuffer_add_msg(client, "dead\n");
+    tile_remove_player(server->map, client);
     OLIST_FOREACH(server->clients, node) {
         target = (client_t *)node->data;
         if (target->type == GRAPHIC)
@@ -41,6 +42,5 @@ void ai_dead(client_t *client, server_t *server, bool disconnect)
     else
         OLOG_INFO("AI id#%ld fd#%d is dead (disconnected)", client->id,
         client->socket->fd);
-    tile_remove_player(server->map, client);
     client_disconnect(server, client);
 }

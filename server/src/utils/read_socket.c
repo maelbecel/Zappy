@@ -45,10 +45,11 @@ static char *empty_buffer(olist_t *buffer)
             continue;
         if (!msg)
             asprintf(&msg, "%s", tmp);
-        else
+        else {
             asprintf(&msg, "%s%s", msg, tmp);
+            free(tmp);
+        }
     }
-    olist_clear_wdfree(buffer);
     if (!msg)
         return NULL;
     return msg;
@@ -64,6 +65,7 @@ void read_socket(client_t *client)
     }
     do_read(client, buffer);
     client->buffer = empty_buffer(buffer);
+    olist_destroy(buffer);
     if (!client->buffer)
         return;
     if (client->buffer[strlen(client->buffer) - 1] == '\n')

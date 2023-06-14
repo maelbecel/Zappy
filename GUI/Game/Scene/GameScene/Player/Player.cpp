@@ -10,13 +10,13 @@
 #include "Tile.hpp"
 #include <iostream>
 
-Player::Player(sf::Vector2i position, int direction, int level, std::string teamName) : _position(position), _direction(direction), _level(level), _teamName(teamName), _idle(true), _expulsion(false), _broadcast(false)
+Player::Player(sf::Vector2i position, int direction, int level, std::string teamName, int color) : _position(position), _direction(direction), _level(level), _teamName(teamName), _idle(true), _expulsion(false), _broadcast(false)
 {
     try {
         std::vector<sf::Sprite *> idle;
 
         for (size_t i = 1; i <= IDLE_FRAME; i++) {
-            std::string path = "./Assets/UI_UX/Characters/Idle/Frame#" + std::to_string(i) + ".png";
+            std::string path = "./Assets/UI_UX/Characters/" + std::to_string(color) + "/Idle/Frame#" + std::to_string(i) + ".png";
             sf::Sprite *sprite = new sf::Sprite(*UI::TextureManager::getTexture(path));
 
             sprite->setTextureRect(sf::IntRect(0, 0, PLAYER_WIDTH, PLAYER_HEIGHT));

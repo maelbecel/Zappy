@@ -213,7 +213,15 @@ void GameData::setPlayer(const std::string &player)
         int oriantationInt = std::stoi(orientation);
         int levelInt = std::stoi(level);
 
-        _players[name] = std::make_shared<Player>(Player(sf::Vector2i(xInt, yInt), oriantationInt, levelInt, team));
+        int index = 1;
+
+        for (auto &t : _teams) {
+            if (t.compare(team) == 0)
+                break;
+            index++;
+        }
+
+        _players[name] = std::make_shared<Player>(Player(sf::Vector2i(xInt, yInt), oriantationInt, levelInt, team, index));
     } catch (std::invalid_argument &e) {
         throw Error::InvalidArgument("GameData::setPlayer");
     }

@@ -21,7 +21,7 @@ class Tile;
 class Player {
     // Constructor & Destructor
     public:
-        Player(sf::Vector2i position = sf::Vector2i(0, 0), int direction = 1, int level = 1, std::string teamName = "");
+        Player(sf::Vector2i position = sf::Vector2i(0, 0), int direction = 1, int level = 1, std::string teamName = "", int color = 1);
         ~Player();
 
     // Getters & Setters

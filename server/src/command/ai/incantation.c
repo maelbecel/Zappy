@@ -37,8 +37,11 @@ bool can_do_incantation(client_t *client, server_t *server)
     tile->inventory->items[THYSTAME] < INCNEED[ai->level - 1].thystame)
         return false;
     players = tile_get_players_by_level(server, tile, ai->level);
-    if (!players || players->size < INCNEED[ai->level - 1].players_needed)
+    if (!players || players->size < INCNEED[ai->level - 1].players_needed) {
+        olist_destroy(players);
         return false;
+    }
+    olist_destroy(players);
     return true;
 }
 
@@ -96,6 +99,7 @@ static void do_incantation(action_t *action)
     pie(server, client, ai->level + 1);
     update_players_level(players, server);
     remove_resources(client, server);
+    olist_destroy(players);
 }
 
 int incantation(client_t *client, server_t *server, UNUSED char **args)

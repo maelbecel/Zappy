@@ -13,7 +13,7 @@ namespace UI {
     /////////////////
 
     template <typename T>
-    VerticalLayout<T>::VerticalLayout(LayoutProperties properties) : ALayout<T>(properties) {};
+    VerticalLayout<T>::VerticalLayout(LayoutProperties properties) : properties(properties) {};
 
     /////////////
     // Methods //
@@ -22,14 +22,20 @@ namespace UI {
     template <typename T>
     void VerticalLayout<T>::applyLayout()
     {
-        sf::Vector2f position = _properties.position;
+        sf::Vector2f position = properties.position;
 
         for (auto *element : _elements) {
             // Set the position of the element
             element->setPosition(position);
 
             // Increment the current position by element height and spacing
-            position.y += element->getLocalBounds().height + _properties.spacing;
+            position.y += element->getSie().y + properties.spacing;
         }
+    }
+
+    template <typename T>
+    void VerticalLayout<T>::addElement(T &element)
+    {
+        _elements.push_back(&element);
     }
 };

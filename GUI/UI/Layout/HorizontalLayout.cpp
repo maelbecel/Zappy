@@ -13,7 +13,7 @@ namespace UI {
     /////////////////
 
     template <typename T>
-    HorizontalLayout<T>::HorizontalLayout(LayoutProperties properties) : ALayout<T>(properties) {};
+    HorizontalLayout<T>::HorizontalLayout(LayoutProperties properties) : properties(properties) {};
 
     /////////////
     // Methods //
@@ -22,14 +22,20 @@ namespace UI {
     template <typename T>
     void HorizontalLayout<T>::applyLayout()
     {
-        sf::Vector2f position = _properties.position;
+        sf::Vector2f position = properties.position;
 
         for (auto *element : _elements) {
             // Set the position of the element
             element->setPosition(position);
 
             // Increment the current position by element width and spacing
-            position.x += element->getLocalBounds().width + _properties.spacing;
+            position.x += element->getSize().x + properties.spacing;
         }
+    }
+
+    template <typename T>
+    void HorizontalLayout<T>::addElement(T &element)
+    {
+        _elements.push_back(&element);
     }
 };

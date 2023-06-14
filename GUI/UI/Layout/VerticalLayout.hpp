@@ -8,7 +8,7 @@
 #ifndef VERTICALLAYOUT_HPP_
     #define VERTICALLAYOUT_HPP_
 
-    #include "ALayout.hpp"
+    #include "ILayout.hpp"
 
 namespace UI {
 
@@ -22,7 +22,7 @@ namespace UI {
      * @tparam T The type of the elements of the layout
      */
     template <typename T>
-    class VerticalLayout : public ALayout<T> {
+    class VerticalLayout : public ILayout {
         // Constructor & Destructor (default)
         public:
 
@@ -45,6 +45,18 @@ namespace UI {
              *  [Widget3]
              */
             void applyLayout() override;
+
+            /**
+             * @brief Add an element to the layout
+             *
+             * @param element The element to add
+             */
+            void addElement(T &element) override;
+
+        // Attributes
+        private:
+            std::vector<T *> _elements; /*!< The elements of the layout */
+            LayoutProperties properties; /*!< Properties of the layout */
     };
 };
 

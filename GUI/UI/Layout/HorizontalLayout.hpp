@@ -8,7 +8,7 @@
 #ifndef HORIZONTALLAYOUT_HPP_
     #define HORIZONTALLAYOUT_HPP_
 
-    #include "ALayout.hpp"
+    #include "ILayout.hpp"
 
 namespace UI {
 
@@ -20,7 +20,7 @@ namespace UI {
      * @tparam T The type of the elements of the layout
      */
     template <typename T>
-    class HorizontalLayout : public ALayout<T> {
+    class HorizontalLayout : public ILayout {
         // Constructor & Destructor (default)
         public:
 
@@ -41,6 +41,18 @@ namespace UI {
              *  [Widget1] [Widget2] [Widget3]
              */
             void applyLayout() override;
+
+            /**
+             * @brief Add an element to the layout
+             *
+             * @param element The element to add
+             */
+            void addElement(T &element) override;
+
+        // Attributes
+        private:
+            std::vector<T *> _elements; /*!< The elements of the layout */
+            LayoutProperties properties; /*!< Properties of the layout */
     };
 };
 

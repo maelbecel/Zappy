@@ -8,7 +8,7 @@
 #ifndef GRIDLAYOUT_HPP_
     #define GRIDLAYOUT_HPP_
 
-    #include "ALayout.hpp"
+    #include "ILayout.hpp"
 
 namespace UI {
     /**
@@ -20,7 +20,7 @@ namespace UI {
      * @tparam T The type of the elements of the layout
      */
     template <typename T>
-    class GridLayout : public ALayout<T> {
+    class GridLayout : public ILayout {
         // Constructor & Destructor (default)
         public:
 
@@ -44,9 +44,18 @@ namespace UI {
              */
             void applyLayout() override;
 
+            /**
+             * @brief Add an element to the layout
+             *
+             * @param element The element to add
+             */
+            void addElement(T &element) override;
+
         // Attributes
         private:
             size_t _nbColumns; /*!< Number of columns of the grid */
+            std::vector<T *> _elements; /*!< The elements of the layout */
+            LayoutProperties properties; /*!< Properties of the layout */
     };
 };
 

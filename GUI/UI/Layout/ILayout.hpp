@@ -45,26 +45,6 @@ namespace UI {
     };
 
     /**
-     * @brief Enum that design the type of layout
-     * // VerticalLayout example:
-     * [Widget1]
-     * [Widget2]
-     * [Widget3]
-     * 
-     * // HorizontalLayout example:
-     * [Widget1] [Widget2] [Widget3]
-     * 
-     * // GridLayout example:
-     * [Widget1] [Widget2]
-     * [Widget3] [Widget4]
-     */
-    enum class LayoutType {
-        VERTICAL,
-        HORIZONTAL,
-        GRID
-    };
-
-    /**
      * @brief Struct that design the properties of a layout
      * He stock :
      * - the type of the layout
@@ -76,10 +56,9 @@ namespace UI {
         public:
             LayoutProperties() = default;
             ~LayoutProperties() = default;
-        
+
         // Attributes
         public:
-            LayoutType type;       /*!< Type of the layout */
             sf::Vector2f position; /*!< Position of the first widget */
             double spacing;        /*!< Spacing between each widget */
     };

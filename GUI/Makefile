@@ -34,7 +34,7 @@ SRC	+=	./UI/Animation/Animation.cpp\
 		./UI/Transition/Transition.cpp\
 		./UI/Manager/FontManager.cpp\
 		./UI/Manager/TextureManager.cpp\
-		#./UI/Layout/GridLayout.cpp\
+		./UI/Layout/GridLayout.cpp\
 		./UI/Layout/HorizontalLayout.cpp\
 		./UI/Layout/VerticalLayout.cpp\
 
@@ -66,7 +66,7 @@ INCLUDE =	-I .\
 			-I ./UI/Transition/\
 			-I ./UI/Widget/\
 			-I ./UI/Manager/\
-			#-I ./UI/Layout/\
+			-I ./UI/Layout/\
 
 OBJ	=	$(SRC:.cpp=.o)
 

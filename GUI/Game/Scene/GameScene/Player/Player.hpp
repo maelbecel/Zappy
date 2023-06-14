@@ -128,22 +128,8 @@ class Player {
         /**
          * @brief Update the player
          * Call this function for update the player animation
-         * @return sf::Sprite* The sprite of the player
          */
-        sf::Sprite *update();
-
-    // Private Methods
-    private:
-
-        /**
-         * @brief Fill the animation of the player with the correct frame
-         *
-         * @param list  The list where the frame are
-         * @param frame The number of frame
-         * @param color The color of the player
-         * @param type  The type of the animation
-         */
-        void fillFrame(std::vector<sf::Sprite *> list, int frame, int color, const std::string &type);
+        void update();
 
     // Attributes
     private:
@@ -171,9 +157,9 @@ class Player {
     public:
         static const int PLAYER_HEIGHT = 19; /*!< The height of the player */
         static const int PLAYER_WIDTH = 28;  /*!< The width of the player */
-        static const int IDLE_FRAME = 5;     /*!< The number of frame of the idle animation */
-        static const int PUSH_FRAME = 4;     /*!< The number of frame of the push animation */
-        static const int BROADCAST_FRAME = 7 /*!< The number of frame of the broadcast animation */;
+        static const size_t IDLE_FRAME = 5;     /*!< The number of frame of the idle animation */
+        static const size_t PUSH_FRAME = 4;     /*!< The number of frame of the push animation */
+        static const size_t BROADCAST_FRAME = 7 /*!< The number of frame of the broadcast animation */;
 };
 
 #endif /* !PLAYER_HPP_ */

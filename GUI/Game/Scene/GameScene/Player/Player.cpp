@@ -17,9 +17,35 @@ Player::Player(sf::Vector2i position, int direction, int level, std::string team
         std::vector<sf::Sprite *> push;
         std::vector<sf::Sprite *> broadcast;
 
-        fillFrame(idle, IDLE_FRAME, color, std::string("Idle"));
-        fillFrame(push, PUSH_FRAME, color, std::string("Push"));
-        fillFrame(broadcast, BROADCAST_FRAME, color, std::string("Broadcast"));
+        for (size_t i = 1; i <= IDLE_FRAME; i++) {
+            std::string path = "./Assets/UI_UX/Characters/" + std::to_string(color) + "/Idle/Frame#" + std::to_string(i) + ".png";
+            sf::Sprite *sprite = new sf::Sprite(*UI::TextureManager::getTexture(path));
+
+            sprite->setTextureRect(sf::IntRect(0, 0, PLAYER_WIDTH, PLAYER_HEIGHT));
+            sprite->setOrigin(PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2);
+
+            idle.push_back(sprite);
+        }
+
+        for (size_t i = 1; i <= PUSH_FRAME; i++) {
+            std::string path = "./Assets/UI_UX/Characters/" + std::to_string(color) + "/Push/Frame#" + std::to_string(i) + ".png";
+            sf::Sprite *sprite = new sf::Sprite(*UI::TextureManager::getTexture(path));
+
+            sprite->setTextureRect(sf::IntRect(0, 0, PLAYER_WIDTH, PLAYER_HEIGHT));
+            sprite->setOrigin(PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2);
+
+            push.push_back(sprite);
+        }
+
+        for (size_t i = 1; i <= BROADCAST_FRAME; i++) {
+            std::string path = "./Assets/UI_UX/Characters/" + std::to_string(color) + "/Broadcast/Frame#" + std::to_string(i) + ".png";
+            sf::Sprite *sprite = new sf::Sprite(*UI::TextureManager::getTexture(path));
+
+            sprite->setTextureRect(sf::IntRect(0, 0, PLAYER_WIDTH, PLAYER_HEIGHT));
+            sprite->setOrigin(PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2);
+
+            broadcast.push_back(sprite);
+        }
 
         _idleAnim = new UI::Animation(idle, 5, 0.30f, true);
         _pushAnim = new UI::Animation(push, 4, 0.15f, false);
@@ -38,19 +64,6 @@ Player::Player(sf::Vector2i position, int direction, int level, std::string team
     srand(time(NULL));
 
     _placement = rand() % 5 + 1;
-}
-
-void Player::fillFrame(std::vector<sf::Sprite *> list, int frame, int color, const std::string &type)
-{
-    for (size_t i = 1; i <= frame; i++) {
-        std::string path = "./Assets/UI_UX/Characters/" + std::to_string(color) + "/" + type + "/Frame#" + std::to_string(i) + ".png";
-        sf::Sprite *sprite = new sf::Sprite(*UI::TextureManager::getTexture(path));
-
-        sprite->setTextureRect(sf::IntRect(0, 0, PLAYER_WIDTH, PLAYER_HEIGHT));
-        sprite->setOrigin(PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2);
-
-        list.push_back(sprite);
-    }
 }
 
 Player::~Player() {}
@@ -123,33 +136,35 @@ void Player::setBroadcast(bool broadcast)
     }
 }
 
-sf::Sprite *Player::update()
+void Player::update()
 {
-    if (_idle == true) {
+    if (_idle == true)
         _idleAnim->update();
-        return _idleAnim->getCurrentSprite();
-    } else if (_expulsion == true) {
-        if (_pushAnim->update() == true) {
+    else if (_expulsion == true) {
+        if (_pushAnim->update() == true)
             setExpulsion(false);
-            return _idleAnim->getCurrentSprite();
-        }
-        return _pushAnim->getCurrentSprite();
-    } /*else if (_broadcast == true) {
-        (_broadcastAnim->update() == true) {
+    } else if (_broadcast == true) {
+        if (_broadcastAnim->update() == true)
             setBroadcast(false);
-            return _idleAnim->getCurrentSprite();
-        }
-        return _broadcastAnim->getCurrentSprite();
-    }*/
-    return _idleAnim->getCurrentSprite();
+    }
 }
 
 void Player::draw(GameData &gameData, sf::RenderWindow &window)
 {
+    update();
+
     sf::Vector2f position = gameData.getTile(_position.x, _position.y)->getPosition();
     sf::Vector2f scale = gameData.getScale();
 
-    sf::Sprite *player = update();
+    sf::Sprite *player = nullptr;
+
+    if (_expulsion == true)
+        player = _pushAnim->getCurrentSprite();
+    else if (_broadcast == true)
+        player = _broadcastAnim->getCurrentSprite();
+    else
+        player = _idleAnim->getCurrentSprite();
+
     player->setScale(setPlayerScale(scale));
 
     switch (_placement) {

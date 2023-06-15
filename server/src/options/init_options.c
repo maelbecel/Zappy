@@ -28,7 +28,7 @@ options_t *init_options(void)
     options->width = 10;
     options->height = 10;
     options->teams_name = NULL;
-    options->clients_nb = 2;
+    options->clients_nb = 3;
     options->freq = 100;
     init_teams_name(options);
     return (options);

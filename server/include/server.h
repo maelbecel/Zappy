@@ -285,11 +285,30 @@ void egg_add_to_team(server_t *server, ulong team_id);
 olist_t *tile_get_players(server_t *server, tile_t *tile);
 
 /**
+ * @brief Get list of clients on a tile by level
+ *
+ * @param server Link to server object
+ * @param tile Tile to get players
+ * @param level Level of players to get
+ * @return olist_t*
+ */
+olist_t *tile_get_players_by_level(server_t *server, tile_t *tile, uint level);
+
+/**
  * @brief Handle ctrl+c signal
  *
  * @param stop
  * @return int
  */
 int catch_sigint(server_t *stop);
+
+/**
+ * @brief Check if a team has won
+ *
+ * @param server
+ * @return true
+ * @return false
+ */
+bool check_win_condition(server_t *server);
 
 #endif /* !SERVER_H_ */

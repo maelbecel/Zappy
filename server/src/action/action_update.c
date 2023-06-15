@@ -99,6 +99,8 @@ static int update_food(client_t *client, uint tickDiff, server_t *server)
  */
 static void update_client(client_t *client, uint tickDiff, server_t *server)
 {
+    ai_t *ai = client->data;
+
     if (update_food(client, tickDiff, server) == -1)
         return;
     if (!client->current_action && client->waiting_orders->size == 0)
@@ -111,7 +113,9 @@ static void update_client(client_t *client, uint tickDiff, server_t *server)
             client->current_action = NULL;
         }
     }
-    if (!client->current_action) {
+    if (!ai)
+        return;
+    if (!client->current_action && !ai->incantation) {
         assign_next_action(client, server);
     }
 }

@@ -12,7 +12,8 @@ BUILD_DIR = build
 SRC = 	$(SRC_DIR)/main.c \
 		$(SRC_DIR)/server.c \
 		$(SRC_DIR)/main_loop.c \
-		$(SRC_DIR)/sigint_handler.c
+		$(SRC_DIR)/sigint_handler.c \
+		$(SRC_DIR)/winning_detection.c
 
 SRC +=	$(SRC_DIR)/server/server_create.c \
 		$(SRC_DIR)/server/server_destroy.c
@@ -57,7 +58,8 @@ SRC +=	$(SRC_DIR)/command/command_exec.c \
 SRC +=	$(SRC_DIR)/utils/id_generator.c \
 		$(SRC_DIR)/utils/read_socket.c \
 		$(SRC_DIR)/utils/ostr_to_array.c \
-		$(SRC_DIR)/utils/array_size.c
+		$(SRC_DIR)/utils/array_size.c \
+		$(SRC_DIR)/utils/stringbuilder.c
 
 SRC +=	$(SRC_DIR)/team/team_create.c \
 		$(SRC_DIR)/team/team_destroy.c \
@@ -94,7 +96,9 @@ SRC +=	$(SRC_DIR)/command/graphic/msz.c \
 		$(SRC_DIR)/command/graphic/pfk.c \
 		$(SRC_DIR)/command/graphic/enw.c \
 		$(SRC_DIR)/command/graphic/pex.c \
-		$(SRC_DIR)/command/graphic/edi.c
+		$(SRC_DIR)/command/graphic/edi.c \
+		$(SRC_DIR)/command/graphic/pic.c \
+		$(SRC_DIR)/command/graphic/pie.c
 
 SRC +=	$(SRC_DIR)/command/ai/forward.c \
 		$(SRC_DIR)/command/ai/right.c \
@@ -108,7 +112,11 @@ SRC +=	$(SRC_DIR)/command/ai/forward.c \
 		$(SRC_DIR)/command/ai/fork.c \
 		$(SRC_DIR)/command/ai/eject.c \
 		$(SRC_DIR)/command/ai/eject_eggs.c \
-		$(SRC_DIR)/command/ai/notif_graphic.c
+		$(SRC_DIR)/command/ai/incantation.c \
+		$(SRC_DIR)/command/ai/incantation_utils.c \
+		$(SRC_DIR)/command/ai/broadcast.c \
+		$(SRC_DIR)/command/ai/notif_graphic.c \
+		$(SRC_DIR)/command/ai/notif_ai.c
 
 SRC +=	$(SRC_DIR)/egg/egg_create.c \
 		$(SRC_DIR)/egg/egg_destroy.c \

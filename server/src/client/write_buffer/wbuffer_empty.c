@@ -21,10 +21,9 @@ char *wbuffer_empty(client_t *client)
             continue;
         if (!msg)
             asprintf(&msg, "%s", tmp);
-        else {
+        else
             asprintf(&msg, "%s%s", msg, tmp);
-            free(tmp);
-        }
+        free(tmp);
     }
     olist_clear_wdfree(client->wbuffer);
     if (!msg)

@@ -15,7 +15,7 @@
     #include "ButtonWidget.hpp"
     #include "CrossButtonWidget.hpp"
     #include "NetworkError.hpp"
-    #include "Settings.hpp"
+    #include "SettingsHUD.hpp"
 
 namespace UI {
     class MenuHUD {
@@ -58,7 +58,7 @@ namespace UI {
             IButton *_connectButton;               /*!< Button to connect to the server */
             IButton *_settingsButton;              /*!< Button to go to the settings */
             IButton *_quitButton;                  /*!< Button to quit the game */
-            Scene::Settings _settings;                    /*!< Settings scene */
+            SettingsHUD _settingsHUD;              /*!< Settings HUD */
             sf::Sprite _titleHeader;                            /*!< Title of the game */
             sf::Text _titleText;                                /*!< Text of the title */
     };

@@ -30,7 +30,7 @@ namespace UI {
         _settingsButton = new Button(settingsButton);
         _quitButton = new Button(quitButton);
 
-        _settings = Scene::Settings();
+        _settingsHUD = SettingsHUD();
 
         sf::Texture *titleTexture = TextureManager::getTexture("./Assets/UI_UX/Paper UI Pack/Paper UI/Folding & Cutout/2 Headers/4.png");
         _titleHeader = sf::Sprite();
@@ -76,23 +76,23 @@ namespace UI {
         } else {
             _quitButton->render(window, ButtonState::IDLE);
         }
-        if (_settings.IsRunning() == true) {
-            _settings.Render(window);
+        if (_settingsHUD.isOpened() == true) {
+            _settingsHUD.draw(window);
         }
     }
 
     void MenuHUD::handleEvent(sf::Event event, Network::Server &server, sf::RenderWindow &window)
     {
-        if (event.type == sf::Event::KeyPressed && _settings.IsRunning() == true) {
+        if (event.type == sf::Event::KeyPressed && _settingsHUD.isOpened() == true) {
             if (event.key.code == sf::Keyboard::Escape) {
-                _settings.SetRunning(false);
+                _settingsHUD.setOpened(false);
             }
         }
         if (event.type == sf::Event::MouseButtonPressed) {
             if (event.mouseButton.button != sf::Mouse::Left)
                 return;
-            if (_settings.IsRunning() == true) {
-                _settings.OnEvent(event, server, window);
+            if (_settingsHUD.isOpened() == true) {
+                _settingsHUD.handleEvent(event, server, window);
                 return;
             }
             if (_connectButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
@@ -108,7 +108,7 @@ namespace UI {
                 return;
             }
             if (_settingsButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
-                _settings.SetRunning(true);
+                _settingsHUD.setOpened(true);
                 return;
             }
             if (_quitButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {

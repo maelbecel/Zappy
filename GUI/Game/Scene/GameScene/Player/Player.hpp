@@ -34,6 +34,33 @@ class Player {
         sf::Vector2i getPosition() const;
 
         /**
+         * @brief Get the Team object
+         *
+         * @return std::string The team name of the player
+         */
+        std::string getTeam() const;
+
+        /**
+         * @brief Get the Level object
+         *
+         * @return int The player level
+         */
+        int getLevel() const;
+
+        /**
+         * @brief Get the Inventory object
+         * [0] : food
+         * [1] : linemate
+         * [2] : deraumere
+         * [3] : sibur
+         * [4] : mendiane
+         * [5] : phiras
+         * [6] : thystame
+         * @return int* The inventory of the player
+         */
+        int *getInventory() const;
+
+        /**
          * @brief Set the Position object
          *
          * @param position    The position of the player

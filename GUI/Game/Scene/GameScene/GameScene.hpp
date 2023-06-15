@@ -84,10 +84,19 @@ namespace Scene {
              */
             bool isInsideTriangle(const sf::Vector2i &position, sf::Vector2i a, sf::Vector2i b, sf::Vector2i c);
 
+            /**
+             * @brief If a tile got clicked, open the tile HUD
+             *
+             * @param x The tile x position
+             * @param y The tile y position
+             */
+            void openTileHUD(int x, int y);
+
         // Attributes
         private:
             GameData _gameData; /*!< The game data */
             Map _map;           /*!< The map */
+            bool _isTileHUDOpen; /*!< If the tile HUD is open */
     };
 }
 

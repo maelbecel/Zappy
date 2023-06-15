@@ -72,6 +72,11 @@ namespace Scene {
 
     void GameScene::LeftMousePressed(sf::Vector2i mousePos)
     {
+        if (_isTileHUDOpen == true) {
+            //TODO: implement left click on tile hud
+            return;
+        }
+
         std::map<std::pair<int, int>, std::shared_ptr<Tile>> tiles = _gameData.getMap();
         sf::Vector2f scale = _gameData.getScale();
 
@@ -85,7 +90,7 @@ namespace Scene {
 
             // Check if the mouse is on the rectangle
             if ((mousePos.x >= position.x + (8 * (scale.x + 2)) && mousePos.y >= position.y) && (mousePos.x <= position.x + (Tile::TILE_WIDTH * (scale.x + 2)) - (8 * (scale.x + 2)) && mousePos.y <= position.y + (Tile::TILE_HEIGHT * (scale.y + 1.25)))) {
-                std::cout << "Rectangle clicked: " << tile.first.first << ", " << tile.first.second << std::endl;
+                openTileHUD(tile.first.first, tile.first.second);
                 break;
             }
 
@@ -95,7 +100,7 @@ namespace Scene {
             sf::Vector2f c = sf::Vector2f(position.x + (8 * (scale.x + 2)), position.y + (Tile::TILE_HEIGHT * (scale.y + 1.25)));
 
             if (isInsideTriangle(mousePos, sf::Vector2i(a.x, a.y), sf::Vector2i(b.x, b.y), sf::Vector2i(c.x, c.y))) {
-                std::cout << "Left Triangle clicked: " << tile.first.first << ", " << tile.first.second << std::endl;
+                openTileHUD(tile.first.first, tile.first.second);
                 break;
             }
 
@@ -105,13 +110,45 @@ namespace Scene {
             c = sf::Vector2f(position.x + (Tile::TILE_WIDTH * (scale.x + 2)) - (8 * (scale.x + 2)), position.y + (Tile::TILE_HEIGHT * (scale.y + 1.25)));
 
             if (isInsideTriangle(mousePos, sf::Vector2i(a.x, a.y), sf::Vector2i(b.x, b.y), sf::Vector2i(c.x, c.y))) {
-                std::cout << "Right Triangle clicked: " << tile.first.first << ", " << tile.first.second << std::endl;
+                openTileHUD(tile.first.first, tile.first.second);
                 break;
             }
-
-            // TODO: Open the book with tiles information
         }
     };
+
+    void GameScene::openTileHUD(int x, int y)
+    {
+        //TODO: faudra moove les info dcp dans le draw plus mais au moins sa te les affiches au click la
+        std::shared_ptr<Tile> tile = _gameData.getTile(x, y);
+
+        std::cout << "Tile clicked: (" << x << ", " << y << ")" << std::endl;
+        std::cout << "Resources: " << std::endl;
+        std::cout << "  Food: " << tile->getResource(0) << std::endl;
+        std::cout << "  Linemate: " << tile->getResource(1) << std::endl;
+        std::cout << "  Deraumere: " << tile->getResource(2) << std::endl;
+        std::cout << "  Sibur: " << tile->getResource(3) << std::endl;
+        std::cout << "  Mendiane: " << tile->getResource(4) << std::endl;
+        std::cout << "  Phiras: " << tile->getResource(5) << std::endl;
+        std::cout << "  Thystame: " << tile->getResource(6) << std::endl << std::endl;
+
+        // Loop on the player
+        for (auto &player : _gameData.getPlayers()) {
+            if (player.second->getPosition() != sf::Vector2i(x, y))
+                continue;
+            std::cout << "Player[" << player.first << "]: " << player.second->getTeam() << std::endl;
+            std::cout << "  Level: " << player.second->getLevel() << std::endl;
+            std::cout << "  Inventory: " << std::endl;
+            std::cout << "    Food: " << player.second->getInventory()[0] << std::endl;
+            std::cout << "    Linemate: " << player.second->getInventory()[1] << std::endl;
+            std::cout << "    Deraumere: " << player.second->getInventory()[2] << std::endl;
+            std::cout << "    Sibur: " << player.second->getInventory()[3] << std::endl;
+            std::cout << "    Mendiane: " << player.second->getInventory()[4] << std::endl;
+            std::cout << "    Phiras: " << player.second->getInventory()[5] << std::endl;
+            std::cout << "    Thystame: " << player.second->getInventory()[6] << std::endl << std::endl;
+        }
+
+        _isTileHUDOpen = true;
+    }
 
     bool GameScene::isInsideTriangle(const sf::Vector2i &position, sf::Vector2i a, sf::Vector2i b, sf::Vector2i c)
     {

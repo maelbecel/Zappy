@@ -48,6 +48,21 @@ sf::Vector2i Player::getPosition() const
     return _position;
 }
 
+std::string Player::getTeam() const
+{
+    return _teamName;
+}
+
+int Player::getLevel() const
+{
+    return _level;
+}
+
+int *Player::getInventory() const
+{
+    return _inventory;
+}
+
 void Player::setPosition(sf::Vector2i position, int orientation)
 {
     _position = position;

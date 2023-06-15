@@ -13,6 +13,8 @@
     #include "ai.h"
     #include "olog.h"
 
+    #define RORIENT receiver->orientation
+
 typedef struct command_s {
     char *command;
     int (*func)(client_t *client, server_t *server, char **args);
@@ -27,7 +29,6 @@ typedef struct incantation_resources_s {
     uint phiras;
     uint thystame;
 } incantation_resources_t;
-
 
 int command_exec(client_t *client, server_t *server);
 int command_exec_ai(client_t *client, server_t *server, char **args);

@@ -15,6 +15,9 @@
     #include <string>
 
 namespace UI {
+    static std::string TEAM_BACKGROUND = "./Assets/UI_UX/HUD/GameSceneHUD/TeamHUD.png";
+    static std::string TEAM_PICTURE = "./Assets/UI_UX/Characters/Idle/Frame#1.png";
+
     class TextureManager {
         // Constructor (default) & Destructor (default)
         public:

@@ -27,7 +27,10 @@ namespace Scene {
         server.Run();
 
         _gameData.parse(server.getSocket().response);
-    };
+
+        if (server.getSocket().response.find("tna") != std::string::npos)
+            _teamHUD.setTeams(_gameData.getTeams());
+    }
 
     void GameScene::Render(sf::RenderWindow &window)
     {
@@ -36,7 +39,9 @@ namespace Scene {
         for (auto &player : _gameData.getPlayers())
             player.second->draw(_gameData, window);
         _map.drawBiome(window, _gameData);
-    };
+
+        _teamHUD.draw(window);
+    }
 
     void GameScene::ShutDown() {};
 

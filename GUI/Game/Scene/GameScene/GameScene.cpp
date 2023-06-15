@@ -39,8 +39,12 @@ namespace Scene {
         for (auto &player : _gameData.getPlayers())
             player.second->draw(_gameData, window);
         _map.drawBiome(window, _gameData);
-
+        if (_gameMenuHUD.isOpened()) {
+            _gameMenuHUD.draw(window);
+            return;
+        }
         _teamHUD.draw(window);
+        _gameHUD.draw(window);
     }
 
     void GameScene::ShutDown() {};
@@ -48,6 +52,9 @@ namespace Scene {
     void GameScene::OnEvent(const sf::Event &event, Network::Server &server, UNUSED sf::RenderWindow &window)
     {
         if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::Escape) {
+                _gameMenuHUD.setOpened(!_gameMenuHUD.isOpened());
+            }
             if (event.key.code == sf::Keyboard::Z) {
                 _gameData.setScale(_gameData.getScale() + sf::Vector2f(0.25, 0.25));
             } else if (event.key.code == sf::Keyboard::R) {
@@ -70,6 +77,10 @@ namespace Scene {
                 _gameData.setScale(_gameData.getScale() - sf::Vector2f(0.25, 0.25));
             }
         } else if (event.type == sf::Event::MouseButtonPressed) {
+            if (_gameMenuHUD.isOpened()) {
+                _gameMenuHUD.handleEvent(event, server, window);
+                return;
+            }
             if (event.mouseButton.button == sf::Mouse::Left) {
                 LeftMousePressed(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
             }

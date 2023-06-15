@@ -12,7 +12,8 @@
     #include "GameData.hpp"
     #include "Map.hpp"
     #include "TeamHUD.hpp"
-
+    #include "GameMenuHUD.hpp"
+    #include "GameHUD.hpp"
     #include <memory>
 
 namespace Scene {
@@ -105,6 +106,8 @@ namespace Scene {
             Map _map;           /*!< The map */
             bool _isTileHUDOpen; /*!< If the tile HUD is open */
             UI::TeamHUD _teamHUD; /*!< The team HUD */
+            UI::GameMenuHUD _gameMenuHUD; /*!< The game menu HUD */
+            UI::GameHUD _gameHUD; /*!< The game HUD */
     };
 }
 

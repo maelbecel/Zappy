@@ -10,6 +10,7 @@
 
     #include "ApplicationError.hpp"
     #include "Game.hpp"
+    #include "Window.hpp"
 
     #include <SFML/Graphics.hpp>
     #include <SFML/Window.hpp>
@@ -19,7 +20,7 @@ class Application {
         /////////////////
         // Ctor & Dtor //
         /////////////////
-        Application();
+        Application(std::string ip = "", std::string port = "");
         ~Application();
 
         /////////////

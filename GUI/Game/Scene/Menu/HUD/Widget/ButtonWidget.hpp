@@ -16,6 +16,9 @@
 
     #include <iostream>
 
+    #define BUTTON_STD_TILES 7 * 32
+    #define BUTTON_STD_SIZE sf::Vector2f(BUTTON_STD_TILES, 32)
+
 namespace UI {
     class ButtonWidget : public AWidget {
         // Define for ButtonWidget
@@ -33,6 +36,7 @@ namespace UI {
              * @param position The position of the widget at the top left corner
              * @param size     The size of the widget
              * @param text     The text of the widget
+             * @param nbrTiles The number of tiles of the widget
              */
             ButtonWidget(const sf::Vector2f &position, const sf::Vector2f &size, const std::string &text = std::string(""), const int nbrTiles = 2);
             ButtonWidget(); // Default Constructor

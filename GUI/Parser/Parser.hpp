@@ -25,6 +25,27 @@ class Parser {
         Parser(int ac, char **av);
 
         ~Parser() = default;
+
+    // Methods
+    public:
+
+            /**
+            * @brief Get the ip
+            *
+            * @return std::string The ip
+            */
+            std::string getIp() const;
+
+            /**
+            * @brief Get the port
+            *
+            * @return std::string The port
+            */
+            std::string getPort() const;
+
+    private:
+        std::string _ip;    /*!< The ip */
+        std::string _port;  /*!< The port */
 };
 
 #endif /* !PARSER_HPP_ */

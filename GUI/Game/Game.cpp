@@ -24,9 +24,9 @@ Game::~Game()
     }
 };
 
-void Game::Initialize()
+void Game::Initialize(std::string ip, std::string port)
 {
-    _scenes.at("Menu").first->Initialize();
+    _scenes.at("Menu").first->Initialize(ip, port);
     _scenes.at("Game").first->Initialize();
     // TODO: Initialize all the scenes
 
@@ -58,11 +58,11 @@ void Game::Update()
     }
 }
 
-void Game::OnEvent(const sf::Event &event)
+void Game::OnEvent(const sf::Event &event, sf::RenderWindow &window)
 {
     for (auto &scene : _scenes) {
         if (scene.second.second == true) {
-            scene.second.first->OnEvent(event, _server);
+            scene.second.first->OnEvent(event, _server, window);
             break;
         }
     }

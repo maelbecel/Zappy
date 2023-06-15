@@ -11,6 +11,7 @@
     #include "IScene.hpp"
     #include "GameData.hpp"
     #include "Map.hpp"
+    #include "TeamHUD.hpp"
 
     #include <memory>
 
@@ -32,6 +33,12 @@ namespace Scene {
              * @brief Initialize the scene game
              */
             void Initialize() override;
+
+            /**
+             * @brief Initialize the scene game with ip and port
+             *
+             */
+            void Initialize(UNUSED std::string ip, UNUSED std::string port) override {};
 
             /**
              * @brief Update the game
@@ -60,7 +67,7 @@ namespace Scene {
              * @param event The event to handle
              * @param server The server (for network events)
              */
-            void OnEvent(const sf::Event &event, Network::Server &server) override;
+            void OnEvent(const sf::Event &event, Network::Server &server, sf::RenderWindow &window) override;
 
         // Private Methods
         private:
@@ -74,7 +81,7 @@ namespace Scene {
 
             /**
              * @brief Check if the left click is inside the left triangle of the hexagonal tiles
-             * 
+             *
              * @param position The mouse click position
              * @param a        The first point of the triangle
              * @param b        The second point of the triangle
@@ -97,6 +104,7 @@ namespace Scene {
             GameData _gameData; /*!< The game data */
             Map _map;           /*!< The map */
             bool _isTileHUDOpen; /*!< If the tile HUD is open */
+            UI::TeamHUD _teamHUD; /*!< The team HUD */
     };
 }
 

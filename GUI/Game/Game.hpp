@@ -29,7 +29,7 @@ class Game {
         /**
          * @brief Initialize the game
          */
-        void Initialize();
+        void Initialize(std::string ip = "", std::string port = "");
 
         /**
          * @brief Render all the game on the window given in parameter
@@ -48,7 +48,7 @@ class Game {
          * All the events are handled here
          * @param event  The event to handle
          */
-        void OnEvent(const sf::Event &event);
+        void OnEvent(const sf::Event &event, sf::RenderWindow &window);
 
     // Attributes
     private:

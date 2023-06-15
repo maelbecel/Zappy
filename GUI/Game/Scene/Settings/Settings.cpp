@@ -12,7 +12,7 @@ namespace Scene {
     // Constructor //
     /////////////////
 
-    Settings::Settings()
+    Settings::Settings() : _settingsHUD()
     {
     }
 
@@ -37,8 +37,18 @@ namespace Scene {
     {
     }
 
-    void Settings::OnEvent(const sf::Event &event, Network::Server &server)
+    void Settings::OnEvent(const sf::Event &event, Network::Server &server, sf::RenderWindow &window)
     {
-        _settingsHUD.handleEvent(event, server);
+        _settingsHUD.handleEvent(event, server, window);
+    }
+
+    bool Settings::IsRunning()
+    {
+        return _settingsHUD.isOpened();
+    }
+
+    void Settings::SetRunning(bool running)
+    {
+        _settingsHUD.setOpened(running);
     }
 };

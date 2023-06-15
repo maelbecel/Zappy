@@ -31,6 +31,12 @@ namespace Scene {
             void Initialize() override;
 
             /**
+             * @brief Initialize the scene menu with ip and port
+             *
+             */
+            void Initialize(UNUSED std::string ip, UNUSED std::string port) override {};
+
+            /**
              * @brief Update the menu
              * Update the menu logic
              * @param server The server (for network events)
@@ -57,7 +63,19 @@ namespace Scene {
              * @param event The event to handle
              * @param server The server (for network events)
              */
-            void OnEvent(const sf::Event &event, Network::Server &server) override;
+            void OnEvent(const sf::Event &event, Network::Server &server, sf::RenderWindow &window) override;
+
+            /**
+             * @brief Check if the menu is running
+             * @return true if the menu is running, false otherwise
+             */
+            bool IsRunning();
+
+            /**
+             * @brief Set the running state of the menu
+             * @param state The state of the menu
+             */
+            void SetRunning(bool state);
 
         // Attributes
         private:

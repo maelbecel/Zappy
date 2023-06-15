@@ -7,12 +7,13 @@
 
 #include "GameScene.hpp"
 #include <iostream>
+#include "Window.hpp"
 
 namespace Scene {
     /////////////////
     // Constructor //
     /////////////////
-    GameScene::GameScene() {};
+    GameScene::GameScene() : _isTileHUDOpen(false) {};
 
     /////////////
     // Methods //
@@ -26,7 +27,10 @@ namespace Scene {
         server.Run();
 
         _gameData.parse(server.getSocket().response);
-    };
+
+        if (server.getSocket().response.find("tna") != std::string::npos)
+            _teamHUD.setTeams(_gameData.getTeams());
+    }
 
     void GameScene::Render(sf::RenderWindow &window)
     {
@@ -35,11 +39,13 @@ namespace Scene {
         for (auto &player : _gameData.getPlayers())
             player.second->draw(_gameData, window);
         _map.drawBiome(window, _gameData);
-    };
+
+        _teamHUD.draw(window);
+    }
 
     void GameScene::ShutDown() {};
 
-    void GameScene::OnEvent(const sf::Event &event, Network::Server &server)
+    void GameScene::OnEvent(const sf::Event &event, Network::Server &server, UNUSED sf::RenderWindow &window)
     {
         if (event.type == sf::Event::KeyPressed) {
             if (event.key.code == sf::Keyboard::Z) {
@@ -91,6 +97,13 @@ namespace Scene {
             // Check if the mouse is on the rectangle
             if ((mousePos.x >= position.x + (8 * (scale.x + 2)) && mousePos.y >= position.y) && (mousePos.x <= position.x + (Tile::TILE_WIDTH * (scale.x + 2)) - (8 * (scale.x + 2)) && mousePos.y <= position.y + (Tile::TILE_HEIGHT * (scale.y + 1.25)))) {
                 openTileHUD(tile.first.first, tile.first.second);
+                
+                // Check if the mouse is on the half left of the screen or the half right
+                //if (mousePos.x < (Window::getWindowWidth()) / 2) {
+                //    std::cout << "Left" << std::endl;
+                //} else {
+                //    std::cout << "Right" << std::endl;
+                //}
                 break;
             }
 

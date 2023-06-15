@@ -28,7 +28,12 @@ namespace Scene {
             /**
              * @brief Initialize the scene menu
              */
-            void Initialize() override;
+            void Initialize() override {};
+
+            /**
+             * @brief Initialize the scene menu with ip and port
+             */
+            void Initialize(std::string ip = "", std::string port = "") override;
 
             /**
              * @brief Update the menu
@@ -57,7 +62,7 @@ namespace Scene {
              * @param event The event to handle
              * @param server The server (for network events)
              */
-            void OnEvent(const sf::Event &event, Network::Server &server) override;
+            void OnEvent(const sf::Event &event, Network::Server &server, sf::RenderWindow &window) override;
 
         // Attributes
         private:

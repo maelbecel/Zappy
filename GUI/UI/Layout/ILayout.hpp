@@ -9,6 +9,7 @@
     #define ILAYOUT_HPP_
 
     #include <SFML/Graphics.hpp>
+    #include "IWidget.hpp"
 
 namespace UI {
     /**
@@ -41,7 +42,14 @@ namespace UI {
              *
              * @param element The element to add
              */
-            virtual void addElement(sf::Drawable &element) = 0;
+            virtual void addElement(IWidget *element) = 0;
+
+            /**
+             * @brief Get the Elements object
+             *
+             * @return IWidget The elements of the layout
+             */
+            virtual std::vector<IWidget *> getElements() = 0;
     };
 
     /**

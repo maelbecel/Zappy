@@ -16,10 +16,7 @@ namespace UI {
      * @brief Layout that organize the widgets horizontally
      * 
      * [Widget1] [Widget2] [Widget3]
-     * 
-     * @tparam T The type of the elements of the layout
      */
-    template <typename T>
     class HorizontalLayout : public ILayout {
         // Constructor & Destructor (default)
         public:
@@ -47,11 +44,18 @@ namespace UI {
              *
              * @param element The element to add
              */
-            void addElement(T &element) override;
+            void addElement(IWidget *element) override;
+
+            /**
+             * @brief Get the Elements object
+             *
+             * @return IWidget The elements of the layout
+             */
+            std::vector<IWidget *> getElements() override;
 
         // Attributes
         private:
-            std::vector<T *> _elements; /*!< The elements of the layout */
+            std::vector<IWidget *> _elements; /*!< The elements of the layout */
             LayoutProperties properties; /*!< Properties of the layout */
     };
 };

@@ -11,16 +11,12 @@ namespace UI {
     /////////////////
     // Constructor //
     /////////////////
-
-    template <typename T>
-    HorizontalLayout<T>::HorizontalLayout(LayoutProperties properties) : properties(properties) {};
+    HorizontalLayout::HorizontalLayout(LayoutProperties properties) : properties(properties) {};
 
     /////////////
     // Methods //
     /////////////
-
-    template <typename T>
-    void HorizontalLayout<T>::applyLayout()
+    void HorizontalLayout::applyLayout()
     {
         sf::Vector2f position = properties.position;
 
@@ -33,9 +29,13 @@ namespace UI {
         }
     }
 
-    template <typename T>
-    void HorizontalLayout<T>::addElement(T &element)
+    void HorizontalLayout::addElement(IWidget *element)
     {
-        _elements.push_back(&element);
+        _elements.push_back(element);
+    }
+
+    std::vector<IWidget *> HorizontalLayout::getElements()
+    {
+        return _elements;
     }
 };

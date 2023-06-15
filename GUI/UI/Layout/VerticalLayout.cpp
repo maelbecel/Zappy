@@ -11,16 +11,12 @@ namespace UI {
     /////////////////
     // Constructor //
     /////////////////
-
-    template <typename T>
-    VerticalLayout<T>::VerticalLayout(LayoutProperties properties) : properties(properties) {};
+    VerticalLayout::VerticalLayout(LayoutProperties properties) : properties(properties) {};
 
     /////////////
     // Methods //
     /////////////
-
-    template <typename T>
-    void VerticalLayout<T>::applyLayout()
+    void VerticalLayout::applyLayout()
     {
         sf::Vector2f position = properties.position;
 
@@ -29,13 +25,17 @@ namespace UI {
             element->setPosition(position);
 
             // Increment the current position by element height and spacing
-            position.y += element->getSie().y + properties.spacing;
+            position.y += element->getSize().y + properties.spacing;
         }
     }
 
-    template <typename T>
-    void VerticalLayout<T>::addElement(T &element)
+    void VerticalLayout::addElement(IWidget *element)
     {
-        _elements.push_back(&element);
+        _elements.push_back(element);
+    }
+
+    std::vector<IWidget *> VerticalLayout::getElements()
+    {
+        return _elements;
     }
 };

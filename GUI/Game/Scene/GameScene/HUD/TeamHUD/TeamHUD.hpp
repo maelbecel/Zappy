@@ -10,6 +10,9 @@
 
     #include <SFML/Graphics.hpp>
 
+    #include "TeamWidget.hpp"
+    #include "VerticalLayout.hpp"
+
 namespace UI {
     class TeamHUD {
         // Constructor & Destructor
@@ -26,8 +29,19 @@ namespace UI {
              */
             void draw(sf::RenderWindow &window);
 
+        // Setters
+        public:
+
+            /**
+             * @brief Add a team to the HUD
+             * @param team The team to add
+             */
+            void setTeams(const std::vector<std::string> &teams);
+
         // Attributes
         private:
+            VerticalLayout *_teamLayout; /*!< The layout of the team HUD */
+            std::vector<std::string> _teams; /*!< The teams of the HUD */
     };
 };
 

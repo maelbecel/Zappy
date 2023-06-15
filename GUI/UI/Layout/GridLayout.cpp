@@ -11,16 +11,12 @@ namespace UI {
     /////////////////
     // Constructor //
     /////////////////
-
-    template <typename T>
-    GridLayout<T>::GridLayout(LayoutProperties properties, size_t nbColumns) : properties(properties), _nbColumns(nbColumns) {};
+    GridLayout::GridLayout(LayoutProperties properties, size_t nbColumns) : properties(properties), _nbColumns(nbColumns) {};
 
     /////////////
     // Methods //
     /////////////
-
-    template <typename T>
-    void GridLayout<T>::applyLayout()
+    void GridLayout::applyLayout()
     {
         sf::Vector2f position = properties.position;
         size_t currentColumn = 0;
@@ -44,9 +40,13 @@ namespace UI {
         }
     }
 
-    template <typename T>
-    void GridLayout<T>::addElement(T &element)
+    void GridLayout::addElement(IWidget *element)
     {
-        _elements.push_back(&element);
+        _elements.push_back(element);
+    }
+
+    std::vector<IWidget *> GridLayout::getElements()
+    {
+        return _elements;
     }
 };

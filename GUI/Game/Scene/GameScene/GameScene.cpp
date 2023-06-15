@@ -26,6 +26,9 @@ namespace Scene {
         server.Run();
 
         _gameData.parse(server.getSocket().response);
+
+        if (server.getSocket().response.find("tna") != std::string::npos)
+            _teamHUD.setTeams(_gameData.getTeams());
     }
 
     void GameScene::Render(sf::RenderWindow &window)

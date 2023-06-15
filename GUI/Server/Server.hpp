@@ -41,6 +41,13 @@ namespace Network {
              */
             void Run();
 
+            /**
+             * @brief Send the command to the server
+             *
+             * @param command The command to send
+             */
+            void sendCommand(const std::string &command);
+
         // Setters & Getters
         public:
 

@@ -134,6 +134,13 @@ namespace Network {
             ::send(_socket, "GRAPHIC\n", 9, 0);
     }
 
+    void Socket::send(const std::string &command)
+    {
+        std::string tmp = command + "\n";
+
+        ::send(_socket, tmp.c_str(), tmp.size(), 0);
+    }
+
     /////////////
     // Setters //
     /////////////

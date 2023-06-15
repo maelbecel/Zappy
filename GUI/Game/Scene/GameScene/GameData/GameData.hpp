@@ -58,6 +58,14 @@ class GameData {
         void setTimeUnit(const std::string &timeUnit);
 
         /**
+         * @brief Add time to Time Unit of the game
+         * timeUnit is a string : sgt T
+         * T is the time unit of the game
+         * @param timeUnit The time unit
+         */
+        void addTimeUnit(const std::string &timeUnit);
+
+        /**
          * @brief Set the Tile Content of the game
          * tileContent is a string : bct X Y q0 q1 q2 q3 q4 q5 q6
          * X and Y are the coordinates of the tile
@@ -215,6 +223,23 @@ class GameData {
          * @param player The player
          */
         void PlayerCollectResource(const std::string &player);
+
+    // Methods private
+    private:
+
+        /**
+         * @brief Set the Multiple Tile Content object
+         * 
+         * @param tiles The tiles informations
+         */
+        void setMultipleTileContent(const std::string &tiles);
+
+        /**
+         * @brief Set the Single Tile Content object
+         *
+         * @param tile The tile informations
+         */
+        void setSingleTileContent(const std::string &tile);
 
     // Attributes
     private:

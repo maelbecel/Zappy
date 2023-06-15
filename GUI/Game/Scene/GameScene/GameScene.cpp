@@ -19,17 +19,33 @@ namespace Scene {
     // Methods //
     /////////////
 
-    // TODO: Implements Game methods
     void GameScene::Initialize() {};
 
     void GameScene::Update(Network::Server &server)
     {
+        askingToServer(server);
+
         server.Run();
 
         _gameData.parse(server.getSocket().response);
 
         if (server.getSocket().response.find("tna") != std::string::npos)
             _teamHUD.setTeams(_gameData.getTeams());
+    }
+
+    void GameScene::askingToServer(Network::Server &server)
+    {
+        if (_gameData.getMapSize().x == 0 || _gameData.getMapSize().y == 0) {
+            server.sendCommand("msz");
+            server.Run();
+            _gameData.parse(server.getSocket().response);
+        }
+
+        /*if (_gameData.getMap().empty()) {
+            server.sendCommand("mct");
+            server.Run();
+            _gameData.parse(server.getSocket().response);
+        }*/
     }
 
     void GameScene::Render(sf::RenderWindow &window)
@@ -82,18 +98,16 @@ namespace Scene {
                 return;
             }
             if (event.mouseButton.button == sf::Mouse::Left) {
-                LeftMousePressed(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
+                LeftMousePressed(sf::Vector2i(event.mouseButton.x, event.mouseButton.y), server);
+                _gameHUD.handleEvent(event, server, window);
             }
         }
     };
 
-    void GameScene::LeftMousePressed(sf::Vector2i mousePos)
+    void GameScene::LeftMousePressed(sf::Vector2i mousePos, Network::Server &server)
     {
-        if (_isTileHUDOpen == true) {
-            //TODO: implement left click on tile hud
+        if (_isTileHUDOpen)
             return;
-        }
-
         std::map<std::pair<int, int>, std::shared_ptr<Tile>> tiles = _gameData.getMap();
         sf::Vector2f scale = _gameData.getScale();
 
@@ -107,7 +121,7 @@ namespace Scene {
 
             // Check if the mouse is on the rectangle
             if ((mousePos.x >= position.x + (8 * (scale.x + 2)) && mousePos.y >= position.y) && (mousePos.x <= position.x + (Tile::TILE_WIDTH * (scale.x + 2)) - (8 * (scale.x + 2)) && mousePos.y <= position.y + (Tile::TILE_HEIGHT * (scale.y + 1.25)))) {
-                openTileHUD(tile.first.first, tile.first.second);
+                openTileHUD(tile.first.first, tile.first.second, server);
                 
                 // Check if the mouse is on the half left of the screen or the half right
                 //if (mousePos.x < (Window::getWindowWidth()) / 2) {
@@ -124,7 +138,7 @@ namespace Scene {
             sf::Vector2f c = sf::Vector2f(position.x + (8 * (scale.x + 2)), position.y + (Tile::TILE_HEIGHT * (scale.y + 1.25)));
 
             if (isInsideTriangle(mousePos, sf::Vector2i(a.x, a.y), sf::Vector2i(b.x, b.y), sf::Vector2i(c.x, c.y))) {
-                openTileHUD(tile.first.first, tile.first.second);
+                openTileHUD(tile.first.first, tile.first.second, server);
                 break;
             }
 
@@ -134,14 +148,33 @@ namespace Scene {
             c = sf::Vector2f(position.x + (Tile::TILE_WIDTH * (scale.x + 2)) - (8 * (scale.x + 2)), position.y + (Tile::TILE_HEIGHT * (scale.y + 1.25)));
 
             if (isInsideTriangle(mousePos, sf::Vector2i(a.x, a.y), sf::Vector2i(b.x, b.y), sf::Vector2i(c.x, c.y))) {
-                openTileHUD(tile.first.first, tile.first.second);
+                openTileHUD(tile.first.first, tile.first.second, server);
                 break;
             }
         }
     };
 
-    void GameScene::openTileHUD(int x, int y)
+    void GameScene::openTileHUD(int x, int y, Network::Server &server)
     {
+        _isTileHUDOpen = true;
+
+        server.sendCommand("bct " + std::to_string(x) + " " + std::to_string(y));
+        _gameData.parse(server.getSocket().response);
+
+        server.sendCommand("sgt");
+        _gameData.parse(server.getSocket().response);
+
+        // Loop on the player
+        for (auto &player : _gameData.getPlayers()) {
+            if (player.second->getPosition() != sf::Vector2i(x, y))
+                continue;
+            server.sendCommand("plv " + player.first);
+            _gameData.parse(server.getSocket().response);
+
+            server.sendCommand("pin " + player.first);
+            _gameData.parse(server.getSocket().response);
+        }
+
         //TODO: faudra moove les info dcp dans le draw plus mais au moins sa te les affiches au click la
         std::shared_ptr<Tile> tile = _gameData.getTile(x, y);
 
@@ -154,6 +187,8 @@ namespace Scene {
         std::cout << "  Mendiane: " << tile->getResource(4) << std::endl;
         std::cout << "  Phiras: " << tile->getResource(5) << std::endl;
         std::cout << "  Thystame: " << tile->getResource(6) << std::endl << std::endl;
+
+        std::cout << "Time: " << _gameData.getTimeUnit() << std::endl << std::endl;
 
         // Loop on the player
         for (auto &player : _gameData.getPlayers()) {
@@ -170,8 +205,6 @@ namespace Scene {
             std::cout << "    Phiras: " << player.second->getInventory()[5] << std::endl;
             std::cout << "    Thystame: " << player.second->getInventory()[6] << std::endl << std::endl;
         }
-
-        _isTileHUDOpen = true;
     }
 
     bool GameScene::isInsideTriangle(const sf::Vector2i &position, sf::Vector2i a, sf::Vector2i b, sf::Vector2i c)

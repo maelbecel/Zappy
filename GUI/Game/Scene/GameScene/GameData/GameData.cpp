@@ -22,6 +22,8 @@ void GameData::parse(std::string &line)
         return setMapSize(line);
     else if (line.find("sgt") != std::string::npos) // sgt = time unit
         return setTimeUnit(line);
+    else if (line.find("sst") != std::string::npos) // sst = time unit with modification
+        return addTimeUnit(line);
     else if (line.find("bct") != std::string::npos) // bct = content of a tile
         return setTileContent(line);
     else if (line.find("tna") != std::string::npos) // tna = team name
@@ -84,7 +86,35 @@ void GameData::setTimeUnit(const std::string &timeUnit)
     }
 }
 
-void GameData::setTileContent(const std::string &tileContent)
+void GameData::addTimeUnit(const std::string &timeUnit)
+{
+    std::string temp;
+    std::string t;
+
+    std::stringstream(timeUnit) >> temp >> t;
+
+    try {
+        GameData::timeUnit += std::stoi(t);
+    } catch (std::invalid_argument &e) {
+        throw Error::InvalidArgument("GameData::addTimeUnit");
+    }
+}
+
+void GameData::setMultipleTileContent(const std::string &tiles)
+{
+    std::vector<std::string> tilesVector;
+
+    std::stringstream ss(tiles);
+    std::string temp;
+
+    while (ss >> temp)
+        tilesVector.push_back(temp);
+    
+    for (auto &tile : tilesVector)
+        setSingleTileContent(tile);
+}
+
+void GameData::setSingleTileContent(const std::string &tile)
 {
     std::string temp;
     std::string x;
@@ -97,7 +127,7 @@ void GameData::setTileContent(const std::string &tileContent)
     std::string q5;
     std::string q6;
 
-    std::stringstream(tileContent) >> temp >> x >> y >> q0 >> q1 >> q2 >> q3 >> q4 >> q5 >> q6;
+    std::stringstream(tile) >> temp >> x >> y >> q0 >> q1 >> q2 >> q3 >> q4 >> q5 >> q6;
 
     try {
         int xInt = std::stoi(x);
@@ -118,8 +148,16 @@ void GameData::setTileContent(const std::string &tileContent)
         }
         _map[std::make_pair(xInt, yInt)] = std::make_shared<Tile>(Tile(sf::Vector2i(xInt, yInt), q0Int, q1Int, q2Int, q3Int, q4Int, q5Int, q6Int));
     } catch (std::invalid_argument &e) {
-        throw Error::InvalidArgument("GameData::setTileContent");
+        throw Error::InvalidArgument("GameData::setSingleTileContent");
     }
+}
+
+void GameData::setTileContent(const std::string &tileContent)
+{
+    if (tileContent.find("bct") != tileContent.rfind("bct"))
+        return setMultipleTileContent(tileContent);
+    else
+        return setSingleTileContent(tileContent);
 }
 
 void GameData::setTeamName(const std::string &name)

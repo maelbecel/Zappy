@@ -64,15 +64,13 @@ namespace UI {
         if (event.type == sf::Event::MouseButtonPressed) {
             if (event.mouseButton.button != sf::Mouse::Left)
                 return;
-            if (_speed1x->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) == true) {
-                // TODO: send command to set speed by 10 (sst 10 ?)
-            }
-            if (_speed2x->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) == true) {
-                // TODO: send command to set speed by 50 (sst 50 ?)
-            }
-            if (_speed4x->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) == true) {
-                // TODO: send command to set speed by 200 (sst 200 ?)
-            }
+
+            if (_speed1x->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) == true)
+                server.sendCommand("sst 25\n");
+            else if (_speed2x->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) == true)
+                server.sendCommand("sst 50\n");
+            else if (_speed4x->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) == true)
+                server.sendCommand("sst 100\n");
             return;
         }
     }

@@ -51,9 +51,8 @@ static void do_broadcast(action_t *action)
             ai = target->data;
             wbuffer_add_message(target, "message %d, %s\n",
             get_direction((ai_t *)client->data, ai), msg);
-        } else if (target->type == GRAPHIC) {
+        } else if (target->type == GRAPHIC)
             wbuffer_add_message(target, "pbc %d %s\n", client->id, msg);
-        }
     }
     wbuffer_add_msg(client, "ok\n");
 }

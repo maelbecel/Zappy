@@ -27,8 +27,6 @@ bool can_do_incantation(client_t *client, server_t *server)
     if (!ai || ai->level > 7)
         return false;
     tile = map_get_tile(server->map, ai->x, ai->y);
-    if (!tile)
-        return false;
     if (tile->inventory->items[LINEMATE] < INCNEED[ai->level - 1].linemate ||
     tile->inventory->items[DERAUMERE] < INCNEED[ai->level - 1].deraumere ||
     tile->inventory->items[SIBUR] < INCNEED[ai->level - 1].sibur ||
@@ -40,8 +38,7 @@ bool can_do_incantation(client_t *client, server_t *server)
     if (!players || players->size < INCNEED[ai->level - 1].players_needed) {
         olist_destroy(players);
         return false;
-    }
-    olist_destroy(players);
+    } olist_destroy(players);
     return true;
 }
 

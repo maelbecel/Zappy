@@ -302,4 +302,13 @@ olist_t *tile_get_players_by_level(server_t *server, tile_t *tile, uint level);
  */
 int catch_sigint(server_t *stop);
 
+/**
+ * @brief Check if a team has won
+ *
+ * @param server
+ * @return true
+ * @return false
+ */
+bool check_win_condition(server_t *server);
+
 #endif /* !SERVER_H_ */

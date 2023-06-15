@@ -68,6 +68,7 @@ int main_loop(server_t *server)
         time_update(server->time);
         action_update(server);
         map_spawn_items(server, true);
+        check_win_condition(server);
     }
     server_destroy(server);
     return 0;

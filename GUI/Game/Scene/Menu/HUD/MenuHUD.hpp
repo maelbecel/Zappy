@@ -21,7 +21,7 @@ namespace UI {
     class MenuHUD {
         // Constructor & Destructor
         public:
-            MenuHUD();
+            MenuHUD(std::string ip = "", std::string port = "");
             ~MenuHUD();
 
         // Methods
@@ -41,6 +41,14 @@ namespace UI {
              * @param server The server to connect to
              */
             void handleEvent(sf::Event event, Network::Server &server, sf::RenderWindow &window);
+
+            /**
+             * @brief Initialize the Menu HUD
+             *
+             * @param ip The ip to connect to
+             * @param port The port to connect to
+             */
+            void Initialize(std::string ip = "", std::string port = "");
 
         // Attributes
         private:

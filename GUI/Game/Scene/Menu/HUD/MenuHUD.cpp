@@ -9,7 +9,7 @@
 #include "Window.hpp"
 
 namespace UI {
-    MenuHUD::MenuHUD() : _background(sf::Vector2f(Window::getWindowWidth() / 6, Window::getWindowHeight()))
+    MenuHUD::MenuHUD(std::string ip, std::string port) : _background(sf::Vector2f(Window::getWindowWidth() / 6, Window::getWindowHeight()))
     {
         BackgroundStyle RectangleColorBg(sf::Color(255, 255, 255, 155));
 
@@ -19,6 +19,8 @@ namespace UI {
 
         _ip = InputBox(std::string("Ip Adress :"), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 15, 250), BUTTON_STD_SIZE);
         _port = InputBox(std::string("Port :"), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 15, 300), BUTTON_STD_SIZE);
+        _ip.value = ip;
+        _port.value = port;
 
         ButtonWidget *connectButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 375), BUTTON_STD_SIZE, std::string("Connect"), 7);
         ButtonWidget *settingsButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450), BUTTON_STD_SIZE, std::string("Settings"), 7);
@@ -118,5 +120,11 @@ namespace UI {
         }
         _ip.handleEvent(event);
         _port.handleEvent(event);
+    }
+
+    void MenuHUD::Initialize(std::string ip, std::string port)
+    {
+        _ip.value = ip;
+        _port.value = port;
     }
 };

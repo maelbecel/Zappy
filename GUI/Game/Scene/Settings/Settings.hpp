@@ -31,6 +31,12 @@ namespace Scene {
             void Initialize() override;
 
             /**
+             * @brief Initialize the scene menu with ip and port
+             *
+             */
+            void Initialize(UNUSED std::string ip, UNUSED std::string port) override {};
+
+            /**
              * @brief Update the menu
              * Update the menu logic
              * @param server The server (for network events)

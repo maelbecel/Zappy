@@ -26,6 +26,7 @@ static const command_t ai_commands[] = {
     {"Fork", &fork_cmd},
     {"Eject", &eject},
     {"Incantation", &incantation},
+    {"Broadcast", &broadcast},
     {NULL, NULL}
 };
 

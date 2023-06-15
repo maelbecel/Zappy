@@ -57,7 +57,8 @@ SRC +=	$(SRC_DIR)/command/command_exec.c \
 SRC +=	$(SRC_DIR)/utils/id_generator.c \
 		$(SRC_DIR)/utils/read_socket.c \
 		$(SRC_DIR)/utils/ostr_to_array.c \
-		$(SRC_DIR)/utils/array_size.c
+		$(SRC_DIR)/utils/array_size.c \
+		$(SRC_DIR)/utils/stringbuilder.c
 
 SRC +=	$(SRC_DIR)/team/team_create.c \
 		$(SRC_DIR)/team/team_destroy.c \
@@ -112,6 +113,7 @@ SRC +=	$(SRC_DIR)/command/ai/forward.c \
 		$(SRC_DIR)/command/ai/eject_eggs.c \
 		$(SRC_DIR)/command/ai/incantation.c \
 		$(SRC_DIR)/command/ai/incantation_utils.c \
+		$(SRC_DIR)/command/ai/broadcast.c \
 		$(SRC_DIR)/command/ai/notif_graphic.c \
 		$(SRC_DIR)/command/ai/notif_ai.c
 

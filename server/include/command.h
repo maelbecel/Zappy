@@ -48,6 +48,7 @@ int look(client_t *client, server_t *server, UNUSED char **args);
 int fork_cmd(client_t *client, server_t *server, UNUSED char **args);
 int eject(client_t *client, server_t *server, UNUSED char **args);
 int incantation(client_t *client, server_t *server, UNUSED char **args);
+int broadcast(client_t *client, server_t *server, char **args);
 
 void print_tile_content(tile_t *tile, client_t *client);
 void look_north(client_t *client, server_t *server, ai_t *ai);

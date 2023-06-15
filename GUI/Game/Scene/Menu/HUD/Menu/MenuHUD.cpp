@@ -101,6 +101,7 @@ namespace UI {
 
                 try {
                     server.Connect();
+                    // TODO: Send to server set speed to 10 (sst 10 ?)
                 } catch (const Error::NetworkError &e) {
                     _ip.value = std::string("");
                     _port.value = std::string("");

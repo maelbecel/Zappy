@@ -13,7 +13,7 @@
     #include "Map.hpp"
     #include "TeamHUD.hpp"
     #include "GameMenuHUD.hpp"
-
+    #include "GameHUD.hpp"
     #include <memory>
 
 namespace Scene {
@@ -98,6 +98,7 @@ namespace Scene {
             Map _map;           /*!< The map */
             UI::TeamHUD _teamHUD; /*!< The team HUD */
             UI::GameMenuHUD _gameMenuHUD; /*!< The game menu HUD */
+            UI::GameHUD _gameHUD; /*!< The game HUD */
     };
 }
 

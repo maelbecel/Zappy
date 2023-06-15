@@ -68,7 +68,7 @@ namespace UI {
         }
     }
 
-    void GameMenuHUD::handleEvent(sf::Event event, UNUSED Network::Server &server, UNUSED sf::RenderWindow &window)
+    void GameMenuHUD::handleEvent(sf::Event event, UNUSED Network::Server &server, sf::RenderWindow &window)
     {
         if (event.type == sf::Event::KeyPressed && _settingsHUD.isOpened() == true) {
             if (event.key.code == sf::Keyboard::Escape) {

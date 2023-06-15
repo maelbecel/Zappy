@@ -44,6 +44,7 @@ namespace Scene {
             return;
         }
         _teamHUD.draw(window);
+        _gameHUD.draw(window);
     }
 
     void GameScene::ShutDown() {};

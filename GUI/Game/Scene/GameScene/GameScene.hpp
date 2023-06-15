@@ -12,6 +12,7 @@
     #include "GameData.hpp"
     #include "Map.hpp"
     #include "TeamHUD.hpp"
+    #include "GameMenuHUD.hpp"
 
     #include <memory>
 
@@ -96,6 +97,7 @@ namespace Scene {
             GameData _gameData; /*!< The game data */
             Map _map;           /*!< The map */
             UI::TeamHUD _teamHUD; /*!< The team HUD */
+            UI::GameMenuHUD _gameMenuHUD; /*!< The game menu HUD */
     };
 }
 

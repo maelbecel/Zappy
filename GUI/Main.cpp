@@ -16,7 +16,7 @@ int main(int ac, char **av)
         Parser parser(ac, av);
         Window::readConfigFile();
 
-        Application App;
+        Application App(parser.getIp(), parser.getPort());
 
         App.run();
     } catch (Error::ZappyHelp &help) {

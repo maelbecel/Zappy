@@ -111,7 +111,7 @@ namespace UI {
             _crossSettingsButton->render(window, ButtonState::IDLE);
     }
 
-    void SettingsHUD::handleEvent(sf::Event event, Network::Server &server, sf::RenderWindow &window)
+    void SettingsHUD::handleEvent(sf::Event event, UNUSED Network::Server &server, UNUSED sf::RenderWindow &window)
     {
         if (event.type == sf::Event::MouseButtonPressed) {
             if (event.mouseButton.button != sf::Mouse::Left)

@@ -29,7 +29,7 @@ class Game {
         /**
          * @brief Initialize the game
          */
-        void Initialize();
+        void Initialize(std::string ip = "", std::string port = "");
 
         /**
          * @brief Render all the game on the window given in parameter

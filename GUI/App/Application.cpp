@@ -7,13 +7,13 @@
 
 #include "Application.hpp"
 
-Application::Application()
+Application::Application(std::string ip, std::string port)
 {
     _window.create(sf::VideoMode(Window::getWindowWidth(), Window::getWindowHeight()), "Zappy", sf::Style::Titlebar | sf::Style::Close);
 
     if (!_window.isOpen())
         throw Error::ApplicationError("Error while creating window...");
-    _game.Initialize();
+    _game.Initialize(ip, port);
 }
 
 Application::~Application()

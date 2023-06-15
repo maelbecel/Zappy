@@ -28,7 +28,12 @@ namespace Scene {
             /**
              * @brief Initialize the scene menu
              */
-            void Initialize() override;
+            void Initialize() override {};
+
+            /**
+             * @brief Initialize the scene menu with ip and port
+             */
+            void Initialize(std::string ip = "", std::string port = "") override;
 
             /**
              * @brief Update the menu

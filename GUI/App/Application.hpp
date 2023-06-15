@@ -20,7 +20,7 @@ class Application {
         /////////////////
         // Ctor & Dtor //
         /////////////////
-        Application();
+        Application(std::string ip = "", std::string port = "");
         ~Application();
 
         /////////////

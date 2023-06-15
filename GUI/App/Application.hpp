@@ -10,6 +10,7 @@
 
     #include "ApplicationError.hpp"
     #include "Game.hpp"
+    #include "Window.hpp"
 
     #include <SFML/Graphics.hpp>
     #include <SFML/Window.hpp>

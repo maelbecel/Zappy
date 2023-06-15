@@ -9,7 +9,7 @@
 
 Application::Application()
 {
-    _window.create(sf::VideoMode(1600, 900), "Zappy");
+    _window.create(sf::VideoMode(Window::getWindowWidth(), Window::getWindowHeight()), "Zappy", sf::Style::Titlebar | sf::Style::Close);
 
     if (!_window.isOpen())
         throw Error::ApplicationError("Error while creating window...");
@@ -38,7 +38,7 @@ void Application::appEventManager()
     while (_window.pollEvent(_event)) {
         if (_event.type == sf::Event::Closed)
             _window.close();
-        _game.OnEvent(_event);
+        _game.OnEvent(_event, _window);
     }
 }
 

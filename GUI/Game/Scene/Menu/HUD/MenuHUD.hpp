@@ -13,6 +13,7 @@
     #include "Server.hpp"
     #include "Button.hpp"
     #include "ButtonWidget.hpp"
+    #include "CrossButtonWidget.hpp"
     #include "NetworkError.hpp"
     #include "Settings.hpp"
 
@@ -39,7 +40,7 @@ namespace UI {
              * @param event  The event to handle
              * @param server The server to connect to
              */
-            void handleEvent(sf::Event event, Network::Server &server);
+            void handleEvent(sf::Event event, Network::Server &server, sf::RenderWindow &window);
 
         // Attributes
         private:
@@ -49,9 +50,7 @@ namespace UI {
             IButton *_connectButton;               /*!< Button to connect to the server */
             IButton *_settingsButton;              /*!< Button to go to the settings */
             IButton *_quitButton;                  /*!< Button to quit the game */
-            bool _settingsButtonOpen;              /*!< Boolean to know if the settings are open */
             Scene::Settings _settings;                    /*!< Settings scene */
-            IButton *_crossSettingsButton;                /*!< Button to close the settings */
             sf::Sprite _titleHeader;                            /*!< Title of the game */
             sf::Text _titleText;                                /*!< Text of the title */
     };

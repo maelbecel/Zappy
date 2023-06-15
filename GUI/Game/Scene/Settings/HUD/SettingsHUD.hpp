@@ -8,6 +8,9 @@
 #ifndef SETTINGSHUD_HPP_
     #define SETTINGSHUD_HPP_
 
+    #include <libconfig.h++>
+
+    #include "ParserError.hpp"
     #include "BackgroundStyle.hpp"
     #include "InputBox.hpp"
     #include "Server.hpp"
@@ -38,7 +41,17 @@ namespace UI {
              * @param event  The event to handle
              * @param server The server to connect to
              */
-            void handleEvent(sf::Event event, Network::Server &server);
+            void handleEvent(sf::Event event, Network::Server &server, sf::RenderWindow &window);
+
+            /**
+             * @brief Check if the Settings HUD is opened
+             */
+            bool isOpened() const;
+
+            /**
+             * @brief Set the Settings HUD opened or not
+             */
+            void setOpened(bool opened);
 
         // Attributes
         private:
@@ -48,8 +61,12 @@ namespace UI {
             IButton *_increaseSoundButton;          /*!< Button to increase the sound */
             IButton *_decreaseMusicButton;          /*!< Button to decrease the music */
             IButton *_increaseMusicButton;          /*!< Button to increase the music */
+            IButton *_crossSettingsButton;          /*!< Button to close the settings */
             InputBox _sound;                        /*!< Input box for the sound */
             InputBox _music;                        /*!< Input box for the music */
+            int _soundValue;                        /*!< Value of the sound */
+            int _musicValue;                        /*!< Value of the music */
+            bool _isOpened;                         /*!< Is the Settings HUD opened */
     };
 };
 

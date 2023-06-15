@@ -58,11 +58,11 @@ void Game::Update()
     }
 }
 
-void Game::OnEvent(const sf::Event &event)
+void Game::OnEvent(const sf::Event &event, sf::RenderWindow &window)
 {
     for (auto &scene : _scenes) {
         if (scene.second.second == true) {
-            scene.second.first->OnEvent(event, _server);
+            scene.second.first->OnEvent(event, _server, window);
             break;
         }
     }

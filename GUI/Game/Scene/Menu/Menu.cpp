@@ -29,8 +29,8 @@ namespace Scene {
 
     void Menu::ShutDown() {};
 
-    void Menu::OnEvent(const sf::Event &event, Network::Server &server)
+    void Menu::OnEvent(const sf::Event &event, Network::Server &server, sf::RenderWindow &window)
     {
-        _menuHUD.handleEvent(event, server);
+        _menuHUD.handleEvent(event, server, window);
     };
 };

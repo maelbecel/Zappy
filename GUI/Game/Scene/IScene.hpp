@@ -57,7 +57,7 @@ namespace Scene {
              * @param event  The event to handle
              * @param server The server (for network events)
              */
-            virtual void OnEvent(const sf::Event &event, Network::Server &server) = 0;
+            virtual void OnEvent(const sf::Event &event, Network::Server &server, sf::RenderWindow &window) = 0;
     };
 };
 

@@ -2,11 +2,11 @@
 ** EPITECH PROJECT, 2023
 ** Zappy
 ** File description:
-** ButtonWidget
+** ArrowButtonWidget
 */
 
-#ifndef BUTTONWIDGET_HPP_
-    #define BUTTONWIDGET_HPP_
+#ifndef ARROWBUTTONWIDGET_H_
+    #define ARROWBUTTONWIDGET_H_
 
     #include "AWidget.hpp"
     #include "BackgroundStyle.hpp"
@@ -16,35 +16,33 @@
 
     #include <iostream>
 
-    #define BUTTON_STD_TILES 7 * 32
-    #define BUTTON_STD_SIZE sf::Vector2f(BUTTON_STD_TILES, 32)
-
 namespace UI {
-    class ButtonWidget : public AWidget {
-        // Define for ButtonWidget
-        public:
-            static const int FONT_SIZE = 14;
+    enum ArrowDirection {
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT
+    };
+    class ArrowButtonWidget : public AWidget {
 
         // Constructor & Destructor
         public:
             /**
              * @brief Construct a new Button Widget object
-             * ButtonWidget exemple :
+             * ArrowButtonWidget exemple :
              * Name :
              * [_____Text______]
              *
              * @param position The position of the widget at the top left corner
              * @param size     The size of the widget
-             * @param text     The text of the widget
-             * @param nbrTiles The number of tiles of the widget
              */
-            ButtonWidget(const sf::Vector2f &position, const sf::Vector2f &size, const std::string &text = std::string(""), const int nbrTiles = 2);
-            ButtonWidget(); // Default Constructor
+            ArrowButtonWidget(const sf::Vector2f &position, const sf::Vector2f &size, const ArrowDirection &direction);
+            ArrowButtonWidget(); // Default Constructor
 
             /**
              * @brief Destroy the Button Widget object
              */
-            ~ButtonWidget() = default;
+            ~ArrowButtonWidget() = default;
 
         // Methods
         public:
@@ -98,16 +96,15 @@ namespace UI {
              * @brief Copy this Button Widget object
              *
              * @param copy        The Button Widget to copy
-             * @return ButtonWidget & A reference to the copied Button Widget
+             * @return ArrowButtonWidget & A reference to the copied Button Widget
              */
-            ButtonWidget &operator=(const ButtonWidget &copy);
+            ArrowButtonWidget &operator=(const ArrowButtonWidget &copy);
 
         // Attributes
         private:
-            sf::Text _name;                                         /*!< The name of the Button Widget */
             sf::RectangleShape _box;                                /*!< The box UI for Input Area */
-            std::map<std::string, sf::Sprite> _idleSprites;         /*!< The textures of the Button Widget */
-            std::map<std::string, sf::Sprite> _hoveredSprites;      /*!< The textures of the Button Widget */
+            sf::Sprite _idleSprite;         /*!< The texture of the Cross Button Widget when idle */
+            sf::Sprite _hoveredSprite;      /*!< The texture of the Cross Button Widget when hover */
 
         // Methods
         private:
@@ -125,4 +122,4 @@ namespace UI {
     };
 };
 
-#endif /* !BUTTONWIDGET_HPP_ */
+#endif /* !ARROWBUTTONWIDGET_H_ */

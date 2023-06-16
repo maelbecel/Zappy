@@ -18,6 +18,7 @@
     #include "Tile.hpp"
     #include "PerlinNoise.hpp"
     #include "Player.hpp"
+    #include "Eggs.hpp"
 
 /**
  * @brief Class that store all the data of the game
@@ -36,7 +37,7 @@ class GameData {
          * Transform the line into a game data
          * @param line The line to parse
          */
-        void parse(std::string &line);
+        int parse(std::string &line);
 
     // Setters & Getters
     public:
@@ -47,7 +48,7 @@ class GameData {
          * X and Y are the size of the map
          * @param mapSize The map size
          */
-        void setMapSize(const std::string &mapSize);
+        int setMapSize(const std::string &mapSize);
 
         /**
          * @brief Set the Time Unit of the game
@@ -55,7 +56,7 @@ class GameData {
          * T is the time unit of the game
          * @param timeUnit The time unit
          */
-        void setTimeUnit(const std::string &timeUnit);
+        int setTimeUnit(const std::string &timeUnit);
 
         /**
          * @brief Add time to Time Unit of the game
@@ -63,7 +64,7 @@ class GameData {
          * T is the time unit of the game
          * @param timeUnit The time unit
          */
-        void addTimeUnit(const std::string &timeUnit);
+        int addTimeUnit(const std::string &timeUnit);
 
         /**
          * @brief Set the Tile Content of the game
@@ -72,7 +73,7 @@ class GameData {
          * q0 to q6 are the quantity of the resources
          * @param tileContent The tile content
          */
-        void setTileContent(const std::string &tileContent);
+        int setTileContent(const std::string &tileContent);
 
         /**
          * @brief Set the Team Name of the game
@@ -80,7 +81,7 @@ class GameData {
          * N is the name of the team
          * @param name The name of the team
          */
-        void setTeamName(const std::string &name);
+        int setTeamName(const std::string &name);
 
         /**
          * @brief Get the Map Size object
@@ -159,49 +160,49 @@ class GameData {
          *
          * @param player The player
          */
-        void setPlayer(const std::string &player);
+        int setPlayer(const std::string &player);
 
         /**
          * @brief Set the Player Position object
          * 
          * @param player The player
          */
-        void setPlayerMovement(const std::string &player);
+        int setPlayerMovement(const std::string &player);
 
         /**
          * @brief Set the Player Level object
          *
          * @param player The player
          */
-        void setPlayerLevel(const std::string &player);
+        int setPlayerLevel(const std::string &player);
 
         /**
          * @brief Remove the Player object
          *
          * @param player The player
          */
-        void deletePlayer(const std::string &player);
+        int deletePlayer(const std::string &player);
 
         /**
          * @brief Set the Player Inventory object
          *
          * @param player The player
          */
-        void setPlayerInventory(const std::string &player);
+        int setPlayerInventory(const std::string &player);
 
         /**
          * @brief Set the Player Expulsion object
          *
          * @param player The player
          */
-        void PlayerExpulsion(const std::string &player);
+        int PlayerExpulsion(const std::string &player);
 
         /**
          * @brief Set the Player Broadcast object
          *
          * @param player The player
          */
-        void PlayerBroadcast(const std::string &player);
+        int PlayerBroadcast(const std::string &player);
 
         /**
          * @brief Get the Players object
@@ -215,14 +216,35 @@ class GameData {
          * The action is drop.
          * @param player The player
          */
-        void PlayerDropResource(const std::string &player);
+        int PlayerDropResource(const std::string &player);
 
         /**
          * @brief Realize the player's action
          * The action is take.
          * @param player The player
          */
-        void PlayerCollectResource(const std::string &player);
+        int PlayerCollectResource(const std::string &player);
+        
+        /**
+         * @brief Create a Egg object
+         *
+         * @param egg  The egg informations
+         */
+        int CreateEgg(const std::string &egg);
+
+        /**
+         * @brief Kill a Egg object
+         *
+         * @param egg  The egg informations
+         */
+        int KillEgg(const std::string &egg);
+
+        /**
+         * @brief Get the Eggs object
+         *
+         * @return std::map<std::string, std::shared_ptr<Eggs>> The eggs
+         */
+        std::map<std::string, std::shared_ptr<Eggs>> getEggs() const;
 
     // Methods private
     private:
@@ -232,20 +254,21 @@ class GameData {
          * 
          * @param tiles The tiles informations
          */
-        void setMultipleTileContent(const std::string &tiles);
+        int setMultipleTileContent(const std::string &tiles);
 
         /**
          * @brief Set the Single Tile Content object
          *
          * @param tile The tile informations
          */
-        void setSingleTileContent(const std::string &tile);
+        int setSingleTileContent(const std::string &tile);
 
     // Attributes
     private:
         sf::Vector2i _mapSize;                                     /*!< The size of the map between (10 and 50 for width and height)*/
         std::map<std::pair<int, int>, std::shared_ptr<Tile>> _map; /*!< The map of the game with the coordinates of the tiles and their content */
         std::map<std::string, std::shared_ptr<Player>> _players;   /*!< The list of all the players */
+        std::map<std::string, std::shared_ptr<Eggs>> _eggs;        /*!< The list of all the eggs */
         std::vector<std::string> _teams;                           /*!< The list of all the teams */
 
         int _gameScale;                                            /*!< The scale of the game */

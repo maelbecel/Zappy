@@ -56,6 +56,11 @@ namespace Network {
         }
     }
 
+    void Server::sendCommand(const std::string &command)
+    {
+        _socket.send(command);
+    }
+
     ///////////////////////
     // Setters & Getters //
     ///////////////////////

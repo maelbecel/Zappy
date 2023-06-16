@@ -74,11 +74,19 @@ namespace Scene {
         private:
 
             /**
+             * @brief Asking to the server
+             * Call this function for asking to the server all the informations needed
+             * @param server The server
+             */
+            void askingToServer(Network::Server &server);
+
+            /**
              * @brief Check all event link to the left mouse button
              *
              * @param mousePos The position of the click
+             * @param server   The server
              */
-            void LeftMousePressed(sf::Vector2i mousePos);
+            void LeftMousePressed(sf::Vector2i mousePos, Network::Server &server);
 
             /**
              * @brief Check if the left click is inside the left triangle of the hexagonal tiles
@@ -97,8 +105,9 @@ namespace Scene {
              *
              * @param x The tile x position
              * @param y The tile y position
+             * @param server The server
              */
-            void openTileHUD(int x, int y);
+            void openTileHUD(int x, int y, Network::Server &server);
 
         // Attributes
         private:

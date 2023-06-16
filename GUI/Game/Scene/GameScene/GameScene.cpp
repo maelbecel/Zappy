@@ -23,14 +23,27 @@ namespace Scene {
 
     void GameScene::Update(Network::Server &server)
     {
+        int response = 0;
+
         askingToServer(server);
 
         server.Run();
 
-        _gameData.parse(server.getSocket().response);
+        response = _gameData.parse(server.getSocket().response);
 
-        if (server.getSocket().response.find("tna") != std::string::npos)
+        if (response == 1) // New Team created
             _teamHUD.setTeams(_gameData.getTeams());
+        else if (response == 2) {// New Eggs created
+            server.sendCommand("sgt");
+            _gameData.parse(server.getSocket().response);
+
+            for (auto &egg : _gameData.getEggs()) {
+                if (egg.second->getTimeWhenDropped() == 0) {
+                    egg.second->setTimeWhenDropped(_gameData.getTimeUnit());
+                    break;
+                }
+            }
+        }
     }
 
     void GameScene::askingToServer(Network::Server &server)
@@ -52,13 +65,18 @@ namespace Scene {
     {
         _map.draw(window, _gameData);
 
+        for (auto &egg : _gameData.getEggs())
+            egg.second->draw(_gameData, window);
         for (auto &player : _gameData.getPlayers())
             player.second->draw(_gameData, window);
+
         _map.drawBiome(window, _gameData);
+
         if (_gameMenuHUD.isOpened()) {
             _gameMenuHUD.draw(window);
             return;
         }
+
         _teamHUD.draw(window);
         _gameHUD.draw(window);
     }
@@ -204,6 +222,13 @@ namespace Scene {
             std::cout << "    Mendiane: " << player.second->getInventory()[4] << std::endl;
             std::cout << "    Phiras: " << player.second->getInventory()[5] << std::endl;
             std::cout << "    Thystame: " << player.second->getInventory()[6] << std::endl << std::endl;
+        }
+
+        for (auto &egg : _gameData.getEggs()) {
+            if (egg.second->getPos() != sf::Vector2i(x, y))
+                continue;
+            std::cout << "Egg[" << egg.first << "]: " << egg.second->getTeam() << " - " << egg.second->getDropBy() << std::endl;
+            std::cout << "  Time before hatching: " << egg.second->getHatchingTime(_gameData.getTimeUnit()) << std::endl << std::endl;
         }
     }
 

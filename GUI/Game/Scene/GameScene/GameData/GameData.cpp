@@ -52,7 +52,8 @@ int GameData::parse(std::string &line)
         return CreateEgg(line);
     else if (line.find("edi") != std::string::npos) // edi = Death of an egg
         return KillEgg(line);
-
+    else if (line.find("ebo") != std::string::npos) // ebo = Player connection from an egg
+        return KillEgg(line);
     else
         return 0;
 }

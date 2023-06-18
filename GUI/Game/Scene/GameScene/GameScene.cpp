@@ -77,6 +77,11 @@ namespace Scene {
             return;
         }
 
+        if (_tileHUD.getIsOpen()) {
+            _tileHUD.draw(window);
+            return;
+        }
+
         _teamHUD.draw(window);
         _gameHUD.draw(window);
     }
@@ -87,6 +92,10 @@ namespace Scene {
     {
         if (event.type == sf::Event::KeyPressed) {
             if (event.key.code == sf::Keyboard::Escape) {
+                if (_tileHUD.getIsOpen()) {
+                    _tileHUD.setIsOpen(false);
+                    return;
+                }
                 _gameMenuHUD.setOpened(!_gameMenuHUD.isOpened());
             }
             if (event.key.code == sf::Keyboard::Z) {
@@ -124,7 +133,7 @@ namespace Scene {
 
     void GameScene::LeftMousePressed(sf::Vector2i mousePos, Network::Server &server)
     {
-        if (_isTileHUDOpen)
+        if (_tileHUD.getIsOpen())
             return;
         std::map<std::pair<int, int>, std::shared_ptr<Tile>> tiles = _gameData.getMap();
         sf::Vector2f scale = _gameData.getScale();
@@ -139,14 +148,13 @@ namespace Scene {
 
             // Check if the mouse is on the rectangle
             if ((mousePos.x >= position.x + (8 * (scale.x + 2)) && mousePos.y >= position.y) && (mousePos.x <= position.x + (Tile::TILE_WIDTH * (scale.x + 2)) - (8 * (scale.x + 2)) && mousePos.y <= position.y + (Tile::TILE_HEIGHT * (scale.y + 1.25)))) {
-                openTileHUD(tile.first.first, tile.first.second, server);
-                
                 // Check if the mouse is on the half left of the screen or the half right
-                //if (mousePos.x < (Window::getWindowWidth()) / 2) {
-                //    std::cout << "Left" << std::endl;
-                //} else {
-                //    std::cout << "Right" << std::endl;
-                //}
+                if (mousePos.x < (Window::getWindowWidth()) / 2) {
+                    openTileHUD(tile.first.first, tile.first.second, server, true);
+                } else {
+                    openTileHUD(tile.first.first, tile.first.second, server, false);
+                }
+
                 break;
             }
 
@@ -156,7 +164,11 @@ namespace Scene {
             sf::Vector2f c = sf::Vector2f(position.x + (8 * (scale.x + 2)), position.y + (Tile::TILE_HEIGHT * (scale.y + 1.25)));
 
             if (isInsideTriangle(mousePos, sf::Vector2i(a.x, a.y), sf::Vector2i(b.x, b.y), sf::Vector2i(c.x, c.y))) {
-                openTileHUD(tile.first.first, tile.first.second, server);
+                if (mousePos.x < (Window::getWindowWidth()) / 2) {
+                    openTileHUD(tile.first.first, tile.first.second, server, true);
+                } else {
+                    openTileHUD(tile.first.first, tile.first.second, server, false);
+                }
                 break;
             }
 
@@ -166,15 +178,20 @@ namespace Scene {
             c = sf::Vector2f(position.x + (Tile::TILE_WIDTH * (scale.x + 2)) - (8 * (scale.x + 2)), position.y + (Tile::TILE_HEIGHT * (scale.y + 1.25)));
 
             if (isInsideTriangle(mousePos, sf::Vector2i(a.x, a.y), sf::Vector2i(b.x, b.y), sf::Vector2i(c.x, c.y))) {
-                openTileHUD(tile.first.first, tile.first.second, server);
+                if (mousePos.x < (Window::getWindowWidth()) / 2) {
+                    openTileHUD(tile.first.first, tile.first.second, server, true);
+                } else {
+                    openTileHUD(tile.first.first, tile.first.second, server, false);
+                }
                 break;
             }
         }
     };
 
-    void GameScene::openTileHUD(int x, int y, Network::Server &server)
+    void GameScene::openTileHUD(int x, int y, Network::Server &server, bool isLeft)
     {
         _isTileHUDOpen = true;
+        _tileHUD.setIsOpen(true);
 
         server.sendCommand("bct " + std::to_string(x) + " " + std::to_string(y));
         _gameData.parse(server.getSocket().response);
@@ -193,6 +210,7 @@ namespace Scene {
             _gameData.parse(server.getSocket().response);
         }
 
+        _tileHUD.setTileHUD(_gameData.getTile(x, y), isLeft);
         //TODO: faudra moove les info dcp dans le draw plus mais au moins sa te les affiches au click la
         std::shared_ptr<Tile> tile = _gameData.getTile(x, y);
 

@@ -13,6 +13,7 @@ SRC	=	./Main.cpp\
 		./Game/Scene/GameScene/GameData/GameData.cpp\
 		./Game/Scene/GameScene/Map/Map.cpp\
 		./Game/Scene/GameScene/Tiles/Tile.cpp\
+		./Game/Scene/GameScene/Tiles/TileHUD/TileHUD.cpp\
 		./Game/Scene/GameScene/Player/Player.cpp\
 		./Game/Scene/GameScene/Player/Eggs/Eggs.cpp\
 		./Game/Scene/GameScene/HUD/GameMenuHUD/GameMenuHUD.cpp\
@@ -52,6 +53,7 @@ INCLUDE =	-I .\
 			-I ./Game/Scene/GameScene/\
 			-I ./Game/Scene/GameScene/GameData/\
 			-I ./Game/Scene/GameScene/Tiles/\
+			-I ./Game/Scene/GameScene/Tiles/TileHUD/\
 			-I ./Game/Scene/GameScene/Player/\
 			-I ./Game/Scene/GameScene/Player/Eggs/\
 			-I ./Game/Scene/GameScene/Map/\

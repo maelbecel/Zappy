@@ -56,7 +56,9 @@ namespace UI {
 
     void CrossButtonWidget::setPosition(const sf::Vector2f &position)
     {
-        _box.setPosition(position);
+        _position = position;
+        _idleSprite.setPosition(position);
+        _hoveredSprite.setPosition(position);
     }
 
     void CrossButtonWidget::setSize(const sf::Vector2f &size)

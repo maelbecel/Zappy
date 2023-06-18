@@ -124,6 +124,10 @@ namespace Scene {
                 _gameMenuHUD.handleEvent(event, server, window);
                 return;
             }
+            if (_tileHUD.getIsOpen()) {
+                _tileHUD.handleEvent(event, server, window);
+                return;
+            }
             if (event.mouseButton.button == sf::Mouse::Left) {
                 LeftMousePressed(sf::Vector2i(event.mouseButton.x, event.mouseButton.y), server);
                 _gameHUD.handleEvent(event, server, window);
@@ -210,7 +214,7 @@ namespace Scene {
             _gameData.parse(server.getSocket().response);
         }
 
-        _tileHUD.setTileHUD(_gameData.getTile(x, y), isLeft);
+        _tileHUD.setTileHUD(_gameData, isLeft, x, y);
         //TODO: faudra moove les info dcp dans le draw plus mais au moins sa te les affiches au click la
         std::shared_ptr<Tile> tile = _gameData.getTile(x, y);
 

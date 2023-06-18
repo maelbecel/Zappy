@@ -25,6 +25,14 @@ namespace UI {
         _backgroundSprite.setScale(sf::Vector2f(2.0f, 2.0f));
 
         _isOpen = false;
+
+        std::string str = "Tile clicked: (0, 0)\n\nResources:\n\n  Food: 0\n\n  Linemate: 0\n\n  Deraumere: 0\n\n  Sibur: 0\n\n  Mendiane: 0\n\n  Phiras: 0\n\n  Thystame: 0\n\nTime: 0";
+
+        _tileContent = setString(str, sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10));
+
+        CrossButtonWidget *crossTileHUDButton = new CrossButtonWidget(sf::Vector2f((Window::getWindowWidth() - 200), 150), sf::Vector2f(16 * 2.5, 16 * 2.5));
+
+        _crossTileHUDButton = new Button(crossTileHUDButton);
     }
 
     TileHUD::~TileHUD()
@@ -35,6 +43,12 @@ namespace UI {
     {
         window.draw(_background);
         window.draw(_backgroundSprite);
+        window.draw(_tileContent);
+
+        if (_crossTileHUDButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
+            _crossTileHUDButton->render(window, ButtonState::HOVERED);
+        else
+            _crossTileHUDButton->render(window, ButtonState::IDLE);
     }
 
     void TileHUD::handleEvent(sf::Event event, Network::Server &server, UNUSED sf::RenderWindow &window)
@@ -43,6 +57,9 @@ namespace UI {
             if (event.mouseButton.button != sf::Mouse::Left)
                 return;
 
+            if (_crossTileHUDButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) == true) {
+                _isOpen = false;
+            }
         }
     }
 
@@ -73,12 +90,27 @@ namespace UI {
         return _isOpen;
     }
 
-    void TileHUD::setTileHUD(std::shared_ptr<Tile> tile, bool isLeft)
+    void TileHUD::setTileHUD(GameData &gameData, bool isLeft, int x, int y)
     {
         if (isLeft == true) {
             _backgroundSprite.setPosition(sf::Vector2f(Window::getWindowWidth() - 416 * 2, 0));
+            _tileContent = setString(constructContent(gameData, x, y), sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10));
+            _tileContent.setPosition(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 175));
+            _crossTileHUDButton->setPosition(sf::Vector2f((Window::getWindowWidth() - 200), 150));
         } else {
+            _tileContent = setString(constructContent(gameData, x, y), sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10));
             _backgroundSprite.setPosition(sf::Vector2f(0, 0));
+            _tileContent.setPosition(sf::Vector2f(175, 175));
+            _crossTileHUDButton->setPosition(sf::Vector2f(635, 150));
         }
+    }
+
+    std::string TileHUD::constructContent(GameData &gameData, int x, int y)
+    {
+        std::shared_ptr<Tile> tile = gameData.getTile(x, y);
+        std::string str;
+
+        str = "Tile clicked: (" + std::to_string(x) + ", " + std::to_string(y) + ")\n\nResources:\n\n  Food: " + std::to_string(tile->getResource(0)) + "\n\n  Linemate: " + std::to_string(tile->getResource(1)) + "\n\n  Deraumere: " + std::to_string(tile->getResource(2)) + "\n\n  Sibur: " + std::to_string(tile->getResource(3)) + "\n\n  Mendiane: " + std::to_string(tile->getResource(4)) + "\n\n  Phiras: " + std::to_string(tile->getResource(5)) + "\n\n  Thystame: " + std::to_string(tile->getResource(6)) + "\n\nTime: " + std::to_string(gameData.getTimeUnit());
+        return str;
     }
 };

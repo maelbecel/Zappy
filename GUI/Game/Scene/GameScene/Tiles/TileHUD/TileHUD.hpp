@@ -18,6 +18,7 @@
     #include "ButtonWidget.hpp"
     #include "NetworkError.hpp"
     #include "Tile.hpp"
+    #include "GameData.hpp"
 
 namespace UI {
     class TileHUD {
@@ -69,16 +70,32 @@ namespace UI {
             /**
              * @brief Set the HUD with the tile information
              *
-             * @param tile The tile to get the information from
+             * @param gameData The game data
              * @param isLeft Boolean to know if the HUD is on the left or on the right
+             * @param x The x position of the tile
+             * @param y The y position of the tile
              */
-            void setTileHUD(std::shared_ptr<Tile> tile, bool isLeft);
+            void setTileHUD(GameData &gameData, bool isLeft, int x, int y);
+
+            /**
+             * @brief Construct the content
+             *
+             * @param gameData The game data
+             * @param x The x position of the tile
+             * @param y The y position of the tile
+             * @return std::string The content of the tile
+             */
+            std::string constructContent(GameData &gameData, int x, int y);
 
         // Attributes
         private:
             sf::Sprite _backgroundSprite;           /*!< Sprite of the Settings HUD */
             sf::RectangleShape _background;         /*!< Background of the Settings HUD */
             bool _isOpen;                           /*!< Is the Tile HUD open ? */
+            sf::Text _tilePosition;                 /*!< Text of the tile position */
+            sf::Text _tileContent;                  /*!< Text of the tile content */
+            IButton *_crossTileHUDButton;          /*!< Button to close the settings */
+
     };
 };
 

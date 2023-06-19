@@ -132,7 +132,7 @@ void Player::setExpulsion(bool expulsion)
         _broadcast = false;
         _pushAnim->play();
         _idleAnim->stop();
-//        _broadcastAnim->stop();
+        _broadcastAnim->stop();
     }
 }
 
@@ -143,12 +143,12 @@ void Player::setBroadcast(bool broadcast)
     if (broadcast == false) {
         _idle = true;
         _expulsion = false;
-        //_broadcastAnim->stop();
+        _broadcastAnim->stop();
         _idleAnim->play();
     } else {
         _idle = false;
         _expulsion = false;
-        //_broadcastAnim->play();
+        _broadcastAnim->play();
         _idleAnim->stop();
         _pushAnim->stop();
     }

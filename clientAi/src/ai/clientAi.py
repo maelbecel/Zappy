@@ -40,15 +40,19 @@ class clientAi:
         self.client = clientServer(port, host)
         self.direction = direction()
         self.queue = []
-        self.inv = dict()
+        self.inv = {"food": 10, "linemate": 0, "deraumere": 0, "sibur": 0, "mendiane": 0, "phiras": 0, "thystame": 0}
         self.level = 1
         self.lookingForFood = False
+        self.message = ""
+        self.inputData = []
 
     def getConnectionResponse(self):
         """
         This function parses a response from a server and extracts information
         about available places and map size.
         """
+        if not self.alive:
+            return
         self.availablePlaces = int(self.response[0])
         self.response = self.response[1].split(" ")
         if len(self.response) != 2:
@@ -62,9 +66,13 @@ class clientAi:
         raising an exception if the team name is invalid.
         """
         try:
+            if not self.alive:
+                return
             self.client.connect()
             self.client.receive()
             self.client.send(self.teamName + "\n")
+            if not self.alive:
+                return
             self.response = self.client.receive().split("\n")
             if self.response[0] == "ko" or len(self.response) != 3:
                 raise cEx("Error: team name is invalid")
@@ -89,32 +97,33 @@ class clientAi:
         @param message The parameter "message" is a string that represents the
         message that the client wants to send to the server.
         """
-        try:
-            self.client.send(message)
-            self.receive()
-        except Exception as e:
-            print(e)
+        if not self.alive:
+            return False
+        self.client.send(message)
+        if not self.receive():
+            return False
+        return True
 
     def receive(self):
         """
         This function attempts to receive data from a client and prints any
         exceptions that occur.
         """
-        try:
-            self.response = self.client.receive()
-            print("RESPONSE -> ", self.response)
-            if self.response == "dead\n":
-                self.alive = False
-                print("DEAD")
-                return
-            elif self.response.find("message") != -1:
-                print("Message: " + self.response)
-                self.receive()
-            elif self.response.find("eject") != -1:
-                # handle eject
-                ...
-        except Exception as e:
-            print(e)
+        # try:
+        if not self.alive:
+            return False
+        self.response = self.client.receive()
+        if self.response == "dead\n":
+            self.alive = False
+            return False
+        elif self.response.find("message") != -1:
+            print("Message: " + self.response)
+            self.message = self.response
+            self.receive()
+        elif self.response.find("eject") != -1:
+            # handle eject
+            ...
+        return True
 
     def getSocket(self):
         """
@@ -160,10 +169,10 @@ class clientAi:
         """
         This function sends a command to move forward.
         """
-        if self.alive:
-            self.send(cAct.FORWARD.value)
+        if not self.alive:
+            return
+        self.send(cAct.FORWARD.value)
         if self.response == "ok\n" and self.alive:
-            print("forward")
             self.direction.updateCoord()
 
     def right(self):
@@ -171,10 +180,10 @@ class clientAi:
         This function sends a command to move the object to the right and updates
         the direction accordingly.
         """
-        if self.alive:
-            self.send(cAct.RIGHT.value)
+        if not self.alive:
+            return
+        self.send(cAct.RIGHT.value)
         if self.response == "ok\n" and self.alive:
-            print("right")
             self.direction.updateDirectionToRight()
 
     def left(self):
@@ -182,10 +191,10 @@ class clientAi:
         This function sends a "LEFT" command and updates the direction to the left
         if the response is "ok".
         """
-        if self.alive:
-            self.send(cAct.LEFT.value)
+        if not self.alive:
+            return
+        self.send(cAct.LEFT.value)
         if self.response == "ok\n" and self.alive:
-            print("left")
             self.direction.updateDirectionToLeft()
 
     def look(self):
@@ -198,18 +207,19 @@ class clientAi:
         response depends on the implementation of the server and the game being
         played.
         """
-        if self.alive:
-            self.send(cAct.LOOK.value)
+        if not self.alive:
+            return
+        self.send(cAct.LOOK.value)
         if self.isValidArray() and self.alive:
-            print("start to parse look")
             self.parseLook()
 
     def inventory(self):
         """
         This function sends a request for inventory information.
         """
-        if self.alive:
-            self.send(cAct.INVENTORY.value)
+        if not self.alive:
+            return
+        self.send(cAct.INVENTORY.value)
         if self.isValidArray() and self.alive:
             self.checkValidityInv()
             return
@@ -223,6 +233,8 @@ class clientAi:
         value of the "BROADCAST" constant from the "cAct" enum class and a newline
         character, and then sent using the "send" method.
         """
+        if not self.alive:
+            return
         self.send(cAct.BROADCAST.value + " " + message + "\n")
         if self.response == "ok\n" and self.alive:
             print("broadcast -> %s" % self.response)
@@ -231,6 +243,8 @@ class clientAi:
         """
         This function sends a message to connect to neighboring nodes.
         """
+        if not self.alive:
+            return
         self.send(cAct.CONNECT_NBR.value)
         if self.response[:-1].isdigit() and self.alive:
             self.availablePlaces = int(self.response.split("\n")[0])
@@ -239,6 +253,8 @@ class clientAi:
         """
         The function sends a fork command using the cAct enum value.
         """
+        if not self.alive:
+            return
         self.send(cAct.FORK.value)
         if self.response == "ok\n" and self.alive:
             return
@@ -247,6 +263,8 @@ class clientAi:
         """
         The function "eject" sends a command to eject something.
         """
+        if not self.alive:
+            return
         self.send(cAct.EJECT.value)
         if self.response == "ok\n" and self.alive:
             return
@@ -260,6 +278,8 @@ class clientAi:
         take in the game. This parameter is used to construct a command that will
         be sent to the game engine to execute the "take" action.
         """
+        if not self.alive:
+            return
         self.send(cAct.TAKE.value + " " + object + "\n")
         if self.response == "ok\n" and self.alive:
             if not self.inv.get(object):
@@ -275,6 +295,8 @@ class clientAi:
         that needs to be set. It is passed as an argument to the "set" method of a
         class.
         """
+        if not self.alive:
+            return
         self.send(cAct.SET.value + " " + object + "\n")
         if self.response == "ok\n" and self.alive:
             self.inv[object] -= 1
@@ -284,6 +306,8 @@ class clientAi:
         This function sends an incantation message using the value of
         cAct.INCANTATION.
         """
+        if not self.alive:
+            return
         self.send(cAct.INCANTATION.value)
         self.receive()
         if self.response != "ko\n" and self.alive:
@@ -296,6 +320,8 @@ class clientAi:
         The function "run" is defined with an ellipsis as its body, indicating that
         it is not yet implemented.
         """
+        if not self.alive:
+            return
         while self.alive:
             self.forward()
 
@@ -309,6 +335,8 @@ class clientAi:
         type of item (e.g. "food", "weapon", "armor"), and the second element is an
         integer that represents the quantity of that item. The function
         """
+        if not self.alive:
+            return
         for element in array:
             if element[0] == "food":
                 self.inv[element[0]] = int(element[1])
@@ -321,6 +349,8 @@ class clientAi:
         """
         array = self.parseInv()
 
+        if not self.alive:
+            return
         self.resetFood(array)
         for element in array:
             if element[0] == "food":
@@ -343,6 +373,8 @@ class clientAi:
         a value. The function "fillInv" takes this array and populates the "inv"
         dictionary of the object with the keys and values from the tuples
         """
+        if not self.alive:
+            return
         for element in array:
             self.inv[element[0]] = int(element[1])
 
@@ -358,6 +390,8 @@ class clientAi:
         """
         temp = []
 
+        if not self.alive:
+            return
         array = self.response[1:-3].split(",")
         for element in array:
             temp.append(element[1:].split(" "))
@@ -372,7 +406,9 @@ class clientAi:
         given response is a valid array. It returns `True` if the response is a
         valid array and `False` otherwise.
         """
-        if not self.response[-1] == "\n" and not self.response[-2] == "]":
+        if not self.alive:
+            return
+        if self.response and self.response[-1] and self.response[-2] and not self.response[-1] == "\n" and not self.response[-2] == "]":
             return False
         if not self.response[0] == "[":
             return False
@@ -383,6 +419,8 @@ class clientAi:
         This function parses a response string and appends the resulting array to a
         list.
         """
+        if not self.alive:
+            return
         array = self.response[1:-2].split(",")
         self.lookResult.clear()
         for i in range(0, len(array)):
@@ -396,6 +434,8 @@ class clientAi:
         This function executes all the elements in a queue and then clears the
         queue.
         """
+        if not self.alive:
+            return
         for element in self.queue:
             if not self.alive:
                 return
@@ -410,6 +450,8 @@ class clientAi:
         @param value The value parameter is an integer that represents the target
         value to be reached in the function.
         """
+        if not self.alive:
+            return
         beforeSize = 1
         result = 0
         max = 0
@@ -451,8 +493,9 @@ class clientAi:
         move forward. It is used in a for loop to append the "forward" command to
         the robot's queue.
         """
+        if not self.alive:
+            return
         left = False
-
         if x < 0:
             x *= -1
             left = True
@@ -477,6 +520,8 @@ class clientAi:
         string that represents the name or identifier of the object that the
         function is supposed to pick up.
         """
+        if not self.alive:
+            return
         self.getGoTo(value)
         self.computeQueueActions()
         self.take(object)
@@ -570,9 +615,37 @@ class clientAi:
         indicating that the player needs food. Otherwise, it returns False,
         indicating that the player does not need food.
         """
+        if not self.alive:
+            return False
         self.inventory()
-
-        if self.inv["food"] < MIN_FOOD:
+        if "food" in self.inv and self.inv["food"] < MIN_FOOD:
             self.lookingForFood = True
             return True
         return False
+
+    def getRessources(self):
+        temp = dict()
+
+        self.look()
+        for element in self.inv:
+            if element == "player":
+                continue
+            temp[element] = 0
+        temp["player"] = 0
+        if (self.lookResult == []):
+            return
+        for element in self.lookResult[0]:
+            temp[element] += 1
+        for element in temp:
+            self.inputData.append(temp[element])
+
+    def getInventory(self):
+
+        self.inventory()
+        for element in self.inv:
+            self.inputData.append(self.inv[element])
+
+    def isABroadcast(self):
+        if (self.message == ""):
+            return 0
+        return 1

@@ -7,6 +7,7 @@
 
 from ..ai.clientAi import clientAi as clientAI
 
+
 class littleDuffer(clientAI):
     def __init__(self, teamName, port, host):
         """

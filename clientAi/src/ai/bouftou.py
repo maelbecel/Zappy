@@ -31,7 +31,6 @@ class bouftou(clientAI):
         self.process = 4
 
     def takeAllFoodForHimself(self):
-
         self.look()
 
         if not self.lookResult[0]:
@@ -41,7 +40,6 @@ class bouftou(clientAI):
                 self.take("food")
 
     def getAllFoodOfTheWorld(self, x, y):
-
         for i in range(0, self.mapSize[x]):
             for j in range(0, self.mapSize[y]):
                 self.takeAllFoodForHimself()
@@ -51,12 +49,10 @@ class bouftou(clientAI):
             self.left()
 
     def throwFood(self, count):
-
         for i in range(0, count):
             self.set("food")
 
     def dispatchAllFood(self):
-
         self.inventory()
 
         foodToDispatch = int(self.inv["food"] / (self.mapSize[0] * self.mapSize[1]))
@@ -70,14 +66,13 @@ class bouftou(clientAI):
             self.left()
 
     def dropAllOverFood(self):
-
         print("aa")
         self.inventory()
         print("bb")
         self.max = self.inv["food"]
         print("number of food -> ", self.inv["food"])
         print("self.safeFoodLevel -> ", self.safeFoodLevel)
-        foodToThrow =  self.inv["food"] - self.safeFoodLevel
+        foodToThrow = self.inv["food"] - self.safeFoodLevel
         print("food to throw -> ", foodToThrow)
         if not foodToThrow > 0:
             return
@@ -88,7 +83,6 @@ class bouftou(clientAI):
         self.oldmax = self.max
 
     def run(self):
-
         print("I'm a bouftou")
         print("map size -> ", self.mapSize)
         self.inventory()

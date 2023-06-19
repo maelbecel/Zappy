@@ -193,15 +193,15 @@ class evoli(clientAI):
 
     def checkActualCase(self, id: int):
         """
-        The function checks if a given dictionary matches a required dictionary
-       self.inputData = None based on a certain level.
+         The function checks if a given dictionary matches a required dictionary
+        self.inputData = None based on a certain level.
 
-        @param id The "id" parameter is an integer that represents the ID of a
-        case.
+         @param id The "id" parameter is an integer that represents the ID of a
+         case.
 
-        @return a boolean value. If the dictionary obtained from the case with the
-        given id matches the required dictionary for the current level, then True
-        is returned. Otherwise, False is returned.
+         @return a boolean value. If the dictionary obtained from the case with the
+         given id matches the required dictionary for the current level, then True
+         is returned. Otherwise, False is returned.
         """
         temp = dict()
 

@@ -40,7 +40,15 @@ class clientAi:
         self.client = clientServer(port, host)
         self.direction = direction()
         self.queue = []
-        self.inv = {"food": 10, "linemate": 0, "deraumere": 0, "sibur": 0, "mendiane": 0, "phiras": 0, "thystame": 0}
+        self.inv = {
+            "food": 10,
+            "linemate": 0,
+            "deraumere": 0,
+            "sibur": 0,
+            "mendiane": 0,
+            "phiras": 0,
+            "thystame": 0,
+        }
         self.level = 1
         self.lookingForFood = False
         self.message = ""
@@ -408,7 +416,13 @@ class clientAi:
         """
         if not self.alive:
             return
-        if self.response and self.response[-1] and self.response[-2] and not self.response[-1] == "\n" and not self.response[-2] == "]":
+        if (
+            self.response
+            and self.response[-1]
+            and self.response[-2]
+            and not self.response[-1] == "\n"
+            and not self.response[-2] == "]"
+        ):
             return False
         if not self.response[0] == "[":
             return False
@@ -632,7 +646,7 @@ class clientAi:
                 continue
             temp[element] = 0
         temp["player"] = 0
-        if (self.lookResult == []):
+        if self.lookResult == []:
             return
         for element in self.lookResult[0]:
             temp[element] += 1
@@ -640,12 +654,11 @@ class clientAi:
             self.inputData.append(temp[element])
 
     def getInventory(self):
-
         self.inventory()
         for element in self.inv:
             self.inputData.append(self.inv[element])
 
     def isABroadcast(self):
-        if (self.message == ""):
+        if self.message == "":
             return 0
         return 1

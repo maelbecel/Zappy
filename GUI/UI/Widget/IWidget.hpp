@@ -89,6 +89,14 @@ namespace UI {
              * @return false        The widget didn't get clicked
              */
             virtual bool isIn(sf::Vector2f mousePosition) = 0;
+
+            /**
+             * @brief Check if the widget is clicked
+             * Call this function to check if the widget is clicked
+             * @return true  The widget is clicked
+             * @return false The widget is not clicked
+             */
+            virtual bool isClicked() const = 0;
     };
 };
 

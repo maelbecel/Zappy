@@ -256,7 +256,7 @@ class evoli(clientAI):
         count = self.countPlayerOnCase()
 
         if count == REQUIRED_PLAYER[self.level - 1]:
-            if (self.level == 2):
+            if self.level == 2:
                 self.broadcast("elevate to level 3")
             if not self.incantation():
                 self.takeUselessRessourcesOnCase()
@@ -359,7 +359,10 @@ class evoli(clientAI):
             # self.findNeededRessources()
             # self.grabFood()
             print("state = " + str(self.state) + "\n")
-            if self.state == enumState.LF_RESSOURCES or self.state == enumState.NEED_FOOD:
+            if (
+                self.state == enumState.LF_RESSOURCES
+                or self.state == enumState.NEED_FOOD
+            ):
                 self.findPlaceToElevate()
                 self.findNeededRessources()
                 self.grabFood()

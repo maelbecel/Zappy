@@ -12,6 +12,7 @@ import pickle
 import threading
 from neat.nn import FeedForwardNetwork
 
+
 class testAi:
     def __init__(self, teamName: str, port: int, host: str):
         self.configFile = "src/ai/neat-config-file.yml"
@@ -24,13 +25,12 @@ class testAi:
 
     # is it what we call in pop.run()
     def evaluateGenome(self, genome, config, fitnesses, mutex):
-
         client = clientAI(self.teamName, self.port, self.host)
         client.connect()
 
         fitness = 0
 
-        while (client.alive):
+        while client.alive:
             # temp = self.evaluateGenome(genome, self.config, client)
             net = FeedForwardNetwork.create(genome, config)
 
@@ -114,11 +114,14 @@ class testAi:
         client.disconnect()
 
     def loadConfig(self):
-
         # Load the NEAT configuration file
-        self.config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
-                            neat.DefaultSpeciesSet, neat.DefaultStagnation,
-                            self.configFile)
+        self.config = neat.Config(
+            neat.DefaultGenome,
+            neat.DefaultReproduction,
+            neat.DefaultSpeciesSet,
+            neat.DefaultStagnation,
+            self.configFile,
+        )
         # Create the population
         self.population = neat.Population(self.config)
 
@@ -128,7 +131,6 @@ class testAi:
         self.population.add_reporter(self.stats)
 
     def run(self):
-
         # Run the NEAT algorithm for the specified number of generations
         self.loadConfig()
 
@@ -141,9 +143,13 @@ class testAi:
             # Create a mutex
             mutex = threading.Lock()
             for genome in genomes:
-
                 # Create thread objects with arguments
-                threads.append(threading.Thread(target=self.evaluateGenome, args=(genome, self.config, fitnesses, mutex)))
+                threads.append(
+                    threading.Thread(
+                        target=self.evaluateGenome,
+                        args=(genome, self.config, fitnesses, mutex),
+                    )
+                )
                 threads[-1].start()
 
             for thread in threads:
@@ -165,5 +171,6 @@ class testAi:
         with open("winner.pkl", "wb") as f:
             pickle.dump(best_genome, f)
             f.close()
+
 
 # TODO: Use the best genome to perform predictions or other tasks

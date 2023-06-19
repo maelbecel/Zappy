@@ -90,13 +90,17 @@ namespace Scene {
 
     void GameScene::OnEvent(const sf::Event &event, Network::Server &server, UNUSED sf::RenderWindow &window)
     {
+        if (_gameMenuHUD.isOpened()) {
+            _gameMenuHUD.handleEvent(event, server, window);
+            return;
+        }
         if (event.type == sf::Event::KeyPressed) {
             if (event.key.code == sf::Keyboard::Escape) {
                 if (_tileHUD.getIsOpen()) {
                     _tileHUD.setIsOpen(false);
                     return;
                 }
-                _gameMenuHUD.setOpened(!_gameMenuHUD.isOpened());
+                _gameMenuHUD.setOpened(true);
             }
             if (event.key.code == sf::Keyboard::Z) {
                 _gameData.setScale(_gameData.getScale() + sf::Vector2f(0.25, 0.25));

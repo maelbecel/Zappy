@@ -70,10 +70,12 @@ namespace UI {
 
     void GameMenuHUD::handleEvent(sf::Event event, UNUSED Network::Server &server, sf::RenderWindow &window)
     {
-        if (event.type == sf::Event::KeyPressed && _settingsHUD.isOpened() == true) {
-            if (event.key.code == sf::Keyboard::Escape) {
+        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+            if (_settingsHUD.isOpened() == true) {
                 _settingsHUD.setOpened(false);
+                return;
             }
+            _isOpened = false;
         }
         if (event.type == sf::Event::MouseButtonPressed) {
             if (event.mouseButton.button != sf::Mouse::Left)

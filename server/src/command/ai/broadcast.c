@@ -27,9 +27,9 @@ static int get_direction(ai_t *emitter, ai_t *receiver)
     if (x < 0 && y == 0)
         return (RORIENT == 1) ? 3 : (RORIENT == 2) ? 5 : (RORIENT == 3) ? 7 : 1;
     if (x == 0 && y > 0)
-        return (RORIENT == 1) ? 5 : (RORIENT == 2) ? 7 : (RORIENT == 3) ? 1 : 3;
-    if (x == 0 && y < 0)
         return (RORIENT == 1) ? 1 : (RORIENT == 2) ? 3 : (RORIENT == 3) ? 5 : 7;
+    if (x == 0 && y < 0)
+        return (RORIENT == 1) ? 5 : (RORIENT == 2) ? 7 : (RORIENT == 3) ? 1 : 3;
     return 0;
 }
 
@@ -50,7 +50,7 @@ static void do_broadcast(action_t *action)
         if (target->type == AI && target != client) {
             ai = target->data;
             wbuffer_add_message(target, "message %d, %s\n",
-            get_direction(ai, (ai_t *)client->data), msg);
+            get_direction((ai_t *)client->data, ai), msg);
         } else if (target->type == GRAPHIC)
             wbuffer_add_message(target, "pbc %d %s\n", client->id, msg);
     }

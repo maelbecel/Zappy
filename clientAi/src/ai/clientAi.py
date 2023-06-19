@@ -11,6 +11,7 @@ from ..action.clientAction import enumActions as cAct
 from ..exception.clientException import clientException as cEx
 from ..server.clientServer import clientServer
 from ..direction.direction import direction
+from ..state.clientState import enumState as enumState
 
 MIN_FOOD = 7
 PERCENTAGE_OF_FOOD = 0.5
@@ -53,6 +54,7 @@ class clientAi:
         self.lookingForFood = False
         self.message = ""
         self.inputData = []
+        self.state = 0
 
     def getConnectionResponse(self):
         """
@@ -127,6 +129,7 @@ class clientAi:
         elif self.response.find("message") != -1:
             print("Message: " + self.response)
             self.message = self.response
+            self.state = enumState.JOIN_INCANTATION
             self.receive()
         elif self.response.find("eject") != -1:
             # handle eject

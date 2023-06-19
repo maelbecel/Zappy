@@ -118,6 +118,9 @@ class evoli(clientAI):
         different, it
         """
 
+        print("dict1: ", dict1)
+        print("dict2: ", dict2)
+
         if len(dict1) != len(dict2):
             print("The dictionaries are not equal")
         else:
@@ -253,12 +256,14 @@ class evoli(clientAI):
         count = self.countPlayerOnCase()
 
         if count == REQUIRED_PLAYER[self.level - 1]:
+            if (self.level == 2):
+                self.broadcast("elevate to level 3")
             if not self.incantation():
                 self.takeUselessRessourcesOnCase()
                 self.elevate()
                 return
         else:
-            self.broadcast("need more player " + self.teamName)
+            self.broadcast(self.teamName + ";Incantation;" + str(self.level))
 
     def findPlaceToElevate(self):
         """
@@ -269,6 +274,7 @@ class evoli(clientAI):
         index = self.checkRessourcesCases()
 
         if index != -1:
+            print("found a case to elevate")
             self.getGoTo(index)
             self.computeQueueActions()
             if self.checkActualCase(0):  # check if the case is the good one
@@ -320,19 +326,46 @@ class evoli(clientAI):
                         and self.inv[element] < REQUIRED[self.level - 1][element]
                     ):
                         self.pickObject(id, element)
+                        return False
                 id += 1
+        return False
+
+    def joinIncantation(self):
+        print(self.message)
+        exit(0)
+
+    def placeRessources(self):
+        """
+        This function places resources on a case based on the player's inventory
+        and level.
+        """
+        for element in self.inv:
+            if element == "food":
+                continue
+            for i in range(self.inv[element]):
+                if REQUIRED[self.level - 1][element] > 0:
+                    for j in range(REQUIRED[self.level - 1][element]):
+                        self.set(element)
 
     def run(self):
         """
         This function runs a loop where the object finds a place to elevate, grabs
         food, and repeats while alive.
         """
-        self.inventory()
         while self.alive:
-            self.getInventory()
-            self.getRessources()
+            # self.getInventory()
+            # self.getRessources()
             # self.findPlaceToElevate()
             # self.findNeededRessources()
             # self.grabFood()
-
-            self.alive = False
+            print("state = " + str(self.state) + "\n")
+            if self.state == enumState.LF_RESSOURCES or self.state == enumState.NEED_FOOD:
+                self.findPlaceToElevate()
+                self.findNeededRessources()
+                self.grabFood()
+            elif self.state == enumState.FULL_RESSOUCRES:
+                self.placeRessources()
+                self.elevate()
+            elif self.state == enumState.JOIN_INCANTATION:
+                self.joinIncantation()
+                # self.grabFood()

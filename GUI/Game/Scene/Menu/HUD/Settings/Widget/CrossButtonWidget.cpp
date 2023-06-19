@@ -63,7 +63,6 @@ namespace UI {
 
     void CrossButtonWidget::setSize(const sf::Vector2f &size)
     {
-        _box.setSize(size);
     }
 
     ///////////////
@@ -72,7 +71,8 @@ namespace UI {
 
     CrossButtonWidget &CrossButtonWidget::operator=(const CrossButtonWidget &CrossbuttonWidget)
     {
-        _box = CrossbuttonWidget._box;
+        _idleSprite = CrossbuttonWidget._idleSprite;
+        _hoveredSprite = CrossbuttonWidget._hoveredSprite;
         return *this;
     }
 };

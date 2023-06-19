@@ -9,6 +9,7 @@
     #define TILEHUD_HPP_
 
     #include <libconfig.h++>
+    #include <unordered_map>
 
     #include "ParserError.hpp"
     #include "BackgroundStyle.hpp"
@@ -87,15 +88,25 @@ namespace UI {
              */
             std::string constructContent(GameData &gameData, int x, int y);
 
+            /**
+             * @brief Construct the player content
+             *
+             * @param player The player to construct the content
+             * @return std::string The content of the player
+             */
+            std::string constructPlayerContent(std::pair<const std::string, std::shared_ptr<Player>> &player);
+
         // Attributes
         private:
-            sf::Sprite _backgroundSprite;           /*!< Sprite of the Settings HUD */
-            sf::RectangleShape _background;         /*!< Background of the Settings HUD */
+            sf::Sprite _backgroundSprite;           /*!< Sprite of the Tile HUD */
+            sf::RectangleShape _background;         /*!< Background of the Tile HUD */
             bool _isOpen;                           /*!< Is the Tile HUD open ? */
             sf::Text _tilePosition;                 /*!< Text of the tile position */
             sf::Text _tileContent;                  /*!< Text of the tile content */
-            IButton *_crossTileHUDButton;          /*!< Button to close the settings */
-
+            IButton *_crossTileHUDButton;           /*!< Button to close the settings */
+            std::unordered_map<int, sf::Text> _tilePlayerContent; /*!< Text of the tile player content */
+            IButton *_changePlayerLeftButton;       /*!< Button to change the player left */
+            IButton *_changePlayerRightButton;      /*!< Button to change the player right */
     };
 };
 

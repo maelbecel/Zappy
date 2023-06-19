@@ -219,20 +219,6 @@ namespace Scene {
         }
 
         _tileHUD.setTileHUD(_gameData, isLeft, x, y);
-        //TODO: faudra moove les info dcp dans le draw plus mais au moins sa te les affiches au click la
-        std::shared_ptr<Tile> tile = _gameData.getTile(x, y);
-
-        std::cout << "Tile clicked: (" << x << ", " << y << ")" << std::endl;
-        std::cout << "Resources: " << std::endl;
-        std::cout << "  Food: " << tile->getResource(0) << std::endl;
-        std::cout << "  Linemate: " << tile->getResource(1) << std::endl;
-        std::cout << "  Deraumere: " << tile->getResource(2) << std::endl;
-        std::cout << "  Sibur: " << tile->getResource(3) << std::endl;
-        std::cout << "  Mendiane: " << tile->getResource(4) << std::endl;
-        std::cout << "  Phiras: " << tile->getResource(5) << std::endl;
-        std::cout << "  Thystame: " << tile->getResource(6) << std::endl << std::endl;
-
-        std::cout << "Time: " << _gameData.getTimeUnit() << std::endl << std::endl;
 
         // Loop on the player
         for (auto &player : _gameData.getPlayers()) {

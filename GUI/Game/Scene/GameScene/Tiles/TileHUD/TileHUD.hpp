@@ -96,6 +96,15 @@ namespace UI {
              */
             std::string constructPlayerContent(std::pair<const std::string, std::shared_ptr<Player>> &player);
 
+            /**
+             * @brief Construct the egg content
+             *
+             * @param egg The egg to construct the content
+             * @param gameData The game data
+             * @return std::string The content of the egg
+             */
+            std::string constructEggContent(std::pair<const std::string, std::shared_ptr<Eggs>> &egg, GameData &gameData);
+
         // Attributes
         private:
             sf::Sprite _backgroundSprite;           /*!< Sprite of the Tile HUD */
@@ -105,8 +114,11 @@ namespace UI {
             sf::Text _tileContent;                  /*!< Text of the tile content */
             IButton *_crossTileHUDButton;           /*!< Button to close the settings */
             std::unordered_map<int, sf::Text> _tilePlayerContent; /*!< Text of the tile player content */
+            std::unordered_map<int, sf::Text> _tileEggContent;   /*!< Text of the tile egg content */
             IButton *_changePlayerLeftButton;       /*!< Button to change the player left */
             IButton *_changePlayerRightButton;      /*!< Button to change the player right */
+            IButton *_changeEggLeftButton;          /*!< Button to change the egg left */
+            IButton *_changeEggRightButton;         /*!< Button to change the egg right */
     };
 };
 

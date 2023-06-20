@@ -30,12 +30,19 @@ namespace UI {
         CrossButtonWidget *crossTileHUDButton = new CrossButtonWidget(sf::Vector2f((Window::getWindowWidth() - 200), 150), sf::Vector2f(16 * 2.5, 16 * 2.5));
         _crossTileHUDButton = new Button(crossTileHUDButton);
 
-        ArrowButtonWidget *changePlayerLeftButton = new ArrowButtonWidget(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 600), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
-        ArrowButtonWidget *changePlayerRightButton = new ArrowButtonWidget(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 597), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
+        ArrowButtonWidget *changePlayerLeftButton = new ArrowButtonWidget(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 550), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
+        ArrowButtonWidget *changePlayerRightButton = new ArrowButtonWidget(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 547), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
         _changePlayerLeftButton = new Button(changePlayerLeftButton);
         _changePlayerRightButton = new Button(changePlayerRightButton);
         _changePlayerLeftButton->setValue(0);
         _changePlayerRightButton->setValue(1);
+
+        ArrowButtonWidget *changeEggLeftButton = new ArrowButtonWidget(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 850), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
+        ArrowButtonWidget *changeEggRightButton = new ArrowButtonWidget(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 847), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
+        _changeEggLeftButton = new Button(changeEggLeftButton);
+        _changeEggRightButton = new Button(changeEggRightButton);
+        _changeEggLeftButton->setValue(0);
+        _changeEggRightButton->setValue(1);
     }
 
     TileHUD::~TileHUD()
@@ -47,15 +54,12 @@ namespace UI {
         window.draw(_background);
         window.draw(_backgroundSprite);
         window.draw(_tileContent);
-        _tilePlayerContent[_changePlayerLeftButton->getValue()].setPosition(_tileContent.getPosition().x + 10, 500);
-        _tilePlayerContent[_changePlayerRightButton->getValue()].setPosition(_tileContent.getPosition().x + 200, 500);
-        std::cout << "left: " << _changePlayerLeftButton->getValue() << std::endl;
-        std::cout << "right: " << _changePlayerRightButton->getValue() << std::endl;
-        std::cout << "size: " << _tilePlayerContent.size() << std::endl;
-        std::cout << "left: " << _tilePlayerContent[_changePlayerLeftButton->getValue()].getString().toAnsiString() << std::endl;
-        std::cout << "right: " << _tilePlayerContent[_changePlayerRightButton->getValue()].getString().toAnsiString() << std::endl;
+        _tilePlayerContent[_changePlayerLeftButton->getValue()].setPosition(_tileContent.getPosition().x + 10, 450);
+        _tilePlayerContent[_changePlayerRightButton->getValue()].setPosition(_tileContent.getPosition().x + 200, 450);
         window.draw(_tilePlayerContent[_changePlayerLeftButton->getValue()]);
         window.draw(_tilePlayerContent[_changePlayerRightButton->getValue()]);
+        _tileEggContent[_changeEggLeftButton->getValue()].setPosition(_tileContent.getPosition().x + 80, 750);
+        window.draw(_tileEggContent[_changeEggLeftButton->getValue()]);
         if (_crossTileHUDButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
             _crossTileHUDButton->render(window, ButtonState::HOVERED);
         else
@@ -68,9 +72,17 @@ namespace UI {
             _changePlayerRightButton->render(window, ButtonState::HOVERED);
         else
             _changePlayerRightButton->render(window, ButtonState::IDLE);
+        if (_changeEggLeftButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
+            _changeEggLeftButton->render(window, ButtonState::HOVERED);
+        else
+            _changeEggLeftButton->render(window, ButtonState::IDLE);
+        if (_changeEggRightButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
+            _changeEggRightButton->render(window, ButtonState::HOVERED);
+        else
+            _changeEggRightButton->render(window, ButtonState::IDLE);
     }
 
-    void TileHUD::handleEvent(sf::Event event, Network::Server &server, UNUSED sf::RenderWindow &window)
+    void TileHUD::handleEvent(sf::Event event, UNUSED Network::Server &server, UNUSED sf::RenderWindow &window)
     {
         if (event.type == sf::Event::MouseButtonPressed) {
             if (event.mouseButton.button != sf::Mouse::Left)
@@ -96,6 +108,22 @@ namespace UI {
                 _changePlayerRightButton->setValue(_changePlayerRightButton->getValue() + 1);
                 if (_changePlayerRightButton->getValue() > (ssize_t)_tilePlayerContent.size() - 1)
                     _changePlayerRightButton->setValue(0);
+            }
+            if (_changeEggLeftButton->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) == true) {
+                _changeEggLeftButton->setValue(_changeEggLeftButton->getValue() - 1);
+                if (_changeEggLeftButton->getValue() < 0)
+                    _changeEggLeftButton->setValue(_tilePlayerContent.size() - 1);
+                _changeEggRightButton->setValue(_changeEggRightButton->getValue() - 1);
+                if (_changeEggRightButton->getValue() < 0)
+                    _changeEggRightButton->setValue(_tilePlayerContent.size() - 1);
+            }
+            if (_changeEggRightButton->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) == true) {
+                _changeEggLeftButton->setValue(_changeEggLeftButton->getValue() + 1);
+                if (_changeEggLeftButton->getValue() > (ssize_t)_tilePlayerContent.size() - 1)
+                    _changeEggLeftButton->setValue(0);
+                _changeEggRightButton->setValue(_changeEggRightButton->getValue() + 1);
+                if (_changeEggRightButton->getValue() > (ssize_t)_tilePlayerContent.size() - 1)
+                    _changeEggRightButton->setValue(0);
             }
         }
     }
@@ -136,20 +164,36 @@ namespace UI {
             _tilePlayerContent.insert(std::pair<int, sf::Text>(i, setString(constructPlayerContent(player), sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10))));
             i++;
         }
+        i = 0;
+        for (auto &egg : gameData.getEggs()) {
+            if (egg.second->getPos() != sf::Vector2i(x, y))
+                continue;
+            _tileEggContent.insert(std::pair<int, sf::Text>(i, setString(constructEggContent(egg, gameData), sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10))));
+        }
+        // _tileEggContent[0] = setString("Egg[0]: \n\n  Time before hatching: 0\n\n", sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10));
+        // _tileEggContent[1] = setString("Egg[1]: \n\n  Time before hatching: 0\n\n", sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10));
+        // _tileEggContent[2] = setString("Egg[2]: \n\n  Time before hatching: 0\n\n", sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10));
+        // _tilePlayerContent[0] = setString("Player[0] : \n\n  Level: 0\n\n  Inventory: \n\n    Food: 0\n\n    Linemate: 0\n\n    Deraumere: 0\n\n    Sibur: 0\n\n    Mendiane: 0\n\n    Phiras: 0\n\n    Thystame: 0\n\n", sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10));
+        // _tilePlayerContent[1] = setString("Player[1] : \n\n  Level: 0\n\n  Inventory: \n\n    Food: 0\n\n    Linemate: 0\n\n    Deraumere: 0\n\n    Sibur: 0\n\n    Mendiane: 0\n\n    Phiras: 0\n\n    Thystame: 0\n\n", sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10));
+        // _tilePlayerContent[2] = setString("Player[2] : \n\n  Level: 0\n\n  Inventory: \n\n    Food: 0\n\n    Linemate: 0\n\n    Deraumere: 0\n\n    Sibur: 0\n\n    Mendiane: 0\n\n    Phiras: 0\n\n    Thystame: 0\n\n", sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10));
         if (isLeft == true) {
             _backgroundSprite.setPosition(sf::Vector2f(Window::getWindowWidth() - 416 * 2, 0));
             _tileContent = setString(constructContent(gameData, x, y), sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 175));
             _tileContent.setPosition(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 175));
             _crossTileHUDButton->setPosition(sf::Vector2f((Window::getWindowWidth() - 200), 150));
-            _changePlayerLeftButton->setPosition(sf::Vector2f(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 130, 600)));
-            _changePlayerRightButton->setPosition(sf::Vector2f(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175 + 530, 597)));
+            _changePlayerLeftButton->setPosition(sf::Vector2f(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 130, 550)));
+            _changePlayerRightButton->setPosition(sf::Vector2f(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175 + 530, 547)));
+            _changeEggLeftButton->setPosition(sf::Vector2f(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 750)));
+            _changeEggRightButton->setPosition(sf::Vector2f(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175 + 480, 750)));
         } else {
             _tileContent = setString(constructContent(gameData, x, y), sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10));
             _tileContent.setPosition(sf::Vector2f(175, 175));
             _backgroundSprite.setPosition(sf::Vector2f(0, 0));
             _crossTileHUDButton->setPosition(sf::Vector2f(635, 150));
-            _changePlayerLeftButton->setPosition(sf::Vector2f(sf::Vector2f(130, 600)));
-            _changePlayerRightButton->setPosition(sf::Vector2f(sf::Vector2f(175 + 530, 597)));
+            _changePlayerLeftButton->setPosition(sf::Vector2f(sf::Vector2f(130, 550)));
+            _changePlayerRightButton->setPosition(sf::Vector2f(sf::Vector2f(175 + 530, 547)));
+            _changeEggLeftButton->setPosition(sf::Vector2f(sf::Vector2f(175, 750)));
+            _changeEggRightButton->setPosition(sf::Vector2f(sf::Vector2f(175 + 480, 750)));
         }
     }
 
@@ -168,7 +212,17 @@ namespace UI {
 
         if (!player.second)
             return str;
-        str += "Player[" + player.first + "] : \n\n  Level: " + std::to_string(player.second->getLevel()) + "\n\n  Inventory: \n\n    Food: " + std::to_string(player.second->getInventory()[0]) + "\n\n    Linemate: " + std::to_string(player.second->getInventory()[1]) + "\n\n    Deraumere: " + std::to_string(player.second->getInventory()[2]) + "\n\n    Sibur: " + std::to_string(player.second->getInventory()[3]) + "\n\n    Mendiane: " + std::to_string(player.second->getInventory()[4]) + "\n\n    Phiras: " + std::to_string(player.second->getInventory()[5]) + "\n\n    Thystame: " + std::to_string(player.second->getInventory()[6]) + "\n\n";
+        str = "Player[" + player.first + "] : \n\n  Level: " + std::to_string(player.second->getLevel()) + "\n\n  Inventory: \n\n    Food: " + std::to_string(player.second->getInventory()[0]) + "\n\n    Linemate: " + std::to_string(player.second->getInventory()[1]) + "\n\n    Deraumere: " + std::to_string(player.second->getInventory()[2]) + "\n\n    Sibur: " + std::to_string(player.second->getInventory()[3]) + "\n\n    Mendiane: " + std::to_string(player.second->getInventory()[4]) + "\n\n    Phiras: " + std::to_string(player.second->getInventory()[5]) + "\n\n    Thystame: " + std::to_string(player.second->getInventory()[6]) + "\n\n";
+        return str;
+    }
+
+    std::string TileHUD::constructEggContent(std::pair<const std::string, std::shared_ptr<Eggs>> &egg, GameData &gameData)
+    {
+        std::string str;
+
+        if (!egg.second)
+            return str;
+        str = "Egg[" + egg.first + "]: " + egg.second->getTeam() + " - " + egg.second->getDropBy() + "\n\n  Time before hatching: " + std::to_string(egg.second->getHatchingTime(gameData.getTimeUnit())) + "\n\n";
         return str;
     }
 };

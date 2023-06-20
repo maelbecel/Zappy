@@ -219,29 +219,6 @@ namespace Scene {
         }
 
         _tileHUD.setTileHUD(_gameData, isLeft, x, y);
-
-        // Loop on the player
-        for (auto &player : _gameData.getPlayers()) {
-            if (player.second->getPosition() != sf::Vector2i(x, y))
-                continue;
-            std::cout << "Player[" << player.first << "]: " << player.second->getTeam() << std::endl;
-            std::cout << "  Level: " << player.second->getLevel() << std::endl;
-            std::cout << "  Inventory: " << std::endl;
-            std::cout << "    Food: " << player.second->getInventory()[0] << std::endl;
-            std::cout << "    Linemate: " << player.second->getInventory()[1] << std::endl;
-            std::cout << "    Deraumere: " << player.second->getInventory()[2] << std::endl;
-            std::cout << "    Sibur: " << player.second->getInventory()[3] << std::endl;
-            std::cout << "    Mendiane: " << player.second->getInventory()[4] << std::endl;
-            std::cout << "    Phiras: " << player.second->getInventory()[5] << std::endl;
-            std::cout << "    Thystame: " << player.second->getInventory()[6] << std::endl << std::endl;
-        }
-
-        for (auto &egg : _gameData.getEggs()) {
-            if (egg.second->getPos() != sf::Vector2i(x, y))
-                continue;
-            std::cout << "Egg[" << egg.first << "]: " << egg.second->getTeam() << " - " << egg.second->getDropBy() << std::endl;
-            std::cout << "  Time before hatching: " << egg.second->getHatchingTime(_gameData.getTimeUnit()) << std::endl << std::endl;
-        }
     }
 
     bool GameScene::isInsideTriangle(const sf::Vector2i &position, sf::Vector2i a, sf::Vector2i b, sf::Vector2i c)

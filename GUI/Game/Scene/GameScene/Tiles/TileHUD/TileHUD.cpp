@@ -30,8 +30,8 @@ namespace UI {
         CrossButtonWidget *crossTileHUDButton = new CrossButtonWidget(sf::Vector2f((Window::getWindowWidth() - 200), 150), sf::Vector2f(16 * 2.5, 16 * 2.5));
         _crossTileHUDButton = new Button(crossTileHUDButton);
 
-        ArrowButtonWidget *changePlayerLeftButton = new ArrowButtonWidget(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 500), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
-        ArrowButtonWidget *changePlayerRightButton = new ArrowButtonWidget(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 500), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
+        ArrowButtonWidget *changePlayerLeftButton = new ArrowButtonWidget(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 600), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
+        ArrowButtonWidget *changePlayerRightButton = new ArrowButtonWidget(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 597), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
         _changePlayerLeftButton = new Button(changePlayerLeftButton);
         _changePlayerRightButton = new Button(changePlayerRightButton);
         _changePlayerLeftButton->setValue(0);
@@ -49,6 +49,11 @@ namespace UI {
         window.draw(_tileContent);
         _tilePlayerContent[_changePlayerLeftButton->getValue()].setPosition(_tileContent.getPosition().x + 10, 500);
         _tilePlayerContent[_changePlayerRightButton->getValue()].setPosition(_tileContent.getPosition().x + 200, 500);
+        std::cout << "left: " << _changePlayerLeftButton->getValue() << std::endl;
+        std::cout << "right: " << _changePlayerRightButton->getValue() << std::endl;
+        std::cout << "size: " << _tilePlayerContent.size() << std::endl;
+        std::cout << "left: " << _tilePlayerContent[_changePlayerLeftButton->getValue()].getString().toAnsiString() << std::endl;
+        std::cout << "right: " << _tilePlayerContent[_changePlayerRightButton->getValue()].getString().toAnsiString() << std::endl;
         window.draw(_tilePlayerContent[_changePlayerLeftButton->getValue()]);
         window.draw(_tilePlayerContent[_changePlayerRightButton->getValue()]);
         if (_crossTileHUDButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
@@ -125,16 +130,11 @@ namespace UI {
     void TileHUD::setTileHUD(GameData &gameData, bool isLeft, int x, int y)
     {
         int i = 0;
-        // for (auto &player : gameData.getPlayers()) {
-        //     if (player.second->getPosition() != sf::Vector2i(x, y))
-        //         continue;
-        //     _tilePlayerContent.insert(std::pair<int, sf::Text>(i, setString(constructPlayerContent(player), sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10))));
-        //     i++;
-        // }
-        for (int j = 0; j < 3; j++) {
-            std::cout << "j: " << j << std::endl;
-            std::string str = "Player[" + std::to_string(j) + "]: \n\n  Level: 0\n\n  Inventory: \n\n    Food: 0\n\n    Linemate: 0\n\n    Deraumere: 0\n\n    Sibur: 0\n\n    Mendiane: 0\n\n    Phiras: 0\n\n    Thystame: 0\n\n";
-            _tilePlayerContent.insert(std::pair<int, sf::Text>(i, setString(str, sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10))));
+        for (auto &player : gameData.getPlayers()) {
+            if (player.second->getPosition() != sf::Vector2i(x, y))
+                continue;
+            _tilePlayerContent.insert(std::pair<int, sf::Text>(i, setString(constructPlayerContent(player), sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10))));
+            i++;
         }
         if (isLeft == true) {
             _backgroundSprite.setPosition(sf::Vector2f(Window::getWindowWidth() - 416 * 2, 0));

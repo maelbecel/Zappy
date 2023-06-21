@@ -25,7 +25,10 @@ namespace Audio {
         }
     }
 
-    Music::~Music() {};
+    Music::~Music()
+    {
+        _music.stop();
+    };
 
     /////////////
     // Methods //
@@ -61,6 +64,14 @@ namespace Audio {
 
     void Music::setVolume(float volume)
     {
+        if (volume == _volume)
+            return;
+
+        if (volume > 100)
+            volume = 100;
+        else if (volume < 0)
+            volume = 0;
+
         _volume = volume;
         _music.setVolume(_volume);
     }

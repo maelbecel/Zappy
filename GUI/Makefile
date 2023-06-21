@@ -47,6 +47,7 @@ SRC	+=	./UI/Animation/Animation.cpp\
 		./UI/Layout/VerticalLayout.cpp\
 		./UI/Audio/Music.cpp\
 		./UI/Audio/VFX.cpp\
+		./UI/Audio/Audio.cpp\
 
 INCLUDE =	-I .\
 			-I ./App\

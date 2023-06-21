@@ -6,15 +6,18 @@
 */
 
 #include "Application.hpp"
+#include "Audio.hpp"
 #include "Parser.hpp"
 
 #include <iostream>
+#include <SFML/Audio.hpp>
 
 int main(int ac, char **av)
 {
     try {
         Parser parser(ac, av);
         Window::readConfigFile();
+        Audio::Audio::readConfigFile();
 
         Application App(parser.getIp(), parser.getPort());
 
@@ -34,6 +37,5 @@ int main(int ac, char **av)
         std::cerr << error.what() << std::endl;
         return 84;
     }
-
     return 0;
 }

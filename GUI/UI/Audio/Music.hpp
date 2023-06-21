@@ -11,6 +11,8 @@
     #include <SFML/Audio.hpp>
 
 namespace Audio {
+    const std::string GAME_OST = "./Assets/Audio/Just_Another_Day.wav";
+
     /**
      * @brief Music class
      * Class that handle the music

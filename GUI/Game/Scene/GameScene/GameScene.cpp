@@ -13,7 +13,15 @@ namespace Scene {
     /////////////////
     // Constructor //
     /////////////////
-    GameScene::GameScene() : _isTileHUDOpen(false) {};
+    GameScene::GameScene() : _isTileHUDOpen(false)
+    {
+        _ost = new Audio::Music(Audio::GAME_OST, Audio::Audio::musicVolume, true);
+    };
+
+    GameScene::~GameScene()
+    {
+        delete _ost;
+    };
 
     /////////////
     // Methods //
@@ -23,6 +31,12 @@ namespace Scene {
 
     void GameScene::Update(Network::Server &server)
     {
+        // Game SFX
+        if (_ost->isPlaying() == false)
+            _ost->play();
+        _ost->setVolume(Audio::Audio::musicVolume);
+
+        // Game Server
         int response = 0;
 
         askingToServer(server);

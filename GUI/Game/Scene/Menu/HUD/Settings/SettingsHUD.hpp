@@ -21,6 +21,7 @@
     #include "ArrowButtonWidget.hpp"
     #include "CrossButtonWidget.hpp"
     #include "ValidateButtonWidget.hpp"
+    #include "Audio.hpp"
 
 namespace UI {
     class SettingsHUD {

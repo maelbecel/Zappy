@@ -51,8 +51,11 @@ namespace UI {
             cfg.readFile("./Config/config.cfg");
 
             libconfig::Setting& settings = cfg.lookup("config");
-            _soundValue = settings["sound"];
-            _musicValue = settings["music"];
+            libconfig::Setting& audio = settings["audio"];
+
+            _soundValue = audio["sound"];
+            _musicValue = audio["music"];
+
             bool tileHUDTextMode = settings["tileHUDTextMode"];
             if (tileHUDTextMode)
                 _tileHUDTextMode = setString("TileHUD mode:\n\n Text", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450));
@@ -233,8 +236,14 @@ namespace UI {
 
         cfg.readFile("./Config/config.cfg");
         libconfig::Setting& settings = cfg.lookup("config");
-        settings["sound"] = _soundValue;
-        settings["music"] = _musicValue;
+        libconfig::Setting& audio = settings["audio"];
+
+        audio["sound"] = _soundValue;
+        audio["music"] = _musicValue;
+
+        Audio::Audio::sfxVolume = _soundValue;
+        Audio::Audio::musicVolume = _musicValue;
+
         if (_tileHUDTextMode.getString() == std::string("TileHUD mode:\n\n Text"))
             settings["tileHUDTextMode"] = true;
         else

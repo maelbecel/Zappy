@@ -15,6 +15,8 @@
     #include "GameMenuHUD.hpp"
     #include "TileHUD.hpp"
     #include "GameHUD.hpp"
+    #include "Music.hpp"
+
     #include <memory>
 
 namespace Scene {
@@ -27,7 +29,7 @@ namespace Scene {
         // Constructor & Destructor (default)
         public:
             GameScene();
-            ~GameScene() override = default;
+            ~GameScene() override;
 
         // Methods
         public:
@@ -120,6 +122,7 @@ namespace Scene {
             UI::GameMenuHUD _gameMenuHUD; /*!< The game menu HUD */
             UI::GameHUD _gameHUD; /*!< The game HUD */
             UI::TileHUD _tileHUD; /*!< The tile HUD */
+            Audio::Music *_ost;    /*!< The game OST */
     };
 }
 

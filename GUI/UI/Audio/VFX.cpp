@@ -25,7 +25,10 @@ namespace Audio {
         }
     }
 
-    VFX::~VFX() {};
+    VFX::~VFX()
+    {
+        _sound.stop();
+    };
 
     /////////////
     // Methods //
@@ -43,6 +46,14 @@ namespace Audio {
 
     void VFX::setVolume(float volume)
     {
+        if (volume == _volume)
+            return;
+
+        if (volume > 100)
+            volume = 100;
+        else if (volume < 0)
+            volume = 0;
+
         _volume = volume;
         _sound.setVolume(_volume);
     }

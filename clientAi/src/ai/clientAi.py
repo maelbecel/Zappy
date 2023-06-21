@@ -86,6 +86,7 @@ class clientAi:
             self.response = self.client.receive().split("\n")
             if self.response[0] == "ko" or len(self.response) != 3:
                 raise cEx("Error: team name is invalid")
+            self.getConnectionResponse()
         except Exception as e:
             print(e)
 
@@ -339,7 +340,8 @@ class clientAi:
         if not self.alive:
             return
         while self.alive:
-            self.forward()
+            self.broadcast("Hello World")
+            self.grabFood()
 
     def resetFood(self, array):
         """
@@ -645,29 +647,3 @@ class clientAi:
             self.lookingForFood = True
             return True
         return False
-
-    def getRessources(self):
-        temp = dict()
-
-        self.look()
-        for element in self.inv:
-            if element == "player":
-                continue
-            temp[element] = 0
-        temp["player"] = 0
-        if self.lookResult == []:
-            return
-        for element in self.lookResult[0]:
-            temp[element] += 1
-        for element in temp:
-            self.inputData.append(temp[element])
-
-    def getInventory(self):
-        self.inventory()
-        for element in self.inv:
-            self.inputData.append(self.inv[element])
-
-    def isABroadcast(self):
-        if self.message == "":
-            return 0
-        return 1

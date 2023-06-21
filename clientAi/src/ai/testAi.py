@@ -23,8 +23,69 @@ class testAi:
         self.host = host
         self.stats = None
 
-    # is it what we call in pop.run()
+    def getRessources(self):
+        """
+        The function gets the resources available in the game and appends them to
+        the inputData list.
+
+        @return It is not clear what is being returned as there is a return
+        statement missing in the code snippet.
+        """
+        temp = dict()
+
+        self.look()
+        for element in self.inv:
+            if element == "player":
+                continue
+            temp[element] = 0
+        temp["player"] = 0
+        if self.lookResult == []:
+            return
+        for element in self.lookResult[0]:
+            temp[element] += 1
+        for element in temp:
+            self.inputData.append(temp[element])
+
+    def getInventory(self):
+        """
+        This function retrieves the inventory data and appends it to the inputData
+        list.
+        """
+        self.inventory()
+        for element in self.inv:
+            self.inputData.append(self.inv[element])
+
+    def isABroadcast(self):
+        """
+        This function checks if a message is empty or not and returns 0 if it is
+        empty and 1 if it is not.
+
+        @return If the message attribute of the object is empty, the function
+        returns 0. Otherwise, it returns 1. This function is checking if the object
+        represents a broadcast message or not.
+        """
+        if self.message == "":
+            return 0
+        return 1
+
     def evaluateGenome(self, genome, config, fitnesses, mutex):
+        """
+        This function evaluates a genome by using a neural network to make
+        decisions for a client in a game, and updates the genome's fitness value
+        based on the client's actions and success in the game.
+
+        @param genome a genetic algorithm genome, which represents a neural network
+        @param config A configuration object that contains various parameters for
+        the neural network, such as the number of input and output nodes, the
+        activation function, and the mutation rates.
+        @param fitnesses A list that stores the fitness values of each evaluated
+        genome.
+        @param mutex A mutex (short for mutual exclusion) is a programming
+        construct used to prevent multiple threads from accessing shared resources
+        simultaneously, which can lead to race conditions and other synchronization
+        issues. In this context, the mutex is used to ensure that only one thread
+        at a time can update the fitness value of the genome and
+        """
         client = clientAI(self.teamName, self.port, self.host)
         client.connect()
 
@@ -114,6 +175,10 @@ class testAi:
         client.disconnect()
 
     def loadConfig(self):
+        """
+        This function loads a NEAT configuration file, creates a population, and
+        adds reporters to track the progress of the evolution.
+        """
         # Load the NEAT configuration file
         self.config = neat.Config(
             neat.DefaultGenome,
@@ -131,6 +196,11 @@ class testAi:
         self.population.add_reporter(self.stats)
 
     def run(self):
+        """
+        This function runs the NEAT algorithm for a specified number of
+        generations, evaluates the fitness of each genome in the population using
+        multithreading, and saves the best genome as a pickle file.
+        """
         # Run the NEAT algorithm for the specified number of generations
         self.loadConfig()
 

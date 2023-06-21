@@ -31,6 +31,12 @@ namespace Scene {
             virtual void Initialize() = 0;
 
             /**
+             * @brief Initialize the scene with ip and port
+             *
+             */
+            virtual void Initialize(std::string ip, std::string port) = 0;
+
+            /**
              * @brief Update the scene
              * Update the scene logic and physics
              * @param server The server (for network events)
@@ -57,7 +63,7 @@ namespace Scene {
              * @param event  The event to handle
              * @param server The server (for network events)
              */
-            virtual void OnEvent(const sf::Event &event, Network::Server &server) = 0;
+            virtual void OnEvent(const sf::Event &event, Network::Server &server, sf::RenderWindow &window) = 0;
     };
 };
 

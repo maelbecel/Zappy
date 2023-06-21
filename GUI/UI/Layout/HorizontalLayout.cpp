@@ -11,25 +11,31 @@ namespace UI {
     /////////////////
     // Constructor //
     /////////////////
-
-    template <typename T>
-    HorizontalLayout<T>::HorizontalLayout(LayoutProperties properties) : ALayout<T>(properties) {};
+    HorizontalLayout::HorizontalLayout(LayoutProperties properties) : properties(properties) {};
 
     /////////////
     // Methods //
     /////////////
-
-    template <typename T>
-    void HorizontalLayout<T>::applyLayout()
+    void HorizontalLayout::applyLayout()
     {
-        sf::Vector2f position = _properties.position;
+        sf::Vector2f position = properties.position;
 
         for (auto *element : _elements) {
             // Set the position of the element
             element->setPosition(position);
 
             // Increment the current position by element width and spacing
-            position.x += element->getLocalBounds().width + _properties.spacing;
+            position.x += element->getSize().x + properties.spacing;
         }
+    }
+
+    void HorizontalLayout::addElement(IWidget *element)
+    {
+        _elements.push_back(element);
+    }
+
+    std::vector<IWidget *> HorizontalLayout::getElements()
+    {
+        return _elements;
     }
 };

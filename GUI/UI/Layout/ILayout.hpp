@@ -9,6 +9,7 @@
     #define ILAYOUT_HPP_
 
     #include <SFML/Graphics.hpp>
+    #include "IWidget.hpp"
 
 namespace UI {
     /**
@@ -41,27 +42,14 @@ namespace UI {
              *
              * @param element The element to add
              */
-            virtual void addElement(sf::Drawable &element) = 0;
-    };
+            virtual void addElement(IWidget *element) = 0;
 
-    /**
-     * @brief Enum that design the type of layout
-     * // VerticalLayout example:
-     * [Widget1]
-     * [Widget2]
-     * [Widget3]
-     * 
-     * // HorizontalLayout example:
-     * [Widget1] [Widget2] [Widget3]
-     * 
-     * // GridLayout example:
-     * [Widget1] [Widget2]
-     * [Widget3] [Widget4]
-     */
-    enum class LayoutType {
-        VERTICAL,
-        HORIZONTAL,
-        GRID
+            /**
+             * @brief Get the Elements object
+             *
+             * @return IWidget The elements of the layout
+             */
+            virtual std::vector<IWidget *> getElements() = 0;
     };
 
     /**
@@ -76,10 +64,9 @@ namespace UI {
         public:
             LayoutProperties() = default;
             ~LayoutProperties() = default;
-        
+
         // Attributes
         public:
-            LayoutType type;       /*!< Type of the layout */
             sf::Vector2f position; /*!< Position of the first widget */
             double spacing;        /*!< Spacing between each widget */
     };

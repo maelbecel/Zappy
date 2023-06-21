@@ -55,13 +55,12 @@ static void update_max_fd(server_t *server)
 int main_loop(server_t *server)
 {
     map_spawn_items(server, false);
+    catch_sigint(server);
     while (server->running) {
         update_max_fd(server);
         if (select(server->select->maxfd + 1, &server->select->readfds,
-            &server->select->writefds, NULL, NULL) == -1) {
-            perror("select");
+            &server->select->writefds, NULL, NULL) == -1)
             break;
-        }
         if (client_accept(server) == EXIT_FAILTEK)
             return EXIT_FAILTEK;
         if (client_read(server) == EXIT_FAILTEK)
@@ -69,6 +68,8 @@ int main_loop(server_t *server)
         time_update(server->time);
         action_update(server);
         map_spawn_items(server, true);
+        check_win_condition(server);
     }
+    server_destroy(server);
     return 0;
 }

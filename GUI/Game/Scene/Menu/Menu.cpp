@@ -18,9 +18,12 @@ namespace Scene {
     /////////////
 
     // TODO: Implements Menu methods
-    void Menu::Initialize() {};
+    void Menu::Initialize(std::string ip, std::string port)
+    {
+        _menuHUD.Initialize(ip, port);
+    };
 
-    void Menu::Update(Network::Server &server) {};
+    void Menu::Update(UNUSED Network::Server &server) {};
 
     void Menu::Render(sf::RenderWindow &window)
     {
@@ -29,8 +32,8 @@ namespace Scene {
 
     void Menu::ShutDown() {};
 
-    void Menu::OnEvent(const sf::Event &event, Network::Server &server)
+    void Menu::OnEvent(const sf::Event &event, Network::Server &server, sf::RenderWindow &window)
     {
-        _menuHUD.handleEvent(event, server);
+        _menuHUD.handleEvent(event, server, window);
     };
 };

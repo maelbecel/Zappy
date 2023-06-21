@@ -9,6 +9,22 @@
 #include "olog.h"
 #include "server.h"
 
+void client_list_destroy(olist_t *list)
+{
+    client_t *client = NULL;
+
+    if (!list)
+        return;
+    OLIST_FOREACH(list, node) {
+        client = (client_t *)node->data;
+        if (!client)
+            continue;
+        client_destroy(client);
+    }
+    olist_clear_wdfree(list);
+    free(list);
+}
+
 /**
  * The function destroys a client and frees its associated memory.
  *
@@ -30,6 +46,7 @@ void client_destroy(client_t *client)
         olist_destroy(client->wbuffer);
     if (client->buffer)
         free(client->buffer);
-    odestroy_socket(client->socket);
+    if (client->socket)
+        odestroy_socket(client->socket);
     free(client);
 }

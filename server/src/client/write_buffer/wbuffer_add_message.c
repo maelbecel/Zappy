@@ -5,6 +5,7 @@
 ** wbuffer_add_message
 */
 
+#include <string.h>
 #include "wbuffer.h"
 
 void wbuffer_add_message(client_t *client, char *fmt, ...)
@@ -24,5 +25,5 @@ void wbuffer_add_msg(client_t *client, char *msg)
 {
     if (!msg)
         return;
-    olist_add_node(client->wbuffer, msg);
+    olist_add_node(client->wbuffer, strdup(msg));
 }

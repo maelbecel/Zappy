@@ -22,5 +22,9 @@ void server_destroy(server_t *server)
         olist_destroy(server->eggs);
     if (server->time)
         time_destroy(server->time);
+    if (server->socket)
+        odestroy_socket(server->socket);
+    if (server->select)
+        free(server->select);
     free(server);
 }

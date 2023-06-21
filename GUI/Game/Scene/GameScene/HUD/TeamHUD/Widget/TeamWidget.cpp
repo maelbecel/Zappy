@@ -99,6 +99,13 @@ namespace UI {
         return setTeamColor(color - 8);
     }
 
+    bool TeamWidget::isInside(sf::Vector2f mousePos)
+    {
+        if (mousePos.x >= _background.getPosition().x && mousePos.x <= _background.getPosition().x + _background.getGlobalBounds().width && mousePos.y >= _background.getPosition().y && mousePos.y <= _background.getPosition().y + _background.getGlobalBounds().height)
+            return true;
+        return false;
+    }
+
     /////////////
     // Setters //
     /////////////
@@ -107,5 +114,10 @@ namespace UI {
         _background.setPosition(position);
         _team.setPosition(position.x + 95.0f, position.y + 68.0f);
         _picture.setPosition(position.x + 19.0f, position.y + 19.0f);
+    }
+
+    std::string TeamWidget::getTeamName() const
+    {
+        return _team.getString();
     }
 };

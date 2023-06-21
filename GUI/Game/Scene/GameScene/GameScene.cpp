@@ -70,6 +70,7 @@ namespace Scene {
         for (auto &player : _gameData.getPlayers())
             player.second->draw(_gameData, window);
 
+        _teamHUD.drawCursor(window, _gameData);
         _map.drawBiome(window, _gameData);
 
         if (_gameMenuHUD.isOpened()) {
@@ -133,16 +134,19 @@ namespace Scene {
                 return;
             }
             if (event.mouseButton.button == sf::Mouse::Left) {
-                LeftMousePressed(sf::Vector2i(event.mouseButton.x, event.mouseButton.y), server);
                 _gameHUD.handleEvent(event, server, window);
+
+                if (!_tileHUD.getIsOpen()) {
+                    if (LeftMousePressed(sf::Vector2i(event.mouseButton.x, event.mouseButton.y), server) == true)
+                        return;
+                    _teamHUD.handleEvent(event);
+                }
             }
         }
     };
 
-    void GameScene::LeftMousePressed(sf::Vector2i mousePos, Network::Server &server)
+    bool GameScene::LeftMousePressed(sf::Vector2i mousePos, Network::Server &server)
     {
-        if (_tileHUD.getIsOpen())
-            return;
         std::map<std::pair<int, int>, std::shared_ptr<Tile>> tiles = _gameData.getMap();
         sf::Vector2f scale = _gameData.getScale();
 
@@ -194,6 +198,8 @@ namespace Scene {
                 break;
             }
         }
+        
+        return _isTileHUDOpen;
     };
 
     void GameScene::openTileHUD(int x, int y, Network::Server &server, bool isLeft)

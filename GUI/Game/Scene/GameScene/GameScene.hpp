@@ -87,7 +87,7 @@ namespace Scene {
              * @param mousePos The position of the click
              * @param server   The server
              */
-            void LeftMousePressed(sf::Vector2i mousePos, Network::Server &server);
+            bool LeftMousePressed(sf::Vector2i mousePos, Network::Server &server);
 
             /**
              * @brief Check if the left click is inside the left triangle of the hexagonal tiles

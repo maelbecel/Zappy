@@ -7,14 +7,14 @@
 
 #include "Map.hpp"
 
-Map::Map()
+Map::Map() : _season(Season::SUMMER)
 {
     try {
         // Load the Tiles texture
         sf::Texture *grassTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/GrassHexP.png");
         sf::Texture *forestTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/BushHexP.png");
         sf::Texture *snowTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/SnowHexP.png");
-        sf::Texture *snowForestTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/SnowForestHexP.png");
+        sf::Texture *snowForestTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/SnowBushHexP.png");
         sf::Texture *desertTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/DesertHexP.png");
         sf::Texture *seaTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/SeaHexP.png");
 
@@ -72,7 +72,17 @@ void Map::draw(sf::RenderWindow &window, GameData &gameData)
     sf::Vector2i mapSize = gameData.getMapSize();
     sf::Vector2f scale = gameData.getScale();
     sf::Vector2f userPosition = gameData.getPosition();
-    double **noise = gameData.getNoise();
+    uint time = gameData.getTimeUnit();
+
+    // Change the season if needed
+    if (time % (4 * SEASON_DURATION) < SEASON_DURATION)
+        _season = Season::SUMMER;
+    else if (time % (4 * SEASON_DURATION) < 2 * SEASON_DURATION)
+        _season = Season::EARLY_WINTER;
+    else if (time % (4 * SEASON_DURATION) < 3 * SEASON_DURATION)
+        _season = Season::WINTER;
+    else
+        _season = Season::LATE_WINTER;
 
     for (int height = mapSize.y + SEA_SIZE * 2 - 1; height > -1; height--) {
         for (int width = mapSize.x + SEA_SIZE * 2 - 1; width > -1; width--) {
@@ -94,10 +104,7 @@ void Map::draw(sf::RenderWindow &window, GameData &gameData)
                 sprite->setScale(scale.x + 2.00, scale.y + 1.25);
                 window.draw(*sprite);
             } else {
-                if (noise[height - SEA_SIZE][width - SEA_SIZE] < 0.3)
-                    sprite = _tiles["Desert"];
-                else
-                    sprite = _tiles["Grass"];
+                sprite = (_season != Season::SUMMER) ? drawWinter(height, width, gameData) : drawSummer(height, width, gameData);
 
                 std::shared_ptr<Tile> tile = map[std::make_pair(width - SEA_SIZE, height - SEA_SIZE)];
 
@@ -133,7 +140,7 @@ void Map::drawBiome(sf::RenderWindow &window, GameData &gameData)
                 (width + height) * (25 * (scale.x + 2)),
                 (width - height) * ((Tile::TILE_WIDTH - 3) * (scale.y + 1.25) / 2)
             );
-            sf::Sprite *sprite = _tiles["Forest"];
+            sf::Sprite *sprite = (_season == WINTER) ? _tiles["SnowForest"] : _tiles["Forest"];
 
             position.x += userPosition.x;
             position.y += userPosition.y;
@@ -162,3 +169,28 @@ void Map::drawBiome(sf::RenderWindow &window, GameData &gameData)
     }
 }
 
+sf::Sprite *Map::drawSummer(int height, int width, GameData &gameData)
+{
+    double **noise = gameData.getNoise();
+
+    if (noise[height - SEA_SIZE][width - SEA_SIZE] < 0.3)
+        return _tiles["Desert"];
+    return _tiles["Grass"];
+}
+
+sf::Sprite *Map::drawWinter(int height, int width, GameData &gameData)
+{
+    double **noise = gameData.getNoise();
+
+    if (_season == Season::EARLY_WINTER) {
+        if (noise[height - SEA_SIZE][width - SEA_SIZE] < 0.5)
+            return _tiles["Snow"];
+        return _tiles["Grass"];
+    } else if (_season == Season::LATE_WINTER) {
+        if (noise[height - SEA_SIZE][width - SEA_SIZE] < 0.7)
+            return _tiles["Snow"];
+        return _tiles["Grass"];
+    }
+
+    return _tiles["Snow"];
+}

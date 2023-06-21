@@ -353,8 +353,6 @@ class evoli(clientAI):
         food, and repeats while alive.
         """
         while self.alive:
-            # self.getInventory()
-            # self.getRessources()
             # self.findPlaceToElevate()
             # self.findNeededRessources()
             # self.grabFood()

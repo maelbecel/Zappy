@@ -11,25 +11,31 @@ namespace UI {
     /////////////////
     // Constructor //
     /////////////////
-
-    template <typename T>
-    VerticalLayout<T>::VerticalLayout(LayoutProperties properties) : ALayout<T>(properties) {};
+    VerticalLayout::VerticalLayout(LayoutProperties properties) : properties(properties) {};
 
     /////////////
     // Methods //
     /////////////
-
-    template <typename T>
-    void VerticalLayout<T>::applyLayout()
+    void VerticalLayout::applyLayout()
     {
-        sf::Vector2f position = _properties.position;
+        sf::Vector2f position = properties.position;
 
         for (auto *element : _elements) {
             // Set the position of the element
             element->setPosition(position);
 
             // Increment the current position by element height and spacing
-            position.y += element->getLocalBounds().height + _properties.spacing;
+            position.y += element->getSize().y + properties.spacing;
         }
+    }
+
+    void VerticalLayout::addElement(IWidget *element)
+    {
+        _elements.push_back(element);
+    }
+
+    std::vector<IWidget *> VerticalLayout::getElements()
+    {
+        return _elements;
     }
 };

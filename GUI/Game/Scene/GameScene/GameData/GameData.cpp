@@ -8,20 +8,24 @@
 #include "GameData.hpp"
 
 uint GameData::timeUnit = 0;
+uint GameData::gameSpeed = 0;
 
 GameData::GameData() : _mapSize(sf::Vector2i(0, 0)), _gameScale(1.0f), _scale(sf::Vector2f(1.0f, 1.0f)), _position(sf::Vector2f(0, 900 / 2))
 {
     _teams = std::vector<std::string>();
 
     GameData::timeUnit = 0;
+    GameData::gameSpeed = 0;
 };
 
-void GameData::parse(std::string &line)
+int GameData::parse(std::string &line)
 {
     if (line.find("msz") != std::string::npos)     // msz = map size
         return setMapSize(line);
     else if (line.find("sgt") != std::string::npos) // sgt = time unit
         return setTimeUnit(line);
+    else if (line.find("sst") != std::string::npos) // sst = time unit with modification
+        return addTimeUnit(line);
     else if (line.find("bct") != std::string::npos) // bct = content of a tile
         return setTileContent(line);
     else if (line.find("tna") != std::string::npos) // tna = team name
@@ -44,15 +48,22 @@ void GameData::parse(std::string &line)
         return PlayerDropResource(line);
     else if (line.find("pgt") != std::string::npos) // pgt = Player collecting resources
         return PlayerCollectResource(line);
-    // TODO: add other commands
+
+    // Eggs Command
+    else if (line.find("enw") != std::string::npos) // enw = An egg was laid by a player
+        return CreateEgg(line);
+    else if (line.find("edi") != std::string::npos) // edi = Death of an egg
+        return KillEgg(line);
+    else if (line.find("ebo") != std::string::npos) // ebo = Player connection from an egg
+        return KillEgg(line);
     else
-        return;
+        return 0;
 }
 
-void GameData::setMapSize(const std::string &mapSize)
+int GameData::setMapSize(const std::string &mapSize)
 {
     if (_mapSize.x != 0 && _mapSize.y != 0)
-        return;
+        return 0;
     std::string temp;
     std::string x;
     std::string y;
@@ -68,9 +79,10 @@ void GameData::setMapSize(const std::string &mapSize)
 
     _noise.setSize(_mapSize.x, _mapSize.y);
     _noise.generateNoise();
+    return 0;
 }
 
-void GameData::setTimeUnit(const std::string &timeUnit)
+int GameData::setTimeUnit(const std::string &timeUnit)
 {
     std::string temp;
     std::string t;
@@ -78,13 +90,52 @@ void GameData::setTimeUnit(const std::string &timeUnit)
     std::stringstream(timeUnit) >> temp >> t;
 
     try {
-        GameData::timeUnit = std::stoi(t);
+        int time = std::stoi(t);
+
+        if (GameData::timeUnit == 0)
+            GameData::gameSpeed = time;
+
+        GameData::timeUnit = time;
     } catch (std::invalid_argument &e) {
         throw Error::InvalidArgument("GameData::setTimeUnit");
     }
+    return 0;
 }
 
-void GameData::setTileContent(const std::string &tileContent)
+int GameData::addTimeUnit(const std::string &timeUnit)
+{
+    std::string temp;
+    std::string t;
+
+    std::stringstream(timeUnit) >> temp >> t;
+
+    try {
+        int time = std::stoi(t);
+
+        GameData::gameSpeed = time;
+        GameData::timeUnit += time;
+    } catch (std::invalid_argument &e) {
+        throw Error::InvalidArgument("GameData::addTimeUnit");
+    }
+    return 0;
+}
+
+int GameData::setMultipleTileContent(const std::string &tiles)
+{
+    std::vector<std::string> tilesVector;
+
+    std::stringstream ss(tiles);
+    std::string temp;
+
+    while (ss >> temp)
+        tilesVector.push_back(temp);
+    
+    for (auto &tile : tilesVector)
+        setSingleTileContent(tile);
+    return 0;
+}
+
+int GameData::setSingleTileContent(const std::string &tile)
 {
     std::string temp;
     std::string x;
@@ -97,7 +148,7 @@ void GameData::setTileContent(const std::string &tileContent)
     std::string q5;
     std::string q6;
 
-    std::stringstream(tileContent) >> temp >> x >> y >> q0 >> q1 >> q2 >> q3 >> q4 >> q5 >> q6;
+    std::stringstream(tile) >> temp >> x >> y >> q0 >> q1 >> q2 >> q3 >> q4 >> q5 >> q6;
 
     try {
         int xInt = std::stoi(x);
@@ -114,15 +165,23 @@ void GameData::setTileContent(const std::string &tileContent)
         // Check if the map[x][y] already exists
         if (_map.find(std::make_pair(xInt, yInt)) != _map.end()) {
             _map[std::make_pair(xInt, yInt)]->setNewResources(q0Int, q1Int, q2Int, q3Int, q4Int, q5Int, q6Int);
-            return;
+            return 0;
         }
         _map[std::make_pair(xInt, yInt)] = std::make_shared<Tile>(Tile(sf::Vector2i(xInt, yInt), q0Int, q1Int, q2Int, q3Int, q4Int, q5Int, q6Int));
     } catch (std::invalid_argument &e) {
-        throw Error::InvalidArgument("GameData::setTileContent");
+        throw Error::InvalidArgument("GameData::setSingleTileContent");
     }
+    return 0;
 }
 
-void GameData::setTeamName(const std::string &name)
+int GameData::setTileContent(const std::string &tileContent)
+{
+    if (tileContent.find("bct") != tileContent.rfind("bct"))
+        return setMultipleTileContent(tileContent);
+    return setSingleTileContent(tileContent);
+}
+
+int GameData::setTeamName(const std::string &name)
 {
     std::string temp;
     std::string n;
@@ -131,8 +190,9 @@ void GameData::setTeamName(const std::string &name)
 
     for (auto &team : _teams)
         if (team.compare(n) == 0)
-            return;
+            return 0;
     _teams.push_back(n);
+    return 1;
 }
 
 sf::Vector2i GameData::getMapSize() const
@@ -191,7 +251,7 @@ void GameData::setPosition(const sf::Vector2f &position)
     _position = position;
 }
 
-void GameData::setPlayer(const std::string &player)
+int GameData::setPlayer(const std::string &player)
 {
     std::string temp;
     std::string name;
@@ -206,20 +266,29 @@ void GameData::setPlayer(const std::string &player)
     try {
         // Check if the #n players already exists
         if (_players.find(name) != _players.end())
-            return;
+            return 0;
 
         int xInt = std::stoi(x);
         int yInt = std::stoi(y);
         int oriantationInt = std::stoi(orientation);
         int levelInt = std::stoi(level);
 
-        _players[name] = std::make_shared<Player>(Player(sf::Vector2i(xInt, yInt), oriantationInt, levelInt, team));
+        int index = 1;
+
+        for (auto &t : _teams) {
+            if (t.compare(team) == 0)
+                break;
+            index++;
+        }
+
+        _players[name] = std::make_shared<Player>(Player(sf::Vector2i(xInt, yInt), oriantationInt, levelInt, team, index));
     } catch (std::invalid_argument &e) {
         throw Error::InvalidArgument("GameData::setPlayer");
     }
+    return 0;
 }
 
-void GameData::setPlayerMovement(const std::string &player)
+int GameData::setPlayerMovement(const std::string &player)
 {
     std::string temp;
     std::string name;
@@ -232,7 +301,7 @@ void GameData::setPlayerMovement(const std::string &player)
     try {
         // Check if the #n players didn't exists
         if (_players.find(name) == _players.end())
-            return;
+            return 0;
         
         int xInt = std::stoi(x);
         int yInt = std::stoi(y);
@@ -242,9 +311,10 @@ void GameData::setPlayerMovement(const std::string &player)
     } catch (std::invalid_argument &e) {
         throw Error::InvalidArgument("GameData::setPlayerMovement");
     }
+    return 0;
 }
 
-void GameData::setPlayerLevel(const std::string &player)
+int GameData::setPlayerLevel(const std::string &player)
 {
     std::string temp;
     std::string name;
@@ -255,7 +325,7 @@ void GameData::setPlayerLevel(const std::string &player)
     try {
         // Check if the #n players didn't exists
         if (_players.find(name) == _players.end())
-            return;
+            return 0;
 
         int levelInt = std::stoi(level);
 
@@ -263,9 +333,10 @@ void GameData::setPlayerLevel(const std::string &player)
     } catch (std::invalid_argument &e) {
         throw Error::InvalidArgument("GameData::setPlayerLevel");
     }
+    return 0;
 }
 
-void GameData::setPlayerInventory(const std::string &player)
+int GameData::setPlayerInventory(const std::string &player)
 {
     std::string temp;
     std::string name;
@@ -284,7 +355,7 @@ void GameData::setPlayerInventory(const std::string &player)
     try {
         // Check if the #n players didn't exists
         if (_players.find(name) == _players.end())
-            return;
+            return 0;
 
         int xInt = std::stoi(x);
         int yInt = std::stoi(y);
@@ -303,9 +374,10 @@ void GameData::setPlayerInventory(const std::string &player)
     } catch (std::invalid_argument &e) {
         throw Error::InvalidArgument("GameData::setPlayerInventory");
     }
+    return 0;
 }
 
-void GameData::PlayerExpulsion(const std::string &player)
+int GameData::PlayerExpulsion(const std::string &player)
 {
     std::string temp;
     std::string name;
@@ -315,22 +387,23 @@ void GameData::PlayerExpulsion(const std::string &player)
     try {
         // Check if the #n players didn't exists
         if (_players.find(name) == _players.end())
-            return;
+            return 0;
         sf::Vector2i pos = _players[name]->getPosition();
 
         _players[name]->setExpulsion(true);
         for (auto &player : _players) {
             if (player.second->getPosition() == pos) {
                 player.second->expulse();
-                return;
+                return 0;
             }
         }
     } catch (std::invalid_argument &e) {
         throw Error::InvalidArgument("GameData::PlayerExpulsion");
     }
+    return 0;
 }
 
-void GameData::PlayerBroadcast(const std::string &player)
+int GameData::PlayerBroadcast(const std::string &player)
 {
     std::string temp;
     std::string name;
@@ -340,15 +413,16 @@ void GameData::PlayerBroadcast(const std::string &player)
     try {
         // Check if the #n players didn't exists
         if (_players.find(name) == _players.end())
-            return;
+            return 0;
 
         _players[name]->setBroadcast(true);
     } catch (std::invalid_argument &e) {
         throw Error::InvalidArgument("GameData::setPlayerBroadcast");
     }
+    return 0;
 }
 
-void GameData::PlayerCollectResource(const std::string &player)
+int GameData::PlayerCollectResource(const std::string &player)
 {
     std::string temp;
     std::string name;
@@ -359,7 +433,7 @@ void GameData::PlayerCollectResource(const std::string &player)
     try {
         // Check if the #n players didn't exists
         if (_players.find(name) == _players.end())
-            return;
+            return 0;
 
         std::shared_ptr<Tile> tile = getTile(_players[name]->getPosition().x, _players[name]->getPosition().y);
 
@@ -368,9 +442,10 @@ void GameData::PlayerCollectResource(const std::string &player)
     } catch (std::invalid_argument &e) {
         throw Error::InvalidArgument("GameData::setPlayerCollectResource");
     }
+    return 0;
 }
 
-void GameData::PlayerDropResource(const std::string &player)
+int GameData::PlayerDropResource(const std::string &player)
 {
     std::string temp;
     std::string name;
@@ -381,7 +456,7 @@ void GameData::PlayerDropResource(const std::string &player)
     try {
         // Check if the #n players didn't exists
         if (_players.find(name) == _players.end())
-            return;
+            return 0;
 
         std::shared_ptr<Tile> tile = getTile(_players[name]->getPosition().x, _players[name]->getPosition().y);
 
@@ -389,9 +464,10 @@ void GameData::PlayerDropResource(const std::string &player)
     } catch (std::invalid_argument &e) {
         throw Error::InvalidArgument("GameData::setPlayerDropResource");
     }
+    return 0;
 }
 
-void GameData::deletePlayer(const std::string &player)
+int GameData::deletePlayer(const std::string &player)
 {
     std::string temp;
     std::string name;
@@ -401,15 +477,74 @@ void GameData::deletePlayer(const std::string &player)
     try {
         // Check if the #n players didn't exists
         if (_players.find(name) == _players.end())
-            return;
+            return 0;
 
         _players.erase(name);
     } catch (std::invalid_argument &e) {
         throw Error::InvalidArgument("GameData::deletePlayer");
     }
+    return 0;
 }
 
 std::map<std::string, std::shared_ptr<Player>> GameData::getPlayers() const
 {
     return _players;
+}
+
+int GameData::CreateEgg(const std::string &egg)
+{
+    std::string temp;
+    std::string egg_name;
+    std::string player_name;
+    std::string x;
+    std::string y;
+
+    std::stringstream(egg) >> temp >> egg_name >> player_name >> x >> y;
+
+    try {
+        // Player didn't exists
+        if (_players.find(player_name) == _players.end())
+            return 0;
+
+        // Check if the #e eggs didn't exists
+        if (_eggs.find(egg_name) != _eggs.end())
+            return 0;
+
+        int index = 1;
+
+        for (auto &team : _teams) {
+            if (team.compare(_players[player_name]->getTeam()) == 0)
+                break;
+            index++;
+        }
+
+        _eggs[egg_name] = std::make_shared<Eggs>(sf::Vector2i(std::stoi(x), std::stoi(y)), player_name, _players[player_name]->getTeam(), index);
+    } catch (std::invalid_argument &e) {
+        throw Error::InvalidArgument("GameData::CreateEgg");
+    }
+    return 2;
+}
+
+int GameData::KillEgg(const std::string &egg)
+{
+    std::string temp;
+    std::string egg_name;
+
+    std::stringstream(egg) >> temp >> egg_name;
+
+    try {
+        // Check if the #e eggs didn't exists
+        if (_eggs.find(egg_name) == _eggs.end())
+            return 0;
+
+        _eggs.erase(egg_name);
+    } catch (std::invalid_argument &e) {
+        throw Error::InvalidArgument("GameData::KillEgg");
+    }
+    return 0;
+}
+
+std::map<std::string, std::shared_ptr<Eggs>> GameData::getEggs() const
+{
+    return _eggs;
 }

@@ -84,6 +84,17 @@ namespace UI {
                 return false;
             }
 
+            /**
+             * @brief Check if the widget is clicked
+             * Call the isIn function with the mouse position
+             * @return true  The widget is clicked
+             * @return false The widget is not clicked
+             */
+            virtual bool isClicked() const override
+            {
+                return _isClicked;
+            }
+
         // Pure virtual methods
         public:
             /**

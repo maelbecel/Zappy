@@ -116,6 +116,13 @@ namespace Network {
              */
             void processClient();
 
+            /**
+             * @brief Send data to the socket
+             *
+             * @param message The message/data to send
+             */
+            void send(const std::string &message);
+
         // Setters and Getters
         public:
             /**

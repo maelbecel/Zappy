@@ -7,18 +7,27 @@
 
 SRC	=	./Main.cpp\
 		./App/Application.cpp\
+		./App/Window.cpp\
 		./Game/Game.cpp\
 		./Game/Scene/GameScene/GameScene.cpp\
 		./Game/Scene/GameScene/GameData/GameData.cpp\
 		./Game/Scene/GameScene/Map/Map.cpp\
 		./Game/Scene/GameScene/Tiles/Tile.cpp\
+		./Game/Scene/GameScene/Tiles/TileHUD/TileHUD.cpp\
 		./Game/Scene/GameScene/Player/Player.cpp\
+		./Game/Scene/GameScene/Player/Eggs/Eggs.cpp\
+		./Game/Scene/GameScene/HUD/GameMenuHUD/GameMenuHUD.cpp\
+		./Game/Scene/GameScene/HUD/GameHUD/GameHUD.cpp\
+		./Game/Scene/GameScene/HUD/TeamHUD/TeamHUD.cpp\
+		./Game/Scene/GameScene/HUD/TeamHUD/Widget/TeamWidget.cpp\
 		./Game/Scene/Menu/Menu.cpp\
-		./Game/Scene/Menu/HUD/MenuHUD.cpp\
-		./Game/Scene/Menu/HUD/Widget/InputBox.cpp\
-		./Game/Scene/Menu/HUD/Widget/ButtonWidget.cpp\
-		./Game/Scene/Settings/Settings.cpp\
-		./Game/Scene/Settings/HUD/SettingsHUD.cpp\
+		./Game/Scene/Menu/HUD/Menu/MenuHUD.cpp\
+		./Game/Scene/Menu/HUD/Menu/Widget/InputBox.cpp\
+		./Game/Scene/Menu/HUD/Menu/Widget/ButtonWidget.cpp\
+		./Game/Scene/Menu/HUD/Settings/Widget/ArrowButtonWidget.cpp\
+		./Game/Scene/Menu/HUD/Settings/Widget/ValidateButtonWidget.cpp\
+		./Game/Scene/Menu/HUD/Settings/Widget/CrossButtonWidget.cpp\
+		./Game/Scene/Menu/HUD/Settings/SettingsHUD.cpp\
 		./Parser/Parser.cpp\
 		./Server/Server.cpp\
 		./Server/Socket/Socket.cpp\
@@ -33,7 +42,7 @@ SRC	+=	./UI/Animation/Animation.cpp\
 		./UI/Transition/Transition.cpp\
 		./UI/Manager/FontManager.cpp\
 		./UI/Manager/TextureManager.cpp\
-		#./UI/Layout/GridLayout.cpp\
+		./UI/Layout/GridLayout.cpp\
 		./UI/Layout/HorizontalLayout.cpp\
 		./UI/Layout/VerticalLayout.cpp\
 
@@ -45,13 +54,20 @@ INCLUDE =	-I .\
 			-I ./Game/Scene/GameScene/\
 			-I ./Game/Scene/GameScene/GameData/\
 			-I ./Game/Scene/GameScene/Tiles/\
+			-I ./Game/Scene/GameScene/Tiles/TileHUD/\
 			-I ./Game/Scene/GameScene/Player/\
+			-I ./Game/Scene/GameScene/Player/Eggs/\
 			-I ./Game/Scene/GameScene/Map/\
+			-I ./Game/Scene/GameScene/HUD/GameMenuHUD/\
+			-I ./Game/Scene/GameScene/HUD/GameHUD/\
+			-I ./Game/Scene/GameScene/HUD/TeamHUD/\
+			-I ./Game/Scene/GameScene/HUD/TeamHUD/Widget/\
 			-I ./Game/Scene/Menu/\
-			-I ./Game/Scene/Menu/HUD/\
-			-I ./Game/Scene/Menu/HUD/Widget/\
+			-I ./Game/Scene/Menu/HUD/Menu\
+			-I ./Game/Scene/Menu/HUD/Menu/Widget/\
 			-I ./Game/Scene/Settings/\
-			-I ./Game/Scene/Settings/HUD/\
+			-I ./Game/Scene/Menu/HUD/Settings\
+			-I ./Game/Scene/Menu/HUD/Settings/Widget/\
 			-I ./Parser/\
 			-I ./Server/\
 			-I ./Server/Socket/\
@@ -64,7 +80,7 @@ INCLUDE =	-I .\
 			-I ./UI/Transition/\
 			-I ./UI/Widget/\
 			-I ./UI/Manager/\
-			#-I ./UI/Layout/\
+			-I ./UI/Layout/\
 
 OBJ	=	$(SRC:.cpp=.o)
 
@@ -72,7 +88,7 @@ NAME	=	zappy_gui
 
 CXXFLAGS += -std=c++20 -Wall -Wextra
 
-SFML = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
+SFML = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lconfig++
 
 all:	$(NAME)
 

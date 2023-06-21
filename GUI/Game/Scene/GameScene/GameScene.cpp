@@ -35,6 +35,7 @@ namespace Scene {
             _teamHUD.setTeams(_gameData.getTeams());
         else if (response == 2) {// New Eggs created
             server.sendCommand("sgt");
+            server.Run();
             _gameData.parse(server.getSocket().response);
 
             for (auto &egg : _gameData.getEggs()) {
@@ -54,11 +55,15 @@ namespace Scene {
             _gameData.parse(server.getSocket().response);
         }
 
-        /*if (_gameData.getMap().empty()) {
+        server.sendCommand("sgt");
+        server.Run();
+        _gameData.parse(server.getSocket().response);
+
+        if (_gameData.getTimeUnit() % 20 == 0 || _gameData.getMap().empty()) {
             server.sendCommand("mct");
             server.Run();
             _gameData.parse(server.getSocket().response);
-        }*/
+        }
     }
 
     void GameScene::Render(sf::RenderWindow &window)
@@ -208,9 +213,11 @@ namespace Scene {
         _tileHUD.setIsOpen(true);
 
         server.sendCommand("bct " + std::to_string(x) + " " + std::to_string(y));
+        server.Run();
         _gameData.parse(server.getSocket().response);
 
         server.sendCommand("sgt");
+        server.Run();
         _gameData.parse(server.getSocket().response);
 
         // Loop on the player
@@ -218,9 +225,11 @@ namespace Scene {
             if (player.second->getPosition() != sf::Vector2i(x, y))
                 continue;
             server.sendCommand("plv " + player.first);
+            server.Run();
             _gameData.parse(server.getSocket().response);
 
             server.sendCommand("pin " + player.first);
+            server.Run();
             _gameData.parse(server.getSocket().response);
         }
 

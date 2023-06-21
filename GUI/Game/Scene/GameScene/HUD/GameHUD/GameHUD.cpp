@@ -67,13 +67,10 @@ namespace UI {
                 return;
 
             if (_speed1x->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) == true) {
-                GameData::gameSpeed = 25;
                 server.sendCommand("sst 25");
             } else if (_speed2x->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) == true) {
-                GameData::gameSpeed = 50;
                 server.sendCommand("sst 50");
             } else if (_speed4x->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) == true) {
-                GameData::gameSpeed = 200;
                 server.sendCommand("sst 200");
             }
             return;

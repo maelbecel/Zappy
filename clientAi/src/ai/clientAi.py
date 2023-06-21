@@ -86,6 +86,7 @@ class clientAi:
             self.response = self.client.receive().split("\n")
             if self.response[0] == "ko" or len(self.response) != 3:
                 raise cEx("Error: team name is invalid")
+            self.getConnectionResponse()
         except Exception as e:
             print(e)
 
@@ -334,7 +335,8 @@ class clientAi:
         if not self.alive:
             return
         while self.alive:
-            self.forward()
+            self.broadcast("Hello World")
+            self.grabFood()
 
     def resetFood(self, array):
         """

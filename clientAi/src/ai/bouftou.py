@@ -6,10 +6,11 @@
 ##
 
 from ..ai.clientAi import clientAi as clientAI
+from ..ai.clientAi import PERCENTAGE_OF_FOOD
 
 
 class bouftou(clientAI):
-    def __init__(self, teamName, port, host):
+    def __init__(self, teamName, port, host, elementToGrab):
         """
         This is a constructor method that initializes the attributes of an object
         with a team name, port, host, objective dictionary, and state.
@@ -28,70 +29,109 @@ class bouftou(clientAI):
         self.safeFoodLevel = 10
         self.max = 10
         self.oldmax = 10
-        self.process = 4
+        self.startProcess = 3
+        self.process = self.startProcess
+        self.elementToGrab = elementToGrab
 
-    def takeAllFoodForHimself(self):
+    def checkElementToGrab(self):
+
+        if self.elementToGrab == "food":
+            self.process = 3
+        if (
+            self.elementToGrab == "linemate"
+            or self.elementToGrab == "deraumere"
+            or self.elementToGrab == "sibur"
+            or self.elementToGrab == "mendiane"
+        ):
+            self.process = 2
+            return True
+        if (
+            self.elementToGrab == "phiras"
+            or self.elementToGrab == "thystame"
+        ):
+            self.process = 3
+            return True
+        return False
+
+    def takeAllElementForHimself(self):
+
         self.look()
-
         if not self.lookResult[0]:
             return
         for element in self.lookResult[0]:
-            if element == "food":
-                self.take("food")
+            if element == self.elementToGrab:
+                self.take(self.elementToGrab)
 
-    def getAllFoodOfTheWorld(self, x, y):
+    def takeSomeFood(self):
+
+        count = 0
+        self.look()
+        for element in self.lookResult[0]:
+            if element == "food":
+                count += 1
+        if int(count) <= 0:
+            self.lookingForFood = True
+            return
+        for i in range(0, int(count)):
+            self.take("food")
+
+        self.lookingForFood = False
+
+    def getAllElementOfTheWorld(self, x, y):
         for i in range(0, self.mapSize[x]):
             for j in range(0, self.mapSize[y]):
-                self.takeAllFoodForHimself()
+                if not self.elementToGrab == "food":
+                    self.take("food")
+                self.takeAllElementForHimself()
                 self.forward()
             self.right()
             self.forward()
             self.left()
 
-    def throwFood(self, count):
+    def throwElement(self, count):
         for i in range(0, count):
-            self.set("food")
+            if not self.elementToGrab == "food":
+                self.take("food")
+            self.set(self.elementToGrab)
 
-    def dispatchAllFood(self):
+    def dispatchAllElement(self):
         self.inventory()
 
-        foodToDispatch = int(self.inv["food"] / (self.mapSize[0] * self.mapSize[1]))
+        elementToDispatch = int(self.inv[self.elementToGrab] / (self.mapSize[0] * self.mapSize[1]))
 
         for i in range(0, self.mapSize[0]):
             for j in range(0, self.mapSize[1]):
-                self.throwFood(foodToDispatch)
+                self.throwElement(elementToDispatch)
                 self.forward()
             self.right()
             self.forward()
             self.left()
 
-    def dropAllOverFood(self):
-        print("aa")
-        self.inventory()
-        print("bb")
-        self.max = self.inv["food"]
-        print("number of food -> ", self.inv["food"])
-        print("self.safeFoodLevel -> ", self.safeFoodLevel)
-        foodToThrow = self.inv["food"] - self.safeFoodLevel
-        print("food to throw -> ", foodToThrow)
-        if not foodToThrow > 0:
-            return
-
-        for i in range(0, foodToThrow):
-            self.set("food")
-        self.safeFoodLevel *= int(int(self.max) / int(self.oldmax))
-        self.oldmax = self.max
+    def dropAllOverElement(self):
+        if (self.elementToGrab == "food"):
+            self.inventory()
+            self.max = self.inv[self.elementToGrab]
+            foodToThrow = self.inv[self.elementToGrab] - self.safeFoodLevel
+            if not foodToThrow > 0:
+                return
+            for i in range(0, foodToThrow):
+                self.set(self.elementToGrab)
+            if self.startProcess - 1 == self.process:
+                self.safeFoodLevel *= int((int(self.max) / int(self.oldmax)) / 1.2)
+            else:
+                self.safeFoodLevel *= int(int(self.max) / int(self.oldmax))
+            self.oldmax = self.max
+        else:
+            for i in range(0, self.inv[self.elementToGrab]):
+                self.set(self.elementToGrab)
 
     def run(self):
-        print("I'm a bouftou")
-        print("map size -> ", self.mapSize)
         self.inventory()
         while self.alive:
             self.process -= 1
             if self.process <= 0:
-                self.dispatchAllFood()
+                self.dispatchAllElement()
                 continue
-            self.getAllFoodOfTheWorld(0, 1)
-            self.dropAllOverFood()
-            self.getAllFoodOfTheWorld(1, 0)
-            self.dropAllOverFood()
+            self.getAllElementOfTheWorld(0, 1)
+            self.dropAllOverElement()
+            self.takeAllElementForHimself()

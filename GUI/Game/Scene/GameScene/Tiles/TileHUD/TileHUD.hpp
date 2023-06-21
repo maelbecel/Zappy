@@ -67,7 +67,7 @@ namespace UI {
              * @param str The string to set
              * @param pos The position of the string
              */
-            sf::Text setString(std::string str, sf::Vector2f pos);
+            sf::Text setString(std::string str, sf::Vector2f pos, int fontSize);
 
             /**
              * @brief Set the Is Open object
@@ -120,13 +120,6 @@ namespace UI {
              * @return std::string The content of the egg
              */
             std::string constructEggContent(std::pair<const std::string, std::shared_ptr<Eggs>> &egg, GameData &gameData);
-
-            /**
-             * @brief Construct the resource content
-             *
-             * @param resource The resource to construct the content
-             * @return std::string The content of the resource
-             */
 
         // Attributes
         private:

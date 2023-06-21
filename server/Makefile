@@ -11,7 +11,9 @@ BUILD_DIR = build
 
 SRC = 	$(SRC_DIR)/main.c \
 		$(SRC_DIR)/server.c \
-		$(SRC_DIR)/main_loop.c
+		$(SRC_DIR)/main_loop.c \
+		$(SRC_DIR)/sigint_handler.c \
+		$(SRC_DIR)/winning_detection.c
 
 SRC +=	$(SRC_DIR)/server/server_create.c \
 		$(SRC_DIR)/server/server_destroy.c
@@ -34,6 +36,7 @@ SRC += 	$(SRC_DIR)/map/tile/tile_add_player.c \
 		$(SRC_DIR)/map/tile/tile_create.c \
 		$(SRC_DIR)/map/tile/tile_destroy.c \
 		$(SRC_DIR)/map/tile/tile_remove_player.c \
+		$(SRC_DIR)/map/tile/tile_get_players.c \
 		$(SRC_DIR)/map/map_create.c \
 		$(SRC_DIR)/map/map_destroy.c \
 		$(SRC_DIR)/map/map_get_tile.c \
@@ -44,7 +47,9 @@ SRC +=	$(SRC_DIR)/client/client_accept.c \
 		$(SRC_DIR)/client/client_destroy.c \
 		$(SRC_DIR)/client/client_read.c \
 		$(SRC_DIR)/client/client_disconnect.c \
-		$(SRC_DIR)/client/client_get_by_id.c
+		$(SRC_DIR)/client/client_get_by_id.c \
+		$(SRC_DIR)/client/write_buffer/wbuffer_add_message.c \
+		$(SRC_DIR)/client/write_buffer/wbuffer_empty.c
 
 SRC +=	$(SRC_DIR)/command/command_exec.c \
 		$(SRC_DIR)/command/command_exec_ai.c \
@@ -53,15 +58,18 @@ SRC +=	$(SRC_DIR)/command/command_exec.c \
 SRC +=	$(SRC_DIR)/utils/id_generator.c \
 		$(SRC_DIR)/utils/read_socket.c \
 		$(SRC_DIR)/utils/ostr_to_array.c \
-		$(SRC_DIR)/utils/array_size.c
+		$(SRC_DIR)/utils/array_size.c \
+		$(SRC_DIR)/utils/stringbuilder.c
 
 SRC +=	$(SRC_DIR)/team/team_create.c \
 		$(SRC_DIR)/team/team_destroy.c \
-		$(SRC_DIR)/team/team_get_by_id.c
+		$(SRC_DIR)/team/team_get_by_id.c \
+		$(SRC_DIR)/team/team_get_by_name.c
 
 SRC +=	$(SRC_DIR)/ai/ai_create.c \
 		$(SRC_DIR)/ai/ai_destroy.c \
-		$(SRC_DIR)/ai/ai_dead.c
+		$(SRC_DIR)/ai/ai_dead.c \
+		$(SRC_DIR)/ai/ai_get_direction_from_orientation.c
 
 SRC +=	$(SRC_DIR)/time/time_create.c \
 		$(SRC_DIR)/time/time_destroy.c \
@@ -83,7 +91,14 @@ SRC +=	$(SRC_DIR)/command/graphic/msz.c \
 		$(SRC_DIR)/command/graphic/plv.c \
 		$(SRC_DIR)/command/graphic/pin.c \
 		$(SRC_DIR)/command/graphic/pgt.c \
-		$(SRC_DIR)/command/graphic/pdr.c
+		$(SRC_DIR)/command/graphic/pdr.c \
+		$(SRC_DIR)/command/graphic/ebo.c \
+		$(SRC_DIR)/command/graphic/pfk.c \
+		$(SRC_DIR)/command/graphic/enw.c \
+		$(SRC_DIR)/command/graphic/pex.c \
+		$(SRC_DIR)/command/graphic/edi.c \
+		$(SRC_DIR)/command/graphic/pic.c \
+		$(SRC_DIR)/command/graphic/pie.c
 
 SRC +=	$(SRC_DIR)/command/ai/forward.c \
 		$(SRC_DIR)/command/ai/right.c \
@@ -91,13 +106,29 @@ SRC +=	$(SRC_DIR)/command/ai/forward.c \
 		$(SRC_DIR)/command/ai/inventory.c \
 		$(SRC_DIR)/command/ai/take.c \
 		$(SRC_DIR)/command/ai/set.c \
-		$(SRC_DIR)/command/ai/notif_graphic.c
+		$(SRC_DIR)/command/ai/connect_nbr.c \
+		$(SRC_DIR)/command/ai/look.c \
+		$(SRC_DIR)/command/ai/look_func.c \
+		$(SRC_DIR)/command/ai/fork.c \
+		$(SRC_DIR)/command/ai/eject.c \
+		$(SRC_DIR)/command/ai/eject_eggs.c \
+		$(SRC_DIR)/command/ai/incantation.c \
+		$(SRC_DIR)/command/ai/incantation_utils.c \
+		$(SRC_DIR)/command/ai/broadcast.c \
+		$(SRC_DIR)/command/ai/notif_graphic.c \
+		$(SRC_DIR)/command/ai/notif_ai.c
+
+SRC +=	$(SRC_DIR)/egg/egg_create.c \
+		$(SRC_DIR)/egg/egg_destroy.c \
+		$(SRC_DIR)/egg/egg_get_one_in_team.c \
+		$(SRC_DIR)/egg/egg_is_egg_in_team.c \
+		$(SRC_DIR)/egg/egg_add_to_team.c
 
 OBJ = $(SRC:%.c=$(BUILD_DIR)/%.o)
 
 NAME = zappy_server
 
-CFLAGS += -Wall -Wextra
+CFLAGS += -Wall -Wextra -D _GNU_SOURCE
 
 CFLAGS += -I include -I libs/list/include -I libs/socket/include
 
@@ -129,7 +160,7 @@ fclean: clean
 
 re: fclean all
 
-debug: CFLAGS += -g
+debug: CFLAGS += -g -D DEBUG
 debug: re
 
 .PHONY: all clean fclean re debug

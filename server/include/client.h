@@ -47,6 +47,7 @@ typedef struct client_s {
     client_type_t type;
     void *data;
     olist_t *waiting_orders;
+    olist_t *wbuffer;
     action_t *current_action;
 } client_t;
 
@@ -65,5 +66,12 @@ client_t *client_create(void);
  * @param client
  */
 void client_destroy(client_t *client);
+
+/**
+ * @brief Destroy a list of client_t structure
+ *
+ * @param list
+ */
+void client_list_destroy(olist_t *list);
 
 #endif /* !CLIENT_H_ */

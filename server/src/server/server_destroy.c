@@ -18,7 +18,13 @@ void server_destroy(server_t *server)
         olist_destroy(server->teams);
     if (server->clients)
         olist_destroy(server->clients);
+    if (server->eggs)
+        olist_destroy(server->eggs);
     if (server->time)
         time_destroy(server->time);
+    if (server->socket)
+        odestroy_socket(server->socket);
+    if (server->select)
+        free(server->select);
     free(server);
 }

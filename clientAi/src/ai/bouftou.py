@@ -34,7 +34,6 @@ class bouftou(clientAI):
         self.elementToGrab = elementToGrab
 
     def checkElementToGrab(self):
-
         if self.elementToGrab == "food":
             self.process = 3
         if (
@@ -45,16 +44,12 @@ class bouftou(clientAI):
         ):
             self.process = 2
             return True
-        if (
-            self.elementToGrab == "phiras"
-            or self.elementToGrab == "thystame"
-        ):
+        if self.elementToGrab == "phiras" or self.elementToGrab == "thystame":
             self.process = 3
             return True
         return False
 
     def takeAllElementForHimself(self):
-
         self.look()
         if not self.lookResult[0]:
             return
@@ -63,7 +58,6 @@ class bouftou(clientAI):
                 self.take(self.elementToGrab)
 
     def takeSomeFood(self):
-
         count = 0
         self.look()
         for element in self.lookResult[0]:
@@ -97,7 +91,9 @@ class bouftou(clientAI):
     def dispatchAllElement(self):
         self.inventory()
 
-        elementToDispatch = int(self.inv[self.elementToGrab] / (self.mapSize[0] * self.mapSize[1]))
+        elementToDispatch = int(
+            self.inv[self.elementToGrab] / (self.mapSize[0] * self.mapSize[1])
+        )
 
         for i in range(0, self.mapSize[0]):
             for j in range(0, self.mapSize[1]):
@@ -108,7 +104,7 @@ class bouftou(clientAI):
             self.left()
 
     def dropAllOverElement(self):
-        if (self.elementToGrab == "food"):
+        if self.elementToGrab == "food":
             self.inventory()
             self.max = self.inv[self.elementToGrab]
             foodToThrow = self.inv[self.elementToGrab] - self.safeFoodLevel

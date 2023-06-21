@@ -13,7 +13,7 @@ from ..server.clientServer import clientServer
 from ..direction.direction import direction
 from ..state.clientState import enumState as enumState
 
-MIN_FOOD = 7
+MIN_FOOD = 10
 PERCENTAGE_OF_FOOD = 0.5
 
 
@@ -129,7 +129,12 @@ class clientAi:
         elif self.response.find("message") != -1:
             print("Message: " + self.response)
             self.message = self.response
-            self.state = enumState.JOIN_INCANTATION
+            values = self.response.split(';')
+            value1 = values[0].split(',')[-1].strip()
+            value2 = values[1]
+            value3 = values[2][:-1]
+            if (value1 == self.teamName and value2 == "Incantation" and value3 == str(self.level)):
+                self.state = enumState.JOIN_INCANTATION
             self.receive()
         elif self.response.find("eject") != -1:
             # handle eject
@@ -373,6 +378,7 @@ class clientAi:
             ):
                 self.fillInv(array)
                 break
+        print("inventory -> %s" % self.inv["food"])
 
     def fillInv(self, array):
         """

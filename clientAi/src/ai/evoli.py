@@ -118,9 +118,6 @@ class evoli(clientAI):
         different, it
         """
 
-        print("dict1: ", dict1)
-        print("dict2: ", dict2)
-
         if len(dict1) != len(dict2):
             print("The dictionaries are not equal")
         else:
@@ -255,9 +252,9 @@ class evoli(clientAI):
         """
         count = self.countPlayerOnCase()
 
+        print("count = " + str(count))
+        print("required = " + str(REQUIRED_PLAYER[self.level - 1]))
         if count == REQUIRED_PLAYER[self.level - 1]:
-            if (self.level == 2):
-                self.broadcast("elevate to level 3")
             if not self.incantation():
                 self.takeUselessRessourcesOnCase()
                 self.elevate()
@@ -329,10 +326,57 @@ class evoli(clientAI):
                         return False
                 id += 1
         return False
+    
+    def checkPlayerInFront(self):
+        self.look()
+        if "player" in self.lookResult[2]:
+            return True
+        return False
 
     def joinIncantation(self):
-        print(self.message)
-        exit(0)
+        orientation = self.message.split(',')[0].split(' ')[-1].strip()
+        print("orientation : " + orientation)
+        if (orientation == "0"):
+            print("count = " + str(self.countPlayerOnCase()))
+            if (self.countPlayerOnCase() == 2):
+                exit(0)
+            if (self.countPlayerOnCase() == 1):
+                while (self.checkPlayerInFront() == False):
+                    self.left()
+                self.forward()
+        elif (orientation == "1"):
+            print("count = " + str(self.countPlayerOnCase()))
+            if (self.countPlayerOnCase() == 2):
+                exit(0)
+            self.forward()
+        elif (orientation == "2"):
+            self.forward()
+            self.left()
+            self.forward()
+        elif (orientation == "3"):
+            self.left()
+            self.forward()
+        elif (orientation == "4"):
+            self.left()
+            self.forward()
+            self.left()
+            self.forward()
+        elif (orientation == "5"):
+            self.left()
+            self.left()
+            self.forward()
+        elif (orientation == "6"):
+            self.right()
+            self.forward()
+            self.right()
+            self.forward()
+        elif (orientation == "7"):
+            self.right()
+            self.forward()
+        elif (orientation == "8"):
+            self.forward()
+            self.right()
+            self.forward()
 
     def placeRessources(self):
         """

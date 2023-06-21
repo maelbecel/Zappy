@@ -67,7 +67,14 @@ namespace UI {
     {
         window.draw(_background);
         window.draw(_backgroundSprite);
-        // window.draw(_tileContent);
+        if (_textMode == false) {
+            window.draw(_tileClicked);
+            for (auto &resource : _tileResourceSprite) {
+                window.draw(resource.second.sprite);
+                window.draw(resource.second.quantity);
+            }
+        } else
+            window.draw(_tileContent);
 
         if (_crossTileHUDButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
             _crossTileHUDButton->render(window, ButtonState::HOVERED);
@@ -128,10 +135,6 @@ namespace UI {
             }
         }
 
-        for (auto &resource : _tileResourceSprite) {
-            window.draw(resource.second.sprite);
-            window.draw(resource.second.quantity);
-        }
     }
 
     void TileHUD::handleEvent(sf::Event event, UNUSED Network::Server &server, UNUSED sf::RenderWindow &window)
@@ -282,6 +285,8 @@ namespace UI {
         int j = 0;
         int index = 0;
 
+        _tileClicked = setString("Tile clicked: (" + std::to_string(x) + ", " + std::to_string(y) + ")\n\n", sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10));
+        _tileClicked.setScale(sf::Vector2f(1.5f, 1.5f));
         for (auto &resource : _tileResourceSprite) {
             resource.second.quantity = setString(std::to_string(tile->getResource(index)), sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 155 + (i * 150) + 50, 200 + (j * 120) + 50));
             i++;

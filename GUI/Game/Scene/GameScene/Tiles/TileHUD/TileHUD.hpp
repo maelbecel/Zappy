@@ -136,6 +136,7 @@ namespace UI {
             bool _textMode;                         /*!< Is the Tile HUD in text mode ? */
             sf::Text _tilePosition;                 /*!< Text of the tile position */
             sf::Text _tileContent;                  /*!< Text of the tile content */
+            sf::Text _tileClicked;                  /*!< Text of the tile clicked */
             std::unordered_map<int, sf::Text> _tilePlayerContent; /*!< Text of the tile player content */
             std::unordered_map<int, sf::Text> _tileEggContent;   /*!< Text of the tile egg content */
             std::unordered_map<RESOURCE, tileResource> _tileResourceSprite; /*!< Sprite of the tile ressource content */

@@ -30,7 +30,6 @@ static void send_infos(client_t *client, team_t *team, server_t *server)
             continue;
         if (tmp->type == GRAPHIC) {
             pnw(tmp, client, server);
-            mct(tmp, server, NULL);
         }
     }
 }

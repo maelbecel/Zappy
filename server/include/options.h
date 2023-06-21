@@ -8,6 +8,16 @@
 #ifndef OPTIONS_H_
     #define OPTIONS_H_
 
+    #define HELP_MESSAGE "USAGE: ./zappy_server -p port -x width -y height -n \
+name1 name2 ... -c clientsNb -f freq\n\
+\tport is the port number\n\
+\twidth is the width of the world\n\
+\theight is the height of the world\n\
+\tnameX is the name of the team X\n\
+\tclientsNb is the number of authorized clients per team\n\
+\tfreq is the reciprocal of time unit for execution of actions\n\
+"
+
 typedef unsigned int uint;
 
 typedef struct options_s {

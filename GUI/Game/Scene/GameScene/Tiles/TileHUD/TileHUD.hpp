@@ -132,7 +132,7 @@ namespace UI {
             sf::Text _tileClicked;                  /*!< Text of the tile clicked */
             std::unordered_map<int, sf::Text> _tilePlayerContent; /*!< Text of the tile player content */
             std::unordered_map<int, sf::Text> _tileEggContent;   /*!< Text of the tile egg content */
-            std::unordered_map<RESOURCE, tileResource> _tileResourceSprite; /*!< Sprite of the tile ressource content */
+            std::map<RESOURCE, tileResource> _tileResourceSprite; /*!< Sprite of the tile ressource content */
             IButton *_crossTileHUDButton;           /*!< Button to close the settings */
             IButton *_changePlayerLeftButton;       /*!< Button to change the player left */
             IButton *_changePlayerRightButton;      /*!< Button to change the player right */

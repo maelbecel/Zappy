@@ -72,11 +72,9 @@ namespace UI {
             void drawHover(UNUSED sf::RenderTarget &target, UNUSED sf::RenderStates states) const override {};
 
             /**
-             * @brief Handle the event of the widget
+             * @brief Handle the event of the button
              *
              * @param event The event to handle
-             * 
-             * Here we don't need to handle the event of the widget
              */
             void handleEvent(UNUSED sf::Event event) override {};
 
@@ -99,6 +97,15 @@ namespace UI {
              * It's always the same size (178.0f, 96.0f)
              */
             void setSize(UNUSED const sf::Vector2f &size) override {};
+
+            /**
+             * @brief Get the Team Name object
+             *
+             * @return std::string The name of the team
+             */
+            std::string getTeamName() const;
+
+            bool isInside(sf::Vector2f mousePos);
 
         // Operators
         public:

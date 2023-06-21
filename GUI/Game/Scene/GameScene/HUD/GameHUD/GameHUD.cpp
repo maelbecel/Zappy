@@ -9,6 +9,7 @@
 #include "Window.hpp"
 #include "ArrowButtonWidget.hpp"
 #include "CrossButtonWidget.hpp"
+#include "GameData.hpp"
 
 namespace UI {
     GameHUD::GameHUD()
@@ -65,12 +66,16 @@ namespace UI {
             if (event.mouseButton.button != sf::Mouse::Left)
                 return;
 
-            if (_speed1x->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) == true)
-                server.sendCommand("sst 25\n");
-            else if (_speed2x->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) == true)
-                server.sendCommand("sst 50\n");
-            else if (_speed4x->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) == true)
-                server.sendCommand("sst 100\n");
+            if (_speed1x->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) == true) {
+                GameData::gameSpeed = 25;
+                server.sendCommand("sst 25");
+            } else if (_speed2x->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) == true) {
+                GameData::gameSpeed = 50;
+                server.sendCommand("sst 50");
+            } else if (_speed4x->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) == true) {
+                GameData::gameSpeed = 200;
+                server.sendCommand("sst 200");
+            }
             return;
         }
     }

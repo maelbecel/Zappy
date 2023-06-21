@@ -13,6 +13,7 @@
     #include "Map.hpp"
     #include "TeamHUD.hpp"
     #include "GameMenuHUD.hpp"
+    #include "TileHUD.hpp"
     #include "GameHUD.hpp"
     #include <memory>
 
@@ -106,8 +107,9 @@ namespace Scene {
              * @param x The tile x position
              * @param y The tile y position
              * @param server The server
+             * @param isLeft If the click is a click on left half of screen
              */
-            void openTileHUD(int x, int y, Network::Server &server);
+            void openTileHUD(int x, int y, Network::Server &server, bool isLeft);
 
         // Attributes
         private:
@@ -117,6 +119,7 @@ namespace Scene {
             UI::TeamHUD _teamHUD; /*!< The team HUD */
             UI::GameMenuHUD _gameMenuHUD; /*!< The game menu HUD */
             UI::GameHUD _gameHUD; /*!< The game HUD */
+            UI::TileHUD _tileHUD; /*!< The tile HUD */
     };
 }
 

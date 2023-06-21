@@ -56,12 +56,13 @@ namespace UI {
 
     void CrossButtonWidget::setPosition(const sf::Vector2f &position)
     {
-        _box.setPosition(position);
+        _position = position;
+        _idleSprite.setPosition(position);
+        _hoveredSprite.setPosition(position);
     }
 
-    void CrossButtonWidget::setSize(const sf::Vector2f &size)
+    void CrossButtonWidget::setSize(UNUSED const sf::Vector2f &size)
     {
-        _box.setSize(size);
     }
 
     ///////////////
@@ -70,7 +71,8 @@ namespace UI {
 
     CrossButtonWidget &CrossButtonWidget::operator=(const CrossButtonWidget &CrossbuttonWidget)
     {
-        _box = CrossbuttonWidget._box;
+        _idleSprite = CrossbuttonWidget._idleSprite;
+        _hoveredSprite = CrossbuttonWidget._hoveredSprite;
         return *this;
     }
 };

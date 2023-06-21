@@ -26,7 +26,7 @@ int Window::getWindowHeight() {
 
 void Window::readConfigFile() {
     libconfig::Config cfg;
-    cfg.readFile("./config/config.cfg");
+    cfg.readFile("./Config/config.cfg");
     libconfig::Setting& config = cfg.lookup("config");
 
     if (config.exists("screen")) {

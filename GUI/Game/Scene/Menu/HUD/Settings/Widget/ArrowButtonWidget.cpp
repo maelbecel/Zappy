@@ -68,12 +68,13 @@ namespace UI {
 
     void ArrowButtonWidget::setPosition(const sf::Vector2f &position)
     {
-        _box.setPosition(position);
+        _position = position;
+        _idleSprite.setPosition(position);
+        _hoveredSprite.setPosition(position);
     }
 
-    void ArrowButtonWidget::setSize(const sf::Vector2f &size)
+    void ArrowButtonWidget::setSize(UNUSED const sf::Vector2f &size)
     {
-        _box.setSize(size);
     }
 
     ///////////////
@@ -82,7 +83,9 @@ namespace UI {
 
     ArrowButtonWidget &ArrowButtonWidget::operator=(const ArrowButtonWidget &ArrowbuttonWidget)
     {
-        _box = ArrowbuttonWidget._box;
+        _position = ArrowbuttonWidget._position;
+        _idleSprite = ArrowbuttonWidget._idleSprite;
+        _hoveredSprite = ArrowbuttonWidget._hoveredSprite;
         return *this;
     }
 };

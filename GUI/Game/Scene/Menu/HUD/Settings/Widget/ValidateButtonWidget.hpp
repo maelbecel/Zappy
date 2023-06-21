@@ -2,11 +2,11 @@
 ** EPITECH PROJECT, 2023
 ** Zappy
 ** File description:
-** ArrowButtonWidget
+** ValidateButtonWidget
 */
 
-#ifndef ARROWBUTTONWIDGET_H_
-    #define ARROWBUTTONWIDGET_H_
+#ifndef VALIDATEBUTTONWIDGET_H_
+    #define VALIDATEBUTTONWIDGET_H_
 
     #include "AWidget.hpp"
     #include "BackgroundStyle.hpp"
@@ -17,32 +17,26 @@
     #include <iostream>
 
 namespace UI {
-    enum ArrowDirection {
-        UP,
-        DOWN,
-        LEFT,
-        RIGHT
-    };
-    class ArrowButtonWidget : public AWidget {
+    class ValidateButtonWidget : public AWidget {
 
         // Constructor & Destructor
         public:
             /**
              * @brief Construct a new Button Widget object
-             * ArrowButtonWidget exemple :
+             * ValidateButtonWidget exemple :
              * Name :
              * [_____Text______]
              *
              * @param position The position of the widget at the top left corner
              * @param size     The size of the widget
              */
-            ArrowButtonWidget(const sf::Vector2f &position, const sf::Vector2f &size, const ArrowDirection &direction);
-            ArrowButtonWidget(); // Default Constructor
+            ValidateButtonWidget(const sf::Vector2f &position, const sf::Vector2f &size);
+            ValidateButtonWidget(); // Default Constructor
 
             /**
              * @brief Destroy the Button Widget object
              */
-            ~ArrowButtonWidget() = default;
+            ~ValidateButtonWidget() = default;
 
         // Methods
         public:
@@ -96,9 +90,9 @@ namespace UI {
              * @brief Copy this Button Widget object
              *
              * @param copy        The Button Widget to copy
-             * @return ArrowButtonWidget & A reference to the copied Button Widget
+             * @return ValidateButtonWidget & A reference to the copied Button Widget
              */
-            ArrowButtonWidget &operator=(const ArrowButtonWidget &copy);
+            ValidateButtonWidget &operator=(const ValidateButtonWidget &copy);
 
         // Attributes
         private:
@@ -121,4 +115,4 @@ namespace UI {
     };
 };
 
-#endif /* !ARROWBUTTONWIDGET_H_ */
+#endif /* !VALIDATEBUTTONWIDGET_H_ */

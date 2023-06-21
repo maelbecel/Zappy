@@ -12,7 +12,7 @@ namespace UI {
     // Constructor //
     /////////////////
 
-    Button::Button(IWidget *widget, std::function<void()> callback) : _widget(widget), _callback(callback) {};
+    Button::Button(IWidget *widget, std::function<void()> callback) : _widget(widget), _callback(callback), _value(0) {};
 
     Button::Button(const Button &button) : _widget(button._widget), _callback(button._callback) {};
 
@@ -75,6 +75,16 @@ namespace UI {
     sf::Vector2f Button::getSize() const
     {
         return _widget->getSize();
+    }
+
+    void Button::setValue(ssize_t value)
+    {
+        _value = value;
+    }
+
+    ssize_t Button::getValue() const
+    {
+        return _value;
     }
 
     ///////////////

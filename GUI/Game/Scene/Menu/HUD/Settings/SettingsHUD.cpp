@@ -6,12 +6,9 @@
 */
 
 #include "SettingsHUD.hpp"
-#include "Window.hpp"
-#include "ArrowButtonWidget.hpp"
-#include "CrossButtonWidget.hpp"
 
 namespace UI {
-    SettingsHUD::SettingsHUD() : _background(sf::Vector2f(Window::getWindowWidth(), Window::getWindowHeight()))
+    SettingsHUD::SettingsHUD(bool isGameMenu) : _background(sf::Vector2f(Window::getWindowWidth(), Window::getWindowHeight()))
     {
         BackgroundStyle RectangleColorBg(sf::Color(0, 0, 0, 220));
 
@@ -39,14 +36,28 @@ namespace UI {
         _increaseMusicButton = new Button(increaseMusicButton);
         _crossSettingsButton = new Button(crossSettingsButton);
 
+        ArrowButtonWidget *changeTileHUDLeftButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 - 75, 448), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
+        ArrowButtonWidget *changeTileHUDRightButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 250, 448), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
+
+        _changeTileHUDLeftButton = new Button(changeTileHUDLeftButton);
+        _changeTileHUDRightButton = new Button(changeTileHUDRightButton);
+
+        ValidateButtonWidget *validateButton = new ValidateButtonWidget(sf::Vector2f(Window::getWindowWidth() / 2 - 8, _backgroundSprite.getTexture()->getSize().y + 100), sf::Vector2f(16 * 3, 16 * 3));
+        _validateButton = new Button(validateButton);
+
         libconfig::Config cfg;
 
         try {
-            cfg.readFile("./config/config.cfg");
+            cfg.readFile("./Config/config.cfg");
 
             libconfig::Setting& settings = cfg.lookup("config");
             _soundValue = settings["sound"];
             _musicValue = settings["music"];
+            bool tileHUDTextMode = settings["tileHUDTextMode"];
+            if (tileHUDTextMode)
+                _tileHUDTextMode = setString("TileHUD mode:\n\n Text", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450));
+            else
+                _tileHUDTextMode = setString("TileHUD mode:\n\n Sprite", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450));
 
         } catch (const libconfig::FileIOException& ex) {
             _soundValue = 50;
@@ -68,17 +79,11 @@ namespace UI {
             _musicValue = 50;
 
         _isOpened = false;
+        _isGameMenu = isGameMenu;
     }
 
     SettingsHUD::~SettingsHUD()
     {
-        libconfig::Config cfg;
-
-        cfg.readFile("./config/config.cfg");
-        libconfig::Setting& settings = cfg.lookup("config");
-        settings["sound"] = _soundValue;
-        settings["music"] = _musicValue;
-        cfg.writeFile("./config/config.cfg");
     }
 
     void SettingsHUD::draw(sf::RenderWindow &window)
@@ -109,6 +114,22 @@ namespace UI {
             _crossSettingsButton->render(window, ButtonState::HOVERED);
         else
             _crossSettingsButton->render(window, ButtonState::IDLE);
+        if (_validateButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
+            _validateButton->render(window, ButtonState::HOVERED);
+        else
+            _validateButton->render(window, ButtonState::IDLE);
+
+        if (!_isGameMenu)
+            return;
+        if (_changeTileHUDLeftButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
+            _changeTileHUDLeftButton->render(window, ButtonState::HOVERED);
+        else
+            _changeTileHUDLeftButton->render(window, ButtonState::IDLE);
+        if (_changeTileHUDRightButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
+            _changeTileHUDRightButton->render(window, ButtonState::HOVERED);
+        else
+            _changeTileHUDRightButton->render(window, ButtonState::IDLE);
+        window.draw(_tileHUDTextMode);
     }
 
     void SettingsHUD::handleEvent(sf::Event event, UNUSED Network::Server &server, UNUSED sf::RenderWindow &window)
@@ -150,8 +171,22 @@ namespace UI {
                 _isOpened = false;
                 return;
             }
+            if (_validateButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                saveSettings();
+                _isOpened = false;
+                return;
+            }
             _sound.isIn(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
             _music.isIn(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
+            if (!_isGameMenu)
+                return;
+            if (_changeTileHUDLeftButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)) || _changeTileHUDRightButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                if (_tileHUDTextMode.getString() == std::string("TileHUD mode:\n\n Text"))
+                    _tileHUDTextMode = setString("TileHUD mode:\n\n Sprite", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450));
+                else
+                    _tileHUDTextMode = setString("TileHUD mode:\n\n Text", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450));
+                return;
+            }
             return;
         }
         _sound.handleEvent(event);
@@ -166,5 +201,44 @@ namespace UI {
     void SettingsHUD::setOpened(bool isOpened)
     {
         _isOpened = isOpened;
+    }
+
+    sf::Text SettingsHUD::setString(std::string str, sf::Vector2f position)
+    {
+        sf::Text text;
+        try {
+            sf::Font *font = FontManager::getFont(UI::ARIAL);
+
+            text.setString(str);
+            text.setFont(*font);
+            text.setCharacterSize(15);
+            text.setFillColor(sf::Color(15, 143, 104, 255));
+            text.setPosition(position);
+        } catch (const Error::TextureError &e) {
+            std::cerr << "Bad Initialization of Text : " << str << std::endl;
+        }
+        return text;
+    }
+
+    bool SettingsHUD::getTileHUDTextMode() const
+    {
+        if (_tileHUDTextMode.getString() == std::string("TileHUD mode:\n\n Text"))
+            return true;
+        return false;
+    }
+
+    void SettingsHUD::saveSettings()
+    {
+        libconfig::Config cfg;
+
+        cfg.readFile("./Config/config.cfg");
+        libconfig::Setting& settings = cfg.lookup("config");
+        settings["sound"] = _soundValue;
+        settings["music"] = _musicValue;
+        if (_tileHUDTextMode.getString() == std::string("TileHUD mode:\n\n Text"))
+            settings["tileHUDTextMode"] = true;
+        else
+            settings["tileHUDTextMode"] = false;
+        cfg.writeFile("./Config/config.cfg");
     }
 };

@@ -96,7 +96,6 @@ namespace UI {
 
         // Attributes
         private:
-            sf::RectangleShape _box;                                /*!< The box UI for Input Area */
             sf::Sprite _idleSprite;         /*!< The texture of the Cross Button Widget when idle */
             sf::Sprite _hoveredSprite;      /*!< The texture of the Cross Button Widget when hover */
 

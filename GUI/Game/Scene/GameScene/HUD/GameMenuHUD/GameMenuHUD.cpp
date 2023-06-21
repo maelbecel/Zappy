@@ -34,7 +34,7 @@ namespace UI {
         _settingsButton = new Button(settingsButton);
         _quitButton = new Button(quitButton);
 
-        _settingsHUD = SettingsHUD();
+        _settingsHUD = SettingsHUD(true);
 
     }
 
@@ -49,7 +49,7 @@ namespace UI {
             return;
         }
         window.draw(_background);
-        window.draw(_backgroundSprite);
+        // window.draw(_backgroundSprite);
 
         if (_resumeButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))) {
             _resumeButton->render(window, ButtonState::HOVERED);
@@ -70,10 +70,12 @@ namespace UI {
 
     void GameMenuHUD::handleEvent(sf::Event event, UNUSED Network::Server &server, sf::RenderWindow &window)
     {
-        if (event.type == sf::Event::KeyPressed && _settingsHUD.isOpened() == true) {
-            if (event.key.code == sf::Keyboard::Escape) {
+        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+            if (_settingsHUD.isOpened() == true) {
                 _settingsHUD.setOpened(false);
+                return;
             }
+            _isOpened = false;
         }
         if (event.type == sf::Event::MouseButtonPressed) {
             if (event.mouseButton.button != sf::Mouse::Left)
@@ -105,5 +107,10 @@ namespace UI {
     void GameMenuHUD::setOpened(bool isOpened)
     {
         _isOpened = isOpened;
+    }
+
+    bool GameMenuHUD::getTileDisplayMode() const
+    {
+        return _settingsHUD.getTileHUDTextMode();
     }
 };

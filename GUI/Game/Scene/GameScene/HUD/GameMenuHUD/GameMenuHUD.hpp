@@ -54,6 +54,12 @@ namespace UI {
              */
             void setOpened(bool opened);
 
+            /**
+             * @brief Get tile dislpay mode
+             *
+             */
+            bool getTileDisplayMode() const;
+
         // Attributes
         private:
             sf::RectangleShape _background;         /*!< Background of the Settings HUD */

@@ -22,6 +22,21 @@
     #include "GameData.hpp"
 
 namespace UI {
+    enum RESOURCE {
+        FOOD,
+        LINEMATE,
+        DERAUMERE,
+        SIBUR,
+        MENDIANE,
+        PHIRAS,
+        THYSTAME
+    };
+
+    struct tileResource {
+        sf::Text quantity;
+        sf::Sprite sprite;
+    };
+
     class TileHUD {
         // Constructor & Destructor
         public:
@@ -77,7 +92,7 @@ namespace UI {
              * @param x The x position of the tile
              * @param y The y position of the tile
              */
-            void setTileHUD(GameData &gameData, bool isLeft, int x, int y);
+            void setTileHUD(GameData &gameData, bool isLeft, int x, int y, bool textMode);
 
             /**
              * @brief Construct the content
@@ -106,21 +121,31 @@ namespace UI {
              */
             std::string constructEggContent(std::pair<const std::string, std::shared_ptr<Eggs>> &egg, GameData &gameData);
 
+            /**
+             * @brief Construct the resource content
+             *
+             * @param resource The resource to construct the content
+             * @return std::string The content of the resource
+             */
+
         // Attributes
         private:
             sf::Sprite _backgroundSprite;           /*!< Sprite of the Tile HUD */
             sf::RectangleShape _background;         /*!< Background of the Tile HUD */
             bool _isOpen;                           /*!< Is the Tile HUD open ? */
+            bool _textMode;                         /*!< Is the Tile HUD in text mode ? */
             sf::Text _tilePosition;                 /*!< Text of the tile position */
             sf::Text _tileContent;                  /*!< Text of the tile content */
-            IButton *_crossTileHUDButton;           /*!< Button to close the settings */
             std::unordered_map<int, sf::Text> _tilePlayerContent; /*!< Text of the tile player content */
             std::unordered_map<int, sf::Text> _tileEggContent;   /*!< Text of the tile egg content */
+            std::unordered_map<RESOURCE, tileResource> _tileResourceSprite; /*!< Sprite of the tile ressource content */
+            IButton *_crossTileHUDButton;           /*!< Button to close the settings */
             IButton *_changePlayerLeftButton;       /*!< Button to change the player left */
             IButton *_changePlayerRightButton;      /*!< Button to change the player right */
             IButton *_changeEggLeftButton;          /*!< Button to change the egg left */
             IButton *_changeEggRightButton;         /*!< Button to change the egg right */
     };
+
 };
 
 #endif /* !TILEHUD_HPP_ */

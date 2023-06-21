@@ -55,9 +55,9 @@ namespace UI {
             _musicValue = settings["music"];
             bool tileHUDTextMode = settings["tileHUDTextMode"];
             if (tileHUDTextMode)
-                _tileHUDTextMode = setString("TileHUD mode: Text", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 50, 450));
+                _tileHUDTextMode = setString("TileHUD mode:\n\n Text", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450));
             else
-                _tileHUDTextMode = setString("TileHUD mode: Sprite", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 50, 450));
+                _tileHUDTextMode = setString("TileHUD mode:\n\n Sprite", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450));
 
         } catch (const libconfig::FileIOException& ex) {
             _soundValue = 50;
@@ -181,10 +181,10 @@ namespace UI {
             if (!_isGameMenu)
                 return;
             if (_changeTileHUDLeftButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)) || _changeTileHUDRightButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
-                if (_tileHUDTextMode.getString() == std::string("TileHUD mode: Text"))
-                    _tileHUDTextMode = setString("TileHUD mode: Sprite", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 50, 450));
+                if (_tileHUDTextMode.getString() == std::string("TileHUD mode:\n\n Text"))
+                    _tileHUDTextMode = setString("TileHUD mode:\n\n Sprite", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450));
                 else
-                    _tileHUDTextMode = setString("TileHUD mode: Text", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 50, 450));
+                    _tileHUDTextMode = setString("TileHUD mode:\n\n Text", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450));
                 return;
             }
             return;
@@ -222,7 +222,7 @@ namespace UI {
 
     bool SettingsHUD::getTileHUDTextMode() const
     {
-        if (_tileHUDTextMode.getString() == std::string("Text"))
+        if (_tileHUDTextMode.getString() == std::string("TileHUD mode:\n\n Text"))
             return true;
         return false;
     }
@@ -235,7 +235,7 @@ namespace UI {
         libconfig::Setting& settings = cfg.lookup("config");
         settings["sound"] = _soundValue;
         settings["music"] = _musicValue;
-        if (_tileHUDTextMode.getString() == std::string("TileHUD mode: Text"))
+        if (_tileHUDTextMode.getString() == std::string("TileHUD mode:\n\n Text"))
             settings["tileHUDTextMode"] = true;
         else
             settings["tileHUDTextMode"] = false;

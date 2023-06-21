@@ -218,7 +218,7 @@ namespace Scene {
             _gameData.parse(server.getSocket().response);
         }
 
-        _tileHUD.setTileHUD(_gameData, isLeft, x, y);
+        _tileHUD.setTileHUD(_gameData, isLeft, x, y, _gameMenuHUD.getTileDisplayMode());
     }
 
     bool GameScene::isInsideTriangle(const sf::Vector2i &position, sf::Vector2i a, sf::Vector2i b, sf::Vector2i c)

@@ -108,4 +108,9 @@ namespace UI {
     {
         _isOpened = isOpened;
     }
+
+    bool GameMenuHUD::getTileDisplayMode() const
+    {
+        return _settingsHUD.getTileHUDTextMode();
+    }
 };

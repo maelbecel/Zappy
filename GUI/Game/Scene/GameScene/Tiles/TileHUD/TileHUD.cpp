@@ -43,6 +43,20 @@ namespace UI {
         _changeEggRightButton = new Button(changeEggRightButton);
         _changeEggLeftButton->setValue(0);
         _changeEggRightButton->setValue(1);
+
+        try {
+            _tileResourceSprite = {
+                {FOOD, {sf::Text(), sf::Sprite(*TextureManager::getTexture("./Assets/UI_UX/Resources/food.png"))}},
+                {LINEMATE, {sf::Text(), sf::Sprite(*TextureManager::getTexture("./Assets/UI_UX/Resources/linemate.png"))}},
+                {DERAUMERE, {sf::Text(), sf::Sprite(*TextureManager::getTexture("./Assets/UI_UX/Resources/deraumere.png"))}},
+                {SIBUR, {sf::Text(), sf::Sprite(*TextureManager::getTexture("./Assets/UI_UX/Resources/sibur.png"))}},
+                {MENDIANE, {sf::Text(), sf::Sprite(*TextureManager::getTexture("./Assets/UI_UX/Resources/mendiane.png"))}},
+                {PHIRAS, {sf::Text(), sf::Sprite(*TextureManager::getTexture("./Assets/UI_UX/Resources/phiras.png"))}},
+                {THYSTAME, {sf::Text(), sf::Sprite(*TextureManager::getTexture("./Assets/UI_UX/Resources/thystame.png"))}}
+            };
+        } catch (const Error::TextureError &e) {
+            std::cerr << e.what() << std::endl;
+        }
     }
 
     TileHUD::~TileHUD()
@@ -53,7 +67,7 @@ namespace UI {
     {
         window.draw(_background);
         window.draw(_backgroundSprite);
-        window.draw(_tileContent);
+        // window.draw(_tileContent);
 
         if (_crossTileHUDButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
             _crossTileHUDButton->render(window, ButtonState::HOVERED);
@@ -112,6 +126,11 @@ namespace UI {
                 _tileEggContent[_changeEggLeftButton->getValue()] = setString("No egg on this tile", sf::Vector2f(_tileContent.getPosition().x + 100, 750));
                 window.draw(_tileEggContent[_changeEggLeftButton->getValue()]);
             }
+        }
+
+        for (auto &resource : _tileResourceSprite) {
+            window.draw(resource.second.sprite);
+            window.draw(resource.second.quantity);
         }
     }
 
@@ -188,8 +207,10 @@ namespace UI {
         return _isOpen;
     }
 
-    void TileHUD::setTileHUD(GameData &gameData, bool isLeft, int x, int y)
+    void TileHUD::setTileHUD(GameData &gameData, bool isLeft, int x, int y, bool textMode)
     {
+        _textMode = textMode;
+
         int i = 0;
         for (auto &player : gameData.getPlayers()) {
             if (player.second->getPosition() != sf::Vector2i(x, y))
@@ -218,15 +239,38 @@ namespace UI {
             _changePlayerRightButton->setPosition(sf::Vector2f(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175 + 530, 547)));
             _changeEggLeftButton->setPosition(sf::Vector2f(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 750)));
             _changeEggRightButton->setPosition(sf::Vector2f(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175 + 480, 750)));
+
+            int i = 0;
+            int j = 0;
+            for (auto &resource : _tileResourceSprite) {
+                resource.second.sprite.setPosition(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 135 + (i * 150), 200 + (j * 120)));
+                resource.second.quantity.setPosition(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 135 + (i * 150) + 90, 200 + (j * 120) + 90));
+                i++;
+                if (i == 4) {
+                    i = 0;
+                    j++;
+                }
+            }
         } else {
-            _tileContent = setString(constructContent(gameData, x, y), sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10));
-            _tileContent.setPosition(sf::Vector2f(175, 175));
+            _tileContent = setString(constructContent(gameData, x, y), sf::Vector2f(175, 175));
             _backgroundSprite.setPosition(sf::Vector2f(0, 0));
             _crossTileHUDButton->setPosition(sf::Vector2f(635, 150));
             _changePlayerLeftButton->setPosition(sf::Vector2f(sf::Vector2f(130, 550)));
             _changePlayerRightButton->setPosition(sf::Vector2f(sf::Vector2f(175 + 530, 547)));
             _changeEggLeftButton->setPosition(sf::Vector2f(sf::Vector2f(175, 750)));
             _changeEggRightButton->setPosition(sf::Vector2f(sf::Vector2f(175 + 480, 750)));
+
+            int i = 0;
+            int j = 0;
+            for (auto &resource : _tileResourceSprite) {
+                resource.second.sprite.setPosition(sf::Vector2f(135 + (i * 150), 200 + (j * 120)));
+                resource.second.quantity.setPosition(sf::Vector2f(135 + (i * 150) + 80, 200 + (j * 120) + 80));
+                i++;
+                if (i == 4) {
+                    i = 0;
+                    j++;
+                }
+            }
         }
     }
 
@@ -234,7 +278,19 @@ namespace UI {
     {
         std::shared_ptr<Tile> tile = gameData.getTile(x, y);
         std::string str;
+        int i = 0;
+        int j = 0;
+        int index = 0;
 
+        for (auto &resource : _tileResourceSprite) {
+            resource.second.quantity = setString(std::to_string(tile->getResource(index)), sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 155 + (i * 150) + 50, 200 + (j * 120) + 50));
+            i++;
+            if (i == 4) {
+                i = 0;
+                j++;
+            }
+            index++;
+        }
         str = "Tile clicked: (" + std::to_string(x) + ", " + std::to_string(y) + ")\n\nResources:\n\n  Food: " + std::to_string(tile->getResource(0)) + "\n\n  Linemate: " + std::to_string(tile->getResource(1)) + "\n\n  Deraumere: " + std::to_string(tile->getResource(2)) + "\n\n  Sibur: " + std::to_string(tile->getResource(3)) + "\n\n  Mendiane: " + std::to_string(tile->getResource(4)) + "\n\n  Phiras: " + std::to_string(tile->getResource(5)) + "\n\n  Thystame: " + std::to_string(tile->getResource(6)) + "\n\nTime: " + std::to_string(gameData.getTimeUnit());
         return str;
     }

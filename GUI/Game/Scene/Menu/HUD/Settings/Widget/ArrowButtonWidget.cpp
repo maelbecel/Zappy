@@ -73,7 +73,7 @@ namespace UI {
         _hoveredSprite.setPosition(position);
     }
 
-    void ArrowButtonWidget::setSize(const sf::Vector2f &size)
+    void ArrowButtonWidget::setSize(UNUSED const sf::Vector2f &size)
     {
     }
 

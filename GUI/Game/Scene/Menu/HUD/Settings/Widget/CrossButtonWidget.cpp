@@ -61,7 +61,7 @@ namespace UI {
         _hoveredSprite.setPosition(position);
     }
 
-    void CrossButtonWidget::setSize(const sf::Vector2f &size)
+    void CrossButtonWidget::setSize(UNUSED const sf::Vector2f &size)
     {
     }
 

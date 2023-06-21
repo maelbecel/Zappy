@@ -17,12 +17,16 @@
     #include "Button.hpp"
     #include "ButtonWidget.hpp"
     #include "NetworkError.hpp"
+    #include "Window.hpp"
+    #include "ArrowButtonWidget.hpp"
+    #include "CrossButtonWidget.hpp"
+    #include "ValidateButtonWidget.hpp"
 
 namespace UI {
     class SettingsHUD {
         // Constructor & Destructor
         public:
-            SettingsHUD();
+            SettingsHUD(bool isGameMenu = false);
             ~SettingsHUD();
 
         // Methods
@@ -53,6 +57,26 @@ namespace UI {
              */
             void setOpened(bool opened);
 
+            /**
+             * @brief Set string
+             *
+             * @param string The string to set
+             * @param pos The position of the string
+             */
+            sf::Text setString(std::string string, sf::Vector2f pos);
+
+            /**
+             * @brief Get tile HUD text mode
+             *
+             * @return true if the tile HUD is in text mode
+             */
+            bool getTileHUDTextMode() const;
+
+            /**
+             * @brief Save the settings
+             */
+            void saveSettings();
+
         // Attributes
         private:
             sf::RectangleShape _background;         /*!< Background of the Settings HUD */
@@ -61,12 +85,19 @@ namespace UI {
             IButton *_increaseSoundButton;          /*!< Button to increase the sound */
             IButton *_decreaseMusicButton;          /*!< Button to decrease the music */
             IButton *_increaseMusicButton;          /*!< Button to increase the music */
+            // IButton *_changeLanguageLeftButton;     /*!< Button to change the language to the left */
+            // IButton *_changeLanguageRightButton;    /*!< Button to change the language to the right */
+            IButton *_changeTileHUDLeftButton;      /*!< Button to change the tile HUD to the left */
+            IButton *_changeTileHUDRightButton;     /*!< Button to change the tile HUD to the right */
             IButton *_crossSettingsButton;          /*!< Button to close the settings */
+            IButton *_validateButton;               /*!< Button to validate the settings */
             InputBox _sound;                        /*!< Input box for the sound */
             InputBox _music;                        /*!< Input box for the music */
             int _soundValue;                        /*!< Value of the sound */
             int _musicValue;                        /*!< Value of the music */
+            sf::Text _tileHUDTextMode;                  /*!< Is the tile HUD in text mode */
             bool _isOpened;                         /*!< Is the Settings HUD opened */
+            bool _isGameMenu;                 /*!< Is the Game Menu HUD opened */
     };
 };
 

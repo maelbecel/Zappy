@@ -34,7 +34,7 @@ namespace UI {
         _settingsButton = new Button(settingsButton);
         _quitButton = new Button(quitButton);
 
-        _settingsHUD = SettingsHUD();
+        _settingsHUD = SettingsHUD(true);
 
     }
 
@@ -49,7 +49,7 @@ namespace UI {
             return;
         }
         window.draw(_background);
-        window.draw(_backgroundSprite);
+        // window.draw(_backgroundSprite);
 
         if (_resumeButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))) {
             _resumeButton->render(window, ButtonState::HOVERED);

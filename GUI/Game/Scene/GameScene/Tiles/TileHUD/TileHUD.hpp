@@ -50,6 +50,7 @@ namespace UI {
              * @brief Set string
              *
              * @param str The string to set
+             * @param pos The position of the string
              */
             sf::Text setString(std::string str, sf::Vector2f pos);
 

@@ -23,7 +23,7 @@ namespace Scene {
         _menuHUD.Initialize(ip, port);
     };
 
-    void Menu::Update(Network::Server &server) {};
+    void Menu::Update(UNUSED Network::Server &server) {};
 
     void Menu::Render(sf::RenderWindow &window)
     {

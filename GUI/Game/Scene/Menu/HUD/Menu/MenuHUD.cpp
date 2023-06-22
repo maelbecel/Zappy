@@ -32,19 +32,23 @@ namespace UI {
 
         _settingsHUD = SettingsHUD();
 
-        sf::Texture *titleTexture = TextureManager::getTexture("./Assets/UI_UX/Paper UI Pack/Paper UI/Folding & Cutout/2 Headers/4.png");
-        _titleHeader = sf::Sprite();
-        _titleHeader.setTexture(*titleTexture);
-        _titleHeader.setPosition(sf::Vector2f(Window::getWindowWidth() / 2 - 448, 0));
-        _titleHeader.setScale(sf::Vector2f(2, 2));
+        try {
+            sf::Texture *titleTexture = TextureManager::getTexture("./Assets/UI_UX/Paper UI Pack/Paper UI/Folding & Cutout/2 Headers/4.png");
+            _titleHeader = sf::Sprite();
+            _titleHeader.setTexture(*titleTexture);
+            _titleHeader.setPosition(sf::Vector2f(Window::getWindowWidth() / 2 - 448, 0));
+            _titleHeader.setScale(sf::Vector2f(2, 2));
 
-        sf::Font *font = FontManager::getFont(UI::ARIAL);
-        _titleText = sf::Text();
-        _titleText.setFont(*font);
-        _titleText.setString("Zappy");
-        _titleText.setCharacterSize(50);
-        _titleText.setFillColor(sf::Color(15, 143, 104, 255));
-        _titleText.setPosition(sf::Vector2f(Window::getWindowWidth() / 2 - (448 / 2.65), 75));
+            sf::Font *font = FontManager::getFont(UI::ARIAL);
+            _titleText = sf::Text();
+            _titleText.setFont(*font);
+            _titleText.setString("Zappy");
+            _titleText.setCharacterSize(50);
+            _titleText.setFillColor(sf::Color(15, 143, 104, 255));
+            _titleText.setPosition(sf::Vector2f(Window::getWindowWidth() / 2 - (448 / 2.65), 75));
+        } catch (const Error::TextureError &e) {
+            std::cerr << "Bad Initialization of MenuHUD: " << e.what() << std::endl;
+        }
     }
 
     MenuHUD::~MenuHUD()

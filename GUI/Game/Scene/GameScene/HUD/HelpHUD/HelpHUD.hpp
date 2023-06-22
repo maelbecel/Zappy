@@ -2,11 +2,11 @@
 ** EPITECH PROJECT, 2023
 ** Zappy
 ** File description:
-** GameMenuHUD
+** HelpHUD
 */
 
-#ifndef GAMEMENUHUD_HPP_
-    #define GAMEMENUHUD_HPP_
+#ifndef HELPHUD_HPP_
+    #define HELPHUD_HPP_
 
     #include <libconfig.h++>
 
@@ -18,14 +18,13 @@
     #include "ButtonWidget.hpp"
     #include "NetworkError.hpp"
     #include "SettingsHUD.hpp"
-    #include "HelpHUD.hpp"
 
 namespace UI {
-    class GameMenuHUD {
+    class HelpHUD {
         // Constructor & Destructor
         public:
-            GameMenuHUD();
-            ~GameMenuHUD();
+            HelpHUD();
+            ~HelpHUD();
 
         // Methods
         public:
@@ -46,6 +45,13 @@ namespace UI {
             void handleEvent(sf::Event event, Network::Server &server, sf::RenderWindow &window);
 
             /**
+             * @brief Set string
+             *
+             * @param str
+             */
+            sf::Text setString(std::string str, sf::Vector2f pos);
+
+            /**
              * @brief Check if the Settings HUD is opened
              */
             bool isOpened() const;
@@ -55,24 +61,14 @@ namespace UI {
              */
             void setOpened(bool opened);
 
-            /**
-             * @brief Get tile dislpay mode
-             *
-             */
-            bool getTileDisplayMode() const;
-
         // Attributes
         private:
-            sf::RectangleShape _background;         /*!< Background of the Settings HUD */
+            sf::RectangleShape _background;         /*!< Background of the Tile HUD */
             sf::Sprite _backgroundSprite;           /*!< Sprite of the Settings HUD */
-            IButton *_resumeButton;                 /*!< Button to resume the game */
-            IButton *_settingsButton;              /*!< Button to go to the settings */
-            IButton *_helpButton;                  /*!< Button to go to the help */
-            IButton *_quitButton;                  /*!< Button to quit the game */
-            SettingsHUD _settingsHUD;               /*!< Settings HUD */
-            HelpHUD _helpHUD;                       /*!< Help HUD */
-            bool _isOpened;                         /*!< Is the Settings HUD opened */
+            IButton *_leftButton;                 /*!< Button to turn left the pages */
+            IButton *_rightButton;              /*!< Button to turn right the pages */
+            bool _opened;                           /*!< If the Settings HUD is opened or not */
     };
 };
 
-#endif /* !GAMEMENUHHPP_ */
+#endif /* !HELPHUD_HPP_ */

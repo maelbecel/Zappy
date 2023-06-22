@@ -14,10 +14,14 @@
 namespace UI {
     GameHUD::GameHUD()
     {
-        sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Paper UI Pack/Paper UI/Folding & Cutout/4 Notification/1.png");
-        _backgroundSprite = sf::Sprite(*texture);
-        _backgroundSprite.setPosition(sf::Vector2f(Window::getWindowWidth() - 268 * 1.5, 0));
-        _backgroundSprite.setScale(sf::Vector2f(1.5f, 1.5f));
+        try {
+            sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Paper UI Pack/Paper UI/Folding & Cutout/4 Notification/1.png");
+            _backgroundSprite = sf::Sprite(*texture);
+            _backgroundSprite.setPosition(sf::Vector2f(Window::getWindowWidth() - 268 * 1.5, 0));
+            _backgroundSprite.setScale(sf::Vector2f(1.5f, 1.5f));
+        } catch (const Error::TextureError &e) {
+            std::cerr << "Bad Initialization of GameHUD: " << e.what() << std::endl;
+        }
 
         ArrowButtonWidget *speed1x = new ArrowButtonWidget(sf::Vector2f(Window::getWindowWidth() - 220 - 80, 35), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
         ArrowButtonWidget *speed2x = new ArrowButtonWidget(sf::Vector2f(Window::getWindowWidth() - 220 + 15, 35), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);

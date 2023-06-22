@@ -21,25 +21,33 @@ namespace UI {
         _position = position;
 
         if (direction == ArrowDirection::LEFT) {
-            sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/5.png");
-            _idleSprite = sf::Sprite(*texture);
-            _idleSprite.setScale(sf::Vector2f(3, 3));
-            _idleSprite.setPosition(position);
+            try {
+                sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/5.png");
+                _idleSprite = sf::Sprite(*texture);
+                _idleSprite.setScale(sf::Vector2f(3, 3));
+                _idleSprite.setPosition(position);
 
-            sf::Texture *textureHover = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/7.png");
-            _hoveredSprite = sf::Sprite(*textureHover);
-            _hoveredSprite.setScale(sf::Vector2f(3, 3));
-            _hoveredSprite.setPosition(position);
+                sf::Texture *textureHover = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/7.png");
+                _hoveredSprite = sf::Sprite(*textureHover);
+                _hoveredSprite.setScale(sf::Vector2f(3, 3));
+                _hoveredSprite.setPosition(position);
+            } catch (const Error::TextureError &e) {
+                std::cerr << "Bad Initialization of ArrowButtonWidget: " << e.what() << std::endl;
+            }
         } else if (direction == ArrowDirection::RIGHT) {
-            sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/5.png");
-            _idleSprite = sf::Sprite(*texture);
-            _idleSprite.setScale(sf::Vector2f(-3, 3));
-            _idleSprite.setPosition(sf::Vector2f(position.x + 48, position.y));
+            try {
+                sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/5.png");
+                _idleSprite = sf::Sprite(*texture);
+                _idleSprite.setScale(sf::Vector2f(-3, 3));
+                _idleSprite.setPosition(sf::Vector2f(position.x + 48, position.y));
 
-            sf::Texture *textureHover = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/7.png");
-            _hoveredSprite = sf::Sprite(*textureHover);
-            _hoveredSprite.setScale(sf::Vector2f(-3, 3));
-            _hoveredSprite.setPosition(sf::Vector2f(position.x + 48, position.y));
+                sf::Texture *textureHover = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/7.png");
+                _hoveredSprite = sf::Sprite(*textureHover);
+                _hoveredSprite.setScale(sf::Vector2f(-3, 3));
+                _hoveredSprite.setPosition(sf::Vector2f(position.x + 48, position.y));
+            } catch (const Error::TextureError &e) {
+                std::cerr << "Bad Initialization of ArrowButtonWidget: " << e.what() << std::endl;
+            }
         }
     }
 

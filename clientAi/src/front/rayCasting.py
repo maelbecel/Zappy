@@ -138,7 +138,7 @@ class rayCasting:
         for element in array:
             tempDict = dict()
             for item in element:
-                if not item in tempDict and not item == "":
+                if item not in tempDict and not item == "":
                     tempDict[item] = 1
                 elif not item == "":
                     tempDict[item] += 1

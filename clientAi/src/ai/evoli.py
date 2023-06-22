@@ -342,7 +342,7 @@ class evoli(clientAI):
             if self.countPlayerOnCase() == 2:
                 exit(0)
             if self.countPlayerOnCase() == 1:
-                while self.checkPlayerInFront() == False:
+                while self.checkPlayerInFront() is False:
                     self.left()
                 self.forward()
         elif orientation == "1":

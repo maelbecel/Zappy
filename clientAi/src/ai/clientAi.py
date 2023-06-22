@@ -12,7 +12,7 @@ from ..exception.clientException import clientException as cEx
 from ..server.clientServer import clientServer
 from ..direction.direction import direction
 from ..state.clientState import enumState as enumState
-from ..front.rayCasting import *
+from ..front.rayCasting import rayCasting
 
 MIN_FOOD = 10
 PERCENTAGE_OF_FOOD = 0.5
@@ -64,7 +64,7 @@ class clientAi:
 
     def __del__(self):
         if self.graphic is True:
-            pygame.quit()
+            rayCasting.pygame.quit()
 
     def initPygame(self):
         self.rayCasting = rayCasting(1200, 800)

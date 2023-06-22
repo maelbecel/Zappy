@@ -13,7 +13,7 @@ namespace Scene {
     /////////////////
     // Constructor //
     /////////////////
-    GameScene::GameScene() : _isTileHUDOpen(false) {};
+    GameScene::GameScene() : _isTileHUDOpen(false), _isTeamActivated(true) {}
 
     /////////////
     // Methods //
@@ -83,7 +83,8 @@ namespace Scene {
             return;
         }
 
-        _teamHUD.draw(window);
+        if (_isTeamActivated)
+            _teamHUD.draw(window);
         _gameHUD.draw(window);
     }
 
@@ -96,6 +97,8 @@ namespace Scene {
             return;
         }
         if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::T)
+                _isTeamActivated = !_isTeamActivated;
             if (event.key.code == sf::Keyboard::Escape) {
                 if (_tileHUD.getIsOpen()) {
                     _tileHUD.setIsOpen(false);
@@ -198,7 +201,7 @@ namespace Scene {
                 break;
             }
         }
-        
+
         return _isTileHUDOpen;
     };
 

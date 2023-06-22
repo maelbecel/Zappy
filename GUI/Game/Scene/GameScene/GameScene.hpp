@@ -116,6 +116,7 @@ namespace Scene {
             GameData _gameData; /*!< The game data */
             Map _map;           /*!< The map */
             bool _isTileHUDOpen; /*!< If the tile HUD is open */
+            bool _isTeamActivated; /*!< If the team HUD is open */
             UI::TeamHUD _teamHUD; /*!< The team HUD */
             UI::GameMenuHUD _gameMenuHUD; /*!< The game menu HUD */
             UI::GameHUD _gameHUD; /*!< The game HUD */

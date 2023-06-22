@@ -20,15 +20,19 @@ namespace UI {
 
         _position = position;
 
-        sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Content/2 Icons/8.png");
-        _idleSprite = sf::Sprite(*texture);
-        _idleSprite.setScale(sf::Vector2f(3, 3));
-        _idleSprite.setPosition(position);
+        try {
+            sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Content/2 Icons/8.png");
+            _idleSprite = sf::Sprite(*texture);
+            _idleSprite.setScale(sf::Vector2f(3, 3));
+            _idleSprite.setPosition(position);
 
-        sf::Texture *textureHover = TextureManager::getTexture("./Assets/UI_UX/Content/2 Icons/11.png");
-        _hoveredSprite = sf::Sprite(*textureHover);
-        _hoveredSprite.setScale(sf::Vector2f(3, 3));
-        _hoveredSprite.setPosition(position);
+            sf::Texture *textureHover = TextureManager::getTexture("./Assets/UI_UX/Content/2 Icons/11.png");
+            _hoveredSprite = sf::Sprite(*textureHover);
+            _hoveredSprite.setScale(sf::Vector2f(3, 3));
+            _hoveredSprite.setPosition(position);
+        } catch (const Error::TextureError &e) {
+            std::cerr << "Bad Initialization of CrossButtonWidget: " << e.what() << std::endl;
+        }
     }
 
     /////////////

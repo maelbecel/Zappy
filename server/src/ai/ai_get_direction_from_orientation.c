@@ -15,9 +15,7 @@ static int get_from_north(orientation_t orientation)
         return W;
     if (orientation == SOUTH)
         return N;
-    if (orientation == WEST)
-        return E;
-    return S;
+    return E;
 }
 
 static int get_from_south(orientation_t orientation)
@@ -28,9 +26,7 @@ static int get_from_south(orientation_t orientation)
         return E;
     if (orientation == SOUTH)
         return S;
-    if (orientation == WEST)
-        return W;
-    return N;
+    return W;
 }
 
 static int get_from_east(orientation_t orientation)
@@ -41,9 +37,7 @@ static int get_from_east(orientation_t orientation)
         return S;
     if (orientation == SOUTH)
         return E;
-    if (orientation == WEST)
-        return N;
-    return W;
+    return N;
 }
 
 static int get_from_west(orientation_t orientation)
@@ -54,9 +48,7 @@ static int get_from_west(orientation_t orientation)
         return N;
     if (orientation == SOUTH)
         return W;
-    if (orientation == WEST)
-        return S;
-    return E;
+    return S;
 }
 
 int ai_get_direction_from_orientation(ai_t *ai, orientation_t orientation)
@@ -67,7 +59,5 @@ int ai_get_direction_from_orientation(ai_t *ai, orientation_t orientation)
         return get_from_south(orientation);
     if (ai->orientation == EAST)
         return get_from_east(orientation);
-    if (ai->orientation == WEST)
-        return get_from_west(orientation);
-    return N;
+    return get_from_west(orientation);
 }

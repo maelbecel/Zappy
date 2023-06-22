@@ -5,7 +5,17 @@
 ** wbuffer_empty
 */
 
+#include <stdlib.h>
 #include "wbuffer.h"
+
+static char *print_with_other_msg(char *msg, char *tmp)
+{
+    char *tmp2 = NULL;
+
+    asprintf(&tmp2, "%s%s", msg, tmp);
+    free(msg);
+    return tmp2;
+}
 
 char *wbuffer_empty(client_t *client)
 {
@@ -21,7 +31,8 @@ char *wbuffer_empty(client_t *client)
         if (!msg)
             asprintf(&msg, "%s", tmp);
         else
-            asprintf(&msg, "%s%s", msg, tmp);
+            msg = print_with_other_msg(msg, tmp);
+        free(tmp);
     }
     olist_clear_wdfree(client->wbuffer);
     if (!msg)

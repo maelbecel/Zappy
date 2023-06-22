@@ -6,12 +6,13 @@
 */
 
 #include "Animation.hpp"
+#include <iostream>
 
 namespace UI {
     /////////////////
     // Constructor //
     /////////////////
-    Animation::Animation(std::vector<sf::Sprite> &sprites, double frameDuration, bool looped) : _sprites(sprites), _frameDuration(frameDuration), _looped(looped), _isPlaying(false), _elapsedTime(0.0f), _currentFrame(0)
+    Animation::Animation(std::vector<sf::Sprite *> sprites, int frames, double frameDuration, bool looped) : _sprites(sprites), _frames(frames), _frameDuration(frameDuration), _looped(looped), _isPlaying(false), _elapsedTime(0.0f), _currentFrame(0)
     {
         if (_sprites.empty())
             return;
@@ -22,14 +23,20 @@ namespace UI {
     // Public methods //
     ////////////////////
 
-    void Animation::addFrame(const sf::Sprite& frame)
+    void Animation::addFrame(sf::Sprite *frame)
     {
         _sprites.push_back(frame);
+    }
+
+    void Animation::addFrames(std::vector<sf::Sprite *> frames)
+    {
+        _sprites = frames;
     }
 
     void Animation::play()
     {
         _isPlaying = true;
+        _clock.restart();
     }
 
     void Animation::pause()
@@ -44,33 +51,39 @@ namespace UI {
         _elapsedTime = 0.0f;
     }
 
-    void Animation::update(double dt)
+    bool Animation::update()
     {
+        bool end = false;
+
         // Check if the animation is playing
         if (!_isPlaying)
-            return;
+            return end;
+        sf::Time time = _clock.getElapsedTime();
+        double seconds = time.asMicroseconds() / 1000000.0f;
 
-        _elapsedTime += dt;
+        if (_frameDuration > seconds)
+            return end;
+        _clock.restart();
+        _currentFrame++;
 
-        // Check if the frame duration is elapsed
-        // elpased is the time between two frames
-        if (_elapsedTime >= _frameDuration) {
-            _currentFrame++;
- 
-            // Check if the animation is finished
-            if (_currentFrame >= (int)_sprites.size()) {
-                // Check if the animation is looped
-                if (_looped)
-                    _currentFrame = 0;
-                else {
-                    _currentFrame = _sprites.size() - 1;
-                    _isPlaying = false;
-                }
-            }
+        if (_currentFrame == _frames) {
+            _currentFrame = 0;
+            end = true;
 
-            // Update the sprite with the new current frame
-            _currentSprite = _sprites[_currentFrame];
-            _elapsedTime = 0.0f;
+            // Check if the animation is looped
+            if (!_looped)
+                _isPlaying = false;
         }
+        _currentSprite = _sprites[_currentFrame];
+        return end;
+    }
+
+    /////////////////////
+    // Getter & Setter //
+    /////////////////////
+
+    sf::Sprite *Animation::getCurrentSprite() const
+    {
+        return _currentSprite;
     }
 };

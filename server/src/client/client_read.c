@@ -78,22 +78,21 @@ static void handle_write(server_t *server, client_t *client)
  * `handle_read` returns `-1`, the function will immediately return without
  * executing the rest of the code.
  */
-static void client_loop(server_t *server, client_t *client)
+static int client_loop(server_t *server, client_t *client)
 {
     char *buffer = NULL;
 
     if (FD_ISSET(client->socket->fd, &server->select->readfds)) {
         if (handle_read(server, client) == -1)
-            return;
+            return -1;
     }
     if (FD_ISSET(client->socket->fd, &server->select->writefds)) {
         handle_write(server, client);
         buffer = wbuffer_empty(client);
-        if (buffer) {
-            dprintf(client->socket->fd, "%s", buffer);
-            free(buffer);
-        }
+        if (buffer)
+            wbuffer_print(client->socket->fd, buffer);
     }
+    return 0;
 }
 
 /**
@@ -112,11 +111,13 @@ int client_read(server_t *server)
 
     if (!node)
         return 0;
-    while (server->clients->head != NULL && node != NULL) {
+    for (int i = 0; server->clients->head != NULL && node != NULL;) {
         client = (client_t *)node->data;
-        client_loop(server, client);
-        if (node)
+        i = client_loop(server, client);
+        if (node && i == 0)
             node = node->next;
+        else
+            node = NULL;
     }
     return 0;
 }

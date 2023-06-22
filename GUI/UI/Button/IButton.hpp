@@ -99,6 +99,20 @@ namespace UI {
              * @return false        If the button is not hovered
              */
             virtual bool isHovered(sf::Vector2f mousePosition) const = 0;
+
+            /**
+             * @brief Set the value of the button
+             *
+             * @param value The value to set
+             */
+            virtual void setValue(ssize_t value) = 0;
+
+            /**
+             * @brief Get the value of the button
+             *
+             * @return ssize_t The value of the button
+             */
+            virtual ssize_t getValue() const = 0;
     };
 };
 

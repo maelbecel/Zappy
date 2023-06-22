@@ -13,6 +13,7 @@
 
     #include "TextureError.hpp"
     #include "TextureManager.hpp"
+    #include "Animation.hpp"
 
 class GameData;
 class Tile;
@@ -20,7 +21,7 @@ class Tile;
 class Player {
     // Constructor & Destructor
     public:
-        Player(sf::Vector2i position = sf::Vector2i(0, 0), int direction = 1, int level = 1, std::string teamName = "");
+        Player(sf::Vector2i position = sf::Vector2i(0, 0), int direction = 1, int level = 1, std::string teamName = "", int color = 1);
         ~Player();
 
     // Getters & Setters
@@ -32,6 +33,33 @@ class Player {
          * @return sf::Vector2i The position of the player
          */
         sf::Vector2i getPosition() const;
+
+        /**
+         * @brief Get the Team object
+         *
+         * @return std::string The team name of the player
+         */
+        std::string getTeam() const;
+
+        /**
+         * @brief Get the Level object
+         *
+         * @return int The player level
+         */
+        int getLevel() const;
+
+        /**
+         * @brief Get the Inventory object
+         * [0] : food
+         * [1] : linemate
+         * [2] : deraumere
+         * [3] : sibur
+         * [4] : mendiane
+         * [5] : phiras
+         * [6] : thystame
+         * @return int* The inventory of the player
+         */
+        int *getInventory() const;
 
         /**
          * @brief Set the Position object
@@ -124,6 +152,23 @@ class Player {
          */
         void collectResource(int nomber, std::shared_ptr<Tile> &tile);
 
+        /**
+         * @brief Update the player
+         * Call this function for update the player animation
+         */
+        void update();
+    
+    // Private Methods
+    private:
+
+        /**
+         * @brief Set the Color object
+         * Call this function for set the color of the player
+         * @param color      The color of the team for the player
+         * @return sf::Color The color of the player
+         */
+        sf::Color setColor(int color);
+
     // Attributes
     private:
         sf::Vector2i _position;              /*!< The position of the player */
@@ -138,6 +183,9 @@ class Player {
         bool _idle;                         /*!< The idle of the player */
         bool _expulsion;                    /*!< The expulsion of the player */
         bool _broadcast;                    /*!< The broadcast of the player */
+        UI::Animation *_idleAnim;           /*!< Animation of the player when he is idle */
+        UI::Animation *_pushAnim;           /*!< Animation of the player when he is pushing */
+        UI::Animation *_broadcastAnim;      /*!< Animation of the player when he is broadcasting */
 
     // Sprites
     private:
@@ -147,6 +195,9 @@ class Player {
     public:
         static const int PLAYER_HEIGHT = 19; /*!< The height of the player */
         static const int PLAYER_WIDTH = 28;  /*!< The width of the player */
+        static const size_t IDLE_FRAME = 5;     /*!< The number of frame of the idle animation */
+        static const size_t PUSH_FRAME = 4;     /*!< The number of frame of the push animation */
+        static const size_t BROADCAST_FRAME = 7 /*!< The number of frame of the broadcast animation */;
 };
 
 #endif /* !PLAYER_HPP_ */

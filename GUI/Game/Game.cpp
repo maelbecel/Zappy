@@ -11,7 +11,6 @@ Game::Game()
 {
     _scenes.emplace("Menu", std::make_pair(new Scene::Menu(), true));
     _scenes.emplace("Game", std::make_pair(new Scene::GameScene(), false));
-    // TODO: Add all the scenes
 
     _server.Initialize();
 };
@@ -24,11 +23,10 @@ Game::~Game()
     }
 };
 
-void Game::Initialize()
+void Game::Initialize(std::string ip, std::string port)
 {
-    _scenes.at("Menu").first->Initialize();
+    _scenes.at("Menu").first->Initialize(ip, port);
     _scenes.at("Game").first->Initialize();
-    // TODO: Initialize all the scenes
 
     // TODO: Load all the fonts and Texture of the game
     try {
@@ -58,11 +56,11 @@ void Game::Update()
     }
 }
 
-void Game::OnEvent(const sf::Event &event)
+void Game::OnEvent(const sf::Event &event, sf::RenderWindow &window)
 {
     for (auto &scene : _scenes) {
         if (scene.second.second == true) {
-            scene.second.first->OnEvent(event, _server);
+            scene.second.first->OnEvent(event, _server, window);
             break;
         }
     }

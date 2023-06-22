@@ -37,6 +37,7 @@ typedef unsigned long long ullong;
 typedef struct select_s {
     fd_set readfds;
     fd_set writefds;
+    fd_set exceptfds;
     uint maxfd;
 } select_t;
 
@@ -121,6 +122,14 @@ int client_accept(server_t *server);
 int client_read(server_t *server);
 
 /**
+ * @brief Check all fd to see if there is exception
+ *
+ * @param server Link to server object
+ * @return int EXIT_SUCCESS or EXIT_FAILTEK
+ */
+int client_except(server_t *server);
+
+/**
  * @brief Create new team
  *
  * @param name Name of team (used to identify it)
@@ -134,6 +143,13 @@ team_t *team_create(char *name);
  * @param team
  */
 void team_destroy(team_t *team);
+
+/**
+ * @brief Destructor for team list
+ *
+ * @param list
+ */
+void team_list_destructor(olist_t *list);
 
 /**
  * @brief Get a team by its id
@@ -235,6 +251,13 @@ egg_t *egg_create(ulong team_id, uint x, uint y, ulong player_id);
 void egg_destroy(egg_t *egg);
 
 /**
+ * @brief Destructor for egg list
+ *
+ * @param list
+ */
+void egg_list_destructor(olist_t *list);
+
+/**
  * @brief Check if at least one egg is in the team
  *
  * @param team_id Team id
@@ -269,5 +292,32 @@ void egg_add_to_team(server_t *server, ulong team_id);
  * @return olist_t*
  */
 olist_t *tile_get_players(server_t *server, tile_t *tile);
+
+/**
+ * @brief Get list of clients on a tile by level
+ *
+ * @param server Link to server object
+ * @param tile Tile to get players
+ * @param level Level of players to get
+ * @return olist_t*
+ */
+olist_t *tile_get_players_by_level(server_t *server, tile_t *tile, uint level);
+
+/**
+ * @brief Handle ctrl+c signal
+ *
+ * @param stop
+ * @return int
+ */
+int catch_sigint(server_t *stop);
+
+/**
+ * @brief Check if a team has won
+ *
+ * @param server
+ * @return true
+ * @return false
+ */
+bool check_win_condition(server_t *server);
 
 #endif /* !SERVER_H_ */

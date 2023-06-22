@@ -98,6 +98,20 @@ namespace UI {
              */
             sf::Vector2f getSize() const override;
 
+            /**
+             * @brief Set the value of the button
+             *
+             * @param value The value to set
+             */
+            void setValue(ssize_t value) override;
+
+            /**
+             * @brief Get the value of the button
+             *
+             * @return ssize_t The value of the button
+             */
+            ssize_t getValue() const override;
+
         // Operators
         public:
 
@@ -113,6 +127,7 @@ namespace UI {
         protected:
             IWidget *_widget;                /*!< The widget that will be rendered inside the button */
             std::function<void()> _callback; /*!< The callback function (function call when the button got clicked) */
+            size_t _value;                      /*!< The value of the button */
     };
 };
 

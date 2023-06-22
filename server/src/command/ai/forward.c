@@ -6,6 +6,7 @@
 */
 
 #include "command.h"
+#include "wbuffer.h"
 
 static void action_forward(action_t *action)
 {
@@ -14,11 +15,10 @@ static void action_forward(action_t *action)
     ai_t *ai = client->data;
 
     if (!ai || !server || !client) {
-        OLOG_FATAL("Forward action: missing data for id#%ld fd#%d\n",
-        client->id, client->socket->fd);
-        dprintf(client->socket->fd, "ko\n");
+        wbuffer_add_msg(client, "ko\n");
         return;
     }
+    tile_remove_player(server->map, client);
     if (ai->orientation == NORTH)
         ai->y = (ai->y - 1 < 0) ? (int)server->map->height - 1 : ai->y - 1;
     if (ai->orientation == SOUTH)
@@ -28,7 +28,8 @@ static void action_forward(action_t *action)
     if (ai->orientation == WEST)
         ai->x = (ai->x - 1 < 0) ? (int)server->map->width - 1 : ai->x - 1;
     notif_graphic(client, server, &do_ppo);
-    dprintf(client->socket->fd, "ok\n");
+    wbuffer_add_msg(client, "ok\n");
+    tile_add_player(server->map, client);
 }
 
 int forward(client_t *client, server_t *server, UNUSED char **args)

@@ -11,10 +11,15 @@ from ..action.clientAction import enumActions as cAct
 from ..exception.clientException import clientException as cEx
 from ..server.clientServer import clientServer
 from ..direction.direction import direction
+from ..state.clientState import enumState as enumState
+from ..front.rayCasting import rayCasting
+
+MIN_FOOD = 10
+PERCENTAGE_OF_FOOD = 0.5
 
 
 class clientAi:
-    def __init__(self, teamName: str, port: int, host: str):
+    def __init__(self, teamName: str, port: int, host: str, isGraphic):
         """
         This is the initialization function for a client AI that sets up various
         attributes and creates a client server object.
@@ -33,18 +38,44 @@ class clientAi:
         self.mapSize = [0, 0]
         self.response = None
         self.availablePlaces = 0
-        self.teamName = teamName + "\n"
+        self.teamName = teamName
         self.client = clientServer(port, host)
         self.direction = direction()
         self.queue = []
-        self.inv = dict()
+        self.inv = {
+            "food": 10,
+            "linemate": 0,
+            "deraumere": 0,
+            "sibur": 0,
+            "mendiane": 0,
+            "phiras": 0,
+            "thystame": 0,
+        }
         self.level = 1
+        self.lookingForFood = False
+        self.message = ""
+        self.inputData = []
+        self.state = 0
+        self.graphic = isGraphic
+        if self.graphic is True:
+            self.initPygame()
+        else:
+            self.rayCasting = None
+
+    def __del__(self):
+        if self.graphic is True:
+            rayCasting.pygame.quit()
+
+    def initPygame(self):
+        self.rayCasting = rayCasting(1200, 800)
 
     def getConnectionResponse(self):
         """
         This function parses a response from a server and extracts information
         about available places and map size.
         """
+        if not self.alive:
+            return
         self.availablePlaces = int(self.response[0])
         self.response = self.response[1].split(" ")
         if len(self.response) != 2:
@@ -58,12 +89,17 @@ class clientAi:
         raising an exception if the team name is invalid.
         """
         try:
+            if not self.alive:
+                return
             self.client.connect()
             self.client.receive()
-            self.client.send(self.teamName)
+            self.client.send(self.teamName + "\n")
+            if not self.alive:
+                return
             self.response = self.client.receive().split("\n")
             if self.response[0] == "ko" or len(self.response) != 3:
                 raise cEx("Error: team name is invalid")
+            self.getConnectionResponse()
         except Exception as e:
             print(e)
 
@@ -85,32 +121,43 @@ class clientAi:
         @param message The parameter "message" is a string that represents the
         message that the client wants to send to the server.
         """
-        try:
-            self.client.send(message)
-            self.receive()
-        except Exception as e:
-            print(e)
+        if not self.alive:
+            return False
+        self.client.send(message)
+        if not self.receive():
+            return False
+        return True
 
     def receive(self):
         """
         This function attempts to receive data from a client and prints any
         exceptions that occur.
         """
-        try:
-            self.response = self.client.receive()
-            print("RESPONSE -> ", self.response)
-            if self.response == "dead\n":
-                self.alive = False
-                print("DEAD")
-                return
-            elif self.response.find("message") != -1:
-                print("Message: " + self.response)
-                self.receive()
-            elif self.response.find("eject") != -1:
-                # handle eject
-                ...
-        except Exception as e:
-            print(e)
+        # try:
+        if not self.alive:
+            return False
+        self.response = self.client.receive()
+        if self.response == "dead\n":
+            self.alive = False
+            return False
+        elif self.response.find("message") != -1:
+            print("Message: " + self.response)
+            self.message = self.response
+            values = self.response.split(";")
+            value1 = values[0].split(",")[-1].strip()
+            value2 = values[1]
+            value3 = values[2][:-1]
+            if (
+                value1 == self.teamName
+                and value2 == "Incantation"
+                and value3 == str(self.level)
+            ):
+                self.state = enumState.JOIN_INCANTATION
+            self.receive()
+        elif self.response.find("eject") != -1:
+            # handle eject
+            ...
+        return True
 
     def getSocket(self):
         """
@@ -156,10 +203,10 @@ class clientAi:
         """
         This function sends a command to move forward.
         """
-        if self.alive:
-            self.send(cAct.FORWARD.value)
+        if not self.alive:
+            return
+        self.send(cAct.FORWARD.value)
         if self.response == "ok\n" and self.alive:
-            print("forward")
             self.direction.updateCoord()
 
     def right(self):
@@ -167,10 +214,10 @@ class clientAi:
         This function sends a command to move the object to the right and updates
         the direction accordingly.
         """
-        if self.alive:
-            self.send(cAct.RIGHT.value)
+        if not self.alive:
+            return
+        self.send(cAct.RIGHT.value)
         if self.response == "ok\n" and self.alive:
-            print("right")
             self.direction.updateDirectionToRight()
 
     def left(self):
@@ -178,10 +225,10 @@ class clientAi:
         This function sends a "LEFT" command and updates the direction to the left
         if the response is "ok".
         """
-        if self.alive:
-            self.send(cAct.LEFT.value)
+        if not self.alive:
+            return
+        self.send(cAct.LEFT.value)
         if self.response == "ok\n" and self.alive:
-            print("left")
             self.direction.updateDirectionToLeft()
 
     def look(self):
@@ -194,17 +241,23 @@ class clientAi:
         response depends on the implementation of the server and the game being
         played.
         """
-        if self.alive:
-            self.send(cAct.LOOK.value)
+        if not self.alive:
+            return
+        self.send(cAct.LOOK.value)
         if self.isValidArray() and self.alive:
             self.parseLook()
+        if self.graphic is True:
+            array = self.lookResult
+            array = self.rayCasting.ArrayToArrayOfDict(array)
+            self.rayCasting.refreshLookDisplay(array)
 
     def inventory(self):
         """
         This function sends a request for inventory information.
         """
-        if self.alive:
-            self.send(cAct.INVENTORY.value)
+        if not self.alive:
+            return
+        self.send(cAct.INVENTORY.value)
         if self.isValidArray() and self.alive:
             self.checkValidityInv()
             return
@@ -218,6 +271,8 @@ class clientAi:
         value of the "BROADCAST" constant from the "cAct" enum class and a newline
         character, and then sent using the "send" method.
         """
+        if not self.alive:
+            return
         self.send(cAct.BROADCAST.value + " " + message + "\n")
         if self.response == "ok\n" and self.alive:
             print("broadcast -> %s" % self.response)
@@ -226,14 +281,18 @@ class clientAi:
         """
         This function sends a message to connect to neighboring nodes.
         """
+        if not self.alive:
+            return
         self.send(cAct.CONNECT_NBR.value)
-        if self.response.isdigit() and self.alive:
+        if self.response[:-1].isdigit() and self.alive:
             self.availablePlaces = int(self.response.split("\n")[0])
 
     def fork(self):
         """
         The function sends a fork command using the cAct enum value.
         """
+        if not self.alive:
+            return
         self.send(cAct.FORK.value)
         if self.response == "ok\n" and self.alive:
             return
@@ -242,6 +301,8 @@ class clientAi:
         """
         The function "eject" sends a command to eject something.
         """
+        if not self.alive:
+            return
         self.send(cAct.EJECT.value)
         if self.response == "ok\n" and self.alive:
             return
@@ -255,9 +316,14 @@ class clientAi:
         take in the game. This parameter is used to construct a command that will
         be sent to the game engine to execute the "take" action.
         """
+        if not self.alive:
+            return
         self.send(cAct.TAKE.value + " " + object + "\n")
         if self.response == "ok\n" and self.alive:
-            self.inv[object] += 1
+            if not self.inv.get(object):
+                self.inv[object] = 1
+            else:
+                self.inv[object] += 1
 
     def set(self, object: str):
         """
@@ -267,6 +333,8 @@ class clientAi:
         that needs to be set. It is passed as an argument to the "set" method of a
         class.
         """
+        if not self.alive:
+            return
         self.send(cAct.SET.value + " " + object + "\n")
         if self.response == "ok\n" and self.alive:
             self.inv[object] -= 1
@@ -276,41 +344,94 @@ class clientAi:
         This function sends an incantation message using the value of
         cAct.INCANTATION.
         """
+        if not self.alive:
+            return
         self.send(cAct.INCANTATION.value)
-        if self.response == "ok\n" and self.alive:
+        self.receive()
+        if self.response != "ko\n" and self.alive:
             self.level += 1
+            return True
+        return False
 
     def run(self):
         """
         The function "run" is defined with an ellipsis as its body, indicating that
         it is not yet implemented.
         """
+        if not self.alive:
+            return
         while self.alive:
-            self.forward()
+            self.broadcast("Hello World")
+            self.grabFood()
 
     def resetFood(self, array):
+        """
+        This function resets the quantity of food in a dictionary based on the
+        input array.
+
+        @param array The parameter "array" is a list of tuples, where each tuple
+        contains two elements. The first element is a string that represents the
+        type of item (e.g. "food", "weapon", "armor"), and the second element is an
+        integer that represents the quantity of that item. The function
+        """
+        if not self.alive:
+            return
         for element in array:
             if element[0] == "food":
-                self.inv[element[0]] = element[1]
+                self.inv[element[0]] = int(element[1])
                 break
 
     def checkValidityInv(self):
+        """
+        This function checks the validity of an inventory by comparing it with the
+        current inventory and fills it if there is any discrepancy.
+        """
         array = self.parseInv()
 
+        if not self.alive:
+            return
         self.resetFood(array)
         for element in array:
-            if self.inv[element[0]] != element[1]:
-                print("something wrong")
+            if element[0] == "food":
+                continue
+            if (
+                element[0]
+                and element[0] in self.inv
+                and self.inv[element[0]] != element[1]
+            ):
                 self.fillInv(array)
                 break
+        print("inventory -> %s" % self.inv["food"])
 
     def fillInv(self, array):
+        """
+        This function fills a dictionary called "inv" with key-value pairs from a
+        given array.
+
+        @param array The parameter "array" is a list of tuples, where each tuple
+        contains two elements. The first element is a key and the second element is
+        a value. The function "fillInv" takes this array and populates the "inv"
+        dictionary of the object with the keys and values from the tuples
+        """
+        if not self.alive:
+            return
         for element in array:
             self.inv[element[0]] = int(element[1])
 
     def parseInv(self):
+        """
+        This function parses an inventory response and returns a list of items.
+
+        @return The function `parseInv` is returning a list of lists. Each inner
+        list contains two elements: the first element is a string representing an
+        item name, and the second element is an integer representing the quantity
+        of that item. The function is parsing a string response and extracting the
+        item names and quantities from it.
+        """
         temp = []
 
+        if not self.alive:
+            return
         array = self.response[1:-3].split(",")
         for element in array:
             temp.append(element[1:].split(" "))
@@ -318,24 +439,65 @@ class clientAi:
         return temp
 
     def isValidArray(self):
-        if not self.response[-1] == "\n" and not self.response[-2] == "]":
+        """
+        This function checks if a given response is a valid array in Python.
+
+        @return This code defines a method called `isValidArray` that checks if a
+        given response is a valid array. It returns `True` if the response is a
+        valid array and `False` otherwise.
+        """
+        if not self.alive:
+            return
+        if (
+            self.response
+            and self.response[-1]
+            and self.response[-2]
+            and not self.response[-1] == "\n"
+            and not self.response[-2] == "]"
+        ):
             return False
         if not self.response[0] == "[":
             return False
-
         return True
 
     def parseLook(self):
-        # -3 to test
+        """
+        This function parses a response string and appends the resulting array to a
+        list.
+        """
+        if not self.alive:
+            return
         array = self.response[1:-2].split(",")
-        for element in array:
-            self.lookResult.append(element[1:-1].split(" "))
+        self.lookResult.clear()
+        for i in range(0, len(array)):
+            if i == len(array) - 1:
+                self.lookResult.append(array[i][1:-1].split(" "))
+                break
+            self.lookResult.append(array[i][1:].split(" "))
 
     def computeQueueActions(self):
+        """
+        This function executes all the elements in a queue and then clears the
+        queue.
+        """
+        if not self.alive:
+            return
         for element in self.queue:
+            if not self.alive:
+                return
             element()
+        self.queue.clear()
 
     def getGoTo(self, value: int):
+        """
+        The function calculates the coordinates of a cell in a grid based on a given
+        value.
+
+        @param value The value parameter is an integer that represents the target
+        value to be reached in the function.
+        """
+        if not self.alive:
+            return
         beforeSize = 1
         result = 0
         max = 0
@@ -344,6 +506,10 @@ class clientAi:
         y = 0
 
         while result != value:
+            if value == max:
+                x += 1
+                result += 1
+                continue
             if result < value and value < max:
                 x += 1
                 result += 1
@@ -360,9 +526,25 @@ class clientAi:
 
         self.fillQueue(x, y)
 
-    def fillQueue(self, x: int, y: int):
-        left = False
+    def getQueue(self):
+        return self.queue
 
+    def fillQueue(self, x: int, y: int):
+        """
+        This function fills a queue with commands to move a robot a certain number
+        of steps to the left or right, and a certain number of steps forward.
+
+        @param x The parameter x represents the distance that the robot needs to
+        move horizontally (either to the left or to the right). If x is negative,
+        it means the robot needs to move to the left. If x is positive, it means
+        the robot needs to move to the right.
+        @param y The parameter "y" represents the number of times the robot should
+        move forward. It is used in a for loop to append the "forward" command to
+        the robot's queue.
+        """
+        if not self.alive:
+            return
+        left = False
         if x < 0:
             x *= -1
             left = True
@@ -370,11 +552,122 @@ class clientAi:
             self.queue.append(self.forward)
         if left:
             self.queue.append(self.left)
-        else:
+        elif x != 0:
             self.queue.append(self.right)
         for i in range(0, x):
             self.queue.append(self.forward)
 
     def pickObject(self, value, object: str):
-        self.__getGoTo(value)
+        """
+        This function picks up an object at a specified location.
+
+        @param value It seems that the `value` parameter is used as an input to the
+        `getGoTo()` method, which suggests that it might be a location or position
+        that the object needs to move to. However, without more context or
+        information about the code, it's difficult to say for sure.
+        @param object The "object" parameter in the function "pickObject" is a
+        string that represents the name or identifier of the object that the
+        function is supposed to pick up.
+        """
+        if not self.alive:
+            return
+        self.getGoTo(value)
+        self.computeQueueActions()
         self.take(object)
+
+    def findFood(self):
+        """
+        The function finds the index of the first occurrence of the string "food"
+        in a 2D array and returns it, or returns -1 if "food" is not found.
+
+        @return The function `findFood` returns the index of the first occurrence
+        of the string "food" in the 2D list `self.lookResult`. If "food" is not
+        found in the list, it returns -1.
+        """
+        id = 0
+
+        for array in self.lookResult:
+            for element in array:
+                if element == "food":
+                    return id
+            id += 1
+        return -1
+
+    def goElsewhere(self):
+        """
+        The function makes a robot move in a square pattern while searching for
+        food and stops when it finds food.
+
+        @return nothing (i.e., it does not have a return statement). It is using
+        the `return` keyword inside a loop to exit the function early if certain
+        conditions are met.
+        """
+        rotateId = 0
+
+        while self.lookingForFood:
+            if rotateId % 4 == 0:
+                self.forward()
+            self.left()
+            self.look()
+            result = self.findFood()
+            if result != -1:
+                self.getGoTo(result)
+                self.computeQueueActions()
+                return
+            rotateId += 1
+
+    def grabFood(self):
+        """
+        This function helps a character in a game grab food based on a certain
+        percentage and their surroundings.
+
+        @return If the condition in the if statement is true (meaning the agent
+        does not need food), then nothing is returned and the function ends. If the
+        condition is false, then the function executes the code block and takes
+        food from the environment. No value is explicitly returned in this case.
+        """
+        count = 0
+        result = 0
+
+        if not self.alive:
+            return
+        if not self.needFood():
+            return
+        self.look()
+        for element in self.lookResult[0]:
+            if element == "food":
+                count += 1
+        if not count < 1:
+            if count != 1:
+                count *= PERCENTAGE_OF_FOOD
+                count = round(count, 0)
+            for i in range(0, int(count)):
+                self.take("food")
+                self.lookingForFood = False
+                return
+        else:
+            result = self.findFood()
+            if result == -1:
+                self.getGoTo(result)
+                self.computeQueueActions()
+                self.grabFood()
+                return
+        self.goElsewhere()
+        self.grabFood()
+
+    def needFood(self):
+        """
+        This function checks if the player's inventory has enough food.
+
+        @return a boolean value. If the value of "food" in the inventory is less
+        than the minimum required amount (MIN_FOOD), then it returns True,
+        indicating that the player needs food. Otherwise, it returns False,
+        indicating that the player does not need food.
+        """
+        if not self.alive:
+            return False
+        self.inventory()
+        if "food" in self.inv and self.inv["food"] < MIN_FOOD:
+            self.lookingForFood = True
+            return True
+        return False

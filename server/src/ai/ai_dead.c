@@ -9,6 +9,7 @@
 #include "olog.h"
 #include "client.h"
 #include "command.h"
+#include "wbuffer.h"
 
 /**
  * The function handles the death of a client in a server and notifies
@@ -26,11 +27,11 @@ void ai_dead(client_t *client, server_t *server, bool disconnect)
     client_t *target = NULL;
 
     if (!disconnect)
-        dprintf(client->socket->fd, "dead\n");
+        wbuffer_add_msg(client, "dead\n");
     OLIST_FOREACH(server->clients, node) {
         target = (client_t *)node->data;
         if (target->type == GRAPHIC)
-            dprintf(target->socket->fd, "pdi %ld\n", client->id);
+            wbuffer_add_message(target, "pdi %ld\n", client->id);
     }
     if (client->data)
         ai_destroy((ai_t *)client->data);
@@ -40,5 +41,6 @@ void ai_dead(client_t *client, server_t *server, bool disconnect)
     else
         OLOG_INFO("AI id#%ld fd#%d is dead (disconnected)", client->id,
         client->socket->fd);
+    tile_remove_player(server->map, client);
     client_disconnect(server, client);
 }

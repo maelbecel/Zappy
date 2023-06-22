@@ -15,9 +15,11 @@ Test(test_broadcast, test_broadcast_1)
 
     emet->x = 1;
     emet->y = 1;
+    emet->orientation = NORTH;
 
     rec->x = 1;
     rec->y = 9;
+    rec->orientation = NORTH;
     cr_assert_eq(get_direction(emet, rec), 1);
 }
 
@@ -28,9 +30,11 @@ Test(test_broadcast, test_broadcast_2)
 
     emet->x = 1;
     emet->y = 9;
+    emet->orientation = NORTH;
 
     rec->x = 1;
     rec->y = 1;
+    rec->orientation = NORTH;
     cr_assert_eq(get_direction(emet, rec), 5);
 }
 
@@ -41,9 +45,11 @@ Test(test_broadcast, test_broadcast_3)
 
     emet->x = 4;
     emet->y = 5;
+    emet->orientation = NORTH;
 
     rec->x = 7;
     rec->y = 5;
+    rec->orientation = NORTH;
     cr_assert_eq(get_direction(emet, rec), 3);
 }
 
@@ -54,9 +60,11 @@ Test(test_broadcast, test_broadcast_4)
 
     emet->x = 7;
     emet->y = 5;
+    emet->orientation = NORTH;
 
     rec->x = 4;
     rec->y = 5;
+    rec->orientation = NORTH;
     cr_assert_eq(get_direction(emet, rec), 7);
 }
 
@@ -67,9 +75,11 @@ Test(test_broadcast, test_broadcast_5)
 
     emet->x = 5;
     emet->y = 2;
+    emet->orientation = NORTH;
 
     rec->x = 7;
     rec->y = 4;
+    rec->orientation = NORTH;
     cr_assert_eq(get_direction(emet, rec), 2);
 }
 
@@ -80,9 +90,11 @@ Test(test_broadcast, test_broadcast_6)
 
     emet->x = 7;
     emet->y = 4;
+    emet->orientation = NORTH;
 
     rec->x = 5;
     rec->y = 2;
+    rec->orientation = NORTH;
     cr_assert_eq(get_direction(emet, rec), 6);
 }
 
@@ -93,9 +105,11 @@ Test(test_broadcast, test_broadcast_7)
 
     emet->x = 7;
     emet->y = 2;
+    emet->orientation = NORTH;
 
     rec->x = 5;
     rec->y = 4;
+    rec->orientation = NORTH;
     cr_assert_eq(get_direction(emet, rec), 8);
 }
 
@@ -106,9 +120,11 @@ Test(test_broadcast, test_broadcast_8)
 
     emet->x = 5;
     emet->y = 4;
+    emet->orientation = NORTH;
 
     rec->x = 7;
     rec->y = 2;
+    rec->orientation = NORTH;
     cr_assert_eq(get_direction(emet, rec), 4);
 }
 

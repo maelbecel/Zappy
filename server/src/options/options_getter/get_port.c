@@ -14,7 +14,7 @@ int get_port(options_t *options, char *arg)
 
     if (port < 1024 || port > 65535) {
         flag_error('p', "option only accepts integer values between 1024 \
-        and 65535");
+and 65535");
         return 0;
     }
     options->port = port;

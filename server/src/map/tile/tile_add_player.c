@@ -6,13 +6,17 @@
 */
 
 #include "map.h"
+#include "ai.h"
 
-void tile_add_player(tile_t *tile, client_t *player)
+void tile_add_player(map_t *map, client_t *client)
 {
-    OLIST_FOREACH(tile->players, node) {
-        client_t *tmp = node->data;
-        if (tmp->id == player->id)
-            return;
-    }
-    olist_add_node(tile->players, player);
+    ai_t *ai = client->data;
+    tile_t *tile = NULL;
+
+    if (!map || !client || !ai)
+        return;
+    tile = map_get_tile(map, ai->x, ai->y);
+    if (!tile)
+        return;
+    tile->players++;
 }

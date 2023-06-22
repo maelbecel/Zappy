@@ -9,9 +9,9 @@
 #include "Window.hpp"
 
 namespace UI {
-    MenuHUD::MenuHUD(std::string ip, std::string port) : _background(sf::Vector2f(Window::getWindowWidth() / 6, Window::getWindowHeight()))
+    MenuHUD::MenuHUD(std::string ip, std::string port) : _background(sf::Vector2f(Window::getWindowWidth(), Window::getWindowHeight()))
     {
-        BackgroundStyle RectangleColorBg(sf::Color(255, 255, 255, 155));
+        BackgroundStyle RectangleColorBg(sf::Color(0, 0, 0, 220));
 
         RectangleColorBg.apply(_background);
 
@@ -32,19 +32,34 @@ namespace UI {
 
         _settingsHUD = SettingsHUD();
 
-        sf::Texture *titleTexture = TextureManager::getTexture("./Assets/UI_UX/Paper UI Pack/Paper UI/Folding & Cutout/2 Headers/4.png");
-        _titleHeader = sf::Sprite();
-        _titleHeader.setTexture(*titleTexture);
-        _titleHeader.setPosition(sf::Vector2f(Window::getWindowWidth() / 2 - 448, 0));
-        _titleHeader.setScale(sf::Vector2f(2, 2));
+        _popUp = false;
 
-        sf::Font *font = FontManager::getFont(UI::ARIAL);
-        _titleText = sf::Text();
-        _titleText.setFont(*font);
-        _titleText.setString("Zappy");
-        _titleText.setCharacterSize(50);
-        _titleText.setFillColor(sf::Color(15, 143, 104, 255));
-        _titleText.setPosition(sf::Vector2f(Window::getWindowWidth() / 2 - (448 / 2.65), 75));
+        try {
+            sf::Texture *titleTexture = TextureManager::getTexture("./Assets/UI_UX/Paper UI Pack/Paper UI/Folding & Cutout/2 Headers/4.png");
+            _titleHeader = sf::Sprite();
+            _titleHeader.setTexture(*titleTexture);
+            _titleHeader.setPosition(sf::Vector2f(Window::getWindowWidth() / 2 - 448, 0));
+            _titleHeader.setScale(sf::Vector2f(2, 2));
+
+            sf::Font *font = FontManager::getFont(UI::ARIAL);
+            _titleText = sf::Text();
+            _titleText.setFont(*font);
+            _titleText.setString("Zappy");
+            _titleText.setCharacterSize(50);
+            _titleText.setFillColor(sf::Color(15, 143, 104, 255));
+            _titleText.setPosition(sf::Vector2f(Window::getWindowWidth() / 2 - (448 / 2.65), 75));
+
+            float popUpScale = 2.0f;
+            sf::Texture *popUp = TextureManager::getTexture("./Assets/UI_UX/Paper UI Pack/Paper UI/Folding & Cutout/4 Notification/2.png");
+            _popUpSprite = sf::Sprite(*popUp);
+            _popUpSprite.setScale(sf::Vector2f(popUpScale, popUpScale));
+            _popUpSprite.setPosition(sf::Vector2f((Window::getWindowWidth() - (popUp->getSize().x * popUpScale)) / 2, (Window::getWindowHeight() - (popUp->getSize().y * popUpScale)) / 2));
+        } catch (const Error::TextureError &e) {
+            std::cerr << "Bad Initialization of MenuHUD: " << e.what() << std::endl;
+        }
+
+        CrossButtonWidget *crossButton = new CrossButtonWidget(sf::Vector2f((_popUpSprite.getPosition().x + _popUpSprite.getGlobalBounds().width) - 16 * 2, _popUpSprite.getPosition().y), sf::Vector2f(16 * 2, 16 * 2));
+        _crossButton = new Button(crossButton);
     }
 
     MenuHUD::~MenuHUD()
@@ -79,18 +94,37 @@ namespace UI {
         if (_settingsHUD.isOpened() == true) {
             _settingsHUD.draw(window);
         }
+        if (_popUp == true) {
+            window.draw(_background);
+            window.draw(_popUpSprite);
+            window.draw(_popUpText);
+            if (_crossButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))) {
+                _crossButton->render(window, ButtonState::HOVERED);
+            } else {
+                _crossButton->render(window, ButtonState::IDLE);
+            }
+        }
     }
 
     void MenuHUD::handleEvent(sf::Event event, Network::Server &server, sf::RenderWindow &window)
     {
-        if (event.type == sf::Event::KeyPressed && _settingsHUD.isOpened() == true) {
-            if (event.key.code == sf::Keyboard::Escape) {
+        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+            if (_settingsHUD.isOpened() == true) {
                 _settingsHUD.setOpened(false);
+            }
+            if (_popUp == true) {
+                _popUp = false;
             }
         }
         if (event.type == sf::Event::MouseButtonPressed) {
             if (event.mouseButton.button != sf::Mouse::Left)
                 return;
+            if (_popUp == true) {
+                if (_crossButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                    _popUp = false;
+                }
+                return;
+            }
             if (_settingsHUD.isOpened() == true) {
                 _settingsHUD.handleEvent(event, server, window);
                 return;
@@ -101,10 +135,11 @@ namespace UI {
 
                 try {
                     server.Connect();
-                    // TODO: Send to server set speed to 10 (sst 10 ?)
                 } catch (const Error::NetworkError &e) {
                     _ip.value = std::string("");
                     _port.value = std::string("");
+                    _popUp = true;
+                    _popUpText = setString(e.what(), sf::Vector2f(_popUpSprite.getPosition().x + (_popUpSprite.getGlobalBounds().width / 5), _popUpSprite.getPosition().y + (_popUpSprite.getGlobalBounds().height) / 2), 12);
                 }
                 return;
             }
@@ -128,4 +163,22 @@ namespace UI {
         _ip.value = ip;
         _port.value = port;
     }
+
+    sf::Text MenuHUD::setString(std::string str, sf::Vector2f position, size_t fontSize)
+    {
+        sf::Text text;
+        try {
+            sf::Font *font = FontManager::getFont(UI::ARIAL);
+
+            text.setString(str + "\n\n(press escape to close)");
+            text.setFont(*font);
+            text.setCharacterSize(fontSize);
+            text.setFillColor(sf::Color(15, 143, 104, 255));
+            text.setPosition(position);
+        } catch (const Error::TextureError &e) {
+            std::cerr << "Bad Initialization of Text : " << str << std::endl;
+        }
+        return text;
+    }
 };
+

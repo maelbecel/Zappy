@@ -117,18 +117,23 @@ namespace UI {
     std::map<std::string, sf::Sprite> ButtonWidget::setHoveredSprites()
     {
         std::map<std::string, sf::Sprite> sprites;
-        sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/25.png");
-        sf::Sprite sprite;
-        sprite.setTexture(*texture);
-        sprites["left"] = sprite;
 
-        texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/27.png");
-        sprite.setTexture(*texture);
-        sprites["right"] = sprite;
+        try {
+            sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/25.png");
+            sf::Sprite sprite;
+            sprite.setTexture(*texture);
+            sprites["left"] = sprite;
 
-        texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/26.png");
-        sprite.setTexture(*texture);
-        sprites["middle"] = sprite;
+            texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/27.png");
+            sprite.setTexture(*texture);
+            sprites["right"] = sprite;
+
+            texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/26.png");
+            sprite.setTexture(*texture);
+            sprites["middle"] = sprite;
+        } catch (const Error::TextureError &e) {
+            std::cerr << "Bad Initialization of ButtonWidget: " << e.what() << std::endl;
+        }
         return sprites;
     }
 

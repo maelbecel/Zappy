@@ -5,9 +5,21 @@
 ** client_disconnect
 */
 
+#include <stdlib.h>
 #include "olog.h"
 #include "server.h"
 #include "client.h"
+#include "wbuffer.h"
+
+static void send_missing_buffer(client_t *client)
+{
+    char *buffer = wbuffer_empty(client);
+
+    if (!buffer)
+        return;
+    dprintf(client->socket->fd, "%s", buffer);
+    free(buffer);
+}
 
 /**
  * This function handles the disconnection of a client from the server and
@@ -36,6 +48,7 @@ void client_disconnect(server_t *server, client_t *client)
             team->team_size--;
         }
     }
+    send_missing_buffer(client);
     client_destroy(client);
     olist_remove_node_wfree(server->clients,
     olist_index_of(server->clients, client));

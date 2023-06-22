@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include "options.h"
 
-static const char *short_options = "p:x:y:n:c:f:";
+static const char *short_options = "p:x:y:n:c:f:h";
 
 static const struct option long_options[] = {
     {"port", required_argument, 0, 'p'},
@@ -18,6 +18,7 @@ static const struct option long_options[] = {
     {"teams", required_argument, 0, 'n'},
     {"clients-nb", required_argument, 0, 'c'},
     {"freq", required_argument, 0, 'f'},
+    {"help", no_argument, 0, 'h'},
     {0, 0, 0, 0}
 };
 
@@ -35,6 +36,12 @@ void flag_error(int flag, char *message)
     fprintf(stderr, "-%c %s\n", flag, message);
 }
 
+static int send_help(void)
+{
+    fprintf(stderr, HELP_MESSAGE);
+    return 0;
+}
+
 static int fill_options(options_t *options, int flag, int argc, char **argv)
 {
     for (uint i = 0; options_getter[i].flag; i++) {
@@ -43,6 +50,8 @@ static int fill_options(options_t *options, int flag, int argc, char **argv)
     }
     if (flag == 'n')
         return get_teams_names(options, argc, argv);
+    if (flag == 'h')
+        return send_help();
     flag_error(flag, "invalid option");
     return 0;
 }

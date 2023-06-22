@@ -18,6 +18,7 @@
     #include "ButtonWidget.hpp"
     #include "NetworkError.hpp"
     #include "SettingsHUD.hpp"
+    #include "HelpHUD.hpp"
 
 namespace UI {
     class GameMenuHUD {
@@ -66,8 +67,10 @@ namespace UI {
             sf::Sprite _backgroundSprite;           /*!< Sprite of the Settings HUD */
             IButton *_resumeButton;                 /*!< Button to resume the game */
             IButton *_settingsButton;              /*!< Button to go to the settings */
+            IButton *_helpButton;                  /*!< Button to go to the help */
             IButton *_quitButton;                  /*!< Button to quit the game */
             SettingsHUD _settingsHUD;               /*!< Settings HUD */
+            HelpHUD _helpHUD;                       /*!< Help HUD */
             bool _isOpened;                         /*!< Is the Settings HUD opened */
     };
 };

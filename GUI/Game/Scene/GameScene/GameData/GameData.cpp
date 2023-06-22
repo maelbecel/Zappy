@@ -62,6 +62,7 @@ int GameData::parse(std::string &line)
         response = KillEgg(line);
     line.clear();
     return response;
+}
 
 int GameData::setMapSize(const std::string &mapSize)
 {
@@ -126,7 +127,7 @@ int GameData::setMultipleTileContent(const std::string &tiles)
 
     while (ss >> temp)
         tilesVector.push_back(temp);
-    
+
     for (auto &tile : tilesVector)
         setSingleTileContent(tile);
     return 0;
@@ -158,7 +159,7 @@ int GameData::setSingleTileContent(const std::string &tile)
         int q5Int = std::stoi(q5);
         int q6Int = std::stoi(q6);
 
-        
+
         // Check if the map[x][y] already exists
         if (_map.find(std::make_pair(xInt, yInt)) != _map.end()) {
             _map[std::make_pair(xInt, yInt)]->setNewResources(q0Int, q1Int, q2Int, q3Int, q4Int, q5Int, q6Int);
@@ -299,7 +300,7 @@ int GameData::setPlayerMovement(const std::string &player)
         // Check if the #n players didn't exists
         if (_players.find(name) == _players.end())
             return 0;
-        
+
         int xInt = std::stoi(x);
         int yInt = std::stoi(y);
         int oriantationInt = std::stoi(orientation);

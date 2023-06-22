@@ -31,6 +31,7 @@ static void update_max_fd(server_t *server)
         return;
     FD_ZERO(&server->select->readfds);
     FD_ZERO(&server->select->writefds);
+    FD_ZERO(&server->select->exceptfds);
     FD_SET(server->socket->fd, &server->select->readfds);
 
     OLIST_FOREACH(server->clients, node) {
@@ -38,6 +39,7 @@ static void update_max_fd(server_t *server)
 
         FD_SET(client->socket->fd, &server->select->readfds);
         FD_SET(client->socket->fd, &server->select->writefds);
+        FD_SET(client->socket->fd, &server->select->exceptfds);
         if ((uint) client->socket->fd > server->select->maxfd)
             server->select->maxfd = client->socket->fd;
     }
@@ -59,12 +61,12 @@ int main_loop(server_t *server)
     while (server->running) {
         update_max_fd(server);
         if (select(server->select->maxfd + 1, &server->select->readfds,
-            &server->select->writefds, NULL, NULL) == -1)
+            &server->select->writefds, &server->select->exceptfds, NULL) == -1)
             break;
         if (client_accept(server) == EXIT_FAILTEK)
-            return EXIT_FAILTEK;
+            continue;
         if (client_read(server) == EXIT_FAILTEK)
-            return EXIT_FAILTEK;
+            continue;
         time_update(server->time);
         action_update(server);
         map_spawn_items(server, true);

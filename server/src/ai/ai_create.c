@@ -25,9 +25,12 @@
  */
 static void get_random_pos(ai_t *ai, uint xmax, uint ymax)
 {
+    uint orientation = rand() % 4;
+
     ai->x = (xmax == 0) ? 0 : rand() % xmax;
     ai->y = (ymax == 0) ? 0 : rand() % ymax;
-    OLOG_DEBUG("Generate random pos: %d %d", ai->x, ai->y);
+    ai->orientation = (orientation == 0) ? NORTH : orientation;
+    OLOG_DEBUG("Generate random pos: %d %d %d", ai->x, ai->y, ai->orientation);
 }
 
 /**
@@ -52,7 +55,6 @@ ai_t *ai_create(uint xmax, uint ymax)
     ai->id = generate_id();
     ai->level = 1;
     ai->time_before_death = 0;
-    ai->orientation = NORTH;
     ai->inventory = inventory_create();
     if (!ai->inventory) {
         free(ai);

@@ -71,4 +71,5 @@ build/
 
 zappy_server
 zappy_gui
+unit_tests
 *.vscode

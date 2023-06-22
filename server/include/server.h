@@ -37,6 +37,7 @@ typedef unsigned long long ullong;
 typedef struct select_s {
     fd_set readfds;
     fd_set writefds;
+    fd_set exceptfds;
     uint maxfd;
 } select_t;
 
@@ -119,6 +120,14 @@ int client_accept(server_t *server);
  * @return int
  */
 int client_read(server_t *server);
+
+/**
+ * @brief Check all fd to see if there is exception
+ *
+ * @param server Link to server object
+ * @return int EXIT_SUCCESS or EXIT_FAILTEK
+ */
+int client_except(server_t *server);
 
 /**
  * @brief Create new team

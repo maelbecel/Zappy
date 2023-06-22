@@ -17,8 +17,7 @@ static void send_missing_buffer(client_t *client)
 
     if (!buffer)
         return;
-    dprintf(client->socket->fd, "%s", buffer);
-    free(buffer);
+    wbuffer_print(client->socket->fd, buffer);
 }
 
 /**

@@ -1,0 +1,57 @@
+
+# def render_array(array):
+#     case_size = 64  # Size of each case (adjust as needed)
+#     num_cases_per_row = screen_width // case_size
+#     x, y = 0, 0
+
+#     for case in array:
+#         render_case(case, x, y)
+
+#         x += case_size
+#         if x >= screen_width:
+#             x = 0
+#             y += case_size
+
+# def render_rays(player_pos, array):
+#     player_x, player_y = player_pos
+#     fov = 60  # Field of view in degrees
+#     num_rays = 100  # Number of rays to cast
+#     angle_increment = fov / num_rays
+
+#     ray_length = max(screen_width, screen_height)  # Maximum length of the rays
+
+#     for ray_index in range(num_rays):
+#         angle = math.radians(player_x + ray_index * angle_increment)  # Calculate the ray angle
+#         end_x = player_x + ray_length * math.cos(angle)  # Calculate the endpoint of the ray
+#         end_y = player_y + ray_length * math.sin(angle)
+
+#         # Find the corresponding case in the array
+#         case_x = int(end_x / case_size)
+#         case_y = int(end_y / case_size)
+#         case_index = case_y * num_cases_per_row + case_x
+#         if case_index < len(array):
+#             case = array[case_index]
+#             render_case(case, case_x * case_size, case_y * case_size)
+
+# running = True
+# while running:
+#     for event in pygame.event.get():
+#         if event.type == pygame.QUIT:
+#             running = False
+
+#     screen.fill((0, 0, 0))  # Clear the screen
+
+#     array = [
+#         {"linemate": 1, "deraumere": 0, "sibur": 0, "mendiane": 0, "phiras": 0, "thystame": 0, "player": 0},
+#         {"linemate": 1, "deraumere": 1, "sibur": 0, "mendiane": 0, "phiras": 0, "thystame": 0, "player": 1},
+#         {"linemate": 1, "deraumere": 1, "sibur": 0, "mendiane": 0, "phiras": 0, "thystame": 0, "player": 1},
+#         {"linemate": 1, "deraumere": 1, "sibur": 0, "mendiane": 2, "phiras": 0, "thystame": 0, "player": 1},
+#     ]
+
+#     render_array(array)  # Render the array
+#     player_pos = (200, 200)  # Example player position
+#     render_rays(player_pos, array)  # Render rays from the player position
+
+#     pygame.display.flip()
+
+# pygame.quit()

@@ -25,5 +25,6 @@ char *stringbuilder(char **str, uint start_pos)
         result[j] = ' ';
         j++;
     }
+    result[j - 1] = '\0';
     return result;
 }

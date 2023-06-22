@@ -57,6 +57,8 @@ void look_south(client_t *client, server_t *server, ai_t *ai);
 void look_west(client_t *client, server_t *server, ai_t *ai);
 void look_east(client_t *client, server_t *server, ai_t *ai);
 
+int get_direction(ai_t *emitter, ai_t *receiver);
+
 void eject_all_eggs(server_t *server, tile_t *tile);
 
 void lock_unlock_players(olist_t *players, bool lock);

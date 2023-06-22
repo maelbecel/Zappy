@@ -14,3 +14,4 @@ class enumState(Enum):
     NEED_FOOD = 0
     LF_RESSOURCES = 1
     FULL_RESSOUCRES = 2
+    JOIN_INCANTATION = 3

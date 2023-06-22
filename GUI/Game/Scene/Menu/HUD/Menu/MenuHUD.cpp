@@ -163,7 +163,7 @@ namespace UI {
         _ip.value = ip;
         _port.value = port;
     }
-
+  
     sf::Text MenuHUD::setString(std::string str, sf::Vector2f position, size_t fontSize)
     {
         sf::Text text;
@@ -181,4 +181,3 @@ namespace UI {
         return text;
     }
 };
-

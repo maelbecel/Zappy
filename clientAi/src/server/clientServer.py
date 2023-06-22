@@ -43,10 +43,10 @@ class clientServer:
         if self.socket is None:
             cEx("Error: socket is null")
         response = self.socket.recv(8192).decode()
+        if response is None or len(response) == 0:
+            return "dead\n"
         while response[-1] != "\n":
             response = self.socket.recv(8192).decode()
-        if response is None:
-            print("Error: response is null")
         return response
 
     def getSocket(self):

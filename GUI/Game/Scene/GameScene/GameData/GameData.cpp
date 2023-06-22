@@ -8,12 +8,14 @@
 #include "GameData.hpp"
 
 uint GameData::timeUnit = 0;
+uint GameData::gameSpeed = 0;
 
 GameData::GameData() : _mapSize(sf::Vector2i(0, 0)), _gameScale(1.0f), _scale(sf::Vector2f(1.0f, 1.0f)), _position(sf::Vector2f(0, 900 / 2))
 {
     _teams = std::vector<std::string>();
 
     GameData::timeUnit = 0;
+    GameData::gameSpeed = 0;
 };
 
 int GameData::parse(std::string &line)
@@ -60,7 +62,6 @@ int GameData::parse(std::string &line)
         response = KillEgg(line);
     line.clear();
     return response;
-}
 
 int GameData::setMapSize(const std::string &mapSize)
 {
@@ -93,7 +94,6 @@ int GameData::setTimeUnit(const std::string &timeUnit)
 
     try {
         int time = std::stoi(t);
-
         GameData::timeUnit = time;
     } catch (std::invalid_argument &e) {
         throw Error::InvalidArgument("GameData::setTimeUnit");
@@ -110,7 +110,6 @@ int GameData::addTimeUnit(const std::string &timeUnit)
 
     try {
         int time = std::stoi(t);
-
         GameData::timeUnit += time;
     } catch (std::invalid_argument &e) {
         throw Error::InvalidArgument("GameData::addTimeUnit");

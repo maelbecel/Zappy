@@ -15,6 +15,7 @@ namespace Scene {
     /////////////////
     GameScene::GameScene() : _isTileHUDOpen(false), _isTeamActivated(true) {}
 
+
     /////////////
     // Methods //
     /////////////
@@ -206,7 +207,6 @@ namespace Scene {
                 break;
             }
         }
-
         return _isTileHUDOpen;
     };
 

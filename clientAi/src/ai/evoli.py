@@ -81,7 +81,7 @@ REQUIRED_PLAYER = [
 
 
 class evoli(clientAI):
-    def __init__(self, teamName, port, host):
+    def __init__(self, teamName, port, host, bool):
         """
         This is a constructor method that initializes the attributes of an object
         with a team name, port, host, objective dictionary, and state.
@@ -96,7 +96,7 @@ class evoli(clientAI):
         or hostname of the server that the code is connecting to. It is used to
         establish a network connection between the client and the server.
         """
-        super().__init__(teamName, port, host)
+        super().__init__(teamName, port, host, bool)
         self.objective = dict()
         self.state = enumState.NEED_FOOD
 
@@ -193,15 +193,15 @@ class evoli(clientAI):
 
     def checkActualCase(self, id: int):
         """
-        The function checks if a given dictionary matches a required dictionary
-        based on a certain level.
+         The function checks if a given dictionary matches a required dictionary
+        self.inputData = None based on a certain level.
 
-        @param id The "id" parameter is an integer that represents the ID of a
-        case.
+         @param id The "id" parameter is an integer that represents the ID of a
+         case.
 
-        @return a boolean value. If the dictionary obtained from the case with the
-        given id matches the required dictionary for the current level, then True
-        is returned. Otherwise, False is returned.
+         @return a boolean value. If the dictionary obtained from the case with the
+         given id matches the required dictionary for the current level, then True
+         is returned. Otherwise, False is returned.
         """
         temp = dict()
 
@@ -252,13 +252,17 @@ class evoli(clientAI):
         """
         count = self.countPlayerOnCase()
 
+        print("count = " + str(count))
+        print("required = " + str(REQUIRED_PLAYER[self.level - 1]))
         if count == REQUIRED_PLAYER[self.level - 1]:
+            if self.level == 2:
+                self.broadcast("elevate to level 3")
             if not self.incantation():
                 self.takeUselessRessourcesOnCase()
                 self.elevate()
                 return
         else:
-            self.broadcast("need more player " + self.teamName)
+            self.broadcast(self.teamName + ";Incantation;" + str(self.level))
 
     def findPlaceToElevate(self):
         """
@@ -269,6 +273,7 @@ class evoli(clientAI):
         index = self.checkRessourcesCases()
 
         if index != -1:
+            print("found a case to elevate")
             self.getGoTo(index)
             self.computeQueueActions()
             if self.checkActualCase(0):  # check if the case is the good one
@@ -320,7 +325,72 @@ class evoli(clientAI):
                         and self.inv[element] < REQUIRED[self.level - 1][element]
                     ):
                         self.pickObject(id, element)
+                        return False
                 id += 1
+        return False
+
+    def checkPlayerInFront(self):
+        self.look()
+        if "player" in self.lookResult[2]:
+            return True
+        return False
+
+    def joinIncantation(self):
+        orientation = self.message.split(",")[0].split(" ")[-1].strip()
+        print("orientation : " + orientation)
+        if orientation == "0":
+            if self.countPlayerOnCase() == 2:
+                exit(0)
+            if self.countPlayerOnCase() == 1:
+                while self.checkPlayerInFront() is False:
+                    self.left()
+                self.forward()
+        elif orientation == "1":
+            print("count = " + str(self.countPlayerOnCase()))
+            if self.countPlayerOnCase() == 2:
+                exit(0)
+            self.forward()
+        elif orientation == "2":
+            self.forward()
+            self.left()
+            self.forward()
+        elif orientation == "3":
+            self.left()
+            self.forward()
+        elif orientation == "4":
+            self.left()
+            self.forward()
+            self.left()
+            self.forward()
+        elif orientation == "5":
+            self.left()
+            self.left()
+            self.forward()
+        elif orientation == "6":
+            self.right()
+            self.forward()
+            self.right()
+            self.forward()
+        elif orientation == "7":
+            self.right()
+            self.forward()
+        elif orientation == "8":
+            self.forward()
+            self.right()
+            self.forward()
+
+    def placeRessources(self):
+        """
+        This function places resources on a case based on the player's inventory
+        and level.
+        """
+        for element in self.inv:
+            if element == "food":
+                continue
+            for i in range(self.inv[element]):
+                if REQUIRED[self.level - 1][element] > 0:
+                    for j in range(REQUIRED[self.level - 1][element]):
+                        self.set(element)
 
     def run(self):
         """
@@ -328,8 +398,20 @@ class evoli(clientAI):
         food, and repeats while alive.
         """
         while self.alive:
-            self.findPlaceToElevate()
+            # self.findPlaceToElevate()
             # self.findNeededRessources()
-            self.grabFood()
-
-            # self.alive = False
+            # self.grabFood()
+            print("state = " + str(self.state) + "\n")
+            if (
+                self.state == enumState.LF_RESSOURCES
+                or self.state == enumState.NEED_FOOD
+            ):
+                self.findPlaceToElevate()
+                self.findNeededRessources()
+                self.grabFood()
+            elif self.state == enumState.FULL_RESSOUCRES:
+                self.placeRessources()
+                self.elevate()
+            elif self.state == enumState.JOIN_INCANTATION:
+                self.joinIncantation()
+                # self.grabFood()

@@ -18,4 +18,6 @@ void wbuffer_add_msg(client_t *client, char *msg);
 
 char *wbuffer_empty(client_t *client);
 
+void wbuffer_print(int fd, char *buffer);
+
 #endif

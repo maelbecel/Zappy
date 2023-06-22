@@ -21,7 +21,7 @@ namespace UI {
         _position = position;
 
         if (direction == ArrowDirection::LEFT) {
-            try {
+=            try {
                 sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/5.png");
                 _idleSprite = sf::Sprite(*texture);
                 _idleSprite.setScale(sf::Vector2f(3, 3));

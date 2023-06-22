@@ -14,7 +14,7 @@ static void action_left(action_t *action)
     ai_t *ai = client->data;
 
     if (!ai || !action->data[1] || !client) {
-        OLOG_FATAL("Left action: missing data for id#%ld fd#%d\n",
+        OLOG_FATAL("Left action: missing data for id#%ld fd#%d",
         client->id, client->socket->fd);
         wbuffer_add_msg(client, "ko\n");
         return;

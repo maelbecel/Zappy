@@ -140,6 +140,7 @@ TESTS_SRC += 	$(TESTS_DIR)/server/test_server.c \
 				$(TESTS_DIR)/client/test_client.c \
 				$(TESTS_DIR)/inventory/test_inventory.c \
 			 	$(TESTS_DIR)/command/graphic/test_simple_command.c \
+			 	$(TESTS_DIR)/command/ai/test_simple_command.c \
 			 	$(TESTS_DIR)/command/ai/test_broadcast.c \
 			 	$(TESTS_DIR)/utils/test_stringbuilder.c \
 				$(TESTS_DIR)/utils/test_array_size.c \

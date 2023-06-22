@@ -141,12 +141,10 @@ namespace UI {
             if (event.mouseButton.button != sf::Mouse::Left)
                 return;
             if (_sound.isIn(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
-                std::cout << "Sound" << std::endl;
                 _soundValue = std::stoi(_sound.value);
                 return;
             }
             if (_music.isIn(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
-                std::cout << "Music" << std::endl;
                 _musicValue = std::stoi(_music.value);
                 return;
             }

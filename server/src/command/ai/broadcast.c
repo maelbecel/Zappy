@@ -9,23 +9,23 @@
 #include "wbuffer.h"
 #include "utils.h"
 
-static int get_direction(ai_t *emitter, ai_t *receiver)
+int get_direction(ai_t *emitter, ai_t *receiver)
 {
     int x = receiver->x - emitter->x;
     int y = receiver->y - emitter->y;
 
     if (x > 0 && y > 0)
-        return (RORIENT == 1) ? 8 : (RORIENT == 2) ? 2 : (RORIENT == 3) ? 4 : 6;
-    if (x > 0 && y < 0)
-        return (RORIENT == 1) ? 6 : (RORIENT == 2) ? 8 : (RORIENT == 3) ? 2 : 4;
-    if (x < 0 && y > 0)
         return (RORIENT == 1) ? 2 : (RORIENT == 2) ? 4 : (RORIENT == 3) ? 6 : 8;
-    if (x < 0 && y < 0)
+    if (x > 0 && y < 0)
         return (RORIENT == 1) ? 4 : (RORIENT == 2) ? 6 : (RORIENT == 3) ? 8 : 2;
+    if (x < 0 && y > 0)
+        return (RORIENT == 1) ? 8 : (RORIENT == 2) ? 2 : (RORIENT == 3) ? 4 : 6;
+    if (x < 0 && y < 0)
+        return (RORIENT == 1) ? 6 : (RORIENT == 2) ? 8 : (RORIENT == 3) ? 2 : 4;
     if (x > 0 && y == 0)
-        return (RORIENT == 1) ? 7 : (RORIENT == 2) ? 1 : (RORIENT == 3) ? 3 : 5;
-    if (x < 0 && y == 0)
         return (RORIENT == 1) ? 3 : (RORIENT == 2) ? 5 : (RORIENT == 3) ? 7 : 1;
+    if (x < 0 && y == 0)
+        return (RORIENT == 1) ? 7 : (RORIENT == 2) ? 1 : (RORIENT == 3) ? 3 : 5;
     if (x == 0 && y > 0)
         return (RORIENT == 1) ? 1 : (RORIENT == 2) ? 3 : (RORIENT == 3) ? 5 : 7;
     if (x == 0 && y < 0)

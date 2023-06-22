@@ -9,24 +9,13 @@ SRC_DIR = src
 
 BUILD_DIR = build
 
-SRC = 	$(SRC_DIR)/main.c \
-		$(SRC_DIR)/server.c \
-		$(SRC_DIR)/main_loop.c \
-		$(SRC_DIR)/sigint_handler.c \
-		$(SRC_DIR)/winning_detection.c
+TESTS_DIR = tests
 
-SRC +=	$(SRC_DIR)/server/server_create.c \
+SRC =	$(SRC_DIR)/server/server_create.c \
 		$(SRC_DIR)/server/server_destroy.c
 
 SRC +=	$(SRC_DIR)/options/del_options.c \
-		$(SRC_DIR)/options/init_options.c \
-		$(SRC_DIR)/options/get_options.c \
-		$(SRC_DIR)/options/options_getter/get_clients_nb.c \
-		$(SRC_DIR)/options/options_getter/get_freq.c \
-		$(SRC_DIR)/options/options_getter/get_height.c \
-		$(SRC_DIR)/options/options_getter/get_port.c \
-		$(SRC_DIR)/options/options_getter/get_teams_names.c \
-		$(SRC_DIR)/options/options_getter/get_width.c
+		$(SRC_DIR)/options/init_options.c
 
 SRC +=	$(SRC_DIR)/inventory/inventory_create.c \
 		$(SRC_DIR)/inventory/inventory_destroy.c \
@@ -48,8 +37,10 @@ SRC +=	$(SRC_DIR)/client/client_accept.c \
 		$(SRC_DIR)/client/client_read.c \
 		$(SRC_DIR)/client/client_disconnect.c \
 		$(SRC_DIR)/client/client_get_by_id.c \
+		$(SRC_DIR)/client/client_except.c \
 		$(SRC_DIR)/client/write_buffer/wbuffer_add_message.c \
-		$(SRC_DIR)/client/write_buffer/wbuffer_empty.c
+		$(SRC_DIR)/client/write_buffer/wbuffer_empty.c \
+		$(SRC_DIR)/client/write_buffer/wbuffer_print.c
 
 SRC +=	$(SRC_DIR)/command/command_exec.c \
 		$(SRC_DIR)/command/command_exec_ai.c \
@@ -124,7 +115,42 @@ SRC +=	$(SRC_DIR)/egg/egg_create.c \
 		$(SRC_DIR)/egg/egg_is_egg_in_team.c \
 		$(SRC_DIR)/egg/egg_add_to_team.c
 
+MAIN += 	$(SRC_DIR)/main.c \
+			$(SRC_DIR)/server.c \
+			$(SRC_DIR)/main_loop.c \
+			$(SRC_DIR)/sigint_handler.c \
+			$(SRC_DIR)/winning_detection.c \
+			$(SRC_DIR)/options/get_options.c \
+			$(SRC_DIR)/options/options_getter/get_clients_nb.c \
+			$(SRC_DIR)/options/options_getter/get_freq.c \
+			$(SRC_DIR)/options/options_getter/get_height.c \
+			$(SRC_DIR)/options/options_getter/get_port.c \
+			$(SRC_DIR)/options/options_getter/get_teams_names.c \
+			$(SRC_DIR)/options/options_getter/get_width.c
+
+TESTS_SRC += 	$(TESTS_DIR)/server/test_server.c \
+				$(TESTS_DIR)/time/test_time.c \
+				$(TESTS_DIR)/team/test_team.c \
+				$(TESTS_DIR)/egg/test_egg.c \
+				$(TESTS_DIR)/map/test_tile.c \
+				$(TESTS_DIR)/map/test_map.c \
+				$(TESTS_DIR)/action/test_action.c \
+				$(TESTS_DIR)/ai/test_ai.c \
+				$(TESTS_DIR)/client/test_wbuffer.c \
+				$(TESTS_DIR)/client/test_client.c \
+				$(TESTS_DIR)/inventory/test_inventory.c \
+			 	$(TESTS_DIR)/command/graphic/test_simple_command.c \
+			 	$(TESTS_DIR)/command/ai/test_simple_command.c \
+			 	$(TESTS_DIR)/command/ai/test_broadcast.c \
+			 	$(TESTS_DIR)/utils/test_stringbuilder.c \
+				$(TESTS_DIR)/utils/test_array_size.c \
+				$(TESTS_DIR)/utils/test_ostr_to_array.c
+
+
 OBJ = $(SRC:%.c=$(BUILD_DIR)/%.o)
+MAIN_OBJ = $(MAIN:%.c=$(BUILD_DIR)/%.o)
+
+TESTS_OBJ = $(TESTS_SRC:%.c=$(BUILD_DIR)/%.o)
 
 NAME = zappy_server
 
@@ -136,10 +162,10 @@ LDFLAGS += -L libs/list -lolist -L libs/socket -losocket
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
+$(NAME): $(OBJ) $(MAIN_OBJ)
 	@make -C libs/list
 	@make -C libs/socket
-	@$(CC) -o $(NAME) $(OBJ) $(CFLAGS) $(LDFLAGS) \
+	@$(CC) -o $(NAME) $(OBJ) $(MAIN_OBJ) $(CFLAGS) $(LDFLAGS) \
 	&& $(ECHO) $(BOLD) $(GREEN)"► SERVER BUILD SUCCESS !"$(DEFAULT) \
 	|| ($(ECHO) $(BOLD) $(RED)"► SERVER BUILD FAILED"$(DEFAULT) && exit 1)
 
@@ -157,11 +183,22 @@ fclean: clean
 	rm -f $(NAME)
 	make -C libs/list fclean
 	make -C libs/socket fclean
+	rm -f unit_tests
 
 re: fclean all
 
 debug: CFLAGS += -g -D DEBUG
 debug: re
+
+tests_run: CFLAGS += --coverage
+tests_run: LDFLAGS += -lcriterion
+tests_run: $(OBJ) $(TESTS_OBJ)
+	@make -C libs/list
+	@make -C libs/socket
+	@$(CC) -o unit_tests $(TESTS_OBJ) $(OBJ) $(CFLAGS) $(LDFLAGS) \
+	&& $(ECHO) $(BOLD) $(GREEN)"► TESTS BUILD SUCCESS !"$(DEFAULT) \
+	|| ($(ECHO) $(BOLD) $(RED)"► TESTS BUILD FAILED"$(DEFAULT) && exit 1)
+	@./unit_tests
 
 .PHONY: all clean fclean re debug
 

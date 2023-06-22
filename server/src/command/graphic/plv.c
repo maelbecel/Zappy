@@ -15,7 +15,7 @@ int do_plv(client_t *client, client_t *graphic)
     ai_t *ai = client->data;
 
     if (!ai) {
-        wbuffer_add_msg(client, "sbp\n");
+        wbuffer_add_msg(graphic, "sbp\n");
         return 0;
     }
     wbuffer_add_message(graphic, "plv %ld %d\n", client->id, ai->level);

@@ -74,9 +74,9 @@ namespace UI {
     void MenuHUD::draw(sf::RenderWindow &window)
     {
         // window.draw(_background);
+        _planet.draw(window, sf::RenderStates::Default);
         window.draw(_titleHeader);
         window.draw(_titleText);
-        _planet.draw(window, sf::RenderStates::Default);
         _ip.draw(window, sf::RenderStates::Default);
         _port.draw(window, sf::RenderStates::Default);
         if (_connectButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))) {

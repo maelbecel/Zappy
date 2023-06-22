@@ -147,11 +147,8 @@ class clientAi:
             value1 = values[0].split(",")[-1].strip()
             value2 = values[1]
             value3 = values[2][:-1]
-            if (
-                value1 == self.teamName
-                and value2 == "Incantation"
-                and value3 == str(self.level)
-            ):
+            self.orientation = self.message.split(',')[0].split(' ')[-1].strip()
+            if (value1 == self.teamName and value2 == "Incantation" and value3 == str(self.level)):
                 self.state = enumState.JOIN_INCANTATION
             self.receive()
         elif self.response.find("eject") != -1:
@@ -350,6 +347,8 @@ class clientAi:
         self.receive()
         if self.response != "ko\n" and self.alive:
             self.level += 1
+            print("level -> %d" % self.level)
+            self.state = enumState.LF_RESSOURCES
             return True
         return False
 

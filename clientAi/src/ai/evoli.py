@@ -99,6 +99,7 @@ class evoli(clientAI):
         super().__init__(teamName, port, host, bool)
         self.objective = dict()
         self.state = enumState.NEED_FOOD
+        self.orientation = 0
 
     def compareDict(self, dict1, dict2):
         """
@@ -236,7 +237,9 @@ class evoli(clientAI):
         first element of the list `self.lookResult`.
         """
         count = 0
+        self.look()
 
+        print("lookResult = " + str(self.lookResult[0]))
         for element in self.lookResult[0]:
             if element == "player":
                 count += 1
@@ -255,8 +258,6 @@ class evoli(clientAI):
         print("count = " + str(count))
         print("required = " + str(REQUIRED_PLAYER[self.level - 1]))
         if count == REQUIRED_PLAYER[self.level - 1]:
-            if self.level == 2:
-                self.broadcast("elevate to level 3")
             if not self.incantation():
                 self.takeUselessRessourcesOnCase()
                 self.elevate()
@@ -336,45 +337,43 @@ class evoli(clientAI):
         return False
 
     def joinIncantation(self):
-        orientation = self.message.split(",")[0].split(" ")[-1].strip()
-        print("orientation : " + orientation)
-        if orientation == "0":
-            if self.countPlayerOnCase() == 2:
-                exit(0)
-            if self.countPlayerOnCase() == 1:
-                while self.checkPlayerInFront() is False:
-                    self.left()
-                self.forward()
-        elif orientation == "1":
+        self.look()
+        self.look()
+        self.look()
+        print("orientation : " + self.orientation)
+        if (self.orientation == "0"):
             print("count = " + str(self.countPlayerOnCase()))
-            if self.countPlayerOnCase() == 2:
-                exit(0)
+            if (self.countPlayerOnCase() == 1):
+                while (self.checkPlayerInFront() == False):
+                    self.left()
+        elif (self.orientation == "1"):
+            print("count = " + str(self.countPlayerOnCase()))
             self.forward()
-        elif orientation == "2":
-            self.forward()
-            self.left()
-            self.forward()
-        elif orientation == "3":
-            self.left()
-            self.forward()
-        elif orientation == "4":
-            self.left()
+        elif (self.orientation == "2"):
             self.forward()
             self.left()
             self.forward()
-        elif orientation == "5":
+        elif (self.orientation == "3"):
+            self.left()
+            self.forward()
+        elif (self.orientation == "4"):
+            self.left()
+            self.forward()
+            self.left()
+            self.forward()
+        elif (self.orientation == "5"):
             self.left()
             self.left()
             self.forward()
-        elif orientation == "6":
+        elif (self.orientation == "6"):
             self.right()
             self.forward()
             self.right()
             self.forward()
-        elif orientation == "7":
+        elif (self.orientation == "7"):
             self.right()
             self.forward()
-        elif orientation == "8":
+        elif (self.orientation == "8"):
             self.forward()
             self.right()
             self.forward()
@@ -409,9 +408,9 @@ class evoli(clientAI):
                 self.findPlaceToElevate()
                 self.findNeededRessources()
                 self.grabFood()
+            elif self.state == enumState.JOIN_INCANTATION:
+                self.joinIncantation()
             elif self.state == enumState.FULL_RESSOUCRES:
                 self.placeRessources()
                 self.elevate()
-            elif self.state == enumState.JOIN_INCANTATION:
-                self.joinIncantation()
                 # self.grabFood()

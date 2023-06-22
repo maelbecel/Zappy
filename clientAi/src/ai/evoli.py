@@ -379,7 +379,6 @@ class evoli(clientAI):
             self.right()
             self.forward()
 
-
     def placeRessources(self):
         """
         This function places resources on a case based on the player's inventory

@@ -1,0 +1,21 @@
+name: Allow Only One User to Push from Dev to Main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  restrict-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Verify Pusher
+      run: |
+        if [[ "${{ github.event.head_commit.committer.username }}" != "maelbecel" ]]; then
+          echo "Only the allowed user can push from dev to main."
+          exit 1
+        fi

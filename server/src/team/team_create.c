@@ -25,5 +25,6 @@ team_t *team_create(char *name)
     team->clients->destructor = &default_destructor_no_free;
     team->id = generate_id();
     team->team_size = 0;
+    team->eggs_size = 0;
     return team;
 }

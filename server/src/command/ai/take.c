@@ -9,6 +9,7 @@
 #include <string.h>
 #include "command.h"
 #include "utils.h"
+#include "wbuffer.h"
 
 static int take_item(client_t *client, server_t *server, char *item)
 {
@@ -40,14 +41,18 @@ static void do_take(action_t *action)
     server_t *server = action->data[1];
     char *item = action->data[2];
 
-    if (!client || !server || !item) {
+    if (!client || !server) {
         OLOG_ERRORA("Fail to do take action. One of needed pointer is NULL");
         return;
     }
+    if (!item) {
+        wbuffer_add_msg(client, "ko\n");
+        return;
+    }
     if (take_item(client, server, item) == EXIT_FAILTEK)
-        dprintf(client->socket->fd, "ko\n");
+        wbuffer_add_msg(client, "ko\n");
     else
-        dprintf(client->socket->fd, "ok\n");
+        wbuffer_add_msg(client, "ok\n");
     free(item);
 }
 
@@ -55,13 +60,10 @@ int take(client_t *client, server_t *server, char **args)
 {
     action_t *action = NULL;
 
-    if (array_size(args) != 2) {
-        dprintf(client->socket->fd, "ko\n");
-        return EXIT_SUCCESS;
-    }
     action = action_create("Take", server, client, 7);
     action->callback = &do_take;
-    action->data[2] = strdup(args[1]);
+    if (array_size(args) == 2)
+        action->data[2] = strdup(args[1]);
     client->current_action = action;
     return 0;
 }

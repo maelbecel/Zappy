@@ -9,12 +9,12 @@ jobs:
   check_norme:
     runs-on: ubuntu-latest
 
-  container: ghcr.io/epitech/coding-style-checker:latest
+    container: ghcr.io/epitech/coding-style-checker:latest
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - run: check.sh $(pwd) $(pwd)
+      - run: check.sh $(pwd)/server $(pwd)
       - run: |
           FILENAME=coding-style-reports.log
           ERRORS=0

@@ -6,6 +6,7 @@
 */
 
 #include "command.h"
+#include "wbuffer.h"
 
 int pnw(client_t *graphic, client_t *target, server_t *server)
 {
@@ -14,10 +15,12 @@ int pnw(client_t *graphic, client_t *target, server_t *server)
 
     if (!ai)
         return 0;
+    OLOG_DEBUGA("Test1");
     team = team_get_by_id(server, target->team_id);
     if (!team)
         return 0;
-    dprintf(graphic->socket->fd, "pnw %ld %d %d %d %d %s\n",
+    OLOG_DEBUGA("Test2");
+    wbuffer_add_message(graphic, "pnw %ld %d %d %d %d %s\n",
     target->id, ai->x, ai->y, ai->orientation, ai->level, team->name);
     return 0;
 }

@@ -9,7 +9,7 @@ from ..ai.clientAi import clientAi as clientAI
 
 
 class littleDuffer(clientAI):
-    def __init__(self, teamName, port, host):
+    def __init__(self, teamName, port, host, bool):
         """
         This is a constructor method that initializes the attributes of an object
         with a team name, port, host, objective dictionary, and state.
@@ -24,7 +24,7 @@ class littleDuffer(clientAI):
         or hostname of the server that the code is connecting to. It is used to
         establish a network connection between the client and the server.
         """
-        super().__init__(teamName, port, host)
+        super().__init__(teamName, port, host, bool)
 
     def checkTeam(self):
         """

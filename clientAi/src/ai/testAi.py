@@ -88,13 +88,9 @@ class testAi:
         """
         client = clientAI(self.teamName, self.port, self.host)
         client.connect()
-
         fitness = 0
-
         while client.alive:
-            # temp = self.evaluateGenome(genome, self.config, client)
             net = FeedForwardNetwork.create(genome, config)
-
             client.getInventory()
             client.getRessources()
             client.inputData.append(client.isABroadcast())
@@ -106,7 +102,6 @@ class testAi:
                 continue
             output = net.activate(client.inputData)
             max_index = output.index(max(output))
-
             client.inputData = []
             if max_index == 0:
                 client.forward()
@@ -167,7 +162,6 @@ class testAi:
             elif max_index == 23:
                 client.set("thystame")
             fitness += 0.0
-
         mutex.acquire()
         genome.fitness = fitness  # Set the fitness value of the genome
         fitnesses.append(fitness)
@@ -224,20 +218,15 @@ class testAi:
 
             for thread in threads:
                 thread.join()
-
             best_fitness = max(fitnesses)
             average_fitness = sum(fitnesses) / len(fitnesses)
-
             print(f"Best Fitness: {best_fitness}")
             print(f"Average Fitness: {average_fitness}")
             # self.population.run_fitness_function(genomes)
-
         print("Evolution complete")
-
         best_genome = max(self.population.population.values(), key=lambda x: x.fitness)
         print(f"Best genome:\n{best_genome}")
         self.bestBoy = best_genome
-
         with open("winner.pkl", "wb") as f:
             pickle.dump(best_genome, f)
             f.close()

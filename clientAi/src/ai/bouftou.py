@@ -9,7 +9,7 @@ from ..ai.clientAi import clientAi as clientAI
 
 
 class bouftou(clientAI):
-    def __init__(self, teamName, port, host, elementToGrab):
+    def __init__(self, teamName, port, host, elementToGrab, bool):
         """
         This is a constructor method that initializes the attributes of an object
         with a team name, port, host, objective dictionary, and state.
@@ -24,13 +24,19 @@ class bouftou(clientAI):
         or hostname of the server that the code is connecting to. It is used to
         establish a network connection between the client and the server.
         """
-        super().__init__(teamName, port, host)
+        super().__init__(teamName, port, host, bool)
         self.safeFoodLevel = 10
         self.max = 10
         self.oldmax = 10
         self.startProcess = 3
         self.process = self.startProcess
         self.elementToGrab = elementToGrab
+
+    def getElementToGrab(self):
+        return self.elementToGrab
+
+    def getProcess(self):
+        return self.process
 
     def checkElementToGrab(self):
         """
@@ -44,6 +50,7 @@ class bouftou(clientAI):
         """
         if self.elementToGrab == "food":
             self.process = 3
+            return True
         if (
             self.elementToGrab == "linemate"
             or self.elementToGrab == "deraumere"
@@ -180,6 +187,8 @@ class bouftou(clientAI):
         This function runs a loop that processes elements in the world and performs
         actions on them until the process counter reaches zero.
         """
+        if not self.checkElementToGrab():
+            return
         self.inventory()
         while self.alive:
             self.process -= 1

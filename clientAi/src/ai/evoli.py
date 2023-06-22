@@ -81,7 +81,7 @@ REQUIRED_PLAYER = [
 
 
 class evoli(clientAI):
-    def __init__(self, teamName, port, host):
+    def __init__(self, teamName, port, host, bool):
         """
         This is a constructor method that initializes the attributes of an object
         with a team name, port, host, objective dictionary, and state.
@@ -96,7 +96,7 @@ class evoli(clientAI):
         or hostname of the server that the code is connecting to. It is used to
         establish a network connection between the client and the server.
         """
-        super().__init__(teamName, port, host)
+        super().__init__(teamName, port, host, bool)
         self.objective = dict()
         self.state = enumState.NEED_FOOD
 
@@ -339,7 +339,6 @@ class evoli(clientAI):
         orientation = self.message.split(",")[0].split(" ")[-1].strip()
         print("orientation : " + orientation)
         if orientation == "0":
-            print("count = " + str(self.countPlayerOnCase()))
             if self.countPlayerOnCase() == 2:
                 exit(0)
             if self.countPlayerOnCase() == 1:
@@ -379,6 +378,7 @@ class evoli(clientAI):
             self.forward()
             self.right()
             self.forward()
+
 
     def placeRessources(self):
         """

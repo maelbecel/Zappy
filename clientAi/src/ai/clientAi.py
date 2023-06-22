@@ -12,13 +12,14 @@ from ..exception.clientException import clientException as cEx
 from ..server.clientServer import clientServer
 from ..direction.direction import direction
 from ..state.clientState import enumState as enumState
+from ..front.rayCasting import *
 
 MIN_FOOD = 10
 PERCENTAGE_OF_FOOD = 0.5
 
 
 class clientAi:
-    def __init__(self, teamName: str, port: int, host: str):
+    def __init__(self, teamName: str, port: int, host: str, isGraphic):
         """
         This is the initialization function for a client AI that sets up various
         attributes and creates a client server object.
@@ -55,6 +56,18 @@ class clientAi:
         self.message = ""
         self.inputData = []
         self.state = 0
+        self.graphic = isGraphic
+        if self.graphic is True:
+            self.initPygame()
+        else:
+            self.rayCasting = None
+
+    def __del__(self):
+        if self.graphic is True:
+            pygame.quit()
+
+    def initPygame(self):
+        self.rayCasting = rayCasting(1200, 800)
 
     def getConnectionResponse(self):
         """
@@ -233,6 +246,10 @@ class clientAi:
         self.send(cAct.LOOK.value)
         if self.isValidArray() and self.alive:
             self.parseLook()
+        if self.graphic is True:
+            array = self.lookResult
+            array = self.rayCasting.ArrayToArrayOfDict(array)
+            self.rayCasting.refreshLookDisplay(array)
 
     def inventory(self):
         """
@@ -508,6 +525,9 @@ class clientAi:
             y += 1
 
         self.fillQueue(x, y)
+
+    def getQueue(self):
+        return self.queue
 
     def fillQueue(self, x: int, y: int):
         """

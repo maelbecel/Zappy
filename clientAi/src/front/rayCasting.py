@@ -8,10 +8,46 @@
 import pygame
 
 EXAMPLE_DATA = [
-    {"linemate": 0, "deraumere": 0, "sibur": 0, "mendiane": 0, "phiras": 0, "thystame": 0, "player": 0, "food": 0},
-    {"linemate": 1, "deraumere": 1, "sibur": 0, "mendiane": 0, "phiras": 0, "thystame": 0, "player": 1, "food": 0},
-    {"linemate": 1, "deraumere": 1, "sibur": 0, "mendiane": 0, "phiras": 0, "thystame": 0, "player": 1, "food": 0},
-    {"linemate": 1, "deraumere": 1, "sibur": 0, "mendiane": 2, "phiras": 0, "thystame": 0, "player": 1, "food": 0},
+    {
+        "linemate": 0,
+        "deraumere": 0,
+        "sibur": 0,
+        "mendiane": 0,
+        "phiras": 0,
+        "thystame": 0,
+        "player": 0,
+        "food": 0,
+    },
+    {
+        "linemate": 1,
+        "deraumere": 1,
+        "sibur": 0,
+        "mendiane": 0,
+        "phiras": 0,
+        "thystame": 0,
+        "player": 1,
+        "food": 0,
+    },
+    {
+        "linemate": 1,
+        "deraumere": 1,
+        "sibur": 0,
+        "mendiane": 0,
+        "phiras": 0,
+        "thystame": 0,
+        "player": 1,
+        "food": 0,
+    },
+    {
+        "linemate": 1,
+        "deraumere": 1,
+        "sibur": 0,
+        "mendiane": 2,
+        "phiras": 0,
+        "thystame": 0,
+        "player": 1,
+        "food": 0,
+    },
 ]
 
 ASSETS = {
@@ -23,14 +59,15 @@ ASSETS = {
     "thystame": "src/front/assets/thystame.png",
     "player": "src/front/assets/player.png",
     "floor": "src/front/assets/grass.png",
-    "player": "src/front/assets/player.png"
+    "player": "src/front/assets/player.png",
 }
 
-class rayCasting():
+
+class rayCasting:
     def __init__(self, widht, height):
         # Initialize pygame
         pygame.init()
-        self.caseSize = 90 # Size of each case (adjust as needed)
+        self.caseSize = 90  # Size of each case (adjust as needed)
         self.width = widht
         self.height = height
         self.screen = pygame.display.set_mode((self.width, self.height))
@@ -43,9 +80,14 @@ class rayCasting():
         for item, value in ASSETS.items():
             ASSETS[item] = self.loadImage(value)
             if item == "floor":
-                ASSETS[item] = pygame.transform.scale(ASSETS[item], (self.caseSize, self.caseSize))
+                ASSETS[item] = pygame.transform.scale(
+                    ASSETS[item], (self.caseSize, self.caseSize)
+                )
             else:
-                ASSETS[item] = pygame.transform.scale(ASSETS[item], (self.caseSize / self.scaleRate, self.caseSize / self.scaleRate))
+                ASSETS[item] = pygame.transform.scale(
+                    ASSETS[item],
+                    (self.caseSize / self.scaleRate, self.caseSize / self.scaleRate),
+                )
 
     def loadImage(self, filename):
         return pygame.image.load(filename)
@@ -107,6 +149,7 @@ class rayCasting():
         self.screen.fill((0, 0, 0))
         self.render_array(array)
         pygame.display.flip()
+
 
 # this method as to be runned at the same location that the main.py
 if __name__ == "__main__":

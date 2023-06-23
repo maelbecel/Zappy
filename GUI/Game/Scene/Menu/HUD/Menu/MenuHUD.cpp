@@ -17,6 +17,7 @@ namespace UI {
         RectangleColorBg.apply(_background);
 
         _background.setPosition(sf::Vector2f(0.0f, 0.0f));
+        _asteroid.setPosition(sf::Vector2f(0, 0));
         _planet.setPosition(sf::Vector2f((float)(Window::getWindowWidth() / 2) - 300, (float)(Window::getWindowHeight() / 2) - 300 + 50));
 
         _ip = InputBox(std::string("Ip Adress :"), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 15, 250), BUTTON_STD_SIZE);
@@ -80,6 +81,7 @@ namespace UI {
     {
         // window.draw(_background);
         _planet.draw(window, sf::RenderStates::Default);
+        _asteroid.draw(window, sf::RenderStates::Default);
         window.draw(_titleHeader);
         window.draw(_titleText);
         _ip.draw(window, sf::RenderStates::Default);

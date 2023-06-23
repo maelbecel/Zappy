@@ -13,6 +13,7 @@
     #include "Server.hpp"
     #include "Button.hpp"
     #include "Planet.hpp"
+    #include "Asteroid.hpp"
     #include "ButtonWidget.hpp"
     #include "CrossButtonWidget.hpp"
     #include "NetworkError.hpp"
@@ -71,12 +72,13 @@ namespace UI {
             IButton *_connectButton;         /*!< Button to connect to the server */
             IButton *_settingsButton;        /*!< Button to go to the settings */
             IButton *_quitButton;            /*!< Button to quit the game */
-            SettingsHUD *_settingsHUD;        /*!< Settings HUD */
+            SettingsHUD *_settingsHUD;       /*!< Settings HUD */
             sf::Sprite _titleHeader;         /*!< Title of the game */
             sf::Text _titleText;             /*!< Text of the title */
             Audio::VFX *_mouseClick;         /*!< Sound of the mouse click */
             Planet _planet;                  /*!< Planet of the Menu HUD */
-            IButton *_planetButton;        /*!< Button to go to the settings */
+            AsteroidHandler _asteroid;              /*!< Asteroid of the Menu HUD */
+            IButton *_planetButton;          /*!< Button to go to the settings */
             IButton *_crossButton;           /*!< Button to close the pop up */
             bool _popUp;                     /*!< Boolean to know if the pop up is opened */
     };

@@ -109,6 +109,20 @@
                  */
                 void setType(PlanetType type);
 
+                /**
+                 * @brief Get the Type object
+                 *
+                 * @return PlanetType The type of the planet
+                 */
+                PlanetType getType();
+
+                /**
+                 * @brief Get the Nb Planet object
+                 *
+                 * @return int The number of planet
+                 */
+                int getNbPlanet();
+
 
             private:
                 PlanetType _type;

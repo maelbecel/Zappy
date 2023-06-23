@@ -27,10 +27,12 @@ namespace UI {
         ButtonWidget *connectButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 375), BUTTON_STD_SIZE, std::string("Connect"), 7);
         ButtonWidget *settingsButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450), BUTTON_STD_SIZE, std::string("Settings"), 7);
         ButtonWidget *quitButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 525), BUTTON_STD_SIZE, std::string("Quit"), 7);
+        ButtonWidget *planetButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 655), BUTTON_STD_SIZE, std::string("Change Planet"), 7);
 
         _connectButton = new Button(connectButton);
         _settingsButton = new Button(settingsButton);
         _quitButton = new Button(quitButton);
+        _planetButton = new Button(planetButton);
 
         _settingsHUD = SettingsHUD();
 
@@ -69,6 +71,7 @@ namespace UI {
         delete _connectButton;
         delete _settingsButton;
         delete _quitButton;
+        delete _planetButton;
     }
 
     void MenuHUD::draw(sf::RenderWindow &window)
@@ -93,6 +96,11 @@ namespace UI {
             _quitButton->render(window, ButtonState::HOVERED);
         } else {
             _quitButton->render(window, ButtonState::IDLE);
+        }
+        if (_planetButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))) {
+            _planetButton->render(window, ButtonState::HOVERED);
+        } else {
+            _planetButton->render(window, ButtonState::IDLE);
         }
         if (_settingsHUD.isOpened() == true) {
             _settingsHUD.draw(window);
@@ -144,6 +152,10 @@ namespace UI {
                     _popUp = true;
                     _popUpText = setString(e.what(), sf::Vector2f(_popUpSprite.getPosition().x + (_popUpSprite.getGlobalBounds().width / 5), _popUpSprite.getPosition().y + (_popUpSprite.getGlobalBounds().height) / 2), 12);
                 }
+                return;
+            }
+            if (_planetButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                _planet.setType((PlanetType)((_planet.getType() + 1 ) % _planet.getNbPlanet()));
                 return;
             }
             if (_settingsButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {

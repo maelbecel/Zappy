@@ -63,6 +63,7 @@ ASSETS = {
     "player": "src/front/assets/player.png",
 }
 
+
 class rayCasting:
     def __init__(self, widht, height):
         # Initialize pygame
@@ -79,18 +80,28 @@ class rayCasting:
 
         ##########
         self.clock = pygame.time.Clock()
-        self.hres = 70 # horizontal resolution
-        self.halfvres = 70 # half the vertical resolution
-        self.mod = self.hres / 60 # scaling factor (60 * fov)
+        self.hres = 70  # horizontal resolution
+        self.halfvres = 70  # half the vertical resolution
+        self.mod = self.hres / 60  # scaling factor (60 * fov)
         self.posX = 0
         self.posY = 0
         self.rot = 0
-        self.frame = np.random.uniform(0,1, (self.hres, self.halfvres * 2, 3)) # frame is the image that will be displayed
-        self.sky = pygame.image.load('src/front/assets/skybox0.png')
-        self.sky = pygame.surfarray.array3d(pygame.transform.scale(self.sky, (360, self.halfvres * 2))) / 255 # sky is the skybox, it is a 2D array of RGB values
-        self.floor = pygame.image.load('src/front/assets/grassRC.png')
+        self.frame = np.random.uniform(
+            0, 1, (self.hres, self.halfvres * 2, 3)
+        )  # frame is the image that will be displayed
+        self.sky = pygame.image.load("src/front/assets/skybox0.png")
+        self.sky = (
+            pygame.surfarray.array3d(
+                pygame.transform.scale(self.sky, (360, self.halfvres * 2))
+            )
+            / 255
+        )  # sky is the skybox, it is a 2D array of RGB values
+        self.floor = pygame.image.load("src/front/assets/grassRC.png")
         self.sizeSprite = self.floor.get_width()
-        self.floor = pygame.surfarray.array3d(pygame.image.load('src/front/assets/grassRC.png')) / 255
+        self.floor = (
+            pygame.surfarray.array3d(pygame.image.load("src/front/assets/grassRC.png"))
+            / 255
+        )
         ##########
 
     def loadImage(self, filename):
@@ -114,13 +125,17 @@ class rayCasting:
                 )
 
     def new_frame(self):
-        for i in range(self.hres): # for each column of horizontal resolution (angle of view)
-            rot_i = self.rot + np.deg2rad(i / self.mod - 30) # angle of the ray
-            sin = np.sin(rot_i) # sin of the ray
-            cos = np.cos(rot_i) # cos of the ray
-            cos2 = np.cos(np.deg2rad(i / self.mod - 30)) # cos of the ray (used for the floor)
-            self.frame[i][:] = self.sky[int(np.rad2deg(rot_i) % 359)][:] # skybox
-            for j in range(self.halfvres): # for each pixel of vertical resolution
+        for i in range(
+            self.hres
+        ):  # for each column of horizontal resolution (angle of view)
+            rot_i = self.rot + np.deg2rad(i / self.mod - 30)  # angle of the ray
+            sin = np.sin(rot_i)  # sin of the ray
+            cos = np.cos(rot_i)  # cos of the ray
+            cos2 = np.cos(
+                np.deg2rad(i / self.mod - 30)
+            )  # cos of the ray (used for the floor)
+            self.frame[i][:] = self.sky[int(np.rad2deg(rot_i) % 359)][:]  # skybox
+            for j in range(self.halfvres):  # for each pixel of vertical resolution
                 n = (self.halfvres / (self.halfvres - j)) / cos2
                 x = self.posX + cos * n
                 y = self.posY + sin * n
@@ -128,8 +143,10 @@ class rayCasting:
                 yy = int(y * 2 % 1 * self.sizeSprite)
                 if xx > 4 and yy > 4:
                     shade = 0.2 + 0.8 * (1 - j / self.halfvres)
-                    self.frame[i][self.halfvres * 2 - j - 1] = shade * self.floor[xx][yy]
-                    if  int(x) % 3 == 0 and int(y) % 3 == 0:
+                    self.frame[i][self.halfvres * 2 - j - 1] = (
+                        shade * self.floor[xx][yy]
+                    )
+                    if int(x) % 3 == 0 and int(y) % 3 == 0:
                         self.frame[i][self.halfvres * 2 - j - 1] *= 0.5
                 else:
                     self.frame[i][self.halfvres * 2 - j - 1] = 0
@@ -138,20 +155,25 @@ class rayCasting:
         return self.frame
 
     def movement(self, keys):
-
         et = self.clock.tick()
 
-        if keys[pygame.K_LEFT] or keys[ord('a')]:
+        if keys[pygame.K_LEFT] or keys[ord("a")]:
             self.rot = self.rot - 0.001 * et
 
-        if keys[pygame.K_RIGHT] or keys[ord('d')]:
+        if keys[pygame.K_RIGHT] or keys[ord("d")]:
             self.rot = self.rot + 0.001 * et
 
-        if keys[pygame.K_UP] or keys[ord('w')]:
-            self.posX, self.posY = self.posX + np.cos(self.rot) * 0.002 * et,  self.posY + np.sin(self.rot) * 0.002 * et
+        if keys[pygame.K_UP] or keys[ord("w")]:
+            self.posX, self.posY = (
+                self.posX + np.cos(self.rot) * 0.002 * et,
+                self.posY + np.sin(self.rot) * 0.002 * et,
+            )
 
-        if keys[pygame.K_DOWN] or keys[ord('s')]:
-            self.posX, self.posY = self.posX - np.cos(self.rot) * 0.002 * et,  self.posY - np.sin(self.rot) * 0.002 * et
+        if keys[pygame.K_DOWN] or keys[ord("s")]:
+            self.posX, self.posY = (
+                self.posX - np.cos(self.rot) * 0.002 * et,
+                self.posY - np.sin(self.rot) * 0.002 * et,
+            )
 
     def renderCase2D(self, case, x, y):
         # floor_image = ASSETS["floor"]
@@ -170,7 +192,6 @@ class rayCasting:
                     y += self.caseSize / self.scaleRate
 
     def displayAssets(self, data):
-
         # get coodinates of the player
         x = self.posX
         y = self.posY
@@ -179,6 +200,7 @@ class rayCasting:
             x += self.caseSize
             self.renderCase2D(element, x, y)
             # self.screen.blit(ASSETS["floor"], (x,y))
+
 
 # this method as to be runned at the same location that the main.py
 if __name__ == "__main__":
@@ -202,7 +224,7 @@ if __name__ == "__main__":
         fps = int(rayCasting.clock.get_fps())
         pygame.display.set_caption("Pycasting maze - FPS: " + str(fps))
 
-        rayCasting.screen.blit(surf, (0,0))
+        rayCasting.screen.blit(surf, (0, 0))
         mousePose = pygame.mouse.get_pos()
         # 100 is the max size of the player
 
@@ -210,7 +232,7 @@ if __name__ == "__main__":
 
         scaling = size * abs((mousePose[1] - rayCasting.height / 2) / 10)
         print(scaling)
-        if (scaling[1] > 350 and scaling[0] > 350):
+        if scaling[1] > 350 and scaling[0] > 350:
             print("ok")
             scaling = np.asarray([350, 350])
         temp = pygame.transform.scale(sprite, scaling)  # scale the player

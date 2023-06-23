@@ -65,6 +65,7 @@ ASSETS = {
     "player": "src/front/assets/player.png",
 }
 
+
 class rayCasting:
     def __init__(self, widht, height):
         # Initialize pygame

@@ -131,14 +131,14 @@ namespace UI {
             _increaseSoundButton->render(window, ButtonState::HOVERED);
         else
             _increaseSoundButton->render(window, ButtonState::IDLE);
-        if (_changeLanguageLeftButton->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
-            _changeLanguageLeftButton->render(window, ButtonState::HOVERED);
-        else
-            _changeLanguageLeftButton->render(window, ButtonState::IDLE);
-        if (_changeLanguageRightButton->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
-            _changeLanguageRightButton->render(window, ButtonState::HOVERED);
-        else
-            _changeLanguageRightButton->render(window, ButtonState::IDLE);
+        // if (_changeLanguageLeftButton->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
+        //     _changeLanguageLeftButton->render(window, ButtonState::HOVERED);
+        // else
+        //     _changeLanguageLeftButton->render(window, ButtonState::IDLE);
+        // if (_changeLanguageRightButton->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
+        //     _changeLanguageRightButton->render(window, ButtonState::HOVERED);
+        // else
+        //     _changeLanguageRightButton->render(window, ButtonState::IDLE);
         if (_crossSettingsButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
             _crossSettingsButton->render(window, ButtonState::HOVERED);
         else
@@ -147,7 +147,7 @@ namespace UI {
             _validateButton->render(window, ButtonState::HOVERED);
         else
             _validateButton->render(window, ButtonState::IDLE);
-        window.draw(_languages[_changeLanguageLeftButton->getValue()]);
+        // window.draw(_languages[_changeLanguageLeftButton->getValue()]);
         if (!_isGameMenu)
             return;
         if (_changeTileHUDLeftButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))

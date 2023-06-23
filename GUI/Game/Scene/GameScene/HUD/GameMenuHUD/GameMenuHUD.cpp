@@ -105,8 +105,8 @@ namespace UI {
 
             _mouseClick->setVolume(Audio::Audio::sfxVolume);
 
-            if (_settingsHUD.isOpened() == true) {
-                _settingsHUD.handleEvent(event, server, window);
+            if (_settingsHUD->isOpened() == true) {
+                _settingsHUD->handleEvent(event, server, window);
                 return;
             }
             if (_helpHUD.isOpened() == true) {

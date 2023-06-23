@@ -26,6 +26,7 @@ SRC	=	./Main.cpp\
 		./Game/Scene/Menu/HUD/Menu/Widget/InputBox.cpp\
 		./Game/Scene/Menu/HUD/Menu/Widget/ButtonWidget.cpp\
 		./Game/Scene/Menu/HUD/Menu/Widget/Planet.cpp\
+		./Game/Scene/Menu/HUD/Menu/Widget/Asteroid.cpp\
 		./Game/Scene/Menu/HUD/Settings/Widget/ArrowButtonWidget.cpp\
 		./Game/Scene/Menu/HUD/Settings/Widget/ValidateButtonWidget.cpp\
 		./Game/Scene/Menu/HUD/Settings/Widget/CrossButtonWidget.cpp\

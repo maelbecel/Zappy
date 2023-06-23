@@ -70,6 +70,7 @@ namespace UI {
             Planet _planet;                  /*!< Planet of the Menu HUD */
             IButton *_connectButton;         /*!< Button to connect to the server */
             IButton *_settingsButton;        /*!< Button to go to the settings */
+            IButton *_planetButton;        /*!< Button to go to the settings */
             IButton *_quitButton;            /*!< Button to quit the game */
             IButton *_crossButton;           /*!< Button to close the pop up */
             SettingsHUD _settingsHUD;        /*!< Settings HUD */

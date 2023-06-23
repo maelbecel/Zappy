@@ -48,6 +48,16 @@ namespace UI {
         _type = type;
     }
 
+    PlanetType Planet::getType()
+    {
+        return _type;
+    }
+
+    int Planet::getNbPlanet()
+    {
+        return (sizeof(planetPath) / sizeof(planetPath_t));
+    }
+
     // Methods
 
     void Planet::handleEvent(UNUSED sf::Event event) {return;}

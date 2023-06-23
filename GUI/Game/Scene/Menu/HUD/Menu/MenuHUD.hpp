@@ -61,6 +61,24 @@ namespace UI {
              */
             sf::Text setString(std::string str, sf::Vector2f pos, size_t fontSize);
 
+            /**
+             * @brief Set the language of the Menu HUD
+             *
+             */
+            void setLanguage();
+
+            /**
+             * @brief Set buttons with default text
+             *
+             */
+            void setButtonsDefault();
+
+            /**
+             * @brief Set buttons with text
+             *
+             */
+            void setButtons(libconfig::Setting &button);
+
         // Attributes
         private:
             sf::RectangleShape _background;  /*!< Background of the Menu HUD */
@@ -79,6 +97,7 @@ namespace UI {
             Planet _planet;                  /*!< Planet of the Menu HUD */
             bool _popUp;                     /*!< Boolean to know if the pop up is opened */
             bool _changePlanet;              /*!< Boolean to know if the planet is changing */
+            std::string _language;           /*!< Language of the game */
     };
 };
 

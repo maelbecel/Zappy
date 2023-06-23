@@ -78,6 +78,18 @@ namespace UI {
              */
             void saveSettings();
 
+            /**
+             * @brief Set the language of the Menu HUD
+             *
+             */
+            void setLanguage();
+
+            /**
+             * @brief Set buttons with default text
+             *
+             */
+            void setButtonsDefault();
+
         // Attributes
         private:
             sf::RectangleShape _background;         /*!< Background of the Settings HUD */
@@ -96,10 +108,12 @@ namespace UI {
             InputBox _music;                        /*!< Input box for the music */
             int _soundValue;                        /*!< Value of the sound */
             int _musicValue;                        /*!< Value of the music */
-            sf::Text _tileHUDTextMode;              /*!< Is the tile HUD in text mode */
+            std::map<int, sf::Text> _tileHUDModes;   /*!< Map of the tile HUD modes */
+            std::map<int, sf::Text> _languages;      /*!< Map of the languages */
             sf::Text _languageText;                 /*!< Language text */
             bool _isOpened;                         /*!< Is the Settings HUD opened */
             bool _isGameMenu;                       /*!< Is the Game Menu HUD opened */
+            bool _tileHUDTextMode;              /*!< Is the tile HUD in text mode */
             Audio::VFX *_mouseClick;                /*!< Mouse click sound */
     };
 };

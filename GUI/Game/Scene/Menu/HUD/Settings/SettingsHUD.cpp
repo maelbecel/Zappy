@@ -6,6 +6,8 @@
 */
 
 #include "SettingsHUD.hpp"
+#include "ToLowerCase.hpp"
+#include <filesystem>
 
 namespace UI {
     SettingsHUD::SettingsHUD(bool isGameMenu) : _background(sf::Vector2f(Window::getWindowWidth(), Window::getWindowHeight()))
@@ -25,8 +27,7 @@ namespace UI {
             std::cerr << "Bad Initialization of SettingsHUD: " << e.what() << std::endl;
         }
 
-        _sound = InputBox(std::string("Sound :"), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 250), BUTTON_STD_SIZE);
-        _music = InputBox(std::string("Music :"), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 350), BUTTON_STD_SIZE);
+        setLanguage();
 
         ArrowButtonWidget *decreaseSoundButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 - 75, 248), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
         ArrowButtonWidget *increaseSoundButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 250, 248), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
@@ -50,7 +51,8 @@ namespace UI {
         ArrowButtonWidget *changeLanguageRightButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 250, 448), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
         _changeLanguageLeftButton = new Button(changeLanguageLeftButton);
         _changeLanguageRightButton = new Button(changeLanguageRightButton);
-
+        _changeLanguageLeftButton->setValue(0);
+        _changeLanguageRightButton->setValue(1);
         ValidateButtonWidget *validateButton = new ValidateButtonWidget(sf::Vector2f(Window::getWindowWidth() / 2 - 8, _backgroundSprite.getTexture()->getSize().y + 100), sf::Vector2f(16 * 3, 16 * 3));
         _validateButton = new Button(validateButton);
 
@@ -66,16 +68,6 @@ namespace UI {
 
             _soundValue = audio["sound"];
             _musicValue = audio["music"];
-
-            bool tileHUDTextMode = settings["tileHUDTextMode"];
-            if (tileHUDTextMode)
-                _tileHUDTextMode = setString("TileHUD mode:\n\n Text", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 550));
-            else
-                _tileHUDTextMode = setString("TileHUD mode:\n\n Sprite", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 550));
-            if (settings.exists("language"))
-                _languageText = setString("Language :\n\n" + std::string(settings["language"]), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450));
-            else
-                _languageText = setString("Language :\n\nEnglish", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450));
 
         } catch (const libconfig::FileIOException& ex) {
             _soundValue = 50;
@@ -139,6 +131,14 @@ namespace UI {
             _increaseSoundButton->render(window, ButtonState::HOVERED);
         else
             _increaseSoundButton->render(window, ButtonState::IDLE);
+        if (_changeLanguageLeftButton->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
+            _changeLanguageLeftButton->render(window, ButtonState::HOVERED);
+        else
+            _changeLanguageLeftButton->render(window, ButtonState::IDLE);
+        if (_changeLanguageRightButton->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
+            _changeLanguageRightButton->render(window, ButtonState::HOVERED);
+        else
+            _changeLanguageRightButton->render(window, ButtonState::IDLE);
         if (_crossSettingsButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
             _crossSettingsButton->render(window, ButtonState::HOVERED);
         else
@@ -147,7 +147,7 @@ namespace UI {
             _validateButton->render(window, ButtonState::HOVERED);
         else
             _validateButton->render(window, ButtonState::IDLE);
-
+        window.draw(_languages[_changeLanguageLeftButton->getValue()]);
         if (!_isGameMenu)
             return;
         if (_changeTileHUDLeftButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
@@ -158,7 +158,10 @@ namespace UI {
             _changeTileHUDRightButton->render(window, ButtonState::HOVERED);
         else
             _changeTileHUDRightButton->render(window, ButtonState::IDLE);
-        window.draw(_tileHUDTextMode);
+        if (_tileHUDTextMode)
+            window.draw(_tileHUDModes[0]);
+        else
+            window.draw(_tileHUDModes[1]);
     }
 
     void SettingsHUD::handleEvent(sf::Event event, UNUSED Network::Server &server, UNUSED sf::RenderWindow &window)
@@ -208,6 +211,22 @@ namespace UI {
                 return;
             }
 
+            if (_changeLanguageLeftButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                _mouseClick->play();
+                if (_changeLanguageLeftButton->getValue() > 0)
+                    _changeLanguageLeftButton->setValue(_changeLanguageLeftButton->getValue() - 1);
+                else
+                    _changeLanguageLeftButton->setValue(_languages.size() - 1);
+            }
+
+            if (_changeLanguageRightButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                _mouseClick->play();
+                if (_changeLanguageLeftButton->getValue() < (ssize_t)_languages.size() - 1)
+                    _changeLanguageLeftButton->setValue(_changeLanguageLeftButton->getValue() + 1);
+                else
+                    _changeLanguageLeftButton->setValue(0);
+            }
+
             if (_crossSettingsButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
                 _mouseClick->play();
                 _isOpened = false;
@@ -230,11 +249,11 @@ namespace UI {
             if (_changeTileHUDLeftButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)) || _changeTileHUDRightButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
                 _mouseClick->play();
 
-                if (_tileHUDTextMode.getString() == std::string("TileHUD mode:\n\n Text"))
-                    _tileHUDTextMode = setString("TileHUD mode:\n\n Sprite", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450));
-                else
-                    _tileHUDTextMode = setString("TileHUD mode:\n\n Text", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450));
-                return;
+                if (_tileHUDTextMode) {
+                    _tileHUDTextMode = false;
+                } else {
+                    _tileHUDTextMode = true;
+                }
             }
 
             return;
@@ -273,9 +292,7 @@ namespace UI {
 
     bool SettingsHUD::getTileHUDTextMode() const
     {
-        if (_tileHUDTextMode.getString() == std::string("TileHUD mode:\n\n Text"))
-            return true;
-        return false;
+        return _tileHUDTextMode;
     }
 
     void SettingsHUD::saveSettings()
@@ -292,10 +309,74 @@ namespace UI {
         Audio::Audio::sfxVolume = _soundValue;
         Audio::Audio::musicVolume = _musicValue;
 
-        if (_tileHUDTextMode.getString() == std::string("TileHUD mode:\n\n Text"))
-            settings["tileHUDTextMode"] = true;
-        else
-            settings["tileHUDTextMode"] = false;
+        settings["tileHUDTextMode"] = _tileHUDTextMode;
+        settings["language"] = getStringAfterDelimiter(_languages[_changeLanguageLeftButton->getValue()].getString(), ":\n\n");
         cfg.writeFile("./Config/config.cfg");
+    }
+
+
+    void SettingsHUD::setLanguage()
+    {
+        try {
+            libconfig::Config cfg;
+            cfg.readFile("./Config/config.cfg");
+            libconfig::Setting &config = cfg.lookup("config");
+
+            libconfig::Config language;
+            std::string configLang = toLowerCase(std::string(config["language"]));
+            std::string languagePath = std::string("./Config/Languages/") + configLang + std::string(".cfg");
+            language.readFile(languagePath.c_str());
+
+            libconfig::Setting &lang = language.lookup("language");
+            libconfig::Setting &settings = lang.lookup("settings");
+            libconfig::Setting &input = settings.lookup("input");
+            libconfig::Setting &tile = settings.lookup("tile");
+
+            bool tileHUDTextMode = config["tileHUDTextMode"];
+            _tileHUDTextMode = tileHUDTextMode;
+            _tileHUDModes[0] = setString(std::string(tile["mode"]) + "\n\n" + std::string(tile["textMode"]), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 550));
+            _tileHUDModes[1] = setString(std::string(tile["mode"]) + "\n\n" + std::string(tile["spriteMode"]), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 550));
+
+            _sound = InputBox(std::string(input["sound"]), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 250), BUTTON_STD_SIZE);
+            _music = InputBox(std::string(input["music"]), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 350), BUTTON_STD_SIZE);
+
+            int i = 0;
+            for (const auto& entry : std::filesystem::directory_iterator("./Config/Languages")) {
+                if (entry.is_regular_file()) {
+                    std::string fileName = entry.path().filename().string();
+                    _languages[i] = setString("Language :\n\n" + fileName.substr(0, fileName.find_last_of(".")), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450));
+                    i++;
+                }
+            }
+            // _languageText = setString(std::string(settings["language"]) + "\n\n" + std::string(config["language"]), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450));
+        } catch (const libconfig::FileIOException &fioex) {
+            std::cerr << "I/O error while reading file." << std::endl;
+            setButtonsDefault();
+        } catch (const libconfig::ParseException &pex) {
+            std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError() << std::endl;
+            setButtonsDefault();
+        } catch (const libconfig::SettingNotFoundException &nfex) {
+            std::cerr << "Setting not found in configuration file." << std::endl;
+            setButtonsDefault();
+        } catch (const libconfig::SettingTypeException &setex) {
+            std::cerr << "Setting type error in configuration file." << std::endl;
+            setButtonsDefault();
+        } catch (const libconfig::ConfigException &confex) {
+            std::cerr << "Configuration error." << std::endl;
+            setButtonsDefault();
+        } catch (const Error::TextureError &e) {
+            std::cerr << "Bad Initialization of SettingsHUD: " << e.what() << std::endl;
+        }
+    }
+
+    void SettingsHUD::setButtonsDefault()
+    {
+        _sound = InputBox(std::string("Sound :"), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 15, 250), BUTTON_STD_SIZE);
+        _music = InputBox(std::string("Music :"), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 15, 350), BUTTON_STD_SIZE);
+        _tileHUDModes[0] = setString("TileHUD mode:\n\nText", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 550));
+        _tileHUDModes[1] = setString("TileHUD mode:\n\nSprite", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 550));
+        // _languageText = setString("Language :\n\nen", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450));
+        _languages[0] = setString("Language :\n\nen", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450));
+        _tileHUDTextMode = true;
     }
 };

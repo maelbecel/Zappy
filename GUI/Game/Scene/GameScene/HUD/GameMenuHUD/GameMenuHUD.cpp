@@ -9,6 +9,7 @@
 #include "Window.hpp"
 #include "ArrowButtonWidget.hpp"
 #include "CrossButtonWidget.hpp"
+#include "ToLowerCase.hpp"
 
 namespace UI {
     GameMenuHUD::GameMenuHUD() : _background(sf::Vector2f(Window::getWindowWidth(), Window::getWindowHeight()))
@@ -19,26 +20,9 @@ namespace UI {
 
         _background.setPosition(sf::Vector2f(0.0f, 0.0f));
 
-        try {
-            sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Paper UI Pack/Paper UI/Folding & Cutout/10 Calander/1.png");
-            _backgroundSprite = sf::Sprite(*texture);
-            _backgroundSprite.setPosition(sf::Vector2f((Window::getWindowWidth() - (656 * 1.5)) / 2, (Window::getWindowHeight() - (544 * 1.5)) / 2));
-            _backgroundSprite.setScale(sf::Vector2f(1.5f, 1.5f));
-        } catch (const Error::TextureError &e) {
-            std::cerr << "Bad Initialization of GameMenuHUD: " << e.what() << std::endl;
-        }
+        setLanguage();
 
-        int initial_y = (Window::getWindowHeight() - (4 * BUTTON_STD_SIZE.y + 3 * 75)) / 2;
-        ButtonWidget *resumeButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, initial_y), BUTTON_STD_SIZE, std::string("Resume"), 7);
-        ButtonWidget *settingsButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, initial_y + 75), BUTTON_STD_SIZE, std::string("Settings"), 7);
-        ButtonWidget *helpButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, initial_y + 75 * 2), BUTTON_STD_SIZE, std::string("Help"), 7);
-        ButtonWidget *quitButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, initial_y + 75 * 3), BUTTON_STD_SIZE, std::string("Quit"), 7);
         _isOpened = false;
-
-        _resumeButton = new Button(resumeButton);
-        _settingsButton = new Button(settingsButton);
-        _quitButton = new Button(quitButton);
-        _helpButton = new Button(helpButton);
 
         _settingsHUD = new SettingsHUD(true);
 
@@ -61,8 +45,8 @@ namespace UI {
             _helpHUD.draw(window);
             return;
         }
+        setLanguage();
         window.draw(_background);
-        // window.draw(_backgroundSprite);
 
         if (_resumeButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))) {
             _resumeButton->render(window, ButtonState::HOVERED);
@@ -118,7 +102,7 @@ namespace UI {
                 _isOpened = false;
                 return;
             }
- 
+
             if (_settingsButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
                 _mouseClick->play();
                 _settingsHUD->setOpened(true);
@@ -151,5 +135,77 @@ namespace UI {
     bool GameMenuHUD::getTileDisplayMode() const
     {
         return _settingsHUD->getTileHUDTextMode();
+    }
+
+    void GameMenuHUD::setLanguage()
+    {
+        try {
+            libconfig::Config cfg;
+            cfg.readFile("./Config/config.cfg");
+            libconfig::Setting &config = cfg.lookup("config");
+
+            libconfig::Config language;
+            std::string configLang = toLowerCase(std::string(config["language"]));
+
+            if (_language == configLang) {
+                return;
+            }
+            _language = configLang;
+
+            std::string languagePath = std::string("./Config/Languages/") + configLang + std::string(".cfg");
+            language.readFile(languagePath.c_str());
+
+            libconfig::Setting &lang = language.lookup("language");
+            libconfig::Setting &menu = lang.lookup("gameMenu");
+            libconfig::Setting &button = menu.lookup("button");
+
+            setButtons(button);
+        } catch (const libconfig::FileIOException &fioex) {
+            std::cerr << "I/O error while reading file." << std::endl;
+            setButtonsDefault();
+        } catch (const libconfig::ParseException &pex) {
+            std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError() << std::endl;
+            setButtonsDefault();
+        } catch (const libconfig::SettingNotFoundException &nfex) {
+            std::cerr << "Setting not found in configuration file." << std::endl;
+            setButtonsDefault();
+        } catch (const libconfig::SettingTypeException &setex) {
+            std::cerr << "Setting type error in configuration file." << std::endl;
+            setButtonsDefault();
+        } catch (const libconfig::ConfigException &confex) {
+            std::cerr << "Configuration error." << std::endl;
+            setButtonsDefault();
+        } catch (const Error::TextureError &e) {
+            std::cerr << "Bad Initialization of GameMenuHUD: " << e.what() << std::endl;
+        }
+
+    }
+
+    void GameMenuHUD::setButtonsDefault()
+    {
+        int initial_y = (Window::getWindowHeight() - (4 * BUTTON_STD_SIZE.y + 3 * 75)) / 2;
+        ButtonWidget *resumeButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, initial_y), BUTTON_STD_SIZE, std::string("Resume"), 7);
+        ButtonWidget *settingsButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, initial_y + 75), BUTTON_STD_SIZE, std::string("Settings"), 7);
+        ButtonWidget *helpButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, initial_y + 75 * 2), BUTTON_STD_SIZE, std::string("Help"), 7);
+        ButtonWidget *quitButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, initial_y + 75 * 3), BUTTON_STD_SIZE, std::string("Quit"), 7);
+
+        _resumeButton = new Button(resumeButton);
+        _settingsButton = new Button(settingsButton);
+        _quitButton = new Button(quitButton);
+        _helpButton = new Button(helpButton);
+    }
+
+    void GameMenuHUD::setButtons(libconfig::Setting &button)
+    {
+        int initial_y = (Window::getWindowHeight() - (4 * BUTTON_STD_SIZE.y + 3 * 75)) / 2;
+        ButtonWidget *resumeButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, initial_y), BUTTON_STD_SIZE, std::string(button["resume"]), 7);
+        ButtonWidget *settingsButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, initial_y + 75), BUTTON_STD_SIZE, std::string(button["settings"]), 7);
+        ButtonWidget *helpButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, initial_y + 75 * 2), BUTTON_STD_SIZE, std::string(button["help"]), 7);
+        ButtonWidget *quitButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, initial_y + 75 * 3), BUTTON_STD_SIZE, std::string(button["quit"]), 7);
+
+        _resumeButton = new Button(resumeButton);
+        _settingsButton = new Button(settingsButton);
+        _quitButton = new Button(quitButton);
+        _helpButton = new Button(helpButton);
     }
 };

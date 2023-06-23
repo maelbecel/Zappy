@@ -314,7 +314,7 @@ namespace UI {
         return str;
     }
 
-    std::string TileHUD::constructPlayerContent(std::pair<const std::string, std::shared_ptr<Player>> &player)
+    std::string TileHUD::constructPlayerContent(std::pair<const std::string, Player *> &player)
     {
         std::string str;
 

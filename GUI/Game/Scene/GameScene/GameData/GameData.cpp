@@ -16,6 +16,12 @@ GameData::GameData() : _mapSize(sf::Vector2i(0, 0)), _gameScale(1.0f), _scale(sf
     GameData::timeUnit = 0;
 };
 
+GameData::~GameData()
+{
+    for (auto &player : _players)
+        delete player.second;
+}
+
 int GameData::parse(std::string &line)
 {
     int response = 0;
@@ -279,7 +285,7 @@ int GameData::setPlayer(const std::string &player)
             index++;
         }
 
-        _players[name] = std::make_shared<Player>(Player(sf::Vector2i(xInt, yInt), oriantationInt, levelInt, team, index));
+        _players[name] = new Player(sf::Vector2i(xInt, yInt), oriantationInt, levelInt, team, index);
     } catch (std::invalid_argument &e) {
         throw Error::InvalidArgument("GameData::setPlayer");
     }
@@ -484,7 +490,7 @@ int GameData::deletePlayer(const std::string &player)
     return 0;
 }
 
-std::map<std::string, std::shared_ptr<Player>> GameData::getPlayers() const
+std::map<std::string, Player *> GameData::getPlayers() const
 {
     return _players;
 }

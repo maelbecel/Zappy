@@ -54,7 +54,7 @@ namespace UI {
 
     void TeamHUD::drawCursor(sf::RenderWindow &window, GameData &data)
     {
-        std::map<std::string, std::shared_ptr<Player>> players = data.getPlayers();
+        std::map<std::string, Player *> players = data.getPlayers();
         sf::Vector2f scale = data.getScale();
         sf::Vector2i size = data.getMapSize();
         sf::Vector2f userPosition = data.getPosition();

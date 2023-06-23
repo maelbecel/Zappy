@@ -111,7 +111,7 @@ namespace UI {
              * @param player The player to construct the content
              * @return std::string The content of the player
              */
-            std::string constructPlayerContent(std::pair<const std::string, std::shared_ptr<Player>> &player);
+            std::string constructPlayerContent(std::pair<const std::string, Player *> &player);
 
             /**
              * @brief Construct the egg content

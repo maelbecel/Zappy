@@ -79,15 +79,15 @@ namespace Scene {
             _gameData.parse(server.getSocket().response);
         }
 
-        server.sendCommand("sgt");
-        server.Run();
-        _gameData.parse(server.getSocket().response);
+        //server.sendCommand("sgt");
+        //server.Run();
+        //_gameData.parse(server.getSocket().response);
 
-        if (_gameData.getTimeUnit() % 20 == 0 || _gameData.getMap().empty()) {
+        /*if (_gameData.getTimeUnit() % 20 == 0 || _gameData.getMap().empty()) {
             server.sendCommand("mct");
             server.Run();
             _gameData.parse(server.getSocket().response);
-        }
+        }*/
     }
 
     void GameScene::Render(sf::RenderWindow &window)

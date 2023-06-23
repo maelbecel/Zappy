@@ -84,7 +84,7 @@ namespace UI {
         }
 
 
-        _settingsHUD = SettingsHUD();
+        _settingsHUD = new SettingsHUD();
 
         _popUp = false;
 
@@ -121,6 +121,8 @@ namespace UI {
         delete _connectButton;
         delete _settingsButton;
         delete _quitButton;
+        delete _mouseClick;
+        delete _settingsHUD;
         delete _planetButton;
         delete _crossButton;
     }
@@ -148,13 +150,14 @@ namespace UI {
         } else {
             _quitButton->render(window, ButtonState::IDLE);
         }
+
         if (_planetButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))) {
             _planetButton->render(window, ButtonState::HOVERED);
         } else {
             _planetButton->render(window, ButtonState::IDLE);
         }
-        if (_settingsHUD.isOpened() == true) {
-            _settingsHUD.draw(window);
+        if (_settingsHUD->isOpened() == true) {
+            _settingsHUD->draw(window);
         }
         if (_popUp == true) {
             window.draw(_background);
@@ -171,8 +174,8 @@ namespace UI {
     void MenuHUD::handleEvent(sf::Event event, Network::Server &server, sf::RenderWindow &window)
     {
         if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
-            if (_settingsHUD.isOpened() == true) {
-                _settingsHUD.setOpened(false);
+            if (_settingsHUD->isOpened() == true) {
+                _settingsHUD->setOpened(false);
             }
             if (_popUp == true) {
                 _popUp = false;
@@ -181,17 +184,23 @@ namespace UI {
         if (event.type == sf::Event::MouseButtonPressed) {
             if (event.mouseButton.button != sf::Mouse::Left)
                 return;
+
+            _mouseClick->setVolume(Audio::Audio::sfxVolume);
+
+
             if (_popUp == true) {
                 if (_crossButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
                     _popUp = false;
                 }
                 return;
             }
-            if (_settingsHUD.isOpened() == true) {
-                _settingsHUD.handleEvent(event, server, window);
+            if (_settingsHUD->isOpened() == true) {
+                _settingsHUD->handleEvent(event, server, window);
                 return;
             }
+
             if (_connectButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                _mouseClick->play();
                 server.setPort(_port.value);
                 server.setMachine(_ip.value);
 
@@ -210,22 +219,28 @@ namespace UI {
                 return;
             }
             if (_settingsButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
-                _settingsHUD.setOpened(true);
+                _mouseClick->play();
+                _settingsHUD->setOpened(true);
                 return;
             }
+
             if (_quitButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                _mouseClick->play();
                 window.close();
             }
+
             _ip.isIn(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
             _port.isIn(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
             return;
         }
+
         _ip.handleEvent(event);
         _port.handleEvent(event);
     }
 
     void MenuHUD::Initialize(std::string ip, std::string port)
     {
+        _mouseClick = new Audio::VFX(Audio::MOUSE_CLICK, Audio::Audio::sfxVolume);
         _ip.value = ip;
         _port.value = port;
     }

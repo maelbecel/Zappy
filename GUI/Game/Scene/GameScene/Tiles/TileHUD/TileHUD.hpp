@@ -20,6 +20,7 @@
     #include "NetworkError.hpp"
     #include "Tile.hpp"
     #include "GameData.hpp"
+    #include "VFX.hpp"
 
 namespace UI {
     enum RESOURCE {
@@ -110,7 +111,7 @@ namespace UI {
              * @param player The player to construct the content
              * @return std::string The content of the player
              */
-            std::string constructPlayerContent(std::pair<const std::string, std::shared_ptr<Player>> &player);
+            std::string constructPlayerContent(std::pair<const std::string, Player *> &player);
 
             /**
              * @brief Construct the egg content
@@ -138,8 +139,8 @@ namespace UI {
             IButton *_changePlayerRightButton;      /*!< Button to change the player right */
             IButton *_changeEggLeftButton;          /*!< Button to change the egg left */
             IButton *_changeEggRightButton;         /*!< Button to change the egg right */
+            Audio::VFX *_mouseClick;                /*!< Sound of the click */
     };
-
 };
 
 #endif /* !TILEHUD_HPP_ */

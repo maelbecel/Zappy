@@ -47,6 +47,9 @@ SRC	+=	./UI/Animation/Animation.cpp\
 		./UI/Layout/GridLayout.cpp\
 		./UI/Layout/HorizontalLayout.cpp\
 		./UI/Layout/VerticalLayout.cpp\
+		./UI/Audio/Music.cpp\
+		./UI/Audio/VFX.cpp\
+		./UI/Audio/Audio.cpp\
 
 INCLUDE =	-I .\
 			-I ./App\
@@ -84,6 +87,7 @@ INCLUDE =	-I .\
 			-I ./UI/Widget/\
 			-I ./UI/Manager/\
 			-I ./UI/Layout/\
+			-I ./UI/Audio/\
 
 OBJ	=	$(SRC:.cpp=.o)
 

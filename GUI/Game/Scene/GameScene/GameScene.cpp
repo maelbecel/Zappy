@@ -73,21 +73,27 @@ namespace Scene {
 
     void GameScene::askingToServer(Network::Server &server)
     {
+        static int i = 0;
+
         if (_gameData.getMapSize().x == 0 || _gameData.getMapSize().y == 0) {
             server.sendCommand("msz");
             server.Run();
             _gameData.parse(server.getSocket().response);
         }
 
-        //server.sendCommand("sgt");
-        //server.Run();
-        //_gameData.parse(server.getSocket().response);
+        if (i % 10 == 0) {
+            server.sendCommand("sgt");
+            server.Run();
+            _gameData.parse(server.getSocket().response);
+        }
 
-        /*if (_gameData.getTimeUnit() % 20 == 0 || _gameData.getMap().empty()) {
+        if (_gameData.getTimeUnit() % 20 == 0 || _gameData.getMap().empty()) {
             server.sendCommand("mct");
             server.Run();
             _gameData.parse(server.getSocket().response);
-        }*/
+        }
+
+        i++;
     }
 
     void GameScene::Render(sf::RenderWindow &window)

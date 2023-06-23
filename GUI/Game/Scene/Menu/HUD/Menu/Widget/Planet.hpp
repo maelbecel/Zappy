@@ -22,6 +22,23 @@
     #define DEG_TO_RAD (M_PI / 180.0)
 
     namespace UI {
+
+        typedef enum PlanetType {
+            MERCURY,
+            VENUS,
+            EARTH,
+            MARS,
+            JUPITER,
+            SATURN,
+            URANUS,
+            NEPTUNE,
+        } PlanetType;
+
+        typedef struct planetPath_s {
+            PlanetType type;
+            std::string path;
+        } planetPath_t;
+
         class Planet : public AWidget {
             // Constructor & Destructor
             public:
@@ -85,8 +102,16 @@
                  */
                 void setSize(const sf::Vector2f &size) override;
 
+                /**
+                 * @brief Set the Type object
+                 *
+                 * @param type The type of the planet
+                 */
+                void setType(PlanetType type);
+
 
             private:
+                PlanetType _type;
         };
     };
 

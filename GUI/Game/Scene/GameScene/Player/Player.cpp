@@ -63,8 +63,6 @@ Player::Player(sf::Vector2i position, int direction, int level, std::string team
 
     for (int i = 0; i < 7; i++)
         _inventory[i] = 0;
-    
-    srand(time(NULL));
 
     _placement = rand() % 5 + 1;
 }

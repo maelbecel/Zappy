@@ -12,6 +12,7 @@
 
 namespace Audio {
     const std::string GAME_OST = "./Assets/Audio/Just_Another_Day.wav";
+    const std::string MENU_OST = "./Assets/Audio/Lost_In_The_Deeps.wav";
 
     /**
      * @brief Music class

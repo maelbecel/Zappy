@@ -16,6 +16,7 @@
     #include "GameScene.hpp"
     #include "Server.hpp"
     #include "FontManager.hpp"
+    #include "Music.hpp"
 
 class Game {
     // Constructor & Destructor
@@ -55,6 +56,8 @@ class Game {
         std::map<std::string, std::pair<Scene::IScene *, bool>> _scenes; /*!< All the scenes */
 
         Network::Server _server; /*!< The server */
+
+        Audio::Music *_ost;      /*!< The music */
 };
 
 #endif /* !GAME_HPP_ */

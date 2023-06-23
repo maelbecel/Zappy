@@ -13,6 +13,10 @@ Game::Game()
     _scenes.emplace("Game", std::make_pair(new Scene::GameScene(), false));
 
     _server.Initialize();
+
+    _ost = new Audio::Music(Audio::MENU_OST, Audio::Audio::musicVolume);
+
+    _ost->play();
 };
 
 Game::~Game()
@@ -21,6 +25,7 @@ Game::~Game()
         if (scene.second.first)
             delete scene.second.first;
     }
+    delete _ost;
 };
 
 void Game::Initialize(std::string ip, std::string port)
@@ -48,6 +53,8 @@ void Game::Render(sf::RenderWindow &window)
 
 void Game::Update()
 {
+    _ost->setVolume(Audio::Audio::musicVolume);
+
     for (auto &scene : _scenes) {
         if (scene.second.second == true) {
             scene.second.first->Update(_server);
@@ -65,7 +72,6 @@ void Game::OnEvent(const sf::Event &event, sf::RenderWindow &window)
         }
     }
 
-    // TODO: Change menu changer
     if (_server.getConnectionStatus() == false) {
         for (auto &scene : _scenes)
             scene.second.second = false;
@@ -74,5 +80,7 @@ void Game::OnEvent(const sf::Event &event, sf::RenderWindow &window)
     } else {
         _scenes.at("Menu").second = false;
         _scenes.at("Game").second = true;
+
+        _ost->stop();
     }
 }

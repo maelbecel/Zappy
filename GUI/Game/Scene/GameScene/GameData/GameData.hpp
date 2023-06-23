@@ -19,6 +19,7 @@
     #include "PerlinNoise.hpp"
     #include "Player.hpp"
     #include "Eggs.hpp"
+    #include "Map.hpp"
 
 /**
  * @brief Class that store all the data of the game
@@ -246,6 +247,20 @@ class GameData {
          */
         std::map<std::string, std::shared_ptr<Eggs>> getEggs() const;
 
+        /**
+         * @brief Set the Season object
+         *
+         * @param season The season of the planet
+         */
+        int setSeason(const std::string &season);
+
+        /**
+         * @brief Get the Season object
+         *
+         * @return std::string The season of the planet
+         */
+        std::string getSeason() const;
+
     // Methods private
     private:
 
@@ -272,6 +287,7 @@ class GameData {
         std::vector<std::string> _teams;                           /*!< The list of all the teams */
 
         int _gameScale;                                            /*!< The scale of the game */
+        std::string _season;                                       /*!< The season of the game */
 
         Math::Noise _noise;
     
@@ -283,7 +299,6 @@ class GameData {
     // Global Attributes
     public:
         static uint timeUnit;                                      /*!< The time unit of the game */
-        static uint gameSpeed;                                     /*!< The game speed */
 };
 
 #endif /* !GAMEDATA_HPP_ */

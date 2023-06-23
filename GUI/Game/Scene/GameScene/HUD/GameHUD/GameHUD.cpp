@@ -66,27 +66,29 @@ namespace UI {
         window.draw(_speed4xText);
     }
 
-    void GameHUD::handleEvent(sf::Event event, Network::Server &server, UNUSED sf::RenderWindow &window)
+    bool GameHUD::handleEvent(sf::Event event, Network::Server &server, UNUSED sf::RenderWindow &window)
     {
         if (event.type == sf::Event::MouseButtonPressed) {
             if (event.mouseButton.button != sf::Mouse::Left)
-                return;
+                return false;
 
             _mouseClick->setVolume(Audio::Audio::sfxVolume);
 
             if (_speed1x->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) == true) {
                 _mouseClick->play();
                 server.sendCommand("sst 25");
+                return true;
             } else if (_speed2x->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) == true) {
                 _mouseClick->play();
                 server.sendCommand("sst 50");
+                return true;
             } else if (_speed4x->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) == true) {
                 _mouseClick->play();
                 server.sendCommand("sst 200");
+                return true;
             }
-
-            return;
         }
+        return false;
     }
 
     sf::Text GameHUD::setString(std::string str, sf::Vector2f position)

@@ -51,8 +51,14 @@ namespace UI {
         ArrowButtonWidget *changeLanguageRightButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 250, 448), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
         _changeLanguageLeftButton = new Button(changeLanguageLeftButton);
         _changeLanguageRightButton = new Button(changeLanguageRightButton);
-        _changeLanguageLeftButton->setValue(0);
-        _changeLanguageRightButton->setValue(1);
+        for (size_t i = 0; i < _languages.size(); i++) {
+            if (getStringAfterDelimiter(_languages[i].getString(), ":\n\n") == getStringAfterDelimiter(_languageText.getString(), ":\n\n")) {
+                _changeLanguageLeftButton->setValue(i);
+                break;
+            }
+        }
+        _changeLanguageRightButton->setValue(_changeLanguageLeftButton->getValue() + 1);
+
         ValidateButtonWidget *validateButton = new ValidateButtonWidget(sf::Vector2f(Window::getWindowWidth() / 2 - 8, _backgroundSprite.getTexture()->getSize().y + 100), sf::Vector2f(16 * 3, 16 * 3));
         _validateButton = new Button(validateButton);
 
@@ -111,6 +117,7 @@ namespace UI {
     {
         window.draw(_background);
         window.draw(_backgroundSprite);
+        setLanguage();
         _sound.value = std::to_string(_soundValue);
         _music.value = std::to_string(_musicValue);
         _sound.draw(window, sf::RenderStates::Default);
@@ -131,14 +138,14 @@ namespace UI {
             _increaseSoundButton->render(window, ButtonState::HOVERED);
         else
             _increaseSoundButton->render(window, ButtonState::IDLE);
-        // if (_changeLanguageLeftButton->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
-        //     _changeLanguageLeftButton->render(window, ButtonState::HOVERED);
-        // else
-        //     _changeLanguageLeftButton->render(window, ButtonState::IDLE);
-        // if (_changeLanguageRightButton->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
-        //     _changeLanguageRightButton->render(window, ButtonState::HOVERED);
-        // else
-        //     _changeLanguageRightButton->render(window, ButtonState::IDLE);
+        if (_changeLanguageLeftButton->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
+            _changeLanguageLeftButton->render(window, ButtonState::HOVERED);
+        else
+            _changeLanguageLeftButton->render(window, ButtonState::IDLE);
+        if (_changeLanguageRightButton->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
+            _changeLanguageRightButton->render(window, ButtonState::HOVERED);
+        else
+            _changeLanguageRightButton->render(window, ButtonState::IDLE);
         if (_crossSettingsButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
             _crossSettingsButton->render(window, ButtonState::HOVERED);
         else
@@ -147,7 +154,7 @@ namespace UI {
             _validateButton->render(window, ButtonState::HOVERED);
         else
             _validateButton->render(window, ButtonState::IDLE);
-        // window.draw(_languages[_changeLanguageLeftButton->getValue()]);
+        window.draw(_languages[_changeLanguageLeftButton->getValue()]);
         if (!_isGameMenu)
             return;
         if (_changeTileHUDLeftButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
@@ -348,7 +355,7 @@ namespace UI {
                     i++;
                 }
             }
-            // _languageText = setString(std::string(settings["language"]) + "\n\n" + std::string(config["language"]), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450));
+            _languageText = setString(std::string(settings["language"]) + "\n\n" + std::string(config["language"]), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450));
         } catch (const libconfig::FileIOException &fioex) {
             std::cerr << "I/O error while reading file." << std::endl;
             setButtonsDefault();
@@ -375,7 +382,7 @@ namespace UI {
         _music = InputBox(std::string("Music :"), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 15, 350), BUTTON_STD_SIZE);
         _tileHUDModes[0] = setString("TileHUD mode:\n\nText", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 550));
         _tileHUDModes[1] = setString("TileHUD mode:\n\nSprite", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 550));
-        // _languageText = setString("Language :\n\nen", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450));
+        _languageText = setString("Language :\n\nen", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450));
         _languages[0] = setString("Language :\n\nen", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450));
         _tileHUDTextMode = true;
     }

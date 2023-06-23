@@ -9,6 +9,7 @@
 #include "Window.hpp"
 #include "ArrowButtonWidget.hpp"
 #include "CrossButtonWidget.hpp"
+#include "ToLowerCase.hpp"
 
 namespace UI {
     TileHUD::TileHUD() : _background(sf::Vector2f(Window::getWindowWidth(), Window::getWindowHeight()))
@@ -28,7 +29,7 @@ namespace UI {
 
         _isOpen = false;
 
-        std::string str = "Tile clicked: (0, 0)\n\nResources:\n\n  Food: 0\n\n  Linemate: 0\n\n  Deraumere: 0\n\n  Sibur: 0\n\n  Mendiane: 0\n\n  Phiras: 0\n\n  Thystame: 0\n\nTime: 0";
+        std::string str = "Tile clicked: (0, 0)\n\nResources:\n\n  Food: 0\n\n  Linemate: 0\n\n  Deraumere: 0\n\n  Sibur: 0\n\n  Mendiane: 0\n\n  Phiras: 0\n\n  Thystame: 0\n\n";
         _tileContent = setString(str, sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10), 10);
 
         CrossButtonWidget *crossTileHUDButton = new CrossButtonWidget(sf::Vector2f((Window::getWindowWidth() - 200), 150), sf::Vector2f(16 * 2.5, 16 * 2.5));
@@ -67,12 +68,18 @@ namespace UI {
     TileHUD::~TileHUD()
     {
         delete _mouseClick;
+        delete _crossTileHUDButton;
+        delete _changePlayerLeftButton;
+        delete _changePlayerRightButton;
+        delete _changeEggLeftButton;
+        delete _changeEggRightButton;
     }
 
     void TileHUD::draw(sf::RenderWindow &window)
     {
         window.draw(_background);
         window.draw(_backgroundSprite);
+        updateTileHUD();
         if (_textMode == false) {
             window.draw(_tileClicked);
             for (auto &resource : _tileResourceSprite) {
@@ -113,7 +120,7 @@ namespace UI {
                 window.draw(_tilePlayerContent[_changePlayerRightButton->getValue()]);
             }
             if (_tilePlayerContent.size() == 0) {
-                _tilePlayerContent[_changePlayerLeftButton->getValue()] = setString("No player on this tile", sf::Vector2f(_tileContent.getPosition().x + 75, 450), 10);
+                _tilePlayerContent[_changePlayerLeftButton->getValue()] = setString(_noPlayer, sf::Vector2f(_tileContent.getPosition().x + 75, 450), 10);
                 window.draw(_tilePlayerContent[_changePlayerLeftButton->getValue()]);
             }
         }
@@ -136,7 +143,7 @@ namespace UI {
                 window.draw(_tileEggContent[_changeEggLeftButton->getValue()]);
             }
             if (_tileEggContent.size() == 0) {
-                _tileEggContent[_changeEggLeftButton->getValue()] = setString("No egg on this tile", sf::Vector2f(_tileContent.getPosition().x + 100, 750), 10);
+                _tileEggContent[_changeEggLeftButton->getValue()] = setString(_noEgg, sf::Vector2f(_tileContent.getPosition().x + 100, 750), 10);
                 window.draw(_tileEggContent[_changeEggLeftButton->getValue()]);
             }
         }
@@ -244,12 +251,6 @@ namespace UI {
                 continue;
             _tileEggContent.insert(std::pair<int, sf::Text>(i, setString(constructEggContent(egg, gameData), sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10), 10)));
         }
-        _tileEggContent[0] = setString("Egg[0]: \n\n  Time before hatching: 0\n\n", sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10), 10);
-        _tileEggContent[1] = setString("Egg[1]: \n\n  Time before hatching: 0\n\n", sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10), 10);
-        _tileEggContent[2] = setString("Egg[2]: \n\n  Time before hatching: 0\n\n", sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10), 10);
-        _tilePlayerContent[0] = setString("Player[0] : \n\n  Level: 0\n\n  Inventory: \n\n    Food: 0\n\n    Linemate: 0\n\n    Deraumere: 0\n\n    Sibur: 0\n\n    Mendiane: 0\n\n    Phiras: 0\n\n    Thystame: 0\n\n", sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10), 10);
-        _tilePlayerContent[1] = setString("Player[1] : \n\n  Level: 0\n\n  Inventory: \n\n    Food: 0\n\n    Linemate: 0\n\n    Deraumere: 0\n\n    Sibur: 0\n\n    Mendiane: 0\n\n    Phiras: 0\n\n    Thystame: 0\n\n", sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10), 10);
-        _tilePlayerContent[2] = setString("Player[2] : \n\n  Level: 0\n\n  Inventory: \n\n    Food: 0\n\n    Linemate: 0\n\n    Deraumere: 0\n\n    Sibur: 0\n\n    Mendiane: 0\n\n    Phiras: 0\n\n    Thystame: 0\n\n", sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10), 10);
         if (isLeft == true) {
             _backgroundSprite.setPosition(sf::Vector2f(Window::getWindowWidth() - 416 * 2, 0));
             _tileContent = setString(constructContent(gameData, x, y), sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 175), 10);
@@ -303,8 +304,41 @@ namespace UI {
         int i = 0;
         int j = 0;
         int index = 0;
+        libconfig::Config cfg;
 
-        _tileClicked = setString("Tile clicked: (" + std::to_string(x) + ", " + std::to_string(y) + ")\n\n", sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10), 18);
+        try {
+            libconfig::Config cfg;
+            cfg.readFile("./Config/config.cfg");
+            libconfig::Setting &config = cfg.lookup("config");
+
+            libconfig::Config language;
+            std::string configLang = toLowerCase(std::string(config["language"]));
+            std::string languagePath = std::string("./Config/Languages/") + configLang + std::string(".cfg");
+            language.readFile(languagePath.c_str());
+
+            libconfig::Setting &lang = language.lookup("language");
+            libconfig::Setting &tileHUD = lang.lookup("tileHUD");
+
+            _tileClicked = setString(std::string(tileHUD["tileClicked"]) + " (" + std::to_string(x) + ", " + std::to_string(y) + ")\n\n", sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10), 18);
+
+            str = std::string(tileHUD["tileClicked"]) + " (" + std::to_string(x) + ", " + std::to_string(y) + ")\n\n" + std::string(tileHUD["resource"]) + "\n\n  " + std::string(tileHUD["food"]) + " " + std::to_string(tile->getResource(0)) + "\n\n  Linemate: " + std::to_string(tile->getResource(1)) + "\n\n  Deraumere: " + std::to_string(tile->getResource(2)) + "\n\n  Sibur: " + std::to_string(tile->getResource(3)) + "\n\n  Mendiane: " + std::to_string(tile->getResource(4)) + "\n\n  Phiras: " + std::to_string(tile->getResource(5)) + "\n\n  Thystame: " + std::to_string(tile->getResource(6));
+        } catch (const libconfig::FileIOException &fioex) {
+            std::cerr << "I/O error while reading file." << std::endl;
+            str = "Tile clicked: (" + std::to_string(x) + ", " + std::to_string(y) + ")\n\nResources:\n\n  Food: " + std::to_string(tile->getResource(0)) + "\n\n  Linemate: " + std::to_string(tile->getResource(1)) + "\n\n  Deraumere: " + std::to_string(tile->getResource(2)) + "\n\n  Sibur: " + std::to_string(tile->getResource(3)) + "\n\n  Mendiane: " + std::to_string(tile->getResource(4)) + "\n\n  Phiras: " + std::to_string(tile->getResource(5)) + "\n\n  Thystame: " + std::to_string(tile->getResource(6));
+        } catch (const libconfig::ParseException &pex) {
+            std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError() << std::endl;
+            str = "Tile clicked: (" + std::to_string(x) + ", " + std::to_string(y) + ")\n\nResources:\n\n  Food: " + std::to_string(tile->getResource(0)) + "\n\n  Linemate: " + std::to_string(tile->getResource(1)) + "\n\n  Deraumere: " + std::to_string(tile->getResource(2)) + "\n\n  Sibur: " + std::to_string(tile->getResource(3)) + "\n\n  Mendiane: " + std::to_string(tile->getResource(4)) + "\n\n  Phiras: " + std::to_string(tile->getResource(5)) + "\n\n  Thystame: " + std::to_string(tile->getResource(6));
+        } catch (const libconfig::SettingNotFoundException &nfex) {
+            std::cerr << "Setting not found in configuration file." << std::endl;
+            str = "Tile clicked: (" + std::to_string(x) + ", " + std::to_string(y) + ")\n\nResources:\n\n  Food: " + std::to_string(tile->getResource(0)) + "\n\n  Linemate: " + std::to_string(tile->getResource(1)) + "\n\n  Deraumere: " + std::to_string(tile->getResource(2)) + "\n\n  Sibur: " + std::to_string(tile->getResource(3)) + "\n\n  Mendiane: " + std::to_string(tile->getResource(4)) + "\n\n  Phiras: " + std::to_string(tile->getResource(5)) + "\n\n  Thystame: " + std::to_string(tile->getResource(6));
+        } catch (const libconfig::SettingTypeException &setex) {
+            std::cerr << "Setting type error in configuration file." << std::endl;
+            str = "Tile clicked: (" + std::to_string(x) + ", " + std::to_string(y) + ")\n\nResources:\n\n  Food: " + std::to_string(tile->getResource(0)) + "\n\n  Linemate: " + std::to_string(tile->getResource(1)) + "\n\n  Deraumere: " + std::to_string(tile->getResource(2)) + "\n\n  Sibur: " + std::to_string(tile->getResource(3)) + "\n\n  Mendiane: " + std::to_string(tile->getResource(4)) + "\n\n  Phiras: " + std::to_string(tile->getResource(5)) + "\n\n  Thystame: " + std::to_string(tile->getResource(6));
+        } catch (const libconfig::ConfigException &confex) {
+            std::cerr << "Configuration error." << std::endl;
+            str = "Tile clicked: (" + std::to_string(x) + ", " + std::to_string(y) + ")\n\nResources:\n\n  Food: " + std::to_string(tile->getResource(0)) + "\n\n  Linemate: " + std::to_string(tile->getResource(1)) + "\n\n  Deraumere: " + std::to_string(tile->getResource(2)) + "\n\n  Sibur: " + std::to_string(tile->getResource(3)) + "\n\n  Mendiane: " + std::to_string(tile->getResource(4)) + "\n\n  Phiras: " + std::to_string(tile->getResource(5)) + "\n\n  Thystame: " + std::to_string(tile->getResource(6));
+        }
+
         for (auto &resource : _tileResourceSprite) {
             resource.second.quantity = setString(std::to_string(tile->getResource(index)), sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 155 + (i * 150) + 50, 200 + (j * 120) + 50), 10);
             i++;
@@ -314,7 +348,6 @@ namespace UI {
             }
             index++;
         }
-        str = "Tile clicked: (" + std::to_string(x) + ", " + std::to_string(y) + ")\n\nResources:\n\n  Food: " + std::to_string(tile->getResource(0)) + "\n\n  Linemate: " + std::to_string(tile->getResource(1)) + "\n\n  Deraumere: " + std::to_string(tile->getResource(2)) + "\n\n  Sibur: " + std::to_string(tile->getResource(3)) + "\n\n  Mendiane: " + std::to_string(tile->getResource(4)) + "\n\n  Phiras: " + std::to_string(tile->getResource(5)) + "\n\n  Thystame: " + std::to_string(tile->getResource(6)) + "\n\nTime: " + std::to_string(gameData.getTimeUnit());
         return str;
     }
 
@@ -322,9 +355,42 @@ namespace UI {
     {
         std::string str;
 
+        try {
+            libconfig::Config cfg;
+            cfg.readFile("./Config/config.cfg");
+            libconfig::Setting &config = cfg.lookup("config");
+
+            libconfig::Config language;
+            std::string configLang = toLowerCase(std::string(config["language"]));
+            std::string languagePath = std::string("./Config/Languages/") + configLang + std::string(".cfg");
+            language.readFile(languagePath.c_str());
+
+            libconfig::Setting &lang = language.lookup("language");
+            libconfig::Setting &tileHUD = lang.lookup("tileHUD");
+            libconfig::Setting &playerHUD = tileHUD.lookup("player");
+
+            _noPlayer = std::string(playerHUD["noPlayer"]);
+
+            str = std::string(playerHUD["name"]) + "[" + player.first + "] : \n\n  " + std::string(playerHUD["level"]) + " " + std::to_string(player.second->getLevel()) + "\n\n  " + std::string(playerHUD["inventory"]) + "\n\n    " + std::string(tileHUD["food"]) + " " + std::to_string(player.second->getInventory()[0]) + "\n\n    Linemate: " + std::to_string(player.second->getInventory()[1]) + "\n\n    Deraumere: " + std::to_string(player.second->getInventory()[2]) + "\n\n    Sibur: " + std::to_string(player.second->getInventory()[3]) + "\n\n    Mendiane: " + std::to_string(player.second->getInventory()[4]) + "\n\n    Phiras: " + std::to_string(player.second->getInventory()[5]) + "\n\n    Thystame: " + std::to_string(player.second->getInventory()[6]) + "\n\n";
+        } catch (const libconfig::FileIOException &fioex) {
+            std::cerr << "I/O error while reading file." << std::endl;
+            str = "Player [" + player.first + "] : \n\n  Level: " + std::to_string(player.second->getLevel()) + "\n\n  Inventory: \n\n    Food: " + std::to_string(player.second->getInventory()[0]) + "\n\n    Linemate: " + std::to_string(player.second->getInventory()[1]) + "\n\n    Deraumere: " + std::to_string(player.second->getInventory()[2]) + "\n\n    Sibur: " + std::to_string(player.second->getInventory()[3]) + "\n\n    Mendiane: " + std::to_string(player.second->getInventory()[4]) + "\n\n    Phiras: " + std::to_string(player.second->getInventory()[5]) + "\n\n    Thystame: " + std::to_string(player.second->getInventory()[6]) + "\n\n";
+        } catch (const libconfig::ParseException &pex) {
+            std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError() << std::endl;
+            str = "Player [" + player.first + "] : \n\n  Level: " + std::to_string(player.second->getLevel()) + "\n\n  Inventory: \n\n    Food: " + std::to_string(player.second->getInventory()[0]) + "\n\n    Linemate: " + std::to_string(player.second->getInventory()[1]) + "\n\n    Deraumere: " + std::to_string(player.second->getInventory()[2]) + "\n\n    Sibur: " + std::to_string(player.second->getInventory()[3]) + "\n\n    Mendiane: " + std::to_string(player.second->getInventory()[4]) + "\n\n    Phiras: " + std::to_string(player.second->getInventory()[5]) + "\n\n    Thystame: " + std::to_string(player.second->getInventory()[6]) + "\n\n";
+        } catch (const libconfig::SettingNotFoundException &nfex) {
+            std::cerr << "Setting not found in configuration file." << std::endl;
+            str = "Player [" + player.first + "] : \n\n  Level: " + std::to_string(player.second->getLevel()) + "\n\n  Inventory: \n\n    Food: " + std::to_string(player.second->getInventory()[0]) + "\n\n    Linemate: " + std::to_string(player.second->getInventory()[1]) + "\n\n    Deraumere: " + std::to_string(player.second->getInventory()[2]) + "\n\n    Sibur: " + std::to_string(player.second->getInventory()[3]) + "\n\n    Mendiane: " + std::to_string(player.second->getInventory()[4]) + "\n\n    Phiras: " + std::to_string(player.second->getInventory()[5]) + "\n\n    Thystame: " + std::to_string(player.second->getInventory()[6]) + "\n\n";
+        } catch (const libconfig::SettingTypeException &setex) {
+            std::cerr << "Setting type error in configuration file." << std::endl;
+            str = "Player [" + player.first + "] : \n\n  Level: " + std::to_string(player.second->getLevel()) + "\n\n  Inventory: \n\n    Food: " + std::to_string(player.second->getInventory()[0]) + "\n\n    Linemate: " + std::to_string(player.second->getInventory()[1]) + "\n\n    Deraumere: " + std::to_string(player.second->getInventory()[2]) + "\n\n    Sibur: " + std::to_string(player.second->getInventory()[3]) + "\n\n    Mendiane: " + std::to_string(player.second->getInventory()[4]) + "\n\n    Phiras: " + std::to_string(player.second->getInventory()[5]) + "\n\n    Thystame: " + std::to_string(player.second->getInventory()[6]) + "\n\n";
+        } catch (const libconfig::ConfigException &confex) {
+            std::cerr << "Configuration error." << std::endl;
+            str = "Player [" + player.first + "] : \n\n  Level: " + std::to_string(player.second->getLevel()) + "\n\n  Inventory: \n\n    Food: " + std::to_string(player.second->getInventory()[0]) + "\n\n    Linemate: " + std::to_string(player.second->getInventory()[1]) + "\n\n    Deraumere: " + std::to_string(player.second->getInventory()[2]) + "\n\n    Sibur: " + std::to_string(player.second->getInventory()[3]) + "\n\n    Mendiane: " + std::to_string(player.second->getInventory()[4]) + "\n\n    Phiras: " + std::to_string(player.second->getInventory()[5]) + "\n\n    Thystame: " + std::to_string(player.second->getInventory()[6]) + "\n\n";
+        }
+
         if (!player.second)
             return str;
-        str = "Player[" + player.first + "] : \n\n  Level: " + std::to_string(player.second->getLevel()) + "\n\n  Inventory: \n\n    Food: " + std::to_string(player.second->getInventory()[0]) + "\n\n    Linemate: " + std::to_string(player.second->getInventory()[1]) + "\n\n    Deraumere: " + std::to_string(player.second->getInventory()[2]) + "\n\n    Sibur: " + std::to_string(player.second->getInventory()[3]) + "\n\n    Mendiane: " + std::to_string(player.second->getInventory()[4]) + "\n\n    Phiras: " + std::to_string(player.second->getInventory()[5]) + "\n\n    Thystame: " + std::to_string(player.second->getInventory()[6]) + "\n\n";
         return str;
     }
 
@@ -332,9 +398,84 @@ namespace UI {
     {
         std::string str;
 
+        try {
+            libconfig::Config cfg;
+            cfg.readFile("./Config/config.cfg");
+            libconfig::Setting &config = cfg.lookup("config");
+
+            libconfig::Config language;
+            std::string configLang = toLowerCase(std::string(config["language"]));
+            std::string languagePath = std::string("./Config/Languages/") + configLang + std::string(".cfg");
+            language.readFile(languagePath.c_str());
+
+            libconfig::Setting &lang = language.lookup("language");
+            libconfig::Setting &tileHUD = lang.lookup("tileHUD");
+            libconfig::Setting &eggHUD = tileHUD.lookup("name");
+
+            _noEgg = std::string(eggHUD["noEgg"]);
+
+            str = std::string(eggHUD["name"]) + "[" + egg.first + "]: " + egg.second->getTeam() + " - " + egg.second->getDropBy() + "\n\n  " + std::string(eggHUD["timer"]) + " " + std::to_string(egg.second->getHatchingTime(gameData.getTimeUnit())) + "\n\n";
+        } catch (const libconfig::FileIOException &fioex) {
+            std::cerr << "I/O error while reading file." << std::endl;
+            str = "Egg[" + egg.first + "]: " + egg.second->getTeam() + " - " + egg.second->getDropBy() + "\n\n  Time before hatching: " + std::to_string(egg.second->getHatchingTime(gameData.getTimeUnit())) + "\n\n";
+        } catch (const libconfig::ParseException &pex) {
+            std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError() << std::endl;
+            str = "Egg[" + egg.first + "]: " + egg.second->getTeam() + " - " + egg.second->getDropBy() + "\n\n  Time before hatching: " + std::to_string(egg.second->getHatchingTime(gameData.getTimeUnit())) + "\n\n";
+        } catch (const libconfig::SettingNotFoundException &nfex) {
+            std::cerr << "Setting not found in configuration file." << std::endl;
+            str = "Egg[" + egg.first + "]: " + egg.second->getTeam() + " - " + egg.second->getDropBy() + "\n\n  Time before hatching: " + std::to_string(egg.second->getHatchingTime(gameData.getTimeUnit())) + "\n\n";
+        } catch (const libconfig::SettingTypeException &setex) {
+            std::cerr << "Setting type error in configuration file." << std::endl;
+            str = "Egg[" + egg.first + "]: " + egg.second->getTeam() + " - " + egg.second->getDropBy() + "\n\n  Time before hatching: " + std::to_string(egg.second->getHatchingTime(gameData.getTimeUnit())) + "\n\n";
+        } catch (const libconfig::ConfigException &confex) {
+            std::cerr << "Configuration error." << std::endl;
+            str = "Egg[" + egg.first + "]: " + egg.second->getTeam() + " - " + egg.second->getDropBy() + "\n\n  Time before hatching: " + std::to_string(egg.second->getHatchingTime(gameData.getTimeUnit())) + "\n\n";
+        }
+
         if (!egg.second)
             return str;
-        str = "Egg[" + egg.first + "]: " + egg.second->getTeam() + " - " + egg.second->getDropBy() + "\n\n  Time before hatching: " + std::to_string(egg.second->getHatchingTime(gameData.getTimeUnit())) + "\n\n";
         return str;
+    }
+
+    void TileHUD::updateTileHUD()
+    {
+
+        try {
+            libconfig::Config cfg;
+            cfg.readFile("./Config/config.cfg");
+            libconfig::Setting &config = cfg.lookup("config");
+            libconfig::Config language;
+            std::string configLang = toLowerCase(std::string(config["language"]));
+            std::string languagePath = std::string("./Config/Languages/") + configLang + std::string(".cfg");
+            language.readFile(languagePath.c_str());
+            if (configLang != _language) {
+                _tilePlayerContent.clear();
+                _tileEggContent.clear();
+            }
+            _language = configLang;
+            libconfig::Setting &lang = language.lookup("language");
+            libconfig::Setting &tileHUD = lang.lookup("tileHUD");
+            libconfig::Setting &playerHUD = tileHUD.lookup("player");
+            libconfig::Setting &eggHUD = tileHUD.lookup("egg");
+            _noPlayer = std::string(playerHUD["noPlayer"]);
+            _noEgg = std::string(eggHUD["noEgg"]);
+        } catch (const libconfig::FileIOException &fioex) {
+            std::cerr << "I/O error while reading file." << std::endl;
+            _noPlayer = "No player on this tile";
+            _noEgg = "No egg on this tile";
+        } catch (const libconfig::ParseException &pex) {
+            std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError() << std::endl;
+            _noPlayer = "No player on this tile";
+            _noEgg = "No egg on this tile";
+        } catch (const libconfig::SettingNotFoundException &nfex) {
+            std::cerr << "Setting not found in configuration file." << std::endl;
+            _noPlayer = "No player on this tile";
+            _noEgg = "No egg on this tile";
+        } catch (const libconfig::SettingTypeException &setex) {
+            std::cerr << "Setting type error in configuration file." << std::endl;
+            _noPlayer = "No player on this tile";
+            _noEgg = "No egg on this tile";
+        }
+
     }
 };

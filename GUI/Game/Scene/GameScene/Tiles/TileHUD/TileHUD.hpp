@@ -122,6 +122,12 @@ namespace UI {
              */
             std::string constructEggContent(std::pair<const std::string, std::shared_ptr<Eggs>> &egg, GameData &gameData);
 
+            /**
+             * @brief updateTileHUD
+             *
+             */
+            void updateTileHUD();
+
         // Attributes
         private:
             sf::Sprite _backgroundSprite;           /*!< Sprite of the Tile HUD */
@@ -131,6 +137,8 @@ namespace UI {
             sf::Text _tilePosition;                 /*!< Text of the tile position */
             sf::Text _tileContent;                  /*!< Text of the tile content */
             sf::Text _tileClicked;                  /*!< Text of the tile clicked */
+            std::string _noPlayer;                   /*!< Text of the tile no player */
+            std::string _noEgg;                      /*!< Text of the tile no egg */
             std::unordered_map<int, sf::Text> _tilePlayerContent; /*!< Text of the tile player content */
             std::unordered_map<int, sf::Text> _tileEggContent;   /*!< Text of the tile egg content */
             std::map<RESOURCE, tileResource> _tileResourceSprite; /*!< Sprite of the tile ressource content */
@@ -140,6 +148,7 @@ namespace UI {
             IButton *_changeEggLeftButton;          /*!< Button to change the egg left */
             IButton *_changeEggRightButton;         /*!< Button to change the egg right */
             Audio::VFX *_mouseClick;                /*!< Sound of the click */
+            std::string _language;                  /*!< Language of the game */
     };
 };
 

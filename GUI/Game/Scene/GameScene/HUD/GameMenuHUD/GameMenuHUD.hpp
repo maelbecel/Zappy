@@ -62,10 +62,27 @@ namespace UI {
              */
             bool getTileDisplayMode() const;
 
+            /**
+             * @brief Set the language of the Menu HUD
+             *
+             */
+            void setLanguage();
+
+            /**
+             * @brief Set buttons with default text
+             *
+             */
+            void setButtonsDefault();
+
+            /**
+             * @brief Set buttons with text
+             *
+             */
+            void setButtons(libconfig::Setting &button);
+
         // Attributes
         private:
             sf::RectangleShape _background;         /*!< Background of the Settings HUD */
-            sf::Sprite _backgroundSprite;           /*!< Sprite of the Settings HUD */
             IButton *_resumeButton;                 /*!< Button to resume the game */
             IButton *_settingsButton;              /*!< Button to go to the settings */
             IButton *_helpButton;                  /*!< Button to go to the help */
@@ -74,6 +91,7 @@ namespace UI {
             HelpHUD _helpHUD;                       /*!< Help HUD */
             bool _isOpened;                         /*!< Is the Settings HUD opened */
             Audio::VFX *_mouseClick;                /*!< Mouse click sound */
+            std::string _language;           /*!< Language of the game */
     };
 };
 

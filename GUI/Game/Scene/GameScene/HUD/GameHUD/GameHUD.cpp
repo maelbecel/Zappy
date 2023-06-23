@@ -30,10 +30,12 @@ namespace UI {
         _speed1xText = setString("1x", sf::Vector2f(Window::getWindowWidth() - 220 - 80 + 16 * 3, 35 + 12 * 3));
         _speed2xText = setString("2x", sf::Vector2f(Window::getWindowWidth() - 220 + 15 + 16 * 3, 35 + 12 * 3));
         _speed4xText = setString("4x", sf::Vector2f(Window::getWindowWidth() - 220 + 115 + 16 * 3, 35 + 12 * 3));
+        _mouseClick = new Audio::VFX(Audio::MOUSE_CLICK, Audio::Audio::sfxVolume);
     }
 
     GameHUD::~GameHUD()
     {
+        delete _mouseClick;
     }
 
     void GameHUD::draw(sf::RenderWindow &window)
@@ -66,13 +68,19 @@ namespace UI {
             if (event.mouseButton.button != sf::Mouse::Left)
                 return;
 
+            _mouseClick->setVolume(Audio::Audio::sfxVolume);
+
             if (_speed1x->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) == true) {
+                _mouseClick->play();
                 server.sendCommand("sst 25");
             } else if (_speed2x->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) == true) {
+                _mouseClick->play();
                 server.sendCommand("sst 50");
             } else if (_speed4x->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) == true) {
+                _mouseClick->play();
                 server.sendCommand("sst 200");
             }
+
             return;
         }
     }

@@ -20,6 +20,7 @@
     #include "NetworkError.hpp"
     #include "Tile.hpp"
     #include "GameData.hpp"
+    #include "VFX.hpp"
 
 namespace UI {
     enum RESOURCE {
@@ -138,8 +139,8 @@ namespace UI {
             IButton *_changePlayerRightButton;      /*!< Button to change the player right */
             IButton *_changeEggLeftButton;          /*!< Button to change the egg left */
             IButton *_changeEggRightButton;         /*!< Button to change the egg right */
+            Audio::VFX *_mouseClick;                /*!< Sound of the click */
     };
-
 };
 
 #endif /* !TILEHUD_HPP_ */

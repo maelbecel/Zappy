@@ -10,7 +10,22 @@
 
     #include <SFML/Audio.hpp>
 
+    #include "Audio.hpp"
+
 namespace Audio {
+    const std::string MOUSE_CLICK = "./Assets/Audio/ButtonClick.wav";
+    const std::string BROADCAST1 = "./Assets/Audio/BroadCast1.wav";
+    const std::string BROADCAST2 = "./Assets/Audio/BroadCast2.wav";
+    const std::string BROADCAST3 = "./Assets/Audio/BroadCast3.wav";
+    const std::string BROADCAST4 = "./Assets/Audio/BroadCast4.wav";
+    const std::string BROADCAST5 = "./Assets/Audio/BroadCast5.wav";
+    const std::string BROADCAST6 = "./Assets/Audio/BroadCast6.wav";
+    const std::string BROADCAST7 = "./Assets/Audio/BroadCast7.wav";
+    const std::string BROADCAST8 = "./Assets/Audio/BroadCast8.wav";
+    const std::string BROADCAST9 = "./Assets/Audio/BroadCast9.wav";
+    const std::string BROADCAST10 = "./Assets/Audio/BroadCast10.wav";
+    const std::string BROADCAST11 = "./Assets/Audio/BroadCast11.wav";
+    const std::string BROADCAST12 = "./Assets/Audio/BroadCast12.wav";
 
     /**
      * @brief VFX class

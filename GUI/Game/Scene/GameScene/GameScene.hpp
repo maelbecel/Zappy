@@ -16,6 +16,7 @@
     #include "TileHUD.hpp"
     #include "GameHUD.hpp"
     #include "Music.hpp"
+    #include "VFX.hpp"
 
     #include <memory>
 
@@ -115,14 +116,15 @@ namespace Scene {
 
         // Attributes
         private:
-            GameData _gameData; /*!< The game data */
-            Map _map;           /*!< The map */
-            bool _isTileHUDOpen; /*!< If the tile HUD is open */
-            UI::TeamHUD _teamHUD; /*!< The team HUD */
-            UI::GameMenuHUD _gameMenuHUD; /*!< The game menu HUD */
-            UI::GameHUD _gameHUD; /*!< The game HUD */
-            UI::TileHUD _tileHUD; /*!< The tile HUD */
-            Audio::Music *_ost;    /*!< The game OST */
+            GameData _gameData;           /*!< The game data */
+            Map _map;                     /*!< The map */
+            bool _isTileHUDOpen;          /*!< If the tile HUD is open */
+            UI::TeamHUD *_teamHUD;         /*!< The team HUD */
+            UI::GameMenuHUD *_gameMenuHUD; /*!< The game menu HUD */
+            UI::GameHUD *_gameHUD;         /*!< The game HUD */
+            UI::TileHUD *_tileHUD;         /*!< The tile HUD */
+            Audio::Music *_ost;           /*!< The game OST */
+            Audio::VFX *_mouseClick;      /*!< The mouse click sound */
     };
 }
 

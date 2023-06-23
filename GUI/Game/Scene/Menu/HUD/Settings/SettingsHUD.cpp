@@ -47,6 +47,8 @@ namespace UI {
 
         libconfig::Config cfg;
 
+        _mouseClick = new Audio::VFX(Audio::MOUSE_CLICK, Audio::Audio::sfxVolume);
+
         try {
             cfg.readFile("./Config/config.cfg");
 
@@ -87,6 +89,7 @@ namespace UI {
 
     SettingsHUD::~SettingsHUD()
     {
+        delete _mouseClick;
     }
 
     void SettingsHUD::draw(sf::RenderWindow &window)
@@ -140,56 +143,80 @@ namespace UI {
         if (event.type == sf::Event::MouseButtonPressed) {
             if (event.mouseButton.button != sf::Mouse::Left)
                 return;
+            _mouseClick->setVolume(Audio::Audio::sfxVolume);
+
             if (_sound.isIn(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                _mouseClick->play();
                 _soundValue = std::stoi(_sound.value);
                 return;
             }
+
             if (_music.isIn(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                _mouseClick->play();
                 _musicValue = std::stoi(_music.value);
                 return;
             }
+
             if (_decreaseSoundButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                _mouseClick->play();
                 if (_soundValue > 0)
                     _soundValue -= 1;
                 return;
             }
+
             if (_increaseSoundButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                _mouseClick->play();
                 if (_soundValue < 100)
                     _soundValue += 1;
                 return;
             }
+
             if (_decreaseMusicButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                _mouseClick->play();
                 if (_musicValue > 0)
                     _musicValue -= 1;
                 return;
             }
+
             if (_increaseMusicButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                _mouseClick->play();
                 if (_musicValue < 100)
                     _musicValue += 1;
                 return;
             }
+
             if (_crossSettingsButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                _mouseClick->play();
                 _isOpened = false;
                 return;
             }
+
             if (_validateButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                _mouseClick->play();
                 saveSettings();
                 _isOpened = false;
                 return;
             }
+
             _sound.isIn(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
             _music.isIn(sf::Vector2f(event.mouseButton.x, event.mouseButton.y));
+
             if (!_isGameMenu)
                 return;
+
             if (_changeTileHUDLeftButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)) || _changeTileHUDRightButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                _mouseClick->play();
+    
                 if (_tileHUDTextMode.getString() == std::string("TileHUD mode:\n\n Text"))
                     _tileHUDTextMode = setString("TileHUD mode:\n\n Sprite", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450));
                 else
                     _tileHUDTextMode = setString("TileHUD mode:\n\n Text", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450));
                 return;
             }
+
             return;
         }
+
         _sound.handleEvent(event);
         _music.handleEvent(event);
     }

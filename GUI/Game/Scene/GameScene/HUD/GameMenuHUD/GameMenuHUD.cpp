@@ -34,18 +34,21 @@ namespace UI {
         _settingsButton = new Button(settingsButton);
         _quitButton = new Button(quitButton);
 
-        _settingsHUD = SettingsHUD(true);
+        _settingsHUD = new SettingsHUD(true);
 
+        _mouseClick = new Audio::VFX(Audio::MOUSE_CLICK, Audio::Audio::sfxVolume);
     }
 
     GameMenuHUD::~GameMenuHUD()
     {
+        delete _mouseClick;
+        delete _settingsHUD;
     }
 
     void GameMenuHUD::draw(sf::RenderWindow &window)
     {
-        if (_settingsHUD.isOpened() == true) {
-            _settingsHUD.draw(window);
+        if (_settingsHUD->isOpened() == true) {
+            _settingsHUD->draw(window);
             return;
         }
         window.draw(_background);
@@ -71,8 +74,8 @@ namespace UI {
     void GameMenuHUD::handleEvent(sf::Event event, UNUSED Network::Server &server, sf::RenderWindow &window)
     {
         if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
-            if (_settingsHUD.isOpened() == true) {
-                _settingsHUD.setOpened(false);
+            if (_settingsHUD->isOpened() == true) {
+                _settingsHUD->setOpened(false);
                 return;
             }
             _isOpened = false;
@@ -80,20 +83,27 @@ namespace UI {
         if (event.type == sf::Event::MouseButtonPressed) {
             if (event.mouseButton.button != sf::Mouse::Left)
                 return;
-            if (_settingsHUD.isOpened() == true) {
-                _settingsHUD.handleEvent(event, server, window);
-                return;
-            }
+
+            _mouseClick->setVolume(Audio::Audio::sfxVolume);
+
+            if (_settingsHUD->isOpened() == true)
+                return _settingsHUD->handleEvent(event, server, window);
+ 
             if (_resumeButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                _mouseClick->play();
                 _isOpened = false;
                 return;
             }
+ 
             if (_settingsButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
-                _settingsHUD.setOpened(true);
+                _mouseClick->play();
+                _settingsHUD->setOpened(true);
                 return;
             }
+
             if (_quitButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
                 window.close();
+                return;
             }
             return;
         }
@@ -111,6 +121,6 @@ namespace UI {
 
     bool GameMenuHUD::getTileDisplayMode() const
     {
-        return _settingsHUD.getTileHUDTextMode();
+        return _settingsHUD->getTileHUDTextMode();
     }
 };

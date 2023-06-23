@@ -18,6 +18,7 @@
     #include "ButtonWidget.hpp"
     #include "NetworkError.hpp"
     #include "SettingsHUD.hpp"
+    #include "VFX.hpp"
 
 namespace UI {
     class GameMenuHUD {
@@ -67,8 +68,9 @@ namespace UI {
             IButton *_resumeButton;                 /*!< Button to resume the game */
             IButton *_settingsButton;              /*!< Button to go to the settings */
             IButton *_quitButton;                  /*!< Button to quit the game */
-            SettingsHUD _settingsHUD;               /*!< Settings HUD */
+            SettingsHUD *_settingsHUD;               /*!< Settings HUD */
             bool _isOpened;                         /*!< Is the Settings HUD opened */
+            Audio::VFX *_mouseClick;                /*!< Mouse click sound */
     };
 };
 

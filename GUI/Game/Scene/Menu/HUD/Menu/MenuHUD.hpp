@@ -16,6 +16,7 @@
     #include "CrossButtonWidget.hpp"
     #include "NetworkError.hpp"
     #include "SettingsHUD.hpp"
+    #include "VFX.hpp"
 
 namespace UI {
     class MenuHUD {
@@ -55,12 +56,13 @@ namespace UI {
             sf::RectangleShape _background;  /*!< Background of the Menu HUD */
             InputBox _ip;                    /*!< Input box for the ip */
             InputBox _port;                  /*!< Input box for the port */
-            IButton *_connectButton;               /*!< Button to connect to the server */
-            IButton *_settingsButton;              /*!< Button to go to the settings */
-            IButton *_quitButton;                  /*!< Button to quit the game */
-            SettingsHUD _settingsHUD;              /*!< Settings HUD */
-            sf::Sprite _titleHeader;                            /*!< Title of the game */
-            sf::Text _titleText;                                /*!< Text of the title */
+            IButton *_connectButton;         /*!< Button to connect to the server */
+            IButton *_settingsButton;        /*!< Button to go to the settings */
+            IButton *_quitButton;            /*!< Button to quit the game */
+            SettingsHUD *_settingsHUD;        /*!< Settings HUD */
+            sf::Sprite _titleHeader;         /*!< Title of the game */
+            sf::Text _titleText;             /*!< Text of the title */
+            Audio::VFX *_mouseClick;         /*!< Sound of the mouse click */
     };
 };
 

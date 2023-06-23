@@ -31,9 +31,14 @@ namespace UI {
         } catch (const std::exception &e) {
             std::cerr << e.what() << std::endl;
         }
+
+        _mouseClick = new Audio::VFX(Audio::MOUSE_CLICK, Audio::Audio::sfxVolume);
     };
 
-    TeamHUD::~TeamHUD() {};
+    TeamHUD::~TeamHUD()
+    {
+        delete _mouseClick;
+    };
 
     /////////////
     // Methods //
@@ -117,8 +122,10 @@ namespace UI {
     {
         bool found = false;
 
+        _mouseClick->setVolume(Audio::Audio::sfxVolume);
         for (auto element : _teamLayout->getElements()) {
             if (static_cast<TeamWidget *>(element)->isInside(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)) == true) {
+                _mouseClick->play();
                 _teamName = static_cast<TeamWidget *>(element)->getTeamName();
                 found = true;
                 break;

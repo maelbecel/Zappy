@@ -74,6 +74,7 @@ namespace Scene {
     void GameScene::askingToServer(Network::Server &server)
     {
         static int i = 0;
+        static bool asking = false;
 
         if (_gameData.getMapSize().x == 0 || _gameData.getMapSize().y == 0) {
             server.sendCommand("msz");
@@ -81,16 +82,18 @@ namespace Scene {
             _gameData.parse(server.getSocket().response);
         }
 
-        if (i % 10 == 0) {
+        if (i % 25 == 0) {
             server.sendCommand("sgt");
             server.Run();
             _gameData.parse(server.getSocket().response);
+            asking = false;
         }
 
-        if (_gameData.getTimeUnit() % 20 == 0 || _gameData.getMap().empty()) {
+        if ((_gameData.getTimeUnit() % 20 == 0 && asking == false) || _gameData.getMap().empty()) {
             server.sendCommand("mct");
             server.Run();
             _gameData.parse(server.getSocket().response);
+            asking = true;
         }
 
         i++;
@@ -168,7 +171,8 @@ namespace Scene {
                 return _tileHUD->handleEvent(event, server, window);
 
             if (event.mouseButton.button == sf::Mouse::Left) {
-                _gameHUD->handleEvent(event, server, window);
+                if (_gameHUD->handleEvent(event, server, window))
+                    return;
 
                 if (!_tileHUD->getIsOpen()) {
                     if (LeftMousePressed(sf::Vector2i(event.mouseButton.x, event.mouseButton.y), server) == true)

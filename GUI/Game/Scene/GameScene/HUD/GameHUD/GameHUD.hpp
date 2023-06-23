@@ -43,7 +43,7 @@ namespace UI {
              * @param event  The event to handle
              * @param server The server to connect to
              */
-            void handleEvent(sf::Event event, Network::Server &server, sf::RenderWindow &window);
+            bool handleEvent(sf::Event event, Network::Server &server, sf::RenderWindow &window);
 
             /**
              * @brief Set string

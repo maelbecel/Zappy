@@ -7,7 +7,7 @@
 
 #include "Map.hpp"
 
-Map::Map() : _season(Season::SUMMER)
+Map::Map()
 {
     try {
         // Load the Tiles texture
@@ -72,17 +72,7 @@ void Map::draw(sf::RenderWindow &window, GameData &gameData)
     sf::Vector2i mapSize = gameData.getMapSize();
     sf::Vector2f scale = gameData.getScale();
     sf::Vector2f userPosition = gameData.getPosition();
-    uint time = gameData.getTimeUnit();
-
-    // Change the season if needed
-    if (time % (4 * SEASON_DURATION) < SEASON_DURATION)
-        _season = Season::SUMMER;
-    else if (time % (4 * SEASON_DURATION) < 2 * SEASON_DURATION)
-        _season = Season::EARLY_WINTER;
-    else if (time % (4 * SEASON_DURATION) < 3 * SEASON_DURATION)
-        _season = Season::WINTER;
-    else
-        _season = Season::LATE_WINTER;
+    Season season = string_to_season(gameData.getSeason());
 
     for (int height = mapSize.y + SEA_SIZE * 2 - 1; height > -1; height--) {
         for (int width = mapSize.x + SEA_SIZE * 2 - 1; width > -1; width--) {
@@ -104,7 +94,7 @@ void Map::draw(sf::RenderWindow &window, GameData &gameData)
                 sprite->setScale(scale.x + 2.00, scale.y + 1.25);
                 window.draw(*sprite);
             } else {
-                sprite = (_season != Season::SUMMER) ? drawWinter(height, width, gameData) : drawSummer(height, width, gameData);
+                sprite = drawSeason(height, width, gameData, season);
 
                 std::shared_ptr<Tile> tile = map[std::make_pair(width - SEA_SIZE, height - SEA_SIZE)];
 
@@ -127,6 +117,7 @@ void Map::drawBiome(sf::RenderWindow &window, GameData &gameData)
     sf::Vector2f scale = gameData.getScale();
     sf::Vector2f userPosition = gameData.getPosition();
     double **noise = gameData.getNoise();
+    Season season = string_to_season(gameData.getSeason());
 
     for (int height = mapSize.y + SEA_SIZE * 2 - 1; height > -1; height--) {
         for (int width = mapSize.x + SEA_SIZE * 2 - 1; width > -1; width--) {
@@ -140,7 +131,20 @@ void Map::drawBiome(sf::RenderWindow &window, GameData &gameData)
                 (width + height) * (25 * (scale.x + 2)),
                 (width - height) * ((Tile::TILE_WIDTH - 3) * (scale.y + 1.25) / 2)
             );
-            sf::Sprite *sprite = (_season == WINTER) ? _tiles["SnowForest"] : _tiles["Forest"];
+            sf::Sprite *sprite;
+            
+            if (season == Season::WINTER) {
+                if (noise[height - SEA_SIZE][width - SEA_SIZE] > 0.65 && noise[height - SEA_SIZE][width - SEA_SIZE] < 0.75)
+                    sprite = _tiles["Forest"];
+                else
+                    sprite = _tiles["SnowForest"];
+            } else if (season == Season::AUTUMN) {
+                if (noise[height - SEA_SIZE][width - SEA_SIZE] > 0.3 && noise[height - SEA_SIZE][width - SEA_SIZE] < 0.4)
+                    sprite = _tiles["SnowForest"];
+                else
+                    sprite = _tiles["Forest"];
+            } else
+                sprite = _tiles["Forest"];
 
             position.x += userPosition.x;
             position.y += userPosition.y;
@@ -169,28 +173,32 @@ void Map::drawBiome(sf::RenderWindow &window, GameData &gameData)
     }
 }
 
-sf::Sprite *Map::drawSummer(int height, int width, GameData &gameData)
+sf::Sprite *Map::drawSeason(int height, int width, GameData &gameData, Season season)
 {
     double **noise = gameData.getNoise();
 
-    if (noise[height - SEA_SIZE][width - SEA_SIZE] < 0.3)
-        return _tiles["Desert"];
-    return _tiles["Grass"];
-}
-
-sf::Sprite *Map::drawWinter(int height, int width, GameData &gameData)
-{
-    double **noise = gameData.getNoise();
-
-    if (_season == Season::EARLY_WINTER) {
-        if (noise[height - SEA_SIZE][width - SEA_SIZE] < 0.5)
-            return _tiles["Snow"];
+    if (season == Season::SUMMER) {
+        if (noise[height - SEA_SIZE][width - SEA_SIZE] < 0.3)
+            return _tiles["Desert"];
         return _tiles["Grass"];
-    } else if (_season == Season::LATE_WINTER) {
-        if (noise[height - SEA_SIZE][width - SEA_SIZE] < 0.7)
+    }
+
+    if (season == Season::WINTER)
+        return _tiles["Snow"];
+    
+    if (season == Season::SPRING) {
+        if (noise[height - SEA_SIZE][width - SEA_SIZE] < 0.3)
+            return _tiles["Desert"];
+        return _tiles["Grass"];
+    }
+    
+    if (season == Season::AUTUMN) {
+        if (noise[height - SEA_SIZE][width - SEA_SIZE] < 0.3)
+            return _tiles["Desert"];
+        if (noise[height - SEA_SIZE][width - SEA_SIZE] >= 0.3 && noise[height - SEA_SIZE][width - SEA_SIZE] < 0.5)
             return _tiles["Snow"];
         return _tiles["Grass"];
     }
 
-    return _tiles["Snow"];
+    return _tiles["Grass"];
 }

@@ -26,20 +26,28 @@ int Window::getWindowHeight() {
 
 void Window::readConfigFile() {
     libconfig::Config cfg;
-    cfg.readFile("./Config/config.cfg");
-    libconfig::Setting& config = cfg.lookup("config");
-
-    if (config.exists("screen")) {
-        const libconfig::Setting& screen = config["screen"];
-        if (screen.exists("width")) {
-            Window::width = screen["width"];
-        }
-        if (screen.exists("height")) {
-            Window::height = screen["height"];
+    try {
+        cfg.readFile("./Config/config.cfg");
+        libconfig::Setting& config = cfg.lookup("config");
+        if (config.exists("screen")) {
+            const libconfig::Setting& screen = config["screen"];
+            if (screen.exists("width")) {
+                Window::width = screen["width"];
+            }
+            if (screen.exists("height")) {
+                Window::height = screen["height"];
+            }
         }
     }
+    catch (const libconfig::FileIOException& fioex) {
+        std::cerr << "I/O error while reading file." << std::endl;
+    }
+    catch (const libconfig::ParseException& pex) {
+        std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError() << std::endl;
+    }
+
     if (Window::width == 0 || Window::height == 0) {
-        Window::width = 1920;
-        Window::height = 1080;
+        Window::width = 1600;
+        Window::height = 900;
     }
 }

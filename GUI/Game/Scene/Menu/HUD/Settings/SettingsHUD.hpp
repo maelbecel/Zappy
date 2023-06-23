@@ -78,6 +78,18 @@ namespace UI {
              */
             void saveSettings();
 
+            /**
+             * @brief Set the language of the Menu HUD
+             *
+             */
+            void setLanguage();
+
+            /**
+             * @brief Set buttons with default text
+             *
+             */
+            void setButtonsDefault();
+
         // Attributes
         private:
             sf::RectangleShape _background;         /*!< Background of the Settings HUD */
@@ -86,8 +98,8 @@ namespace UI {
             IButton *_increaseSoundButton;          /*!< Button to increase the sound */
             IButton *_decreaseMusicButton;          /*!< Button to decrease the music */
             IButton *_increaseMusicButton;          /*!< Button to increase the music */
-            // IButton *_changeLanguageLeftButton;  /*!< Button to change the language to the left */
-            // IButton *_changeLanguageRightButton; /*!< Button to change the language to the right */
+            IButton *_changeLanguageLeftButton;  /*!< Button to change the language to the left */
+            IButton *_changeLanguageRightButton; /*!< Button to change the language to the right */
             IButton *_changeTileHUDLeftButton;      /*!< Button to change the tile HUD to the left */
             IButton *_changeTileHUDRightButton;     /*!< Button to change the tile HUD to the right */
             IButton *_crossSettingsButton;          /*!< Button to close the settings */
@@ -96,9 +108,12 @@ namespace UI {
             InputBox _music;                        /*!< Input box for the music */
             int _soundValue;                        /*!< Value of the sound */
             int _musicValue;                        /*!< Value of the music */
-            sf::Text _tileHUDTextMode;              /*!< Is the tile HUD in text mode */
+            std::map<int, sf::Text> _tileHUDModes;   /*!< Map of the tile HUD modes */
+            std::map<int, sf::Text> _languages;      /*!< Map of the languages */
+            sf::Text _languageText;                 /*!< Language text */
             bool _isOpened;                         /*!< Is the Settings HUD opened */
             bool _isGameMenu;                       /*!< Is the Game Menu HUD opened */
+            bool _tileHUDTextMode;              /*!< Is the tile HUD in text mode */
             Audio::VFX *_mouseClick;                /*!< Mouse click sound */
     };
 };

@@ -19,6 +19,7 @@ namespace UI {
         RectangleColorBg.apply(_background);
 
         _background.setPosition(sf::Vector2f(0.0f, 0.0f));
+        _asteroid.setPosition(sf::Vector2f(0, 0));
         _planet.setPosition(sf::Vector2f((float)(Window::getWindowWidth() / 2) - 300, (float)(Window::getWindowHeight() / 2) - 300 + 50));
 
         setLanguage();
@@ -70,6 +71,7 @@ namespace UI {
     void MenuHUD::draw(sf::RenderWindow &window)
     {
         _planet.draw(window, sf::RenderStates::Default);
+        _asteroid.draw(window, sf::RenderStates::Default);
         window.draw(_titleHeader);
         window.draw(_titleText);
         setLanguage();

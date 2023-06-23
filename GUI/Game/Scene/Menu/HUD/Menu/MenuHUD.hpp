@@ -13,6 +13,7 @@
     #include "Server.hpp"
     #include "Button.hpp"
     #include "Planet.hpp"
+    #include "Asteroid.hpp"
     #include "ButtonWidget.hpp"
     #include "CrossButtonWidget.hpp"
     #include "NetworkError.hpp"
@@ -94,6 +95,7 @@ namespace UI {
             IButton *_crossButton;           /*!< Button to close the pop up */
             SettingsHUD *_settingsHUD;        /*!< Settings HUD */
             Audio::VFX *_mouseClick;         /*!< Sound of the mouse click */
+            AsteroidHandler _asteroid;              /*!< Asteroid of the Menu HUD */
             Planet _planet;                  /*!< Planet of the Menu HUD */
             bool _popUp;                     /*!< Boolean to know if the pop up is opened */
             bool _changePlanet;              /*!< Boolean to know if the planet is changing */

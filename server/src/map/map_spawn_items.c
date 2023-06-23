@@ -9,6 +9,14 @@
 #include "server.h"
 #include "command.h"
 
+static const float spawn_rate_modifier[] = {
+    0,
+    0.8,
+    1,
+    0.7,
+    0.5
+};
+
 static tile_t *get_random_tile(server_t *server)
 {
     int x = rand() % server->map->width;
@@ -19,7 +27,9 @@ static tile_t *get_random_tile(server_t *server)
 
 static uint get_spawn_quantity(server_t *server, item_t item)
 {
-    return (server->map->width * server->map->height * spawn_rate[item]);
+    float spawn_rate_seasoning =
+    spawn_rate_modifier[server->time->currentSeason] * spawn_rate[item];
+    return (server->map->width * server->map->height * spawn_rate_seasoning);
 }
 
 static void put_item(server_t *server, int i)

@@ -79,7 +79,6 @@ namespace UI {
     {
         window.draw(_background);
         window.draw(_backgroundSprite);
-        updateTileHUD();
         if (_textMode == false) {
             window.draw(_tileClicked);
             for (auto &resource : _tileResourceSprite) {
@@ -238,6 +237,8 @@ namespace UI {
     {
         _textMode = textMode;
 
+        _tilePlayerContent.clear();
+        _tileEggContent.clear();
         int i = 0;
         for (auto &player : gameData.getPlayers()) {
             if (player.second->getPosition() != sf::Vector2i(x, y))

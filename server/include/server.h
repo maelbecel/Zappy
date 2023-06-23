@@ -15,6 +15,7 @@
     #include "olist.h"
     #include "osocket.h"
     #include "map.h"
+    #include "season.h"
 
     #ifndef NULL
         #define NULL (0)
@@ -47,8 +48,10 @@ typedef struct time_manager_s {
     struct timeval last;
     struct timeval current;
     double secPerTick;
+    season_t currentSeason;
     uint actionLastTick;
     uint spawnItemLastTick;
+    uint seasonLastTick;
 } time_manager_t;
 
 typedef struct egg_s {
@@ -319,5 +322,12 @@ int catch_sigint(server_t *stop);
  * @return false
  */
 bool check_win_condition(server_t *server);
+
+/**
+ * @brief Update season
+ *
+ * @param server Link to server object
+ */
+void season_update(server_t *server);
 
 #endif /* !SERVER_H_ */

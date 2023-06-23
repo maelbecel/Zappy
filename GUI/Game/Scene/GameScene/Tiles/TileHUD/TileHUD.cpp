@@ -17,10 +17,14 @@ namespace UI {
         RectangleColorBg.apply(_background);
         _background.setPosition(sf::Vector2f(0.0f, 0.0f));
 
-        sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Paper UI Pack/Paper UI/Folding & Cutout/8 Shop/1.png");
-        _backgroundSprite = sf::Sprite(*texture);
-        _backgroundSprite.setPosition(sf::Vector2f(Window::getWindowWidth() - 416 * 2, 0));
-        _backgroundSprite.setScale(sf::Vector2f(2.0f, 2.0f));
+        try {
+            sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Paper UI Pack/Paper UI/Folding & Cutout/8 Shop/1.png");
+            _backgroundSprite = sf::Sprite(*texture);
+            _backgroundSprite.setPosition(sf::Vector2f(Window::getWindowWidth() - 416 * 2, 0));
+            _backgroundSprite.setScale(sf::Vector2f(2.0f, 2.0f));
+        } catch (const Error::TextureError &e) {
+            std::cerr << "Bad Initialization of TileHUD: " << e.what() << std::endl;
+        }
 
         _isOpen = false;
 

@@ -9,16 +9,17 @@
 #include "command.h"
 #include "ai.h"
 #include "utils.h"
+#include "wbuffer.h"
 
 int do_ppo(client_t *client, client_t *graphic)
 {
     ai_t *ai = client->data;
 
     if (!ai) {
-        dprintf(client->socket->fd, "sbp\n");
+        wbuffer_add_msg(graphic, "sbp\n");
         return 0;
     }
-    dprintf(graphic->socket->fd, "ppo %ld %d %d %d\n", client->id, ai->x, ai->y,
+    wbuffer_add_message(graphic, "ppo %ld %d %d %d\n", client->id, ai->x, ai->y,
     ai->orientation);
     return 0;
 }
@@ -28,12 +29,12 @@ int ppo(client_t *client, server_t *server, char **args)
     client_t *target = NULL;
 
     if (array_size(args) != 2) {
-        dprintf(client->socket->fd, "sbp\n");
+        wbuffer_add_msg(client, "sbp\n");
         return 0;
     }
     target = client_get_by_id(server, atoi(args[1]));
     if (!target) {
-        dprintf(client->socket->fd, "sbp\n");
+        wbuffer_add_msg(client, "sbp\n");
         return 0;
     }
     return do_ppo(target, client);

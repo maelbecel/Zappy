@@ -13,7 +13,7 @@ namespace Scene {
     /////////////////
     // Constructor //
     /////////////////
-    GameScene::GameScene() : _isTileHUDOpen(false)
+    GameScene::GameScene() : _isTileHUDOpen(false), _isTeamActivated(true)
     {
         _ost = new Audio::Music(Audio::GAME_OST, Audio::Audio::musicVolume, true);
         _mouseClick = new Audio::VFX(Audio::MOUSE_CLICK, Audio::Audio::sfxVolume);
@@ -118,7 +118,8 @@ namespace Scene {
             return;
         }
 
-        _teamHUD->draw(window);
+        if (_isTeamActivated)
+            _teamHUD->draw(window);
         _gameHUD->draw(window);
     }
 
@@ -130,6 +131,8 @@ namespace Scene {
             return _gameMenuHUD->handleEvent(event, server, window);
 
         if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::T)
+                _isTeamActivated = !_isTeamActivated;
             if (event.key.code == sf::Keyboard::Escape) {
                 if (_tileHUD->getIsOpen()) {
                     _tileHUD->setIsOpen(false);
@@ -235,7 +238,6 @@ namespace Scene {
                 break;
             }
         }
-        
         return _isTileHUDOpen;
     };
 

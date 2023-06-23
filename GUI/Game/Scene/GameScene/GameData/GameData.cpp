@@ -8,12 +8,14 @@
 #include "GameData.hpp"
 
 uint GameData::timeUnit = 0;
+uint GameData::gameSpeed = 0;
 
 GameData::GameData() : _mapSize(sf::Vector2i(0, 0)), _gameScale(1.0f), _scale(sf::Vector2f(1.0f, 1.0f)), _position(sf::Vector2f(0, 900 / 2))
 {
     _teams = std::vector<std::string>();
 
     GameData::timeUnit = 0;
+    GameData::gameSpeed = 0;
 };
 
 GameData::~GameData()
@@ -99,7 +101,6 @@ int GameData::setTimeUnit(const std::string &timeUnit)
 
     try {
         int time = std::stoi(t);
-
         GameData::timeUnit = time;
     } catch (std::invalid_argument &e) {
         throw Error::InvalidArgument("GameData::setTimeUnit");
@@ -116,7 +117,6 @@ int GameData::addTimeUnit(const std::string &timeUnit)
 
     try {
         int time = std::stoi(t);
-
         GameData::timeUnit += time;
     } catch (std::invalid_argument &e) {
         throw Error::InvalidArgument("GameData::addTimeUnit");
@@ -133,7 +133,7 @@ int GameData::setMultipleTileContent(const std::string &tiles)
 
     while (ss >> temp)
         tilesVector.push_back(temp);
-    
+
     for (auto &tile : tilesVector)
         setSingleTileContent(tile);
     return 0;
@@ -165,7 +165,7 @@ int GameData::setSingleTileContent(const std::string &tile)
         int q5Int = std::stoi(q5);
         int q6Int = std::stoi(q6);
 
-        
+
         // Check if the map[x][y] already exists
         if (_map.find(std::make_pair(xInt, yInt)) != _map.end()) {
             _map[std::make_pair(xInt, yInt)]->setNewResources(q0Int, q1Int, q2Int, q3Int, q4Int, q5Int, q6Int);
@@ -306,7 +306,7 @@ int GameData::setPlayerMovement(const std::string &player)
         // Check if the #n players didn't exists
         if (_players.find(name) == _players.end())
             return 0;
-        
+
         int xInt = std::stoi(x);
         int yInt = std::stoi(y);
         int oriantationInt = std::stoi(orientation);

@@ -10,12 +10,28 @@
 #include "client.h"
 #include "olog.h"
 
+/**
+ * The function updates the maximum file descriptor for the server's select
+ * object based on the file descriptors of the server's socket and its
+ * clients' sockets.
+ *
+ * @param server a pointer to a server_t struct, which contains information
+ * about the server and its clients.
+ *
+ * @return If `server->select` is `NULL`, the function returns without doing
+ * anything. Otherwise, it clears the read and write file descriptor sets
+ * using `FD_ZERO`, sets the server socket file descriptor in the read file
+ * descriptor set using `FD_SET`, and sets the file descriptors of all
+ * connected clients in both the read and write file descriptor sets using
+ * `FD_SET`. Finally, it updates the maximum file
+ */
 static void update_max_fd(server_t *server)
 {
     if (!server->select)
         return;
     FD_ZERO(&server->select->readfds);
     FD_ZERO(&server->select->writefds);
+    FD_ZERO(&server->select->exceptfds);
     FD_SET(server->socket->fd, &server->select->readfds);
 
     OLIST_FOREACH(server->clients, node) {
@@ -23,28 +39,39 @@ static void update_max_fd(server_t *server)
 
         FD_SET(client->socket->fd, &server->select->readfds);
         FD_SET(client->socket->fd, &server->select->writefds);
+        FD_SET(client->socket->fd, &server->select->exceptfds);
         if ((uint) client->socket->fd > server->select->maxfd)
             server->select->maxfd = client->socket->fd;
     }
 }
 
+/**
+ * This function runs a loop that updates the server and handles
+ * client connections and actions.
+ *
+ * @param server a pointer to a server_t struct, which likely
+ * contains information about the game server being run.
+ *
+ * @return an integer value of 0.
+ */
 int main_loop(server_t *server)
 {
     map_spawn_items(server, false);
+    catch_sigint(server);
     while (server->running) {
         update_max_fd(server);
         if (select(server->select->maxfd + 1, &server->select->readfds,
-            &server->select->writefds, NULL, NULL) == -1) {
-            perror("select");
+            &server->select->writefds, &server->select->exceptfds, NULL) == -1)
             break;
-        }
         if (client_accept(server) == EXIT_FAILTEK)
-            return EXIT_FAILTEK;
+            continue;
         if (client_read(server) == EXIT_FAILTEK)
-            return EXIT_FAILTEK;
+            continue;
         time_update(server->time);
         action_update(server);
         map_spawn_items(server, true);
+        check_win_condition(server);
     }
+    server_destroy(server);
     return 0;
 }

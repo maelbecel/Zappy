@@ -20,10 +20,12 @@ SRC	=	./Main.cpp\
 		./Game/Scene/GameScene/HUD/GameHUD/GameHUD.cpp\
 		./Game/Scene/GameScene/HUD/TeamHUD/TeamHUD.cpp\
 		./Game/Scene/GameScene/HUD/TeamHUD/Widget/TeamWidget.cpp\
+		./Game/Scene/GameScene/HUD/HelpHUD/HelpHUD.cpp\
 		./Game/Scene/Menu/Menu.cpp\
 		./Game/Scene/Menu/HUD/Menu/MenuHUD.cpp\
 		./Game/Scene/Menu/HUD/Menu/Widget/InputBox.cpp\
 		./Game/Scene/Menu/HUD/Menu/Widget/ButtonWidget.cpp\
+		./Game/Scene/Menu/HUD/Menu/Widget/Planet.cpp\
 		./Game/Scene/Menu/HUD/Settings/Widget/ArrowButtonWidget.cpp\
 		./Game/Scene/Menu/HUD/Settings/Widget/ValidateButtonWidget.cpp\
 		./Game/Scene/Menu/HUD/Settings/Widget/CrossButtonWidget.cpp\
@@ -64,6 +66,7 @@ INCLUDE =	-I .\
 			-I ./Game/Scene/GameScene/HUD/GameMenuHUD/\
 			-I ./Game/Scene/GameScene/HUD/GameHUD/\
 			-I ./Game/Scene/GameScene/HUD/TeamHUD/\
+			-I ./Game/Scene/GameScene/HUD/HelpHUD/\
 			-I ./Game/Scene/GameScene/HUD/TeamHUD/Widget/\
 			-I ./Game/Scene/Menu/\
 			-I ./Game/Scene/Menu/HUD/Menu\

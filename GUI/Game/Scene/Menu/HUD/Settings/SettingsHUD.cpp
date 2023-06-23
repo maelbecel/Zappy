@@ -16,10 +16,14 @@ namespace UI {
 
         _background.setPosition(sf::Vector2f(0.0f, 0.0f));
 
-        sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Paper UI Pack/Paper UI/Folding & Cutout/10 Calander/1.png");
-        _backgroundSprite = sf::Sprite(*texture);
-        _backgroundSprite.setPosition(sf::Vector2f((Window::getWindowWidth() - (656 * 1.5)) / 2, (Window::getWindowHeight() - (544 * 1.5)) / 2));
-        _backgroundSprite.setScale(sf::Vector2f(1.5f, 1.5f));
+        try {
+            sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Paper UI Pack/Paper UI/Folding & Cutout/10 Calander/1.png");
+            _backgroundSprite = sf::Sprite(*texture);
+            _backgroundSprite.setPosition(sf::Vector2f((Window::getWindowWidth() - (656 * 1.5)) / 2, (Window::getWindowHeight() - (544 * 1.5)) / 2));
+            _backgroundSprite.setScale(sf::Vector2f(1.5f, 1.5f));
+        } catch (const Error::TextureError &e) {
+            std::cerr << "Bad Initialization of SettingsHUD: " << e.what() << std::endl;
+        }
 
         _sound = InputBox(std::string("Sound :"), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 250), BUTTON_STD_SIZE);
         _music = InputBox(std::string("Music :"), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 350), BUTTON_STD_SIZE);

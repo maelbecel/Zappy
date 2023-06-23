@@ -15,6 +15,7 @@
 int main(int ac, char **av)
 {
     try {
+        srand(time(NULL));
         Parser parser(ac, av);
         Window::readConfigFile();
         Audio::Audio::readConfigFile();

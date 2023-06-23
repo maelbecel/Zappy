@@ -52,6 +52,15 @@ Mkfile.old
 dkms.conf
 a.out
 
+# python stuff:
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+.pytest_cache/
+
+# vscode stuff:
+.vscode/
 # Build folder
 build/
 
@@ -60,6 +69,8 @@ build/
 .vscode
 *.code-workspace
 
+zappy_server-1-4.tgz
 zappy_server
 zappy_gui
+unit_tests
 *.vscode

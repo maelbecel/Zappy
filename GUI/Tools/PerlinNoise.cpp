@@ -8,10 +8,7 @@
 #include "PerlinNoise.hpp"
 
 namespace Math {
-    Noise::Noise() : _width(0), _height(0)
-    {
-        srand(time(NULL));
-    };
+    Noise::Noise() : _width(0), _height(0) {};
 
     Noise::~Noise()
     {

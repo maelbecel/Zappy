@@ -19,6 +19,17 @@ typedef enum {
     WEST = 4
 } orientation_t;
 
+typedef enum {
+    N = 1,
+    NW = 2,
+    W = 3,
+    SW = 4,
+    S = 5,
+    SE = 6,
+    E = 7,
+    NE = 8
+} rotation_orientation_t;
+
 typedef struct ai_s {
     ulong id;
     uint level;
@@ -54,5 +65,14 @@ void ai_destroy(ai_t *ai);
  * @param server
  */
 void ai_dead(client_t *client, server_t *server, bool disconnect);
+
+/**
+ * @brief Get direction from orientation
+ *
+ * @param ai
+ * @param orientation
+ * @return int
+ */
+int ai_get_direction_from_orientation(ai_t *ai, orientation_t orientation);
 
 #endif

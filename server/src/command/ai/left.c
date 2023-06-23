@@ -6,6 +6,7 @@
 */
 
 #include "command.h"
+#include "wbuffer.h"
 
 static void action_left(action_t *action)
 {
@@ -13,9 +14,9 @@ static void action_left(action_t *action)
     ai_t *ai = client->data;
 
     if (!ai || !action->data[1] || !client) {
-        OLOG_FATAL("Forward action: missing data for id#%ld fd#%d\n",
+        OLOG_FATAL("Left action: missing data for id#%ld fd#%d",
         client->id, client->socket->fd);
-        dprintf(client->socket->fd, "ko\n");
+        wbuffer_add_msg(client, "ko\n");
         return;
     }
     switch (ai->orientation) {
@@ -25,7 +26,7 @@ static void action_left(action_t *action)
         case WEST:  ai->orientation = SOUTH; break;
     }
     notif_graphic(client, action->data[1], &do_ppo);
-    dprintf(client->socket->fd, "ok\n");
+    wbuffer_add_msg(client, "ok\n");
 }
 
 int left(client_t *client, server_t *server, UNUSED char **args)

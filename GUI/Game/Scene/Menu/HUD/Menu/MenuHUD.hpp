@@ -12,6 +12,7 @@
     #include "InputBox.hpp"
     #include "Server.hpp"
     #include "Button.hpp"
+    #include "Planet.hpp"
     #include "ButtonWidget.hpp"
     #include "CrossButtonWidget.hpp"
     #include "NetworkError.hpp"
@@ -51,9 +52,20 @@ namespace UI {
              */
             void Initialize(std::string ip = "", std::string port = "");
 
+            /**
+             * @brief Set string
+             *
+             * @param str The string to set
+             * @param pos The position of the string
+             * @param fontSize The size of the font
+             */
+            sf::Text setString(std::string str, sf::Vector2f pos, size_t fontSize);
+
         // Attributes
         private:
             sf::RectangleShape _background;  /*!< Background of the Menu HUD */
+            sf::Sprite _popUpSprite;         /*!< Pop up for the server error */
+            sf::Text _popUpText;             /*!< Text of the pop up */
             InputBox _ip;                    /*!< Input box for the ip */
             InputBox _port;                  /*!< Input box for the port */
             IButton *_connectButton;         /*!< Button to connect to the server */
@@ -63,6 +75,10 @@ namespace UI {
             sf::Sprite _titleHeader;         /*!< Title of the game */
             sf::Text _titleText;             /*!< Text of the title */
             Audio::VFX *_mouseClick;         /*!< Sound of the mouse click */
+            Planet _planet;                  /*!< Planet of the Menu HUD */
+            IButton *_planetButton;        /*!< Button to go to the settings */
+            IButton *_crossButton;           /*!< Button to close the pop up */
+            bool _popUp;                     /*!< Boolean to know if the pop up is opened */
     };
 };
 

@@ -133,7 +133,7 @@ namespace UI {
                 if (distance <= radius)
                 {
                     float intensity = 1.0f - distance / radius + 0.1f;
-                    intensity = intensity > 1 ?  : intensity;
+                    intensity = intensity > 1 ? 1 : intensity;
                     sf::Color color =  image.getPixel(x + rotationAngle, y);
                     if (x + rotationAngle > (int)image.getSize().x)
                         color = image.getPixel(x + rotationAngle - image.getSize().x, y);

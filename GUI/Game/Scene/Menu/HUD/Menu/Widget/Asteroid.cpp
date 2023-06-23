@@ -10,7 +10,6 @@
 #include "Asteroid.hpp"
 #include <cmath>
 
-#define RANDOM(min, max) (rand() % (max - min + 1) + min)
 #define RANDFLOAT(min, max) (min + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(max-min))))
 #define WIDTH Window::getWindowWidth()
 #define HEIGHT Window::getWindowHeight()

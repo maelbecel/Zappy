@@ -53,6 +53,7 @@ void map_spawn_items(server_t *server, bool checkTime)
         n = (tickDiff / 20);
     } else
         n = 1;
+    n = (n > 10) ? 10 : n;
     for (uint i = 0; i < n; i++)
         spawn_items(server);
     server->time->spawnItemLastTick = server->time->tick;

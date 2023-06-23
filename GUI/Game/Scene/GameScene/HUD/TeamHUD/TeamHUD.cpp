@@ -31,9 +31,14 @@ namespace UI {
         } catch (const std::exception &e) {
             std::cerr << e.what() << std::endl;
         }
+
+        _mouseClick = new Audio::VFX(Audio::MOUSE_CLICK, Audio::Audio::sfxVolume);
     };
 
-    TeamHUD::~TeamHUD() {};
+    TeamHUD::~TeamHUD()
+    {
+        delete _mouseClick;
+    };
 
     /////////////
     // Methods //
@@ -49,7 +54,7 @@ namespace UI {
 
     void TeamHUD::drawCursor(sf::RenderWindow &window, GameData &data)
     {
-        std::map<std::string, std::shared_ptr<Player>> players = data.getPlayers();
+        std::map<std::string, Player *> players = data.getPlayers();
         sf::Vector2f scale = data.getScale();
         sf::Vector2i size = data.getMapSize();
         sf::Vector2f userPosition = data.getPosition();
@@ -117,8 +122,10 @@ namespace UI {
     {
         bool found = false;
 
+        _mouseClick->setVolume(Audio::Audio::sfxVolume);
         for (auto element : _teamLayout->getElements()) {
             if (static_cast<TeamWidget *>(element)->isInside(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)) == true) {
+                _mouseClick->play();
                 _teamName = static_cast<TeamWidget *>(element)->getTeamName();
                 found = true;
                 break;

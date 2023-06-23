@@ -12,6 +12,7 @@
 
     #include "TeamWidget.hpp"
     #include "VerticalLayout.hpp"
+    #include "VFX.hpp"
 
 class GameData;
 
@@ -66,6 +67,7 @@ namespace UI {
             std::vector<std::string> _teams; /*!< The teams of the HUD */
             sf::Sprite *_cursor;             /*!< The cursor of the HUD */
             std::string _teamName;           /*!< The name of the team that got clicked */
+            Audio::VFX *_mouseClick;         /*!< The sound of the mouse click */
     };
 };
 

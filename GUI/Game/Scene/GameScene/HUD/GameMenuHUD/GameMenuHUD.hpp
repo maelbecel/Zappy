@@ -18,6 +18,7 @@
     #include "ButtonWidget.hpp"
     #include "NetworkError.hpp"
     #include "SettingsHUD.hpp"
+    #include "VFX.hpp"
     #include "HelpHUD.hpp"
 
 namespace UI {
@@ -69,9 +70,10 @@ namespace UI {
             IButton *_settingsButton;              /*!< Button to go to the settings */
             IButton *_helpButton;                  /*!< Button to go to the help */
             IButton *_quitButton;                  /*!< Button to quit the game */
-            SettingsHUD _settingsHUD;               /*!< Settings HUD */
+            SettingsHUD *_settingsHUD;               /*!< Settings HUD */
             HelpHUD _helpHUD;                       /*!< Help HUD */
             bool _isOpened;                         /*!< Is the Settings HUD opened */
+            Audio::VFX *_mouseClick;                /*!< Mouse click sound */
     };
 };
 

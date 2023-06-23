@@ -65,9 +65,26 @@ Player::Player(sf::Vector2i position, int direction, int level, std::string team
         _inventory[i] = 0;
 
     _placement = rand() % 5 + 1;
+
+    _vfx.push_back(new Audio::VFX(Audio::BROADCAST1, Audio::Audio::sfxVolume));
+    _vfx.push_back(new Audio::VFX(Audio::BROADCAST2, Audio::Audio::sfxVolume));
+    _vfx.push_back(new Audio::VFX(Audio::BROADCAST3, Audio::Audio::sfxVolume));
+    _vfx.push_back(new Audio::VFX(Audio::BROADCAST4, Audio::Audio::sfxVolume));
+    _vfx.push_back(new Audio::VFX(Audio::BROADCAST5, Audio::Audio::sfxVolume));
+    _vfx.push_back(new Audio::VFX(Audio::BROADCAST6, Audio::Audio::sfxVolume));
+    _vfx.push_back(new Audio::VFX(Audio::BROADCAST7, Audio::Audio::sfxVolume));
+    _vfx.push_back(new Audio::VFX(Audio::BROADCAST8, Audio::Audio::sfxVolume));
+    _vfx.push_back(new Audio::VFX(Audio::BROADCAST9, Audio::Audio::sfxVolume));
+    _vfx.push_back(new Audio::VFX(Audio::BROADCAST10, Audio::Audio::sfxVolume));
+    _vfx.push_back(new Audio::VFX(Audio::BROADCAST11, Audio::Audio::sfxVolume));
+    _vfx.push_back(new Audio::VFX(Audio::BROADCAST12, Audio::Audio::sfxVolume));
 }
 
-Player::~Player() {}
+Player::~Player()
+{
+    for (auto &vfx : _vfx)
+        delete vfx;
+}
 
 sf::Vector2i Player::getPosition() const
 {
@@ -147,6 +164,9 @@ void Player::setBroadcast(bool broadcast)
         _idle = false;
         _expulsion = false;
         _broadcastAnim->play();
+
+        _vfx[rand() % 12]->play();
+
         _idleAnim->stop();
         _pushAnim->stop();
     }

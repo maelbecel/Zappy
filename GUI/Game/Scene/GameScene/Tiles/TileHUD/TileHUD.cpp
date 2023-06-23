@@ -61,10 +61,12 @@ namespace UI {
         } catch (const Error::TextureError &e) {
             std::cerr << e.what() << std::endl;
         }
+        _mouseClick = new Audio::VFX(Audio::MOUSE_CLICK, Audio::Audio::sfxVolume);
     }
 
     TileHUD::~TileHUD()
     {
+        delete _mouseClick;
     }
 
     void TileHUD::draw(sf::RenderWindow &window)
@@ -146,12 +148,18 @@ namespace UI {
             if (event.mouseButton.button != sf::Mouse::Left)
                 return;
 
+            _mouseClick->setVolume(Audio::Audio::sfxVolume);
+
             if (_crossTileHUDButton->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) == true) {
+                _mouseClick->play();
                 _isOpen = false;
             }
+
             if (_tilePlayerContent.size() < 2)
                 return;
+
             if (_changePlayerLeftButton->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) == true) {
+                _mouseClick->play();
                 _changePlayerLeftButton->setValue(_changePlayerLeftButton->getValue() - 1);
                 if (_changePlayerLeftButton->getValue() < 0)
                     _changePlayerLeftButton->setValue(_tilePlayerContent.size() - 1);
@@ -159,7 +167,9 @@ namespace UI {
                 if (_changePlayerRightButton->getValue() < 0)
                     _changePlayerRightButton->setValue(_tilePlayerContent.size() - 1);
             }
+
             if (_changePlayerRightButton->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) == true) {
+                _mouseClick->play();
                 _changePlayerLeftButton->setValue(_changePlayerLeftButton->getValue() + 1);
                 if (_changePlayerLeftButton->getValue() > (ssize_t)_tilePlayerContent.size() - 1)
                     _changePlayerLeftButton->setValue(0);
@@ -167,7 +177,9 @@ namespace UI {
                 if (_changePlayerRightButton->getValue() > (ssize_t)_tilePlayerContent.size() - 1)
                     _changePlayerRightButton->setValue(0);
             }
+
             if (_changeEggLeftButton->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) == true) {
+                _mouseClick->play();
                 _changeEggLeftButton->setValue(_changeEggLeftButton->getValue() - 1);
                 if (_changeEggLeftButton->getValue() < 0)
                     _changeEggLeftButton->setValue(_tilePlayerContent.size() - 1);
@@ -175,7 +187,9 @@ namespace UI {
                 if (_changeEggRightButton->getValue() < 0)
                     _changeEggRightButton->setValue(_tilePlayerContent.size() - 1);
             }
+
             if (_changeEggRightButton->isClicked(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)) == true) {
+                _mouseClick->play();
                 _changeEggLeftButton->setValue(_changeEggLeftButton->getValue() + 1);
                 if (_changeEggLeftButton->getValue() > (ssize_t)_tilePlayerContent.size() - 1)
                     _changeEggLeftButton->setValue(0);
@@ -304,7 +318,7 @@ namespace UI {
         return str;
     }
 
-    std::string TileHUD::constructPlayerContent(std::pair<const std::string, std::shared_ptr<Player>> &player)
+    std::string TileHUD::constructPlayerContent(std::pair<const std::string, Player *> &player)
     {
         std::string str;
 

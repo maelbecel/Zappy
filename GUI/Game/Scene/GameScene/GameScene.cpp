@@ -13,8 +13,25 @@ namespace Scene {
     /////////////////
     // Constructor //
     /////////////////
-    GameScene::GameScene() : _isTileHUDOpen(false), _isTeamActivated(true) {}
+    GameScene::GameScene() : _isTileHUDOpen(false), _isTeamActivated(true)
+    {
+        _ost = new Audio::Music(Audio::GAME_OST, Audio::Audio::musicVolume, true);
+        _mouseClick = new Audio::VFX(Audio::MOUSE_CLICK, Audio::Audio::sfxVolume);
+        _teamHUD = new UI::TeamHUD();
+        _gameMenuHUD = new UI::GameMenuHUD();
+        _gameHUD = new UI::GameHUD();
+        _tileHUD = new UI::TileHUD();
+    };
 
+    GameScene::~GameScene()
+    {
+        delete _ost;
+        delete _mouseClick;
+        delete _teamHUD;
+        delete _gameMenuHUD;
+        delete _gameHUD;
+        delete _tileHUD;
+    };
 
     /////////////
     // Methods //
@@ -24,6 +41,12 @@ namespace Scene {
 
     void GameScene::Update(Network::Server &server)
     {
+        // Game SFX
+        if (_ost->isPlaying() == false)
+            _ost->play();
+        _ost->setVolume(Audio::Audio::musicVolume);
+
+        // Game Server
         int response = 0;
 
         askingToServer(server);
@@ -33,7 +56,7 @@ namespace Scene {
         response = _gameData.parse(server.getSocket().response);
 
         if (response == 1) // New Team created
-            _teamHUD.setTeams(_gameData.getTeams());
+            _teamHUD->setTeams(_gameData.getTeams());
         else if (response == 2) {// New Eggs created
             server.sendCommand("sgt");
             server.Run();
@@ -50,21 +73,27 @@ namespace Scene {
 
     void GameScene::askingToServer(Network::Server &server)
     {
+        static int i = 0;
+
         if (_gameData.getMapSize().x == 0 || _gameData.getMapSize().y == 0) {
             server.sendCommand("msz");
             server.Run();
             _gameData.parse(server.getSocket().response);
         }
 
-        server.sendCommand("sgt");
-        server.Run();
-        _gameData.parse(server.getSocket().response);
+        if (i % 10 == 0) {
+            server.sendCommand("sgt");
+            server.Run();
+            _gameData.parse(server.getSocket().response);
+        }
 
         if (_gameData.getTimeUnit() % 20 == 0 || _gameData.getMap().empty()) {
             server.sendCommand("mct");
             server.Run();
             _gameData.parse(server.getSocket().response);
         }
+
+        i++;
     }
 
     void GameScene::Render(sf::RenderWindow &window)
@@ -76,41 +105,40 @@ namespace Scene {
         for (auto &player : _gameData.getPlayers())
             player.second->draw(_gameData, window);
 
-        _teamHUD.drawCursor(window, _gameData);
+        _teamHUD->drawCursor(window, _gameData);
         _map.drawBiome(window, _gameData);
 
-        if (_gameMenuHUD.isOpened()) {
-            _gameMenuHUD.draw(window);
+        if (_gameMenuHUD->isOpened()) {
+            _gameMenuHUD->draw(window);
             return;
         }
 
-        if (_tileHUD.getIsOpen()) {
-            _tileHUD.draw(window);
+        if (_tileHUD->getIsOpen()) {
+            _tileHUD->draw(window);
             return;
         }
 
         if (_isTeamActivated)
-            _teamHUD.draw(window);
-        _gameHUD.draw(window);
+            _teamHUD->draw(window);
+        _gameHUD->draw(window);
     }
 
     void GameScene::ShutDown() {};
 
     void GameScene::OnEvent(const sf::Event &event, Network::Server &server, UNUSED sf::RenderWindow &window)
     {
-        if (_gameMenuHUD.isOpened()) {
-            _gameMenuHUD.handleEvent(event, server, window);
-            return;
-        }
+        if (_gameMenuHUD->isOpened())
+            return _gameMenuHUD->handleEvent(event, server, window);
+
         if (event.type == sf::Event::KeyPressed) {
             if (event.key.code == sf::Keyboard::T)
                 _isTeamActivated = !_isTeamActivated;
             if (event.key.code == sf::Keyboard::Escape) {
-                if (_tileHUD.getIsOpen()) {
-                    _tileHUD.setIsOpen(false);
+                if (_tileHUD->getIsOpen()) {
+                    _tileHUD->setIsOpen(false);
                     return;
                 }
-                _gameMenuHUD.setOpened(true);
+                _gameMenuHUD->setOpened(true);
             }
             if (event.key.code == sf::Keyboard::Z) {
                 _gameData.setScale(_gameData.getScale() + sf::Vector2f(0.25, 0.25));
@@ -134,21 +162,18 @@ namespace Scene {
                 _gameData.setScale(_gameData.getScale() - sf::Vector2f(0.25, 0.25));
             }
         } else if (event.type == sf::Event::MouseButtonPressed) {
-            if (_gameMenuHUD.isOpened()) {
-                _gameMenuHUD.handleEvent(event, server, window);
-                return;
-            }
-            if (_tileHUD.getIsOpen()) {
-                _tileHUD.handleEvent(event, server, window);
-                return;
-            }
-            if (event.mouseButton.button == sf::Mouse::Left) {
-                _gameHUD.handleEvent(event, server, window);
+            _mouseClick->setVolume(Audio::Audio::sfxVolume);
 
-                if (!_tileHUD.getIsOpen()) {
+            if (_tileHUD->getIsOpen())
+                return _tileHUD->handleEvent(event, server, window);
+
+            if (event.mouseButton.button == sf::Mouse::Left) {
+                _gameHUD->handleEvent(event, server, window);
+
+                if (!_tileHUD->getIsOpen()) {
                     if (LeftMousePressed(sf::Vector2i(event.mouseButton.x, event.mouseButton.y), server) == true)
                         return;
-                    _teamHUD.handleEvent(event);
+                    _teamHUD->handleEvent(event);
                 }
             }
         }
@@ -169,6 +194,8 @@ namespace Scene {
 
             // Check if the mouse is on the rectangle
             if ((mousePos.x >= position.x + (8 * (scale.x + 2)) && mousePos.y >= position.y) && (mousePos.x <= position.x + (Tile::TILE_WIDTH * (scale.x + 2)) - (8 * (scale.x + 2)) && mousePos.y <= position.y + (Tile::TILE_HEIGHT * (scale.y + 1.25)))) {
+                _mouseClick->play();
+
                 // Check if the mouse is on the half left of the screen or the half right
                 if (mousePos.x < (Window::getWindowWidth()) / 2) {
                     openTileHUD(tile.first.first, tile.first.second, server, true);
@@ -185,6 +212,8 @@ namespace Scene {
             sf::Vector2f c = sf::Vector2f(position.x + (8 * (scale.x + 2)), position.y + (Tile::TILE_HEIGHT * (scale.y + 1.25)));
 
             if (isInsideTriangle(mousePos, sf::Vector2i(a.x, a.y), sf::Vector2i(b.x, b.y), sf::Vector2i(c.x, c.y))) {
+                _mouseClick->play();
+
                 if (mousePos.x < (Window::getWindowWidth()) / 2) {
                     openTileHUD(tile.first.first, tile.first.second, server, true);
                 } else {
@@ -199,6 +228,8 @@ namespace Scene {
             c = sf::Vector2f(position.x + (Tile::TILE_WIDTH * (scale.x + 2)) - (8 * (scale.x + 2)), position.y + (Tile::TILE_HEIGHT * (scale.y + 1.25)));
 
             if (isInsideTriangle(mousePos, sf::Vector2i(a.x, a.y), sf::Vector2i(b.x, b.y), sf::Vector2i(c.x, c.y))) {
+                _mouseClick->play();
+
                 if (mousePos.x < (Window::getWindowWidth()) / 2) {
                     openTileHUD(tile.first.first, tile.first.second, server, true);
                 } else {
@@ -213,7 +244,7 @@ namespace Scene {
     void GameScene::openTileHUD(int x, int y, Network::Server &server, bool isLeft)
     {
         _isTileHUDOpen = true;
-        _tileHUD.setIsOpen(true);
+        _tileHUD->setIsOpen(true);
 
         server.sendCommand("bct " + std::to_string(x) + " " + std::to_string(y));
         server.Run();
@@ -236,7 +267,7 @@ namespace Scene {
             _gameData.parse(server.getSocket().response);
         }
 
-        _tileHUD.setTileHUD(_gameData, isLeft, x, y, _gameMenuHUD.getTileDisplayMode());
+        _tileHUD->setTileHUD(_gameData, isLeft, x, y, _gameMenuHUD->getTileDisplayMode());
     }
 
     bool GameScene::isInsideTriangle(const sf::Vector2i &position, sf::Vector2i a, sf::Vector2i b, sf::Vector2i c)

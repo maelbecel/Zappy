@@ -91,6 +91,11 @@ namespace UI {
              */
             void setSize(const sf::Vector2f &size) override;
 
+            /**
+             * @brief Update the Button Widget object
+             *
+             */
+
         // Operators
         public:
 

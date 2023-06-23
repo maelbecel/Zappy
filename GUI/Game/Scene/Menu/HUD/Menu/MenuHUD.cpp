@@ -12,6 +12,7 @@
 namespace UI {
     MenuHUD::MenuHUD(std::string ip, std::string port) : _background(sf::Vector2f(Window::getWindowWidth(), Window::getWindowHeight()))
     {
+
         BackgroundStyle RectangleColorBg(sf::Color(0, 0, 0, 220));
 
         RectangleColorBg.apply(_background);
@@ -19,20 +20,69 @@ namespace UI {
         _background.setPosition(sf::Vector2f(0.0f, 0.0f));
         _planet.setPosition(sf::Vector2f((float)(Window::getWindowWidth() / 2) - 300, (float)(Window::getWindowHeight() / 2) - 300 + 50));
 
-        _ip = InputBox(std::string("Ip Adress :"), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 15, 250), BUTTON_STD_SIZE);
-        _port = InputBox(std::string("Port :"), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 15, 300), BUTTON_STD_SIZE);
-        _ip.value = ip;
-        _port.value = port;
+        libconfig::Config cfg;
+        try {
+            cfg.readFile("./Config/config.cfg");
+            libconfig::Setting &config = cfg.lookup("config");
 
-        ButtonWidget *connectButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 375), BUTTON_STD_SIZE, std::string("Connect"), 7);
-        ButtonWidget *settingsButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450), BUTTON_STD_SIZE, std::string("Settings"), 7);
-        ButtonWidget *quitButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 525), BUTTON_STD_SIZE, std::string("Quit"), 7);
-        ButtonWidget *planetButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 655), BUTTON_STD_SIZE, std::string("Change Planet"), 7);
+            libconfig::Config language;
+            std::string languagePath = std::string("./Config/Languages/") + config["language"].c_str() + ".cfg";
+            language.readFile(languagePath.c_str());
 
-        _connectButton = new Button(connectButton);
-        _settingsButton = new Button(settingsButton);
-        _quitButton = new Button(quitButton);
-        _planetButton = new Button(planetButton);
+            libconfig::Setting &lang = language.lookup("language");
+            libconfig::Setting &menu = lang.lookup("menu");
+            libconfig::Setting &input = menu.lookup("input");
+
+            if (input.exists("ip")) {
+                _ip = InputBox(std::string(input["ip"]), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 15, 250), BUTTON_STD_SIZE);
+            } else {
+                _ip = InputBox(std::string("Ip Adress :"), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 15, 250), BUTTON_STD_SIZE);
+            }
+            if (input.exists("port")) {
+                _port = InputBox(std::string(input["port"]), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 15, 300), BUTTON_STD_SIZE);
+            } else
+                _port = InputBox(std::string("Port :"), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 15, 300), BUTTON_STD_SIZE);
+            _ip.value = ip;
+            _port.value = port;
+
+            libconfig::Setting &button = menu.lookup("button");
+
+            if (button.exists("connect")) {
+                ButtonWidget *connectButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 375), BUTTON_STD_SIZE, std::string(button["connect"]), 7);
+                _connectButton = new Button(connectButton);
+            } else {
+                ButtonWidget *connectButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 375), BUTTON_STD_SIZE, std::string("Connect"), 7);
+                _connectButton = new Button(connectButton);
+            }
+            if (button.exists("settings")) {
+                ButtonWidget *settingsButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450), BUTTON_STD_SIZE, std::string(button["settings"]), 7);
+                _settingsButton = new Button(settingsButton);
+            } else {
+                ButtonWidget *settingsButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450), BUTTON_STD_SIZE, std::string("Settings"), 7);
+                _settingsButton = new Button(settingsButton);
+            }
+            if (button.exists("quit")) {
+                ButtonWidget *quitButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 525), BUTTON_STD_SIZE, std::string(button["quit"]), 7);
+                _quitButton = new Button(quitButton);
+            } else {
+                ButtonWidget *quitButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 525), BUTTON_STD_SIZE, std::string("Quit"), 7);
+                _quitButton = new Button(quitButton);
+            }
+            if (button.exists("planet")) {
+                ButtonWidget *planetButton = new ButtonWidget(sf::Vector2f(BUTTON_STD_SIZE.y, BUTTON_STD_SIZE.y), sf::Vector2f(9 * 32, 32), std::string(button["planet"]), 9);
+                _planetButton = new Button(planetButton);
+            } else {
+                ButtonWidget *planetButton = new ButtonWidget(sf::Vector2f(BUTTON_STD_SIZE.y, BUTTON_STD_SIZE.y), sf::Vector2f(9 * 32, 32), std::string("Change Planet"), 9);
+                _planetButton = new Button(planetButton);
+            }
+        } catch (const libconfig::FileIOException &fioex) {
+            std::cerr << "I/O error while reading file." << std::endl;
+        } catch (const libconfig::ParseException &pex) {
+            std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError() << std::endl;
+        } catch (const libconfig::SettingNotFoundException &nfex) {
+            std::cerr << "Setting not found in configuration file." << std::endl;
+        }
+
 
         _settingsHUD = SettingsHUD();
 
@@ -72,6 +122,7 @@ namespace UI {
         delete _settingsButton;
         delete _quitButton;
         delete _planetButton;
+        delete _crossButton;
     }
 
     void MenuHUD::draw(sf::RenderWindow &window)

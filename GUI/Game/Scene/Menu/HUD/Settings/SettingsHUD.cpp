@@ -30,21 +30,26 @@ namespace UI {
 
         ArrowButtonWidget *decreaseSoundButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 - 75, 248), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
         ArrowButtonWidget *increaseSoundButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 250, 248), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
-        ArrowButtonWidget *decreaseMusicButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 - 75, 348), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
-        ArrowButtonWidget *increaseMusicButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 250, 348), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
-        CrossButtonWidget *crossSettingsButton = new CrossButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 450, 150), sf::Vector2f(16 * 2.5, 16 * 2.5));
-
         _decreaseSoundButton = new Button(decreaseSoundButton);
         _increaseSoundButton = new Button(increaseSoundButton);
+
+        ArrowButtonWidget *decreaseMusicButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 - 75, 348), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
+        ArrowButtonWidget *increaseMusicButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 250, 348), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
         _decreaseMusicButton = new Button(decreaseMusicButton);
         _increaseMusicButton = new Button(increaseMusicButton);
+
+        CrossButtonWidget *crossSettingsButton = new CrossButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 450, 150), sf::Vector2f(16 * 2.5, 16 * 2.5));
         _crossSettingsButton = new Button(crossSettingsButton);
 
-        ArrowButtonWidget *changeTileHUDLeftButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 - 75, 448), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
-        ArrowButtonWidget *changeTileHUDRightButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 250, 448), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
-
+        ArrowButtonWidget *changeTileHUDLeftButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 - 75, 548), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
+        ArrowButtonWidget *changeTileHUDRightButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 250, 548), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
         _changeTileHUDLeftButton = new Button(changeTileHUDLeftButton);
         _changeTileHUDRightButton = new Button(changeTileHUDRightButton);
+
+        ArrowButtonWidget *changeLanguageLeftButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 - 75, 448), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
+        ArrowButtonWidget *changeLanguageRightButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 250, 448), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
+        _changeLanguageLeftButton = new Button(changeLanguageLeftButton);
+        _changeLanguageRightButton = new Button(changeLanguageRightButton);
 
         ValidateButtonWidget *validateButton = new ValidateButtonWidget(sf::Vector2f(Window::getWindowWidth() / 2 - 8, _backgroundSprite.getTexture()->getSize().y + 100), sf::Vector2f(16 * 3, 16 * 3));
         _validateButton = new Button(validateButton);
@@ -64,15 +69,19 @@ namespace UI {
 
             bool tileHUDTextMode = settings["tileHUDTextMode"];
             if (tileHUDTextMode)
-                _tileHUDTextMode = setString("TileHUD mode:\n\n Text", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450));
+                _tileHUDTextMode = setString("TileHUD mode:\n\n Text", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 550));
             else
-                _tileHUDTextMode = setString("TileHUD mode:\n\n Sprite", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450));
+                _tileHUDTextMode = setString("TileHUD mode:\n\n Sprite", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 550));
+            if (settings.exists("language"))
+                _languageText = setString("Language :\n\n" + std::string(settings["language"]), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450));
+            else
+                _languageText = setString("Language :\n\nEnglish", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450));
 
         } catch (const libconfig::FileIOException& ex) {
             _soundValue = 50;
             _musicValue = 50;
 
-            throw Error::ParserException("I/O error while reading file.");
+            std::cout << "File I/O error while reading file." << std::endl;
         } catch (const libconfig::ParseException& ex) {
             _soundValue = 50;
             _musicValue = 50;
@@ -80,7 +89,17 @@ namespace UI {
             std::string file = ex.getFile();
             std::string line = std::to_string(ex.getLine());
             const std::string &error = "Parse error at " + file + ":" + line + " - " + ex.getError();
-            throw Error::ParserException(error.c_str());
+            std::cout << error << std::endl;
+        } catch (const libconfig::SettingNotFoundException& ex) {
+            _soundValue = 50;
+            _musicValue = 50;
+
+            std::cout << "Setting not found." << std::endl;
+        } catch (const libconfig::SettingTypeException& ex) {
+            _soundValue = 50;
+            _musicValue = 50;
+
+            std::cout << "Setting type mismatch." << std::endl;
         }
         if (_soundValue < 0 || _soundValue > 100)
             _soundValue = 50;
@@ -210,7 +229,7 @@ namespace UI {
 
             if (_changeTileHUDLeftButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)) || _changeTileHUDRightButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
                 _mouseClick->play();
-    
+
                 if (_tileHUDTextMode.getString() == std::string("TileHUD mode:\n\n Text"))
                     _tileHUDTextMode = setString("TileHUD mode:\n\n Sprite", sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450));
                 else

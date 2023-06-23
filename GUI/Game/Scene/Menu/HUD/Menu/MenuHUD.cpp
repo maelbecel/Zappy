@@ -26,7 +26,9 @@ namespace UI {
             libconfig::Setting &config = cfg.lookup("config");
 
             libconfig::Config language;
-            std::string languagePath = std::string("./Config/Languages/") + config["language"].c_str() + ".cfg";
+            // take 3 letters of the language
+            std::string configLang = std::string(config["language"]).substr(0, 3);
+            std::string languagePath = std::string("./Config/Languages/") + configLang + std::string(".cfg");
             language.readFile(languagePath.c_str());
 
             libconfig::Setting &lang = language.lookup("language");
@@ -68,19 +70,14 @@ namespace UI {
                 ButtonWidget *quitButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 525), BUTTON_STD_SIZE, std::string("Quit"), 7);
                 _quitButton = new Button(quitButton);
             }
-            if (button.exists("planet")) {
-                ButtonWidget *planetButton = new ButtonWidget(sf::Vector2f(BUTTON_STD_SIZE.y, BUTTON_STD_SIZE.y), sf::Vector2f(9 * 32, 32), std::string(button["planet"]), 9);
-                _planetButton = new Button(planetButton);
-            } else {
-                ButtonWidget *planetButton = new ButtonWidget(sf::Vector2f(BUTTON_STD_SIZE.y, BUTTON_STD_SIZE.y), sf::Vector2f(9 * 32, 32), std::string("Change Planet"), 9);
-                _planetButton = new Button(planetButton);
-            }
         } catch (const libconfig::FileIOException &fioex) {
             std::cerr << "I/O error while reading file." << std::endl;
         } catch (const libconfig::ParseException &pex) {
             std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError() << std::endl;
         } catch (const libconfig::SettingNotFoundException &nfex) {
             std::cerr << "Setting not found in configuration file." << std::endl;
+        } catch (const libconfig::SettingTypeException &setex) {
+            std::cerr << "Setting type error in configuration file." << std::endl;
         }
 
 
@@ -123,13 +120,11 @@ namespace UI {
         delete _quitButton;
         delete _mouseClick;
         delete _settingsHUD;
-        delete _planetButton;
         delete _crossButton;
     }
 
     void MenuHUD::draw(sf::RenderWindow &window)
     {
-        // window.draw(_background);
         _planet.draw(window, sf::RenderStates::Default);
         window.draw(_titleHeader);
         window.draw(_titleText);
@@ -150,12 +145,6 @@ namespace UI {
         } else {
             _quitButton->render(window, ButtonState::IDLE);
         }
-
-        if (_planetButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))) {
-            _planetButton->render(window, ButtonState::HOVERED);
-        } else {
-            _planetButton->render(window, ButtonState::IDLE);
-        }
         if (_settingsHUD->isOpened() == true) {
             _settingsHUD->draw(window);
         }
@@ -173,13 +162,16 @@ namespace UI {
 
     void MenuHUD::handleEvent(sf::Event event, Network::Server &server, sf::RenderWindow &window)
     {
-        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
-            if (_settingsHUD->isOpened() == true) {
-                _settingsHUD->setOpened(false);
-            }
-            if (_popUp == true) {
-                _popUp = false;
-            }
+        if (event.type == sf::Event::KeyPressed){
+            if (event.key.code == sf::Keyboard::Escape) {
+                if (_settingsHUD->isOpened() == true) {
+                    _settingsHUD->setOpened(false);
+                }
+                if (_popUp == true) {
+                    _popUp = false;
+                }
+            } else if (event.key.code == sf::Keyboard::P)
+                _planet.setType((PlanetType)((_planet.getType() + 1 ) % _planet.getNbPlanet()));
         }
         if (event.type == sf::Event::MouseButtonPressed) {
             if (event.mouseButton.button != sf::Mouse::Left)
@@ -212,10 +204,6 @@ namespace UI {
                     _popUp = true;
                     _popUpText = setString(e.what(), sf::Vector2f(_popUpSprite.getPosition().x + (_popUpSprite.getGlobalBounds().width / 5), _popUpSprite.getPosition().y + (_popUpSprite.getGlobalBounds().height) / 2), 12);
                 }
-                return;
-            }
-            if (_planetButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
-                _planet.setType((PlanetType)((_planet.getType() + 1 ) % _planet.getNbPlanet()));
                 return;
             }
             if (_settingsButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {

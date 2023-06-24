@@ -79,15 +79,15 @@ namespace UI {
     void MenuHUD::draw(sf::RenderWindow &window)
     {
         _planet.draw(window, sf::RenderStates::Default);
-        
+        _asteroid.draw(window, sf::RenderStates::Default);
         window.draw(_titleHeader);
         window.draw(_titleText);
-        
+
         setLanguage();
-        
+
         _ip.draw(window, sf::RenderStates::Default);
         _port.draw(window, sf::RenderStates::Default);
-        
+
         if (_connectButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
             _connectButton->render(window, ButtonState::HOVERED);
         else
@@ -217,9 +217,9 @@ namespace UI {
     {
         try {
             libconfig::Config cfg;
-            
+
             cfg.readFile("./Config/config.cfg");
-            
+
             libconfig::Setting &config = cfg.lookup("config");
             libconfig::Config language;
             std::string configLang = toLowerCase(std::string(config["language"]));
@@ -267,7 +267,7 @@ namespace UI {
     {
         _ip = InputBox(std::string("Ip Adress :"), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 15, 250), BUTTON_STD_SIZE);
         _port = InputBox(std::string("Port :"), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 15, 300), BUTTON_STD_SIZE);
-        
+
         std::shared_ptr<IWidget> connectButton = std::make_shared<ButtonWidget>(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 375), BUTTON_STD_SIZE, std::string("Connect"), 7);
         std::shared_ptr<IWidget> settingsButton = std::make_shared<ButtonWidget>(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450), BUTTON_STD_SIZE, std::string("Settings"), 7);
         std::shared_ptr<IWidget> quitButton = std::make_shared<ButtonWidget>(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 525), BUTTON_STD_SIZE, std::string("Quit"), 7);

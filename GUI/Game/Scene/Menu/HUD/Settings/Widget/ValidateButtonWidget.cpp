@@ -16,17 +16,18 @@ namespace UI {
 
     ValidateButtonWidget::ValidateButtonWidget(const sf::Vector2f &position, const sf::Vector2f &size) : AWidget(position, size)
     {
-        // [X]
+        // [V]
 
         _position = position;
 
         try {
-            sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Content/2 Icons/5.png");
+            std::shared_ptr<sf::Texture> texture = TextureManager::getTexture(UI::ICONS5);
+            std::shared_ptr<sf::Texture> textureHover = TextureManager::getTexture(UI::ICONS10);
+
             _idleSprite = sf::Sprite(*texture);
             _idleSprite.setScale(sf::Vector2f(4, 4));
             _idleSprite.setPosition(position);
 
-            sf::Texture *textureHover = TextureManager::getTexture("./Assets/UI_UX/Content/2 Icons/10.png");
             _hoveredSprite = sf::Sprite(*textureHover);
             _hoveredSprite.setScale(sf::Vector2f(4, 4));
             _hoveredSprite.setPosition(position);
@@ -49,14 +50,14 @@ namespace UI {
         target.draw(_hoveredSprite, states);
     }
 
-    void ValidateButtonWidget::handleEvent(sf::Event event)
+    void ValidateButtonWidget::handleEvent(UNUSED sf::Event event)
     {
-        (void)event;
+        return;
     }
 
-    ///////////////////////
-    // Setters & Getters //
-    ///////////////////////
+    /////////////
+    // Setters //
+    /////////////
 
     void ValidateButtonWidget::setPosition(const sf::Vector2f &position)
     {
@@ -67,6 +68,7 @@ namespace UI {
 
     void ValidateButtonWidget::setSize(UNUSED const sf::Vector2f &size)
     {
+        return;
     }
 
     ///////////////

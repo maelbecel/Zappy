@@ -24,7 +24,7 @@ namespace UI {
         // Constructor & Destructor
         public:
             HelpHUD();
-            ~HelpHUD();
+            ~HelpHUD() = default;
 
         // Methods
         public:
@@ -65,8 +65,8 @@ namespace UI {
         private:
             sf::RectangleShape _background;         /*!< Background of the Tile HUD */
             sf::Sprite _backgroundSprite;           /*!< Sprite of the Settings HUD */
-            IButton *_leftButton;                 /*!< Button to turn left the pages */
-            IButton *_rightButton;              /*!< Button to turn right the pages */
+            std::shared_ptr<IButton>_leftButton;    /*!< Button to turn left the pages */
+            std::shared_ptr<IButton> _rightButton;  /*!< Button to turn right the pages */
             bool _opened;                           /*!< If the Settings HUD is opened or not */
     };
 };

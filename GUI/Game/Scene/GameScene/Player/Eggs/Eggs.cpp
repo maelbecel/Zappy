@@ -9,9 +9,9 @@
 #include "GameData.hpp"
 #include <iostream>
 
-//////////////////////////////
-// Constructor & Destructor //
-//////////////////////////////
+/////////////////
+// Constructor //
+/////////////////
 
 Eggs::Eggs(sf::Vector2i pos, std::string dropBy, std::string team, int color, size_t timeWhenDropped) : _pos(pos), _dropBy(dropBy), _team(team), _timeWhenDropped(timeWhenDropped)
 {
@@ -25,30 +25,9 @@ Eggs::Eggs(sf::Vector2i pos, std::string dropBy, std::string team, int color, si
     }
 }
 
-//////////////
-// Methods //
-/////////////
-
-sf::Color Eggs::setColor(int color)
-{
-    if (color == 1)
-        return sf::Color(220, 136, 85, 255);
-    else if (color == 2)
-        return sf::Color(202, 102, 213, 255);
-    else if (color == 3)
-        return sf::Color::Blue;
-    else if (color == 4)
-        return sf::Color::Green;
-    else if (color == 5)
-        return sf::Color::Magenta;
-    else if (color == 6)
-        return sf::Color::Red;
-    else if (color == 7)
-        return sf::Color::Yellow;
-    else if (color == 8)
-        return sf::Color::Cyan;
-    return setColor(color - 8);
-}
+////////////
+// Method //
+////////////
 
 void Eggs::draw(GameData &gameData, sf::RenderWindow &window)
 {
@@ -99,4 +78,25 @@ sf::Vector2f Eggs::setEggScale(sf::Vector2f scale)
     if (scale.x >= 2.0f)
         return sf::Vector2f(2.0f, 2.00f);
     return sf::Vector2f(1.0f, 1.0f);
+}
+
+sf::Color Eggs::setColor(int color)
+{
+    if (color == 1)
+        return sf::Color(220, 136, 85, 255);
+    else if (color == 2)
+        return sf::Color(202, 102, 213, 255);
+    else if (color == 3)
+        return sf::Color::Blue;
+    else if (color == 4)
+        return sf::Color::Green;
+    else if (color == 5)
+        return sf::Color::Magenta;
+    else if (color == 6)
+        return sf::Color::Red;
+    else if (color == 7)
+        return sf::Color::Yellow;
+    else if (color == 8)
+        return sf::Color::Cyan;
+    return setColor(color - 8);
 }

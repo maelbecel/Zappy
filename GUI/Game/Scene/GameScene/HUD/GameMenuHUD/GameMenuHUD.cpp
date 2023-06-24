@@ -23,16 +23,8 @@ namespace UI {
         setLanguage();
 
         _isOpened = false;
-
-        _settingsHUD = new SettingsHUD(true);
-
-        _mouseClick = new Audio::VFX(Audio::MOUSE_CLICK, Audio::Audio::sfxVolume);
-    }
-
-    GameMenuHUD::~GameMenuHUD()
-    {
-        delete _mouseClick;
-        delete _settingsHUD;
+        _settingsHUD = std::make_shared<SettingsHUD>(true);
+        _mouseClick = std::make_shared<Audio::SFX>(Audio::MOUSE_CLICK, Audio::Audio::sfxVolume);
     }
 
     void GameMenuHUD::draw(sf::RenderWindow &window)
@@ -184,28 +176,30 @@ namespace UI {
     void GameMenuHUD::setButtonsDefault()
     {
         int initial_y = (Window::getWindowHeight() - (4 * BUTTON_STD_SIZE.y + 3 * 75)) / 2;
-        ButtonWidget *resumeButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, initial_y), BUTTON_STD_SIZE, std::string("Resume"), 7);
-        ButtonWidget *settingsButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, initial_y + 75), BUTTON_STD_SIZE, std::string("Settings"), 7);
-        ButtonWidget *helpButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, initial_y + 75 * 2), BUTTON_STD_SIZE, std::string("Help"), 7);
-        ButtonWidget *quitButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, initial_y + 75 * 3), BUTTON_STD_SIZE, std::string("Quit"), 7);
 
-        _resumeButton = new Button(resumeButton);
-        _settingsButton = new Button(settingsButton);
-        _quitButton = new Button(quitButton);
-        _helpButton = new Button(helpButton);
+        std::shared_ptr<IWidget> resumeButton = std::make_shared<ButtonWidget>(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, initial_y), BUTTON_STD_SIZE, std::string("Resume"), 7);
+        std::shared_ptr<IWidget> settingsButton = std::make_shared<ButtonWidget>(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, initial_y + 75), BUTTON_STD_SIZE, std::string("Settings"), 7);
+        std::shared_ptr<IWidget> helpButton = std::make_shared<ButtonWidget>(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, initial_y + 75 * 2), BUTTON_STD_SIZE, std::string("Help"), 7);
+        std::shared_ptr<IWidget> quitButton = std::make_shared<ButtonWidget>(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, initial_y + 75 * 3), BUTTON_STD_SIZE, std::string("Quit"), 7);
+
+        _resumeButton = std::make_shared<Button>(resumeButton);
+        _settingsButton = std::make_shared<Button>(settingsButton);
+        _quitButton = std::make_shared<Button>(quitButton);
+        _helpButton = std::make_shared<Button>(helpButton);
     }
 
     void GameMenuHUD::setButtons(libconfig::Setting &button)
     {
         int initial_y = (Window::getWindowHeight() - (4 * BUTTON_STD_SIZE.y + 3 * 75)) / 2;
-        ButtonWidget *resumeButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, initial_y), BUTTON_STD_SIZE, std::string(button["resume"]), 7);
-        ButtonWidget *settingsButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, initial_y + 75), BUTTON_STD_SIZE, std::string(button["settings"]), 7);
-        ButtonWidget *helpButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, initial_y + 75 * 2), BUTTON_STD_SIZE, std::string(button["help"]), 7);
-        ButtonWidget *quitButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, initial_y + 75 * 3), BUTTON_STD_SIZE, std::string(button["quit"]), 7);
 
-        _resumeButton = new Button(resumeButton);
-        _settingsButton = new Button(settingsButton);
-        _quitButton = new Button(quitButton);
-        _helpButton = new Button(helpButton);
+        std::shared_ptr<IWidget> resumeButton = std::make_shared<ButtonWidget>(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, initial_y), BUTTON_STD_SIZE, std::string(button["resume"]), 7);
+        std::shared_ptr<IWidget> settingsButton = std::make_shared<ButtonWidget>(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, initial_y + 75), BUTTON_STD_SIZE, std::string(button["settings"]), 7);
+        std::shared_ptr<IWidget> helpButton = std::make_shared<ButtonWidget>(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, initial_y + 75 * 2), BUTTON_STD_SIZE, std::string(button["help"]), 7);
+        std::shared_ptr<IWidget> quitButton = std::make_shared<ButtonWidget>(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, initial_y + 75 * 3), BUTTON_STD_SIZE, std::string(button["quit"]), 7);
+
+        _resumeButton = std::make_shared<Button>(resumeButton);
+        _settingsButton = std::make_shared<Button>(settingsButton);
+        _quitButton = std::make_shared<Button>(quitButton);
+        _helpButton = std::make_shared<Button>(helpButton);
     }
 };

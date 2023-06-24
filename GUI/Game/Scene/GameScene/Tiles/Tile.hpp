@@ -32,53 +32,8 @@ class Tile {
          * @param q6 The quantity of thystame
          */
         Tile(sf::Vector2i coordonates = sf::Vector2i(0, 0), int q0 = 0, int q1 = 0, int q2 = 0, int q3 = 0, int q4 = 0, int q5 = 0, int q6 = 0);
-        ~Tile();
-    
-    // Getters and Setters
-    public:
 
-        /**
-         * @brief Set the Position object
-         * 
-         * @param position The position of the tile
-         */
-        void setPosition(sf::Vector2f &position);
-
-        /**
-         * @brief Get the Position object
-         * 
-         * @return sf::Vector2f The position of the tile
-         */
-        sf::Vector2f getPosition() const;
-
-        /**
-         * @brief Set the New Resources object
-         * 
-         * @param q0 The quantity of food
-         * @param q1 The quantity of linemate
-         * @param q2 The quantity of deraumere
-         * @param q3 The quantity of sibur
-         * @param q4 The quantity of mendiane
-         * @param q5 The quantity of phiras
-         * @param q6 The quantity of thystame
-         */
-        void setNewResources(int q0, int q1, int q2, int q3, int q4, int q5, int q6);
-
-        /**
-         * @brief Get the Ressource object
-         *
-         * @param type {
-         *  0: food,
-         *  1: linemate,
-         *  2: deraumere,
-         *  3: sibur,
-         *  4: mendiane,
-         *  5: phiras,
-         *  6: thystame
-         * }
-         * @return int The quantity of the resource
-         */
-        int getResource(int type);
+        ~Tile() = default;
 
     // Methods
     public:
@@ -121,7 +76,53 @@ class Tile {
          */
         void removeResource(int type);
 
-    // Private Methods
+    // Setters and Getters
+    public:
+
+        /**
+         * @brief Set the Position object
+         * 
+         * @param position The position of the tile
+         */
+        void setPosition(sf::Vector2f &position);
+
+        /**
+         * @brief Set the New Resources object
+         * 
+         * @param q0 The quantity of food
+         * @param q1 The quantity of linemate
+         * @param q2 The quantity of deraumere
+         * @param q3 The quantity of sibur
+         * @param q4 The quantity of mendiane
+         * @param q5 The quantity of phiras
+         * @param q6 The quantity of thystame
+         */
+        void setNewResources(int q0, int q1, int q2, int q3, int q4, int q5, int q6);
+
+        /**
+         * @brief Get the Position object
+         * 
+         * @return sf::Vector2f The position of the tile
+         */
+        sf::Vector2f getPosition() const;
+
+        /**
+         * @brief Get the Ressource object
+         *
+         * @param type {
+         *  0: food,
+         *  1: linemate,
+         *  2: deraumere,
+         *  3: sibur,
+         *  4: mendiane,
+         *  5: phiras,
+         *  6: thystame
+         * }
+         * @return int The quantity of the resource
+         */
+        int getResource(int type);
+
+    // Private Method
     private:
 
         /**
@@ -156,7 +157,7 @@ class Tile {
 
     // Resource Sprite
     private:
-        std::map<std::string, sf::Sprite *> _resources; /*!< The resources of the tile */
+        std::map<std::string, std::shared_ptr<sf::Sprite>> _resources; /*!< The resources of the tile */
 };
 
 #endif /* !TILE_HPP_ */

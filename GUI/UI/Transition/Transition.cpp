@@ -8,14 +8,16 @@
 #include "Transition.hpp"
 
 namespace UI {
+
     /////////////////
     // Constructor //
     /////////////////
+
     Transition::Transition(sf::RenderWindow &window, sf::Time duration) : _window(window), _duration(duration), _elapsedTime(sf::Time::Zero), _isPlaying(false), _callback(nullptr) {};
 
-    ////////////////////
-    // Public methods //
-    ////////////////////
+    /////////////
+    // Methods //
+    /////////////
 
     void Transition::play(std::function<void()> transitionCallback)
     {

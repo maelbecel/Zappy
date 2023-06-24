@@ -12,15 +12,22 @@
     #include "MenuHUD.hpp"
 
 namespace Scene {
+
     /**
      * @brief Menu scene
      * It's a concrete class, so it can be instanciated
      * It's used to define the menu scene of the game
      */
     class Menu : public IScene {
+
         // Constructor & Destructor (default)
         public:
+
+            /**
+             * @brief Construct a new Menu object
+             */
             Menu();
+
             ~Menu() override = default;
 
         // Methods
@@ -64,7 +71,7 @@ namespace Scene {
              */
             void OnEvent(const sf::Event &event, Network::Server &server, sf::RenderWindow &window) override;
 
-        // Attributes
+        // Attribute
         private:
             UI::MenuHUD _menuHUD; /*!< The menu HUD */
     };

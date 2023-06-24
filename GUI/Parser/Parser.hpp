@@ -12,7 +12,12 @@
 
     #include <string>
 
+/**
+ * @brief The Parser class
+ * This class is used to parse the arguments of the program
+ */
 class Parser {
+
     // Constructor & Destructor (default)
     public:
 
@@ -26,7 +31,7 @@ class Parser {
 
         ~Parser() = default;
 
-    // Methods
+    // Getters
     public:
 
             /**

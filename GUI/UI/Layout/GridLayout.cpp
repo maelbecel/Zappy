@@ -21,7 +21,7 @@ namespace UI {
         sf::Vector2f position = properties.position;
         size_t currentColumn = 0;
 
-        for (auto *element : _elements) {
+        for (auto &element : _elements) {
             // Set the position of the element
             element->setPosition(position);
 
@@ -40,12 +40,12 @@ namespace UI {
         }
     }
 
-    void GridLayout::addElement(IWidget *element)
+    void GridLayout::addElement(std::shared_ptr<IWidget> element)
     {
         _elements.push_back(element);
     }
 
-    std::vector<IWidget *> GridLayout::getElements()
+    std::vector<std::shared_ptr<IWidget>> GridLayout::getElements()
     {
         return _elements;
     }

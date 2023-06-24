@@ -13,18 +13,25 @@
     #include <unordered_map>
     #include <functional>
 
+    /////////////////////////////////////////////////////////////////////////////
+    // @Warning: This class is not called in the project yet                   //
+    //           So if you want to use it, you have to put him in the Makefile //
+    /////////////////////////////////////////////////////////////////////////////
+
 namespace UI {
+
     /**
      * @brief Manage user input effectively, including keyboard, mouse, and touch input,
      *        to provide a seamless and intuitive interaction experience.
      */
     class InputHandler {
+
         // Default function
         public:
             InputHandler() = default;
             ~InputHandler() = default;
 
-        // Methods
+        // Method
         public:
 
             /**

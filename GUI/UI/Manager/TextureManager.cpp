@@ -8,5 +8,5 @@
 #include "TextureManager.hpp"
 
 namespace UI {
-    std::map<std::string, sf::Texture *> TextureManager::_textures;
+    std::map<std::string, std::shared_ptr<sf::Texture>> TextureManager::_textures;
 };

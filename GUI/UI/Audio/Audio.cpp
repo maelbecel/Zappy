@@ -6,6 +6,7 @@
 */
 
 #include "Audio.hpp"
+#include <iostream>
 
 namespace Audio {
 
@@ -16,38 +17,44 @@ namespace Audio {
     float Audio::musicVolume = 100.0f;
     float Audio::sfxVolume = 100.0f;
 
-    /////////////
-    // Methods //
-    /////////////
+    ////////////
+    // Method //
+    ////////////
 
     void Audio::readConfigFile()
     {
-        libconfig::Config cfg;
+        try {
+            libconfig::Config cfg;
 
-        cfg.readFile("./Config/config.cfg");
+            cfg.readFile("./Config/config.cfg");
 
-        libconfig::Setting& config = cfg.lookup("config");
+            libconfig::Setting& config = cfg.lookup("config");
 
-        if (config.exists("audio")) {
-            const libconfig::Setting& audio = config["audio"];
-            int volume = 0;
+            if (config.exists("audio")) {
+                const libconfig::Setting& audio = config["audio"];
+                int volume = 0;
 
-            if (audio.exists("sound")) {
-                volume = audio["sound"];
+                if (audio.exists("sound")) {
+                    volume = audio["sound"];
 
-                Audio::sfxVolume = (float)volume;            
+                    Audio::sfxVolume = (float)volume;            
+                }
+
+                if (audio.exists("music")) {
+                    volume = audio["music"];
+
+                    Audio::musicVolume = (float)volume;
+                }
             }
 
-            if (audio.exists("music")) {
-                volume = audio["music"];
-
-                Audio::musicVolume = (float)volume;
-            }
+            if (Audio::musicVolume < 0.0f || Audio::musicVolume > 100.0f)
+                Audio::musicVolume = 100.0f;
+            if (Audio::sfxVolume < 0.0f || Audio::sfxVolume > 100.0f)
+                Audio::sfxVolume = 100.0f;
+        } catch (const libconfig::FileIOException &fioex) {
+            std::cerr << "I/O error while reading file." << std::endl;
+        } catch (const libconfig::ParseException &pex) {
+            std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError() << std::endl;
         }
-
-        if (Audio::musicVolume < 0.0f || Audio::musicVolume > 100.0f)
-            Audio::musicVolume = 100.0f;
-        if (Audio::sfxVolume < 0.0f || Audio::sfxVolume > 100.0f)
-            Audio::sfxVolume = 100.0f;
     }
 };

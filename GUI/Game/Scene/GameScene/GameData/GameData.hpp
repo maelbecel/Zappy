@@ -28,7 +28,8 @@ class GameData {
     // Constructor and Destructor (default)
     public:
         GameData();
-        ~GameData();
+
+        ~GameData() = default;
 
     // Methods
     public:
@@ -210,7 +211,7 @@ class GameData {
          *
          * @return std::map<std::string, std::shared_ptr<Player>> The players
          */
-        std::map<std::string, Player *> getPlayers() const;
+        std::map<std::string, std::shared_ptr<Player>> getPlayers() const;
 
         /**
          * @brief Realize the player's action
@@ -282,7 +283,7 @@ class GameData {
     private:
         sf::Vector2i _mapSize;                                     /*!< The size of the map between (10 and 50 for width and height)*/
         std::map<std::pair<int, int>, std::shared_ptr<Tile>> _map; /*!< The map of the game with the coordinates of the tiles and their content */
-        std::map<std::string, Player *> _players;                  /*!< The list of all the players */
+        std::map<std::string, std::shared_ptr<Player>> _players;   /*!< The list of all the players */
         std::map<std::string, std::shared_ptr<Eggs>> _eggs;        /*!< The list of all the eggs */
         std::vector<std::string> _teams;                           /*!< The list of all the teams */
 

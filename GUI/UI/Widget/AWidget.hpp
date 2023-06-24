@@ -10,9 +10,8 @@
 
     #include "IWidget.hpp"
 
-    #include <vector>
-
 namespace UI {
+
     /**
      * @brief Abstract class for all widgets
      * Create a variety of reusable UI widgets.
@@ -20,11 +19,13 @@ namespace UI {
      * Each widget should have customizable properties like size, position, colors, text, and callbacks for handling user interactions.
      */
     class AWidget : public IWidget {
+
         // Constructor / Destructor
         public:
             /**
              * @brief Construct a new AWidget object
-             *
+             * Function that create an instance of the class AWidget
+             * @warning You can't create an instance of the class AWidget because it's an abstract class
              * @param position The position of the widget
              * @param size     The size of the widget
              */
@@ -37,6 +38,49 @@ namespace UI {
 
         // Methods
         public:
+
+            /**
+             * @brief Update the widget
+             * Call this function for update the widget
+             * Function that update all the elements of the widget
+             * It's a override function cause certain don't need to be updated
+             */
+            virtual void update() override
+            {
+                // Do nothing for the widget that don't need to be updated
+                return;
+            }
+
+        // Getters
+        public:
+
+            /**
+             * @brief Check if the widget is clicked
+             * Check the collision between the mouse and the widget
+             * @param mousePosition The position of the mouse
+             * @return true         The widget is clicked
+             * @return false        The widget is not clicked
+             */
+            virtual bool isIn(sf::Vector2f mousePosition) override
+            {
+                if (mousePosition.x >= _position.x && mousePosition.x <= _position.x + _size.x && mousePosition.y >= _position.y && mousePosition.y <= _position.y + _size.y)
+                    _isClicked = true;
+                else
+                    _isClicked = false;
+
+                return _isClicked;
+            }
+
+            /**
+             * @brief Check if the widget is clicked
+             * Call the isIn function with the mouse position
+             * @return true  The widget is clicked
+             * @return false The widget is not clicked
+             */
+            virtual bool isClicked() const override
+            {
+                return _isClicked;
+            }
 
             /**
              * @brief Get the Position of the widget
@@ -56,43 +100,6 @@ namespace UI {
             virtual sf::Vector2f getSize() const override
             {
                 return _size;
-            }
-
-            /**
-             * @brief Update the widget
-             * Function that update all the elements of the widget
-             */
-            virtual void update() override
-            {
-                return;
-            }
-
-            /**
-             * @brief Check if the widget is clicked
-             * Check the collision between the mouse and the widget
-             * @param mousePosition The position of the mouse
-             * @return true         The widget is clicked
-             * @return false        The widget is not clicked
-             */
-            virtual bool isIn(sf::Vector2f mousePosition) override
-            {
-                if (mousePosition.x >= _position.x && mousePosition.x <= _position.x + _size.x && mousePosition.y >= _position.y && mousePosition.y <= _position.y + _size.y) {
-                    _isClicked = true;
-                    return true;
-                }
-                _isClicked = false;
-                return false;
-            }
-
-            /**
-             * @brief Check if the widget is clicked
-             * Call the isIn function with the mouse position
-             * @return true  The widget is clicked
-             * @return false The widget is not clicked
-             */
-            virtual bool isClicked() const override
-            {
-                return _isClicked;
             }
 
         // Pure virtual methods

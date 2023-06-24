@@ -8,9 +8,9 @@
 #include "InputBox.hpp"
 
 namespace UI {
-    //////////////////////////////
-    // Constructor & Destructor //
-    //////////////////////////////
+    /////////////////
+    // Constructor //
+    /////////////////
     InputBox::InputBox() : AWidget(), value(std::string("")) {};
 
     InputBox::InputBox(const std::string &name, const sf::Vector2f &position, const sf::Vector2f &size) : AWidget(position, size), value(std::string(""))
@@ -20,7 +20,7 @@ namespace UI {
 
         // Create the Title of the input box
         try {
-            sf::Font *font = FontManager::getFont(UI::ARIAL);
+            std::shared_ptr<sf::Font> font = FontManager::getFont(UI::ARIAL);
 
             _name.setString(name);
             _name.setFont(*font);
@@ -41,12 +41,6 @@ namespace UI {
         borderStyle.apply(_box);
     }
 
-    InputBox::~InputBox()
-    {
-        // Destroy the _name ~sf::Text() default destructor
-        // Destroy the _box ~sf::RectangleShape() default destructor
-    };
-
     /////////////
     // Methods //
     /////////////
@@ -61,7 +55,7 @@ namespace UI {
 
         // Draw the text enter
         try {
-            sf::Font *font = FontManager::getFont(UI::ARIAL);
+            std::shared_ptr<sf::Font> font = FontManager::getFont(UI::ARIAL);
             sf::Text text(value, *font, FONT_SIZE);
 
             text.setFillColor(sf::Color::Black);
@@ -94,9 +88,9 @@ namespace UI {
         value += static_cast<char>(event.text.unicode);
     }
 
-    ///////////////////////
-    // Setters & Getters //
-    ///////////////////////
+    /////////////
+    // Setters //
+    /////////////
 
     void InputBox::setPosition(const sf::Vector2f &position)
     {

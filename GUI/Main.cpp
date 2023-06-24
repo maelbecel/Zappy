@@ -12,6 +12,9 @@
 #include <iostream>
 #include <SFML/Audio.hpp>
 
+#include "TextureManager.hpp"
+#include "FontManager.hpp"
+
 int main(int ac, char **av)
 {
     try {
@@ -37,6 +40,14 @@ int main(int ac, char **av)
     } catch (Error::ParserException &error) {
         std::cerr << error.what() << std::endl;
         return 84;
+    } catch (const libconfig::FileIOException &fioex) {
+        std::cerr << "I/O error while reading file." << std::endl;
+    } catch (const libconfig::ParseException &pex) {
+        std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError() << std::endl;
     }
+
+    // Destroy all the textures and fonts of the game
+    UI::TextureManager::destroy();
+    UI::FontManager::destroy();
     return 0;
 }

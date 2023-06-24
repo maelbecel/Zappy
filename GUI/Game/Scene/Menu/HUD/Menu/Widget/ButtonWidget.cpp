@@ -19,7 +19,7 @@ namespace UI {
         // [___Text____]
 
         try {
-            sf::Font *font = FontManager::getFont(UI::ARIAL);
+            std::shared_ptr<sf::Font> font = FontManager::getFont(UI::ARIAL);
 
             _name.setString(text);
             _name.setFont(*font);
@@ -119,7 +119,7 @@ namespace UI {
         std::map<std::string, sf::Sprite> sprites;
 
         try {
-            sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/25.png");
+            std::shared_ptr<sf::Texture> texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/25.png");
             sf::Sprite sprite;
             sprite.setTexture(*texture);
             sprites["left"] = sprite;
@@ -140,7 +140,7 @@ namespace UI {
     std::map<std::string, sf::Sprite> ButtonWidget::setIdleSprites()
     {
         std::map<std::string, sf::Sprite> sprites;
-        sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/22.png");
+        std::shared_ptr<sf::Texture> texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/22.png");
         sf::Sprite sprite;
         sprite.setTexture(*texture);
         sprites["left"] = sprite;

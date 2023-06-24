@@ -29,6 +29,10 @@ namespace Math {
             delete[] _noise;
     }
 
+    ////////////
+    // Method //
+    ////////////
+
     void Noise::generateNoise()
     {
         _noise = new double *[_height];
@@ -40,6 +44,10 @@ namespace Math {
                 _noise[i][j] = (random(32768) / 32768.0);
         }
     }
+
+    /////////////////////
+    // Getter & Setter //
+    /////////////////////
 
     double **Noise::getNoise() const
     {

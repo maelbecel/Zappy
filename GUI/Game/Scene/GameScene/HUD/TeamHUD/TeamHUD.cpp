@@ -28,11 +28,11 @@ namespace UI {
 
             _cursor->setTexture(*TextureManager::getTexture(UI::CURSOR));
             _cursor->setTextureRect(sf::IntRect(0, 0, Tile::TILE_WIDTH, Tile::TILE_TOTAL_HEIGHT));
-        } catch (const std::exception &e) {
-            std::cerr << e.what() << std::endl;
+        } catch (const Error::TextureError &e) {
+            std::cerr << "Bad Initialization of TeamHUD: " << e.what() << std::endl;
         }
 
-        _mouseClick = new Audio::VFX(Audio::MOUSE_CLICK, Audio::Audio::sfxVolume);
+        _mouseClick = new Audio::SFX(Audio::MOUSE_CLICK, Audio::Audio::sfxVolume);
     };
 
     TeamHUD::~TeamHUD()
@@ -124,9 +124,9 @@ namespace UI {
 
         _mouseClick->setVolume(Audio::Audio::sfxVolume);
         for (auto element : _teamLayout->getElements()) {
-            if (static_cast<TeamWidget *>(element)->isInside(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)) == true) {
+            if (static_cast<TeamWidget *>(element.get())->isInside(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)) == true) {
                 _mouseClick->play();
-                _teamName = static_cast<TeamWidget *>(element)->getTeamName();
+                _teamName = static_cast<TeamWidget *>(element.get())->getTeamName();
                 found = true;
                 break;
             }
@@ -155,7 +155,7 @@ namespace UI {
             }
 
             if (!found) {
-                TeamWidget *teamWidget = new TeamWidget(team, index, sf::Vector2f(0.0f, 0.0f));
+                std::shared_ptr<TeamWidget> teamWidget = std::make_shared<TeamWidget>(team, index, sf::Vector2f(0.0f, 0.0f));
 
                 _teamLayout->addElement(teamWidget);
             }

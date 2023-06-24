@@ -11,17 +11,30 @@
     #include "TextureError.hpp"
 
     #include <SFML/Graphics.hpp>
-    #include <map>
+
+    #include <memory>
     #include <string>
+    #include <map>
 
 namespace UI {
-    static std::string TEAM_BACKGROUND = "./Assets/UI_UX/HUD/GameSceneHUD/TeamHUD.png";
-    static std::string TEAM_PICTURE = "./Assets/UI_UX/Characters/Idle/Frame#1.png";
-    static std::string EGGS = "./Assets/UI_UX/Characters/Eggs/Eggs.png";
-    static std::string CURSOR = "./Assets/Hexagonal/CursorHexP.png";
 
+    //////////////////
+    // Texture path //
+    //////////////////
+
+    static std::string TEAM_BACKGROUND = "./Assets/UI_UX/HUD/GameSceneHUD/TeamHUD.png"; /*!< The path for the Team Widget in the Zappy Game HUD */
+    static std::string TEAM_PICTURE = "./Assets/UI_UX/Characters/Idle/Frame#1.png";     /*!< The path for the Team Picture in the Zappy Game HUD */
+    static std::string EGGS = "./Assets/UI_UX/Characters/Eggs/Eggs.png";                /*!< The path for the Eggs for the Zappy Gameplay */
+    static std::string CURSOR = "./Assets/Hexagonal/CursorHexP.png";                    /*!< The path for the Cursor in the Zappy Gameplay */
+
+    /**
+     * @brief The TextureManager class
+     * This class can't be instanciate
+     * It's a static class for texture managing (load, get, destroy)
+     */
     class TextureManager {
-        // Constructor (default) & Destructor (default)
+
+        // Constructor (delete) & Destructor (delete)
         public:
             TextureManager() = delete;
             ~TextureManager() = delete;
@@ -35,14 +48,15 @@ namespace UI {
              * If the texture is already loaded, return it
              * If the texture is not loaded, load it and return it
              * If the texture not exist, throw an error
-             * @param filepath       The filepath of the texture
-             * @return sf::Texture * The texture
+             * @warning Don't forget to destroy the textures at the end of the program
+             * @param filepath          The filepath of the texture
+             * @return Ref<sf::Texture> The texture
              */
-            static sf::Texture *getTexture(const std::string &filepath)
+            static std::shared_ptr<sf::Texture> getTexture(const std::string &filepath)
             {
                 if (_textures.find(filepath) == _textures.end()) {
                     // Texture not found, create it
-                    sf::Texture *texture = new sf::Texture;
+                    std::shared_ptr<sf::Texture> texture = std::make_shared<sf::Texture>();
 
                     // Check if the texture is loaded
                     if (!texture->loadFromFile(filepath))
@@ -54,17 +68,17 @@ namespace UI {
 
             /**
              * @brief Destroy all the textures
+             * Call this function at the end of the program
              * Destroy all the textures loaded
              */
             static void destroy()
             {
-                for (auto &texture : _textures)
-                    delete texture.second;
+                _textures.clear();
             }
 
-        // Attributes
+        // Attribute
         private:
-            static std::map<std::string, sf::Texture *> _textures; /*!< The textures of the game */
+            static std::map<std::string, std::shared_ptr<sf::Texture>> _textures; /*!< The textures of the game */
     };
 };
 

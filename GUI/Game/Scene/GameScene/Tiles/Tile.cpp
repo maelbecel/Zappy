@@ -13,13 +13,13 @@ Tile::Tile(sf::Vector2i coordonates, int q0, int q1, int q2, int q3, int q4, int
 
     try {
         // Load the Tiles texture
-        sf::Texture *foodTexture = UI::TextureManager::getTexture("./Assets/UI_UX/Resources/food.png");
-        sf::Texture *linemateTexture = UI::TextureManager::getTexture("./Assets/UI_UX/Resources/linemate.png");
-        sf::Texture *deraumereTexture = UI::TextureManager::getTexture("./Assets/UI_UX/Resources/deraumere.png");
-        sf::Texture *siburTexture = UI::TextureManager::getTexture("./Assets/UI_UX/Resources/sibur.png");
-        sf::Texture *mendianeTexture = UI::TextureManager::getTexture("./Assets/UI_UX/Resources/mendiane.png");
-        sf::Texture *phirasTexture = UI::TextureManager::getTexture("./Assets/UI_UX/Resources/phiras.png");
-        sf::Texture *thystameTexture = UI::TextureManager::getTexture("./Assets/UI_UX/Resources/thystame.png");
+        std::shared_ptr<sf::Texture> foodTexture = UI::TextureManager::getTexture("./Assets/UI_UX/Resources/food.png");
+        std::shared_ptr<sf::Texture> linemateTexture = UI::TextureManager::getTexture("./Assets/UI_UX/Resources/linemate.png");
+        std::shared_ptr<sf::Texture> deraumereTexture = UI::TextureManager::getTexture("./Assets/UI_UX/Resources/deraumere.png");
+        std::shared_ptr<sf::Texture> siburTexture = UI::TextureManager::getTexture("./Assets/UI_UX/Resources/sibur.png");
+        std::shared_ptr<sf::Texture> mendianeTexture = UI::TextureManager::getTexture("./Assets/UI_UX/Resources/mendiane.png");
+        std::shared_ptr<sf::Texture> phirasTexture = UI::TextureManager::getTexture("./Assets/UI_UX/Resources/phiras.png");
+        std::shared_ptr<sf::Texture> thystameTexture = UI::TextureManager::getTexture("./Assets/UI_UX/Resources/thystame.png");
 
         // Create the sprites for the texture
         sf::Sprite *foodSprite = new sf::Sprite();

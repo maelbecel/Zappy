@@ -16,7 +16,7 @@ namespace Scene {
     GameScene::GameScene() : _isTileHUDOpen(false), _isTeamActivated(true)
     {
         _ost = new Audio::Music(Audio::GAME_OST, Audio::Audio::musicVolume, true);
-        _mouseClick = new Audio::VFX(Audio::MOUSE_CLICK, Audio::Audio::sfxVolume);
+        _mouseClick = new Audio::SFX(Audio::MOUSE_CLICK, Audio::Audio::sfxVolume);
         _teamHUD = new UI::TeamHUD();
         _gameMenuHUD = new UI::GameMenuHUD();
         _gameHUD = new UI::GameHUD();

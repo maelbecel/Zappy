@@ -15,7 +15,7 @@
     #include "TextureError.hpp"
     #include "TextureManager.hpp"
     #include "Animation.hpp"
-    #include "VFX.hpp"
+    #include "SFX.hpp"
 
 class GameData;
 class Tile;
@@ -192,7 +192,7 @@ class Player {
     // Sprites
     private:
         sf::Sprite *_playerSprite;           /*!< The sprite of the player */
-        std::vector<Audio::VFX *> _vfx;      /*!< The vector of vfx */
+        std::vector<Audio::SFX *> _SFX;      /*!< The vector of SFX */
 
     // Define
     public:

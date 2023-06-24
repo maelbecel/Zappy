@@ -16,7 +16,7 @@
     #include "TileHUD.hpp"
     #include "GameHUD.hpp"
     #include "Music.hpp"
-    #include "VFX.hpp"
+    #include "SFX.hpp"
 
     #include <memory>
 
@@ -125,7 +125,7 @@ namespace Scene {
             UI::GameHUD *_gameHUD;         /*!< The game HUD */
             UI::TileHUD *_tileHUD;         /*!< The tile HUD */
             Audio::Music *_ost;           /*!< The game OST */
-            Audio::VFX *_mouseClick;      /*!< The mouse click sound */
+            Audio::SFX *_mouseClick;      /*!< The mouse click sound */
     };
 }
 

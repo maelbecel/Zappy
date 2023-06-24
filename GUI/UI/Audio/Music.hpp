@@ -11,6 +11,11 @@
     #include <SFML/Audio.hpp>
 
 namespace Audio {
+
+    ////////////////
+    // Music path //
+    ////////////////
+
     const std::string GAME_OST = "./Assets/Audio/Just_Another_Day.wav";
     const std::string MENU_OST = "./Assets/Audio/Lost_In_The_Deeps.wav";
 
@@ -20,6 +25,7 @@ namespace Audio {
      * Use it for play a music in the game
      */
     class Music {
+
         // Constructor & Destructor
         public:
 
@@ -56,7 +62,7 @@ namespace Audio {
              */
             void pause();
 
-        // Getters & Setters
+        // Setters & Getters
         public:
 
             /**

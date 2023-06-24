@@ -11,12 +11,12 @@ Map::Map()
 {
     try {
         // Load the Tiles texture
-        sf::Texture *grassTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/GrassHexP.png");
-        sf::Texture *forestTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/BushHexP.png");
-        sf::Texture *snowTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/SnowHexP.png");
-        sf::Texture *snowForestTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/SnowBushHexP.png");
-        sf::Texture *desertTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/DesertHexP.png");
-        sf::Texture *seaTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/SeaHexP.png");
+        std::shared_ptr<sf::Texture> grassTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/GrassHexP.png");
+        std::shared_ptr<sf::Texture> forestTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/BushHexP.png");
+        std::shared_ptr<sf::Texture> snowTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/SnowHexP.png");
+        std::shared_ptr<sf::Texture> snowForestTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/SnowBushHexP.png");
+        std::shared_ptr<sf::Texture> desertTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/DesertHexP.png");
+        std::shared_ptr<sf::Texture> seaTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/SeaHexP.png");
 
         // Create the sprites for the texture
         sf::Sprite *grassSprite = new sf::Sprite();
@@ -54,7 +54,7 @@ Map::Map()
         _tiles["Sea"] = seaSprite;
 
     } catch (Error::TextureError &e) {
-        std::cerr << e.what() << std::endl;
+        std::cerr << "Bad Initialization of Map: " << e.what() << std::endl;
     }
 }
 

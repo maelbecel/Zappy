@@ -12,7 +12,7 @@ namespace UI {
     /////////////////
     // Constructor //
     /////////////////
-    Animation::Animation(std::vector<sf::Sprite *> sprites, int frames, double frameDuration, bool looped) : _sprites(sprites), _frames(frames), _frameDuration(frameDuration), _looped(looped), _isPlaying(false), _elapsedTime(0.0f), _currentFrame(0)
+    Animation::Animation(std::vector<std::shared_ptr<sf::Sprite>> sprites, int frames, double frameDuration, bool looped) : _sprites(sprites), _frames(frames), _frameDuration(frameDuration), _looped(looped), _isPlaying(false), _elapsedTime(0.0f), _currentFrame(0)
     {
         if (_sprites.empty())
             return;
@@ -23,12 +23,12 @@ namespace UI {
     // Public methods //
     ////////////////////
 
-    void Animation::addFrame(sf::Sprite *frame)
+    void Animation::addFrame(std::shared_ptr<sf::Sprite> frame)
     {
         _sprites.push_back(frame);
     }
 
-    void Animation::addFrames(std::vector<sf::Sprite *> frames)
+    void Animation::addFrames(std::vector<std::shared_ptr<sf::Sprite>> frames)
     {
         _sprites = frames;
     }
@@ -78,11 +78,11 @@ namespace UI {
         return end;
     }
 
-    /////////////////////
-    // Getter & Setter //
-    /////////////////////
+    ////////////
+    // Getter //
+    ////////////
 
-    sf::Sprite *Animation::getCurrentSprite() const
+    std::shared_ptr<sf::Sprite> Animation::getCurrentSprite() const
     {
         return _currentSprite;
     }

@@ -18,7 +18,7 @@
     #include "CrossButtonWidget.hpp"
     #include "NetworkError.hpp"
     #include "SettingsHUD.hpp"
-    #include "VFX.hpp"
+    #include "SFX.hpp"
 
 namespace UI {
     class MenuHUD {
@@ -94,7 +94,7 @@ namespace UI {
             IButton *_quitButton;            /*!< Button to quit the game */
             IButton *_crossButton;           /*!< Button to close the pop up */
             SettingsHUD *_settingsHUD;        /*!< Settings HUD */
-            Audio::VFX *_mouseClick;         /*!< Sound of the mouse click */
+            Audio::SFX *_mouseClick;         /*!< Sound of the mouse click */
             AsteroidHandler _asteroid;              /*!< Asteroid of the Menu HUD */
             Planet _planet;                  /*!< Planet of the Menu HUD */
             bool _popUp;                     /*!< Boolean to know if the pop up is opened */

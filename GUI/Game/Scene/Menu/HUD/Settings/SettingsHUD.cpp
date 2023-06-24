@@ -19,7 +19,7 @@ namespace UI {
         _background.setPosition(sf::Vector2f(0.0f, 0.0f));
 
         try {
-            sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Paper UI Pack/Paper UI/Folding & Cutout/10 Calander/1.png");
+            std::shared_ptr<sf::Texture> texture = TextureManager::getTexture("./Assets/UI_UX/Paper UI Pack/Paper UI/Folding & Cutout/10 Calander/1.png");
             _backgroundSprite = sf::Sprite(*texture);
             _backgroundSprite.setPosition(sf::Vector2f((Window::getWindowWidth() - (656 * 1.5)) / 2, (Window::getWindowHeight() - (544 * 1.5)) / 2));
             _backgroundSprite.setScale(sf::Vector2f(1.5f, 1.5f));
@@ -29,26 +29,26 @@ namespace UI {
 
         setLanguage();
 
-        ArrowButtonWidget *decreaseSoundButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 - 75, 248), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
-        ArrowButtonWidget *increaseSoundButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 250, 248), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
+        std::shared_ptr<IWidget> decreaseSoundButton = std::make_shared<ArrowButtonWidget>(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 - 75, 248), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
+        std::shared_ptr<IWidget> increaseSoundButton = std::make_shared<ArrowButtonWidget>(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 250, 248), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
         _decreaseSoundButton = new Button(decreaseSoundButton);
         _increaseSoundButton = new Button(increaseSoundButton);
 
-        ArrowButtonWidget *decreaseMusicButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 - 75, 348), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
-        ArrowButtonWidget *increaseMusicButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 250, 348), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
+        std::shared_ptr<IWidget> decreaseMusicButton = std::make_shared<ArrowButtonWidget>(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 - 75, 348), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
+        std::shared_ptr<IWidget> increaseMusicButton = std::make_shared<ArrowButtonWidget>(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 250, 348), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
         _decreaseMusicButton = new Button(decreaseMusicButton);
         _increaseMusicButton = new Button(increaseMusicButton);
 
-        CrossButtonWidget *crossSettingsButton = new CrossButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 450, 150), sf::Vector2f(16 * 2.5, 16 * 2.5));
+        std::shared_ptr<IWidget> crossSettingsButton = std::make_shared<CrossButtonWidget>(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 450, 150), sf::Vector2f(16 * 2.5, 16 * 2.5));
         _crossSettingsButton = new Button(crossSettingsButton);
 
-        ArrowButtonWidget *changeTileHUDLeftButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 - 75, 548), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
-        ArrowButtonWidget *changeTileHUDRightButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 250, 548), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
+        std::shared_ptr<IWidget> changeTileHUDLeftButton = std::make_shared<ArrowButtonWidget>(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 - 75, 548), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
+        std::shared_ptr<IWidget> changeTileHUDRightButton = std::make_shared<ArrowButtonWidget>(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 250, 548), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
         _changeTileHUDLeftButton = new Button(changeTileHUDLeftButton);
         _changeTileHUDRightButton = new Button(changeTileHUDRightButton);
 
-        ArrowButtonWidget *changeLanguageLeftButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 - 75, 448), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
-        ArrowButtonWidget *changeLanguageRightButton = new ArrowButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 250, 448), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
+        std::shared_ptr<IWidget> changeLanguageLeftButton = std::make_shared<ArrowButtonWidget>(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 - 75, 448), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
+        std::shared_ptr<IWidget> changeLanguageRightButton = std::make_shared<ArrowButtonWidget>(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 250, 448), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
         _changeLanguageLeftButton = new Button(changeLanguageLeftButton);
         _changeLanguageRightButton = new Button(changeLanguageRightButton);
         for (size_t i = 0; i < _languages.size(); i++) {
@@ -59,12 +59,12 @@ namespace UI {
         }
         _changeLanguageRightButton->setValue(_changeLanguageLeftButton->getValue() + 1);
 
-        ValidateButtonWidget *validateButton = new ValidateButtonWidget(sf::Vector2f(Window::getWindowWidth() / 2 - 8, _backgroundSprite.getTexture()->getSize().y + 100), sf::Vector2f(16 * 3, 16 * 3));
+        std::shared_ptr<IWidget> validateButton = std::make_shared<ValidateButtonWidget>(sf::Vector2f(Window::getWindowWidth() / 2 - 8, _backgroundSprite.getTexture()->getSize().y + 100), sf::Vector2f(16 * 3, 16 * 3));
         _validateButton = new Button(validateButton);
 
         libconfig::Config cfg;
 
-        _mouseClick = new Audio::VFX(Audio::MOUSE_CLICK, Audio::Audio::sfxVolume);
+        _mouseClick = new Audio::SFX(Audio::MOUSE_CLICK, Audio::Audio::sfxVolume);
 
         try {
             cfg.readFile("./Config/config.cfg");
@@ -294,8 +294,9 @@ namespace UI {
     sf::Text SettingsHUD::setString(std::string str, sf::Vector2f position)
     {
         sf::Text text;
+
         try {
-            sf::Font *font = FontManager::getFont(UI::ARIAL);
+            std::shared_ptr<sf::Font> font = FontManager::getFont(UI::ARIAL);
 
             text.setString(str);
             text.setFont(*font);

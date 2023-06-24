@@ -15,7 +15,7 @@ namespace UI {
     GameHUD::GameHUD()
     {
         try {
-            sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Paper UI Pack/Paper UI/Folding & Cutout/4 Notification/1.png");
+            std::shared_ptr<sf::Texture> texture = TextureManager::getTexture("./Assets/UI_UX/Paper UI Pack/Paper UI/Folding & Cutout/4 Notification/1.png");
             _backgroundSprite = sf::Sprite(*texture);
             _backgroundSprite.setPosition(sf::Vector2f(Window::getWindowWidth() - 268 * 1.5, 0));
             _backgroundSprite.setScale(sf::Vector2f(1.5f, 1.5f));
@@ -23,9 +23,9 @@ namespace UI {
             std::cerr << "Bad Initialization of GameHUD: " << e.what() << std::endl;
         }
 
-        ArrowButtonWidget *speed1x = new ArrowButtonWidget(sf::Vector2f(Window::getWindowWidth() - 220 - 80, 35), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
-        ArrowButtonWidget *speed2x = new ArrowButtonWidget(sf::Vector2f(Window::getWindowWidth() - 220 + 15, 35), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
-        ArrowButtonWidget *speed4x = new ArrowButtonWidget(sf::Vector2f(Window::getWindowWidth() - 220 + 115, 35), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
+        std::shared_ptr<IWidget> speed1x = std::make_shared<ArrowButtonWidget>(sf::Vector2f(Window::getWindowWidth() - 220 - 80, 35), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);        
+        std::shared_ptr<IWidget> speed2x = std::make_shared<ArrowButtonWidget>(sf::Vector2f(Window::getWindowWidth() - 220 + 15, 35), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
+        std::shared_ptr<IWidget> speed4x = std::make_shared<ArrowButtonWidget>(sf::Vector2f(Window::getWindowWidth() - 220 + 115, 35), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
 
         _speed1x = new Button(speed1x);
         _speed2x = new Button(speed2x);
@@ -34,7 +34,7 @@ namespace UI {
         _speed1xText = setString("1x", sf::Vector2f(Window::getWindowWidth() - 220 - 80 + 16 * 3, 35 + 12 * 3));
         _speed2xText = setString("2x", sf::Vector2f(Window::getWindowWidth() - 220 + 15 + 16 * 3, 35 + 12 * 3));
         _speed4xText = setString("4x", sf::Vector2f(Window::getWindowWidth() - 220 + 115 + 16 * 3, 35 + 12 * 3));
-        _mouseClick = new Audio::VFX(Audio::MOUSE_CLICK, Audio::Audio::sfxVolume);
+        _mouseClick = new Audio::SFX(Audio::MOUSE_CLICK, Audio::Audio::sfxVolume);
     }
 
     GameHUD::~GameHUD()
@@ -94,8 +94,9 @@ namespace UI {
     sf::Text GameHUD::setString(std::string str, sf::Vector2f position)
     {
         sf::Text text;
+
         try {
-            sf::Font *font = FontManager::getFont(UI::ARIAL);
+            std::shared_ptr<sf::Font> font = FontManager::getFont(UI::ARIAL);
 
             text.setString(str);
             text.setFont(*font);

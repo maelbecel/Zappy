@@ -10,6 +10,9 @@
 
     #include <cmath>
 
+/**
+ * @brief The namespace containing all the math tools
+ */
 namespace Math {
 
     /**

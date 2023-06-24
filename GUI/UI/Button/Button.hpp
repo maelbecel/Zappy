@@ -11,10 +11,27 @@
     #include "IButton.hpp"
 
 namespace UI {
+
+    /**
+     * @brief A button is a widget that contains a widget and a callback function
+     */
     class Button : public IButton {
+
         // Constructor & Destructor (default)
         public:
-            Button(IWidget *widget = nullptr, std::function<void()> callback = nullptr);
+            /**
+             * @brief Construct a new Button object
+             *
+             * @param widget   The widget that will be rendered inside the button
+             * @param callback The callback function that will be called when the button is clicked
+             */
+            Button(std::shared_ptr<IWidget> widget, std::function<void()> callback = nullptr);
+
+            /**
+             * @brief Construct a new Button object
+             * Call this constructor if you want to copy a button
+             * @param button The button to copy
+             */
             Button(const Button &button);
 
             ~Button() override = default;
@@ -35,6 +52,9 @@ namespace UI {
              */
             void render(sf::RenderWindow& window, ButtonState state) const override;
 
+        // Getters & Setters
+        public:
+
             /**
              * @brief Check if the button is clicked
              *
@@ -53,15 +73,33 @@ namespace UI {
              */
             bool isHovered(sf::Vector2f mousePosition) const override;
 
-        // Setters & Getters
-        public:
+            /**
+             * @brief Get the Position of the button
+             *
+             * @return sf::Vector2f The button position
+             */
+            sf::Vector2f getPosition() const override;
+
+            /**
+             * @brief Get the Size object
+             *
+             * @return sf::Vector2f The button size
+             */
+            sf::Vector2f getSize() const override;
+
+            /**
+             * @brief Get the value of the button
+             *
+             * @return ssize_t The value of the button
+             */
+            ssize_t getValue() const override;
 
             /**
              * @brief Set the Widget object
              * The widget is the object that will be rendered inside the button
              * @param widget The widget to set
              */
-            void setWidget(IWidget *widget) override;
+            void setWidget(std::shared_ptr<IWidget> widget) override;
 
             /**
              * @brief Set the On Click Callback of the button
@@ -78,13 +116,6 @@ namespace UI {
             void setPosition(const sf::Vector2f& position) override;
 
             /**
-             * @brief Get the Position of the button
-             *
-             * @return sf::Vector2f The button position
-             */
-            sf::Vector2f getPosition() const override;
-
-            /**
              * @brief Set the Size of the button
              *
              * @param size The button size
@@ -92,25 +123,11 @@ namespace UI {
             void setSize(const sf::Vector2f& size) override;
 
             /**
-             * @brief Get the Size object
-             *
-             * @return sf::Vector2f The button size
-             */
-            sf::Vector2f getSize() const override;
-
-            /**
              * @brief Set the value of the button
              *
              * @param value The value to set
              */
             void setValue(ssize_t value) override;
-
-            /**
-             * @brief Get the value of the button
-             *
-             * @return ssize_t The value of the button
-             */
-            ssize_t getValue() const override;
 
         // Operators
         public:
@@ -125,9 +142,9 @@ namespace UI {
 
         // Attributes
         protected:
-            IWidget *_widget;                /*!< The widget that will be rendered inside the button */
-            std::function<void()> _callback; /*!< The callback function (function call when the button got clicked) */
-            size_t _value;                      /*!< The value of the button */
+            std::shared_ptr<IWidget> _widget; /*!< The widget that will be rendered inside the button */
+            std::function<void()> _callback;  /*!< The callback function (function call when the button got clicked) */
+            size_t _value;                    /*!< The value of the button */
     };
 };
 

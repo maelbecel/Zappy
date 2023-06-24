@@ -2,17 +2,22 @@
 ** EPITECH PROJECT, 2023
 ** GUI
 ** File description:
-** VFX
+** SFX
 */
 
-#ifndef VFX_HPP_
-    #define VFX_HPP_
+#ifndef SFX_HPP_
+    #define SFX_HPP_
 
     #include <SFML/Audio.hpp>
 
     #include "Audio.hpp"
 
 namespace Audio {
+
+    //////////////
+    // SFX path //
+    //////////////
+
     const std::string MOUSE_CLICK = "./Assets/Audio/ButtonClick.wav";
     const std::string BROADCAST1 = "./Assets/Audio/BroadCast1.wav";
     const std::string BROADCAST2 = "./Assets/Audio/BroadCast2.wav";
@@ -28,62 +33,62 @@ namespace Audio {
     const std::string BROADCAST12 = "./Assets/Audio/BroadCast12.wav";
 
     /**
-     * @brief VFX class
-     * Class that handle the VFX
-     * Use it for play a VFX in the game
+     * @brief SFX class
+     * Class that handle the SFX
+     * Use it for play a SFX in the game
      */
-    class VFX {
+    class SFX {
         
         // Constructor & Destructor
         public:
 
             /**
-             * @brief Construct a new VFX object
-             * Create a VFX for the game
+             * @brief Construct a new SFX object
+             * Create a SFX for the game
              * @param audio  The path of the audio file
-             * @param volume The volume of the VFX
+             * @param volume The volume of the SFX
              */
-            VFX(const std::string &audio, float volume = 100.0f);
+            SFX(const std::string &audio, float volume = 100.0f);
 
             /**
-             * @brief Destroy the VFX object
-             * Destroy the VFX object
+             * @brief Destroy the SFX object
+             * Destroy the SFX object
              */
-            ~VFX();
+            ~SFX();
 
-        // Methods
+        // Method
         public:
 
             /**
-             * @brief Play the VFX
+             * @brief Play the SFX
              */
             void play();
 
-        // Getters & Setters
+        // Setter & Getter
         public:
 
             /**
              * @brief Set the volume object
-             * Set the volume of the VFX
-             * @param volume The volume of the VFX
+             * Set the volume of the SFX
+             * @param volume The volume of the SFX
              */
             void setVolume(float volume);
 
             /**
              * @brief Get the isPlaying object
-             * Get the isPlaying of the VFX
-             * @return true If the VFX is playing
-             * @return false If the VFX is not playing
+             * Get the isPlaying of the SFX
+             * @return true If the SFX is playing
+             * @return false If the SFX is not playing
              */
             bool isPlaying() const;
 
         // Attributes
         private:
-            sf::SoundBuffer _buffer; /*!< The buffer of the VFX */
-            sf::Sound _sound;        /*!< The sound of the VFX */
-            float _volume;           /*!< The volume of the VFX */
-            bool _isPlaying;         /*!< The isPlaying of the VFX */
+            sf::SoundBuffer _buffer; /*!< The buffer of the SFX */
+            sf::Sound _sound;        /*!< The sound of the SFX */
+            float _volume;           /*!< The volume of the SFX */
+            bool _isPlaying;         /*!< The isPlaying of the SFX */
     };
 };
 
-#endif /* !VFX_HPP_ */
+#endif /* !SFX_HPP_ */

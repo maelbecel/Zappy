@@ -32,13 +32,6 @@ void Game::Initialize(std::string ip, std::string port)
 {
     _scenes.at("Menu").first->Initialize(ip, port);
     _scenes.at("Game").first->Initialize();
-
-    // TODO: Load all the fonts and Texture of the game
-    try {
-        UI::FontManager::getFont(UI::ARIAL);
-    } catch (const Error::TextureError &e) {
-        std::cerr << e.what() << std::endl;
-    }
 };
 
 void Game::Render(sf::RenderWindow &window)

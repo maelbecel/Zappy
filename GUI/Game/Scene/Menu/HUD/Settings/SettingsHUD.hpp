@@ -21,7 +21,7 @@
     #include "ArrowButtonWidget.hpp"
     #include "CrossButtonWidget.hpp"
     #include "ValidateButtonWidget.hpp"
-    #include "VFX.hpp"
+    #include "SFX.hpp"
 
 namespace UI {
     class SettingsHUD {
@@ -114,7 +114,7 @@ namespace UI {
             bool _isOpened;                         /*!< Is the Settings HUD opened */
             bool _isGameMenu;                       /*!< Is the Game Menu HUD opened */
             bool _tileHUDTextMode;              /*!< Is the tile HUD in text mode */
-            Audio::VFX *_mouseClick;                /*!< Mouse click sound */
+            Audio::SFX *_mouseClick;                /*!< Mouse click sound */
     };
 };
 

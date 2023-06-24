@@ -20,7 +20,7 @@ namespace UI {
 
         // Create the Title of the input box
         try {
-            sf::Font *font = FontManager::getFont(UI::ARIAL);
+            std::shared_ptr<sf::Font> font = FontManager::getFont(UI::ARIAL);
 
             _name.setString(name);
             _name.setFont(*font);
@@ -61,7 +61,7 @@ namespace UI {
 
         // Draw the text enter
         try {
-            sf::Font *font = FontManager::getFont(UI::ARIAL);
+            std::shared_ptr<sf::Font> font = FontManager::getFont(UI::ARIAL);
             sf::Text text(value, *font, FONT_SIZE);
 
             text.setFillColor(sf::Color::Black);

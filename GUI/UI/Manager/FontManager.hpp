@@ -11,18 +11,29 @@
     #include "TextureError.hpp"
 
     #include <SFML/Graphics.hpp>
+
     #include <string>
     #include <memory>
     #include <map>
 
 namespace UI {
-    static std::string ARIAL = "./Assets/Fonts/arial.TTF";
 
+    ///////////////
+    // Font path //
+    ///////////////
+
+    static std::string ARIAL = "./Assets/Fonts/arial.TTF"; /*!< The path for the Arial font, that will be used in all the Zappy UI */
+
+    /**
+     * @brief The FontManager class
+     * This class can't be instanciate
+     * It's a static class for font managing (load, get, destroy)
+     */
     class FontManager {
-        // Constructor (default) & Destructor (default)
+        // Constructor (delete) & Destructor (delete)
         public:
-            FontManager() = default;
-            ~FontManager() = default;
+            FontManager() = delete;
+            ~FontManager() = delete;
         
         // Methods
         public:
@@ -33,14 +44,15 @@ namespace UI {
              * If the font is already loaded, return it
              * If the font is not loaded, load it and return it
              * If the font not exist, throw an error
-             * @param filepath    The filepath of the font
-             * @return sf::Font * The font
+             * @warning Don't forget to destroy the fonts at the end of the program
+             * @param filepath       The filepath of the font
+             * @return Ref<sf::Font> The font
              */
-            static sf::Font *getFont(const std::string &filepath)
+            static std::shared_ptr<sf::Font> getFont(const std::string &filepath)
             {
                 if (_fonts.find(filepath) == _fonts.end()) {
                     // Font not found, create it
-                    sf::Font *font = new sf::Font();
+                    std::shared_ptr<sf::Font> font = std::make_shared<sf::Font>();
 
                     // Check if the font is loaded
                     if (!font->loadFromFile(filepath))
@@ -56,12 +68,11 @@ namespace UI {
              */
             static void destroy()
             {
-                for (auto &font : _fonts)
-                    delete font.second;
+                _fonts.clear();
             }
 
         // Attributes
-            static std::map<std::string, sf::Font *> _fonts;
+            static std::map<std::string, std::shared_ptr<sf::Font>> _fonts;
     };
 };
 

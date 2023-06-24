@@ -20,7 +20,7 @@ namespace UI {
     {
         sf::Vector2f position = properties.position;
 
-        for (auto *element : _elements) {
+        for (auto &element : _elements) {
             // Set the position of the element
             element->setPosition(position);
 
@@ -29,12 +29,12 @@ namespace UI {
         }
     }
 
-    void VerticalLayout::addElement(IWidget *element)
+    void VerticalLayout::addElement(std::shared_ptr<IWidget> element)
     {
         _elements.push_back(element);
     }
 
-    std::vector<IWidget *> VerticalLayout::getElements()
+    std::vector<std::shared_ptr<IWidget>> VerticalLayout::getElements()
     {
         return _elements;
     }

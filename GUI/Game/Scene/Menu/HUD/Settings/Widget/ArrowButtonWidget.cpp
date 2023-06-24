@@ -22,12 +22,12 @@ namespace UI {
 
         if (direction == ArrowDirection::LEFT) {
             try {
-                sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/5.png");
+                std::shared_ptr<sf::Texture> texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/5.png");
                 _idleSprite = sf::Sprite(*texture);
                 _idleSprite.setScale(sf::Vector2f(3, 3));
                 _idleSprite.setPosition(position);
 
-                sf::Texture *textureHover = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/7.png");
+                std::shared_ptr<sf::Texture> textureHover = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/7.png");
                 _hoveredSprite = sf::Sprite(*textureHover);
                 _hoveredSprite.setScale(sf::Vector2f(3, 3));
                 _hoveredSprite.setPosition(position);
@@ -36,12 +36,12 @@ namespace UI {
             }
         } else if (direction == ArrowDirection::RIGHT) {
             try {
-                sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/5.png");
+                std::shared_ptr<sf::Texture> texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/5.png");
                 _idleSprite = sf::Sprite(*texture);
                 _idleSprite.setScale(sf::Vector2f(-3, 3));
                 _idleSprite.setPosition(sf::Vector2f(position.x + 48, position.y));
 
-                sf::Texture *textureHover = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/7.png");
+                std::shared_ptr<sf::Texture> textureHover = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/7.png");
                 _hoveredSprite = sf::Sprite(*textureHover);
                 _hoveredSprite.setScale(sf::Vector2f(-3, 3));
                 _hoveredSprite.setPosition(sf::Vector2f(position.x + 48, position.y));

@@ -15,6 +15,7 @@ namespace UI {
      * @brief The BackgroundStyle represent the background color of the UI elements
      */
     class BackgroundStyle : public IStyle {
+
         // Constructor & Destructor (default)
         public:
             /**
@@ -23,20 +24,23 @@ namespace UI {
              * @param color The color of the background
              */
             BackgroundStyle(sf::Color color);
+
             ~BackgroundStyle() = default;
 
-        // Methods
+        // Method
         public:
             /**
              * @brief Apply the style to the drawable
+             * Call this function for apply the style to the drawable
              * The style represent the visual appearance of the UI elements
              * Here the style is the background color
              * A Drawable is an entity that can be drawn to a render target.
+             * @warning The drawable must be a sf::Shape
              * @param drawable The drawable to apply the style
              */
             void apply(sf::Drawable &drawable) override;
 
-        // Attributes
+        // Attribute
         private:
             sf::Color _backgroundColor; /*!< The color of the background */
     };

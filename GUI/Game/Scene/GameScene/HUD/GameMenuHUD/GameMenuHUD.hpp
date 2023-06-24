@@ -18,7 +18,7 @@
     #include "ButtonWidget.hpp"
     #include "NetworkError.hpp"
     #include "SettingsHUD.hpp"
-    #include "VFX.hpp"
+    #include "SFX.hpp"
     #include "HelpHUD.hpp"
 
 namespace UI {
@@ -90,7 +90,7 @@ namespace UI {
             SettingsHUD *_settingsHUD;               /*!< Settings HUD */
             HelpHUD _helpHUD;                       /*!< Help HUD */
             bool _isOpened;                         /*!< Is the Settings HUD opened */
-            Audio::VFX *_mouseClick;                /*!< Mouse click sound */
+            Audio::SFX *_mouseClick;                /*!< Mouse click sound */
             std::string _language;           /*!< Language of the game */
     };
 };

@@ -19,7 +19,7 @@ namespace UI {
         _background.setPosition(sf::Vector2f(0.0f, 0.0f));
 
         try {
-            sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Paper UI Pack/Paper UI/Folding & Cutout/8 Shop/1.png");
+            std::shared_ptr<sf::Texture> texture = TextureManager::getTexture("./Assets/UI_UX/Paper UI Pack/Paper UI/Folding & Cutout/8 Shop/1.png");
             _backgroundSprite = sf::Sprite(*texture);
             _backgroundSprite.setPosition(sf::Vector2f(Window::getWindowWidth() - 416 * 2, 0));
             _backgroundSprite.setScale(sf::Vector2f(2.0f, 2.0f));
@@ -31,19 +31,19 @@ namespace UI {
 
         std::string str = "Tile clicked: (0, 0)\n\nResources:\n\n  Food: 0\n\n  Linemate: 0\n\n  Deraumere: 0\n\n  Sibur: 0\n\n  Mendiane: 0\n\n  Phiras: 0\n\n  Thystame: 0\n\n";
         _tileContent = setString(str, sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10), 10);
-
-        CrossButtonWidget *crossTileHUDButton = new CrossButtonWidget(sf::Vector2f((Window::getWindowWidth() - 200), 150), sf::Vector2f(16 * 2.5, 16 * 2.5));
+    
+        std::shared_ptr<IWidget> crossTileHUDButton = std::make_shared<CrossButtonWidget>(sf::Vector2f((Window::getWindowWidth() - 200), 150), sf::Vector2f(16 * 2.5, 16 * 2.5));
         _crossTileHUDButton = new Button(crossTileHUDButton);
 
-        ArrowButtonWidget *changePlayerLeftButton = new ArrowButtonWidget(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 550), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
-        ArrowButtonWidget *changePlayerRightButton = new ArrowButtonWidget(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 547), sf::Vector2f(16 * 2, 16 * 2), ArrowDirection::RIGHT);
+        std::shared_ptr<IWidget> changePlayerLeftButton = std::make_shared<ArrowButtonWidget>(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 550), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
+        std::shared_ptr<IWidget> changePlayerRightButton = std::make_shared<ArrowButtonWidget>(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 547), sf::Vector2f(16 * 2, 16 * 2), ArrowDirection::RIGHT);
         _changePlayerLeftButton = new Button(changePlayerLeftButton);
         _changePlayerRightButton = new Button(changePlayerRightButton);
         _changePlayerLeftButton->setValue(0);
         _changePlayerRightButton->setValue(1);
 
-        ArrowButtonWidget *changeEggLeftButton = new ArrowButtonWidget(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 850), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
-        ArrowButtonWidget *changeEggRightButton = new ArrowButtonWidget(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 847), sf::Vector2f(16 * 2, 16 * 2), ArrowDirection::RIGHT);
+        std::shared_ptr<IWidget> changeEggLeftButton = std::make_shared<ArrowButtonWidget>(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 850), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
+        std::shared_ptr<IWidget> changeEggRightButton = std::make_shared<ArrowButtonWidget>(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 847), sf::Vector2f(16 * 2, 16 * 2), ArrowDirection::RIGHT);
         _changeEggLeftButton = new Button(changeEggLeftButton);
         _changeEggRightButton = new Button(changeEggRightButton);
         _changeEggLeftButton->setValue(0);
@@ -62,7 +62,7 @@ namespace UI {
         } catch (const Error::TextureError &e) {
             std::cerr << e.what() << std::endl;
         }
-        _mouseClick = new Audio::VFX(Audio::MOUSE_CLICK, Audio::Audio::sfxVolume);
+        _mouseClick = new Audio::SFX(Audio::MOUSE_CLICK, Audio::Audio::sfxVolume);
     }
 
     TileHUD::~TileHUD()
@@ -209,8 +209,9 @@ namespace UI {
     sf::Text TileHUD::setString(std::string str, sf::Vector2f position, int fontSize)
     {
         sf::Text text;
+
         try {
-            sf::Font *font = FontManager::getFont(UI::ARIAL);
+            std::shared_ptr<sf::Font> font = FontManager::getFont(UI::ARIAL);
 
             text.setString(str);
             text.setFont(*font);

@@ -15,13 +15,14 @@
 Player::Player(sf::Vector2i position, int direction, int level, std::string teamName, int color) : _position(position), _direction(direction), _level(level), _teamName(teamName), _idle(true), _expulsion(false), _broadcast(false)
 {
     try {
-        std::vector<sf::Sprite *> idle;
-        std::vector<sf::Sprite *> push;
-        std::vector<sf::Sprite *> broadcast;
+        std::vector<std::shared_ptr<sf::Sprite>> idle;
+        std::vector<std::shared_ptr<sf::Sprite>> push;
+        std::vector<std::shared_ptr<sf::Sprite>> broadcast;
 
         for (size_t i = 1; i <= IDLE_FRAME; i++) {
             std::string path = "./Assets/UI_UX/Characters/Idle/Frame#" + std::to_string(i) + ".png";
-            sf::Sprite *sprite = new sf::Sprite(*UI::TextureManager::getTexture(path));
+            std::shared_ptr<sf::Sprite> sprite = std::make_shared<sf::Sprite>(*UI::TextureManager::getTexture(path));
+            new sf::Sprite(*UI::TextureManager::getTexture(path));
 
             sprite->setTextureRect(sf::IntRect(0, 0, PLAYER_WIDTH, PLAYER_HEIGHT));
             sprite->setOrigin(PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2);
@@ -32,7 +33,7 @@ Player::Player(sf::Vector2i position, int direction, int level, std::string team
 
         for (size_t i = 1; i <= PUSH_FRAME; i++) {
             std::string path = "./Assets/UI_UX/Characters/Push/Frame#" + std::to_string(i) + ".png";
-            sf::Sprite *sprite = new sf::Sprite(*UI::TextureManager::getTexture(path));
+            std::shared_ptr<sf::Sprite> sprite = std::make_shared<sf::Sprite>(*UI::TextureManager::getTexture(path));
 
             sprite->setTextureRect(sf::IntRect(0, 0, PLAYER_WIDTH, PLAYER_HEIGHT));
             sprite->setOrigin(PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2);
@@ -43,7 +44,7 @@ Player::Player(sf::Vector2i position, int direction, int level, std::string team
 
         for (size_t i = 1; i <= BROADCAST_FRAME; i++) {
             std::string path = "./Assets/UI_UX/Characters/Broadcast/Frame#" + std::to_string(i) + ".png";
-            sf::Sprite *sprite = new sf::Sprite(*UI::TextureManager::getTexture(path));
+            std::shared_ptr<sf::Sprite> sprite = std::make_shared<sf::Sprite>(*UI::TextureManager::getTexture(path));
 
             sprite->setTextureRect(sf::IntRect(0, 0, PLAYER_WIDTH, PLAYER_HEIGHT));
             sprite->setOrigin(PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2);
@@ -68,24 +69,24 @@ Player::Player(sf::Vector2i position, int direction, int level, std::string team
 
     _placement = Math::random(5) + 1;
 
-    _vfx.push_back(new Audio::VFX(Audio::BROADCAST1, Audio::Audio::sfxVolume));
-    _vfx.push_back(new Audio::VFX(Audio::BROADCAST2, Audio::Audio::sfxVolume));
-    _vfx.push_back(new Audio::VFX(Audio::BROADCAST3, Audio::Audio::sfxVolume));
-    _vfx.push_back(new Audio::VFX(Audio::BROADCAST4, Audio::Audio::sfxVolume));
-    _vfx.push_back(new Audio::VFX(Audio::BROADCAST5, Audio::Audio::sfxVolume));
-    _vfx.push_back(new Audio::VFX(Audio::BROADCAST6, Audio::Audio::sfxVolume));
-    _vfx.push_back(new Audio::VFX(Audio::BROADCAST7, Audio::Audio::sfxVolume));
-    _vfx.push_back(new Audio::VFX(Audio::BROADCAST8, Audio::Audio::sfxVolume));
-    _vfx.push_back(new Audio::VFX(Audio::BROADCAST9, Audio::Audio::sfxVolume));
-    _vfx.push_back(new Audio::VFX(Audio::BROADCAST10, Audio::Audio::sfxVolume));
-    _vfx.push_back(new Audio::VFX(Audio::BROADCAST11, Audio::Audio::sfxVolume));
-    _vfx.push_back(new Audio::VFX(Audio::BROADCAST12, Audio::Audio::sfxVolume));
+    _SFX.push_back(new Audio::SFX(Audio::BROADCAST1, Audio::Audio::sfxVolume));
+    _SFX.push_back(new Audio::SFX(Audio::BROADCAST2, Audio::Audio::sfxVolume));
+    _SFX.push_back(new Audio::SFX(Audio::BROADCAST3, Audio::Audio::sfxVolume));
+    _SFX.push_back(new Audio::SFX(Audio::BROADCAST4, Audio::Audio::sfxVolume));
+    _SFX.push_back(new Audio::SFX(Audio::BROADCAST5, Audio::Audio::sfxVolume));
+    _SFX.push_back(new Audio::SFX(Audio::BROADCAST6, Audio::Audio::sfxVolume));
+    _SFX.push_back(new Audio::SFX(Audio::BROADCAST7, Audio::Audio::sfxVolume));
+    _SFX.push_back(new Audio::SFX(Audio::BROADCAST8, Audio::Audio::sfxVolume));
+    _SFX.push_back(new Audio::SFX(Audio::BROADCAST9, Audio::Audio::sfxVolume));
+    _SFX.push_back(new Audio::SFX(Audio::BROADCAST10, Audio::Audio::sfxVolume));
+    _SFX.push_back(new Audio::SFX(Audio::BROADCAST11, Audio::Audio::sfxVolume));
+    _SFX.push_back(new Audio::SFX(Audio::BROADCAST12, Audio::Audio::sfxVolume));
 }
 
 Player::~Player()
 {
-    for (auto &vfx : _vfx)
-        delete vfx;
+    for (auto &SFX : _SFX)
+        delete SFX;
 }
 
 sf::Vector2i Player::getPosition() const
@@ -167,7 +168,7 @@ void Player::setBroadcast(bool broadcast)
         _expulsion = false;
         _broadcastAnim->play();
 
-        _vfx[Math::random(12)]->play();
+        _SFX[Math::random(12)]->play();
 
         _idleAnim->stop();
         _pushAnim->stop();
@@ -215,7 +216,7 @@ void Player::draw(GameData &gameData, sf::RenderWindow &window)
     sf::Vector2f position = gameData.getTile(_position.x, _position.y)->getPosition();
     sf::Vector2f scale = gameData.getScale();
 
-    sf::Sprite *player = nullptr;
+    std::shared_ptr<sf::Sprite> player = nullptr;
 
     if (_expulsion == true)
         player = _pushAnim->getCurrentSprite();

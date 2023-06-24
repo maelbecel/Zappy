@@ -18,7 +18,7 @@
     #include "ButtonWidget.hpp"
     #include "NetworkError.hpp"
     #include "SettingsHUD.hpp"
-    #include "VFX.hpp"
+    #include "SFX.hpp"
 
 namespace UI {
     class GameHUD {
@@ -61,7 +61,7 @@ namespace UI {
             sf::Text _speed1xText;        /*!< Text of the resume button */
             sf::Text _speed2xText;        /*!< Text of the settings button */
             sf::Text _speed4xText;        /*!< Text of the quit button */
-            Audio::VFX *_mouseClick;      /*!< Sound of the mouse click */
+            Audio::SFX *_mouseClick;      /*!< Sound of the mouse click */
     };
 };
 

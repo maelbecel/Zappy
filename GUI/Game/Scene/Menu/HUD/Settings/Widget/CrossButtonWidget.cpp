@@ -21,12 +21,12 @@ namespace UI {
         _position = position;
 
         try {
-            sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Content/2 Icons/8.png");
+            std::shared_ptr<sf::Texture> texture = TextureManager::getTexture("./Assets/UI_UX/Content/2 Icons/8.png");
             _idleSprite = sf::Sprite(*texture);
             _idleSprite.setScale(sf::Vector2f(3, 3));
             _idleSprite.setPosition(position);
 
-            sf::Texture *textureHover = TextureManager::getTexture("./Assets/UI_UX/Content/2 Icons/11.png");
+            std::shared_ptr<sf::Texture> textureHover = TextureManager::getTexture("./Assets/UI_UX/Content/2 Icons/11.png");
             _hoveredSprite = sf::Sprite(*textureHover);
             _hoveredSprite.setScale(sf::Vector2f(3, 3));
             _hoveredSprite.setPosition(position);

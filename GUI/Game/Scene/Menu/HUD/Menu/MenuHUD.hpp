@@ -18,14 +18,29 @@
     #include "CrossButtonWidget.hpp"
     #include "NetworkError.hpp"
     #include "SettingsHUD.hpp"
-    #include "VFX.hpp"
+    #include "SFX.hpp"
+
+    #include <memory>
 
 namespace UI {
+
+    /**
+     * @brief Menu HUD
+     */
     class MenuHUD {
-        // Constructor & Destructor
+
+        // Constructor & Destructor (default)
         public:
+
+            /**
+             * @brief Construct a new Menu H U D object
+             *
+             * @param ip   The ip to connect to
+             * @param port The port to connect to
+             */
             MenuHUD(std::string ip = "", std::string port = "");
-            ~MenuHUD();
+
+            ~MenuHUD() = default;
 
         // Methods
         public:
@@ -52,6 +67,9 @@ namespace UI {
              * @param port The port to connect to
              */
             void Initialize(std::string ip = "", std::string port = "");
+
+        // Setters
+        public:
 
             /**
              * @brief Set string
@@ -82,24 +100,24 @@ namespace UI {
 
         // Attributes
         private:
-            sf::RectangleShape _background;  /*!< Background of the Menu HUD */
-            sf::Sprite _popUpSprite;         /*!< Pop up for the server error */
-            sf::Sprite _titleHeader;         /*!< Title of the game */
-            sf::Text _titleText;             /*!< Text of the title */
-            sf::Text _popUpText;             /*!< Text of the pop up */
-            InputBox _ip;                    /*!< Input box for the ip */
-            InputBox _port;                  /*!< Input box for the port */
-            IButton *_connectButton;         /*!< Button to connect to the server */
-            IButton *_settingsButton;        /*!< Button to go to the settings */
-            IButton *_quitButton;            /*!< Button to quit the game */
-            IButton *_crossButton;           /*!< Button to close the pop up */
-            SettingsHUD *_settingsHUD;        /*!< Settings HUD */
-            Audio::VFX *_mouseClick;         /*!< Sound of the mouse click */
-            AsteroidHandler _asteroid;              /*!< Asteroid of the Menu HUD */
-            Planet _planet;                  /*!< Planet of the Menu HUD */
-            bool _popUp;                     /*!< Boolean to know if the pop up is opened */
-            bool _changePlanet;              /*!< Boolean to know if the planet is changing */
-            std::string _language;           /*!< Language of the game */
+            sf::RectangleShape _background;            /*!< Background of the Menu HUD */
+            sf::Sprite _popUpSprite;                   /*!< Pop up for the server error */
+            sf::Sprite _titleHeader;                   /*!< Title of the game */
+            sf::Text _titleText;                       /*!< Text of the title */
+            sf::Text _popUpText;                       /*!< Text of the pop up */
+            InputBox _ip;                              /*!< Input box for the ip */
+            InputBox _port;                            /*!< Input box for the port */
+            std::shared_ptr<IButton> _connectButton;   /*!< Button to connect to the server */
+            std::shared_ptr<IButton> _settingsButton;  /*!< Button to go to the settings */
+            std::shared_ptr<IButton> _quitButton;      /*!< Button to quit the game */
+            std::shared_ptr<IButton> _crossButton;     /*!< Button to close the pop up */
+            std::shared_ptr<SettingsHUD> _settingsHUD; /*!< Settings HUD */
+            std::shared_ptr<Audio::SFX> _mouseClick;   /*!< Sound of the mouse click */
+            AsteroidHandler _asteroid;                 /*!< Asteroid of the Menu HUD */
+            Planet _planet;                            /*!< Planet of the Menu HUD */
+            bool _popUp;                               /*!< Boolean to know if the pop up is opened */
+            bool _changePlanet;                        /*!< Boolean to know if the planet is changing */
+            std::string _language;                     /*!< Language of the game */
     };
 };
 

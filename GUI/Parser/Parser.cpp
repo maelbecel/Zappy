@@ -7,6 +7,10 @@
 
 #include "Parser.hpp"
 
+/////////////////
+// Constructor //
+/////////////////
+
 Parser::Parser(int ac, char **av)
 {
     if (ac == 1)
@@ -44,6 +48,10 @@ Parser::Parser(int ac, char **av)
     } else
         throw Error::InvalidArgument("Invalid argument");
 }
+
+/////////////
+// Getters //
+/////////////
 
 std::string Parser::getIp() const
 {

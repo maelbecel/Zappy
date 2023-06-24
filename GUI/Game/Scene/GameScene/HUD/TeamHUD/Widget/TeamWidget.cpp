@@ -22,7 +22,7 @@ namespace UI {
 
         try {
             // Create the name of the team
-            sf::Font *font = FontManager::getFont(UI::ARIAL);
+            std::shared_ptr<sf::Font> font = FontManager::getFont(UI::ARIAL);
 
             _team.setString(team);
             _team.setFont(*font);
@@ -31,7 +31,7 @@ namespace UI {
             _team.setFillColor(sf::Color::Black);
 
             // Create the background of the widget
-            sf::Texture *texture = TextureManager::getTexture(UI::TEAM_BACKGROUND);
+            std::shared_ptr<sf::Texture> texture = TextureManager::getTexture(UI::TEAM_BACKGROUND);
 
             _background.setTexture(*texture);
             _background.setPosition(position);

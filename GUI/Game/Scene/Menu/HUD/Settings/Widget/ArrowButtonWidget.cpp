@@ -16,18 +16,19 @@ namespace UI {
 
     ArrowButtonWidget::ArrowButtonWidget(const sf::Vector2f &position, const sf::Vector2f &size, const ArrowDirection &direction) : AWidget(position, size)
     {
-        // [.]
+        // [>>] or [<<] or [^] or [v]
 
         _position = position;
 
         if (direction == ArrowDirection::LEFT) {
             try {
-                sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/5.png");
+                std::shared_ptr<sf::Texture> texture = TextureManager::getTexture(UI::BUTTON5);
+                std::shared_ptr<sf::Texture> textureHover = TextureManager::getTexture(UI::BUTTON7);
+
                 _idleSprite = sf::Sprite(*texture);
                 _idleSprite.setScale(sf::Vector2f(3, 3));
                 _idleSprite.setPosition(position);
 
-                sf::Texture *textureHover = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/7.png");
                 _hoveredSprite = sf::Sprite(*textureHover);
                 _hoveredSprite.setScale(sf::Vector2f(3, 3));
                 _hoveredSprite.setPosition(position);
@@ -36,12 +37,13 @@ namespace UI {
             }
         } else if (direction == ArrowDirection::RIGHT) {
             try {
-                sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/5.png");
+                std::shared_ptr<sf::Texture> texture = TextureManager::getTexture(UI::BUTTON5);
+                std::shared_ptr<sf::Texture> textureHover = TextureManager::getTexture(UI::BUTTON7);
+
                 _idleSprite = sf::Sprite(*texture);
                 _idleSprite.setScale(sf::Vector2f(-3, 3));
                 _idleSprite.setPosition(sf::Vector2f(position.x + 48, position.y));
 
-                sf::Texture *textureHover = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/7.png");
                 _hoveredSprite = sf::Sprite(*textureHover);
                 _hoveredSprite.setScale(sf::Vector2f(-3, 3));
                 _hoveredSprite.setPosition(sf::Vector2f(position.x + 48, position.y));
@@ -65,14 +67,14 @@ namespace UI {
         target.draw(_hoveredSprite, states);
     }
 
-    void ArrowButtonWidget::handleEvent(sf::Event event)
+    void ArrowButtonWidget::handleEvent(UNUSED sf::Event event)
     {
-        (void)event;
+        return;
     }
 
-    ///////////////////////
-    // Setters & Getters //
-    ///////////////////////
+    /////////////
+    // Setters //
+    /////////////
 
     void ArrowButtonWidget::setPosition(const sf::Vector2f &position)
     {
@@ -83,6 +85,7 @@ namespace UI {
 
     void ArrowButtonWidget::setSize(UNUSED const sf::Vector2f &size)
     {
+        return;
     }
 
     ///////////////

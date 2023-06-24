@@ -10,20 +10,30 @@
 
     #include "IEventHandler.hpp"
 
+    #define UNUSED __attribute__((unused))
+
+        /////////////////////////////////////////////////////////////////////////////
+        // @Warning: This Abstract class is not called in the project yet          //
+        //           So if you want to use it, you have to put him in the Makefile //
+        /////////////////////////////////////////////////////////////////////////////
+
 namespace UI {
+
     /**
      * @brief Abstract class that design an event system that captures user interactions with the widgets,
      * such as button clicks, mouse movement, keyboard input, etc...
      * Proper event handling ensures the widgets respond to user actions and trigger the appropriate callbacks or actions.
      */
     class AEventHandler : public IEventHandler {
-        // Override methods
+
+        // Override method
         public:
 
             /**
              * @brief Handle all type of events
              *
              * @param event The event to handle
+             * @TODO: Handle other events (touch, joystick, etc...)
              */
             void handleEvent(sf::Event &event) override
             {
@@ -39,8 +49,6 @@ namespace UI {
                     handleMouseMoved(event.mouseMove.x, event.mouseMove.y); // Handle mouse moved event
                 else if (event.type == sf::Event::MouseWheelScrolled)
                     handleMouseWheelScrolled(event.mouseWheelScroll.delta, event.mouseWheelScroll.x, event.mouseWheelScroll.y); // Handle mouse wheel scrolled event
-
-                // TODO: Handle other events (touch, joystick, etc...)
             }
 
         // Virtual override methods
@@ -51,9 +59,9 @@ namespace UI {
              *
              * @param key The key that was pressed
              */
-            virtual void handleKeyPress(sf::Keyboard::Key key)
+            virtual void handleKeyPress(UNUSED sf::Keyboard::Key key)
             {
-                (void)key;
+                return;
             }
 
             /**
@@ -61,9 +69,9 @@ namespace UI {
              *
              * @param key The key that was released
              */
-            virtual void handleKeyRelease(sf::Keyboard::Key key)
+            virtual void handleKeyRelease(UNUSED sf::Keyboard::Key key)
             {
-                (void)key;
+                return;
             }
 
             /**
@@ -73,11 +81,9 @@ namespace UI {
              * @param x      The mouse x position
              * @param y      The mouse y position
              */
-            virtual void handleMouseButtonPress(sf::Mouse::Button button, int x, int y)
+            virtual void handleMouseButtonPress(UNUSED sf::Mouse::Button button, UNUSED int x, UNUSED int y)
             {
-                (void)button;
-                (void)x;
-                (void)y;
+                return;
             }
 
             /**
@@ -87,11 +93,9 @@ namespace UI {
              * @param x      The mouse x position
              * @param y      The mouse y position
              */
-            virtual void handleMouseButtonRelease(sf::Mouse::Button button, int x, int y)
+            virtual void handleMouseButtonRelease(UNUSED sf::Mouse::Button button, UNUSED int x, UNUSED int y)
             {
-                (void)button;
-                (void)x;
-                (void)y;
+                return;
             }
 
             /**
@@ -100,10 +104,9 @@ namespace UI {
              * @param x The mouse x position
              * @param y The mouse y position
              */
-            virtual void handleMouseMoved(int x, int y)
+            virtual void handleMouseMoved(UNUSED int x, UNUSED int y)
             {
-                (void)x;
-                (void)y;
+                return;
             }
 
             /**
@@ -115,14 +118,10 @@ namespace UI {
              * Delta is positive if the mouse wheel is scrolled up
              * Delta is negative if the mouse wheel is scrolled down
              */
-            virtual void handleMouseWheelScrolled(int delta, int x, int y)
+            virtual void handleMouseWheelScrolled(UNUSED int delta, UNUSED int x, UNUSED int y)
             {
-                (void)delta;
-                (void)x;
-                (void)y;
+                return;
             }
-
-            // TODO: Handle other events (touch, joystick, etc...) with the same models than previously
     };
 };
 

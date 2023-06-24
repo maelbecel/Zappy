@@ -2,10 +2,10 @@
 ** EPITECH PROJECT, 2023
 ** GUI
 ** File description:
-** VFX
+** SFX
 */
 
-#include "VFX.hpp"
+#include "SFX.hpp"
 #include <iostream>
 
 namespace Audio {
@@ -14,7 +14,7 @@ namespace Audio {
     // Constructor & Destructor //
     //////////////////////////////
 
-    VFX::VFX(const std::string &audio, float volume) : _volume(volume), _isPlaying(false)
+    SFX::SFX(const std::string &audio, float volume) : _volume(volume), _isPlaying(false)
     {
         try {
             _buffer.loadFromFile(audio);
@@ -25,26 +25,26 @@ namespace Audio {
         }
     }
 
-    VFX::~VFX()
+    SFX::~SFX()
     {
         _sound.stop();
-    };
+    }
 
     /////////////
     // Methods //
     /////////////
 
-    void VFX::play()
+    void SFX::play()
     {
         _sound.play();
         _isPlaying = true;
     }
 
-    ///////////////////////
-    // Getters & Setters //
-    ///////////////////////
+    /////////////////////
+    // Setter & Getter //
+    /////////////////////
 
-    void VFX::setVolume(float volume)
+    void SFX::setVolume(float volume)
     {
         if (volume == _volume)
             return;
@@ -58,7 +58,7 @@ namespace Audio {
         _sound.setVolume(_volume);
     }
 
-    bool VFX::isPlaying() const
+    bool SFX::isPlaying() const
     {
         return _isPlaying;
     }

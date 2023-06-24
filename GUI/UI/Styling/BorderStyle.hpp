@@ -11,10 +11,12 @@
     #include "IStyle.hpp"
 
 namespace UI {
+
     /**
      * @brief The BorderStyle class represent the border style of the UI elements
      */
     class BorderStyle : public IStyle {
+
         // Constructor & Destructor (default)
         public:
 
@@ -25,9 +27,10 @@ namespace UI {
              * @param thickness The thickness of the border
              */
             BorderStyle(sf::Color color, double thickness);
+
             ~BorderStyle() = default;
 
-        // Methods
+        // Method
         public:
 
             /**
@@ -35,6 +38,7 @@ namespace UI {
              * The style represent the visual appearance of the UI elements
              * Here the style is the border color and the border thickness
              * A Drawable is an entity that can be drawn to a render target.
+             * @warning The drawable must be a sf::Shape
              * @param drawable The drawable to apply the style
              */
             void apply(sf::Drawable &drawable) override;

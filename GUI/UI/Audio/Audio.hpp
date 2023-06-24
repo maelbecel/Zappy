@@ -9,16 +9,18 @@
     #define AUDIO_HPP_
 
     #include <libconfig.h++>
+
     #define UNUSED __attribute__((unused))
 
 namespace Audio {
+
     class Audio {
         // Global variables
         public:
             static float musicVolume;
             static float sfxVolume;
 
-        // Methods
+        // Method
         public:
 
             /**

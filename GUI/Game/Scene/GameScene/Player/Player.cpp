@@ -10,6 +10,8 @@
 #include "Tile.hpp"
 #include <iostream>
 
+#include "Math.hpp"
+
 Player::Player(sf::Vector2i position, int direction, int level, std::string teamName, int color) : _position(position), _direction(direction), _level(level), _teamName(teamName), _idle(true), _expulsion(false), _broadcast(false)
 {
     try {
@@ -64,7 +66,7 @@ Player::Player(sf::Vector2i position, int direction, int level, std::string team
     for (int i = 0; i < 7; i++)
         _inventory[i] = 0;
 
-    _placement = rand() % 5 + 1;
+    _placement = Math::random(5) + 1;
 
     _vfx.push_back(new Audio::VFX(Audio::BROADCAST1, Audio::Audio::sfxVolume));
     _vfx.push_back(new Audio::VFX(Audio::BROADCAST2, Audio::Audio::sfxVolume));
@@ -165,7 +167,7 @@ void Player::setBroadcast(bool broadcast)
         _expulsion = false;
         _broadcastAnim->play();
 
-        _vfx[rand() % 12]->play();
+        _vfx[Math::random(12)]->play();
 
         _idleAnim->stop();
         _pushAnim->stop();

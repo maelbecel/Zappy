@@ -6,17 +6,25 @@
 */
 
 #include "PerlinNoise.hpp"
+#include "Math.hpp"
 
 namespace Math {
+
+    //////////////////////////////
+    // Constructor & Destructor //
+    //////////////////////////////
+
     Noise::Noise() : _width(0), _height(0) {};
 
     Noise::~Noise()
     {
         if (_width == 0 || _height == 0)
             return;
+
         for (int i = 0; i < _height; i++)
             if (_noise[i])
                 delete[] _noise[i];
+
         if (_noise)
             delete[] _noise;
     }
@@ -29,7 +37,7 @@ namespace Math {
             _noise[i] = new double[_width];
 
             for (int j = 0; j < _width; j++)
-                _noise[i][j] = (rand() % 32768) / 32768.0;
+                _noise[i][j] = (random(32768) / 32768.0);
         }
     }
 

@@ -9,6 +9,7 @@
 #include "Window.hpp"
 #include "Asteroid.hpp"
 #include <cmath>
+#include "Math.hpp"
 
 #define RANDFLOAT(min, max) (min + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(max-min))))
 #define WIDTH Window::getWindowWidth()
@@ -18,7 +19,7 @@
 
 namespace UI {
     AsteroidHandler::Asteroid::Asteroid() {
-        switch (rand() % 4) {
+        switch (Math::random(4)) {
             case 0:
                 _position = sf::Vector2f(RANDFLOAT(0, WIDTH), -200);
                 _movement = sf::Vector2f(RANDFLOAT(-SPEED, SPEED), RANDFLOAT(0, SPEED));
@@ -37,11 +38,11 @@ namespace UI {
                 break;
         }
         _size = RANDFLOAT(0.1, 0.3);
-        _angle = rand() % 360;
+        _angle = Math::random(360);
         _scale = RANDFLOAT(-0.002, 0.002);
     };
     AsteroidHandler::Asteroid::Asteroid(const sf::Vector2f &position, const sf::Vector2f &movement, int size) : _position (position), _movement(movement), _size(size) {
-        _angle = rand() % 360;
+        _angle = Math::random(360);
     };
 
     AsteroidHandler::Asteroid::~Asteroid() {};

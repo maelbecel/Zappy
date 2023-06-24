@@ -8,7 +8,7 @@
 #include "MenuHUD.hpp"
 #include "Window.hpp"
 #include "Planet.hpp"
-#include <cmath>
+#include "Math.hpp"
 
 namespace UI {
 
@@ -26,7 +26,7 @@ namespace UI {
     // Constructor & Destructor
 
     Planet::Planet() : AWidget() {
-        _type = (PlanetType)(rand() % (sizeof(planetPath) / sizeof(planetPath_t)));
+        _type = (PlanetType)(Math::random(sizeof(planetPath) / sizeof(planetPath_t)));
     };
 
     Planet::~Planet() {};

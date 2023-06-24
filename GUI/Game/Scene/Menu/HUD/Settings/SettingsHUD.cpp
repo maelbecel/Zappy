@@ -74,15 +74,18 @@ namespace UI {
 
             _soundValue = audio["sound"];
             _musicValue = audio["music"];
+            _tileHUDTextMode = settings["tileHUDTextMode"];
 
         } catch (const libconfig::FileIOException& ex) {
             _soundValue = 50;
             _musicValue = 50;
+            _tileHUDTextMode = true;
 
             std::cout << "File I/O error while reading file." << std::endl;
         } catch (const libconfig::ParseException& ex) {
             _soundValue = 50;
             _musicValue = 50;
+            _tileHUDTextMode = true;
 
             std::string file = ex.getFile();
             std::string line = std::to_string(ex.getLine());
@@ -91,11 +94,13 @@ namespace UI {
         } catch (const libconfig::SettingNotFoundException& ex) {
             _soundValue = 50;
             _musicValue = 50;
+            _tileHUDTextMode = true;
 
             std::cout << "Setting not found." << std::endl;
         } catch (const libconfig::SettingTypeException& ex) {
             _soundValue = 50;
             _musicValue = 50;
+            _tileHUDTextMode = true;
 
             std::cout << "Setting type mismatch." << std::endl;
         }
@@ -111,6 +116,16 @@ namespace UI {
     SettingsHUD::~SettingsHUD()
     {
         delete _mouseClick;
+        delete _decreaseSoundButton;
+        delete _increaseSoundButton;
+        delete _decreaseMusicButton;
+        delete _increaseMusicButton;
+        delete _changeLanguageLeftButton;
+        delete _changeLanguageRightButton;
+        delete _crossSettingsButton;
+        delete _validateButton;
+        delete _changeTileHUDLeftButton;
+        delete _changeTileHUDRightButton;
     }
 
     void SettingsHUD::draw(sf::RenderWindow &window)
@@ -256,11 +271,7 @@ namespace UI {
             if (_changeTileHUDLeftButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)) || _changeTileHUDRightButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
                 _mouseClick->play();
 
-                if (_tileHUDTextMode) {
-                    _tileHUDTextMode = false;
-                } else {
-                    _tileHUDTextMode = true;
-                }
+                _tileHUDTextMode = !_tileHUDTextMode;
             }
 
             return;
@@ -339,8 +350,6 @@ namespace UI {
             libconfig::Setting &input = settings.lookup("input");
             libconfig::Setting &tile = settings.lookup("tile");
 
-            bool tileHUDTextMode = config["tileHUDTextMode"];
-            _tileHUDTextMode = tileHUDTextMode;
             _tileHUDModes[0] = setString(std::string(tile["mode"]) + "\n\n" + std::string(tile["textMode"]), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 550));
             _tileHUDModes[1] = setString(std::string(tile["mode"]) + "\n\n" + std::string(tile["spriteMode"]), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 550));
 

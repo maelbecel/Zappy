@@ -11,7 +11,7 @@ import src.ai.evoli as evoli
 import src.ai.testAi as testAi
 import src.ai.littleDuffer as littleDuffer
 import src.ai.bouftou as bouftou
-import sys
+import sys, traceback
 from time import sleep
 
 MAX_PORT = 65535
@@ -76,4 +76,5 @@ if __name__ == "__main__":
             main(client)
         except Exception as e:
             print(e)
+            print(traceback.format_exc())
             sys.exit(84)

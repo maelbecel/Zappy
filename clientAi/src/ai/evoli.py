@@ -69,6 +69,17 @@ REQUIRED = [
     },
 ]
 
+LEVEL = {
+    4: 1,
+    9: 2,
+    16: 3,
+    25: 4,
+    36: 5,
+    49: 6,
+    64: 7,
+    81: 8
+}
+
 REQUIRED_PLAYER = [
     1,
     2,
@@ -258,8 +269,11 @@ class evoli(clientAI):
         print("count = " + str(count))
         print("required = " + str(REQUIRED_PLAYER[self.level - 1]))
         if count == REQUIRED_PLAYER[self.level - 1]:
+            if (self.level > 1):
+                self.broadcast(self.teamName + ";Incantation;" + str(self.level))
             if not self.incantation():
                 self.takeUselessRessourcesOnCase()
+                self.checkRessourcesCases()
                 self.elevate()
                 return
         else:
@@ -329,6 +343,10 @@ class evoli(clientAI):
                         return False
                 id += 1
         return False
+
+    def getLevel(self):
+        self.look()
+        return LEVEL[len(self.lookResult)]
 
     def checkPlayerInFront(self):
         self.look()
@@ -401,10 +419,9 @@ class evoli(clientAI):
             # self.findNeededRessources()
             # self.grabFood()
             print("state = " + str(self.state) + "\n")
-            if (
-                self.state == enumState.LF_RESSOURCES
-                or self.state == enumState.NEED_FOOD
-            ):
+            if self.state == enumState.NEED_FOOD:
+                self.grabFood()
+            elif self.state == enumState.LF_RESSOURCES:
                 self.findPlaceToElevate()
                 self.findNeededRessources()
                 self.grabFood()

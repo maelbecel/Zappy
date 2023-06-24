@@ -62,10 +62,6 @@ class clientAi:
         else:
             self.rayCasting = None
 
-    def __del__(self):
-        if self.graphic is True:
-            rayCasting.pygame.quit()
-
     def initPygame(self):
         self.rayCasting = rayCasting(1200, 800)
 
@@ -261,6 +257,8 @@ class clientAi:
         self.send(cAct.LOOK.value)
         if self.isValidArray() and self.alive:
             self.parseLook()
+        else:
+            return
         if self.graphic is True:
             array = self.lookResult
             array = self.rayCasting.ArrayToArrayOfDict(array)

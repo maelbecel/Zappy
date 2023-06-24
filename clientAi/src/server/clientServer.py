@@ -46,7 +46,7 @@ class clientServer:
         if response is None or len(response) == 0:
             return "dead\n"
         while response[-1] != "\n":
-            response = self.socket.recv(8192).decode()
+            response += self.socket.recv(8192).decode()
         return response
 
     def getSocket(self):

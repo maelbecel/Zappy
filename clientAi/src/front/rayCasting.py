@@ -6,6 +6,9 @@
 ##
 
 import pygame
+import numpy as np
+
+from numba import jit, int32
 
 EXAMPLE_DATA = [
     {
@@ -70,11 +73,13 @@ class rayCasting:
         self.caseSize = 90  # Size of each case (adjust as needed)
         self.width = widht
         self.height = height
-        self.screen = pygame.display.set_mode((self.width, self.height))
+        self.screen = pygame.display.set_mode((self.height, self.width))
         self.IsTwoD = True
         self.scaleRate = 3
         self.loadAllAssets()
-        pygame.display.set_caption("Ray Casting Test")
+
+    def __del__(self):
+        pygame.quit()
 
     def loadAllAssets(self):
         for item, value in ASSETS.items():
@@ -151,14 +156,21 @@ class rayCasting:
         pygame.display.flip()
 
 
-# this method as to be runned at the same location that the main.py
-if __name__ == "__main__":
-    rayCasting = rayCasting(1200, 800)
-    running = True
+# # this method as to be runned at the same location that the main.py
+# if __name__ == "__main__":
+#     rayCasting = rayCasting(1200, 800)
+#     running = True
 
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-        rayCasting.refreshLookDisplay(EXAMPLE_DATA)
-    pygame.quit()
+#     while running:
+#         for event in pygame.event.get():
+#             if event.type == pygame.QUIT:
+#                 running = False
+#         rayCasting.movement(pygame.key.get_pressed())
+#         frame = rayCasting.new_frame()
+
+#         pygame.display.set_caption("Pycasting maze - FPS: " + str(fps))
+
+#         rayCasting.screen.blit(surf, (0,0))
+#         pygame.display.update()
+#         # rayCasting.refreshLookDisplay(EXAMPLE_DATA)
+#     pygame.quit()

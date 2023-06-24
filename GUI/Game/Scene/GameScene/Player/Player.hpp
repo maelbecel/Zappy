@@ -20,11 +20,68 @@
 class GameData;
 class Tile;
 
+/**
+ * @brief The player class
+ */
 class Player {
     // Constructor & Destructor
     public:
+
+        /**
+         * @brief Construct a new Player object
+         *
+         * @param position  The position of the player
+         * @param direction The direction of the player
+         * @param level     The level of the player
+         * @param teamName  The team name of the player
+         * @param color     The color of the player
+         */
         Player(sf::Vector2i position = sf::Vector2i(0, 0), int direction = 1, int level = 1, std::string teamName = "", int color = 1);
-        ~Player();
+
+        /**
+         * @brief Destroy the Player object
+         */
+        ~Player() = default;
+
+    // Methods
+    public:
+
+        /**
+         * @brief Draw the player on the map
+         *
+         * @param gameData The game data
+         * @param window   The window to draw on
+         */
+        void draw(GameData &gameData, sf::RenderWindow &window);
+
+        /**
+         * @brief Expulse the player
+         * 
+         * Move the player in the direction he is facing
+         */
+        void expulse();
+
+        /**
+         * @brief The player drop "nomber" of resource on his actual tile
+         *
+         * @param nomber The nomber of resource to drop
+         * @param tile   The tile that the player is on
+         */
+        void dropResource(int nomber, std::shared_ptr<Tile> &tile);
+
+        /**
+         * @brief The player collect "nomber" of resource on his actual tile
+         *
+         * @param nomber The nomber of resource to collect
+         * @param tile   The tile that the player is on
+         */
+        void collectResource(int nomber, std::shared_ptr<Tile> &tile);
+
+        /**
+         * @brief Update the player
+         * Call this function for update the player animation
+         */
+        void update();
 
     // Getters & Setters
     public:
@@ -119,46 +176,6 @@ class Player {
          * @return sf::Vector2f The correct scale of the player
          */
         sf::Vector2f setPlayerScale(sf::Vector2f scale);
-
-    // Methods
-    public:
-
-        /**
-         * @brief Draw the player on the map
-         *
-         * @param gameData The game data
-         * @param window   The window to draw on
-         */
-        void draw(GameData &gameData, sf::RenderWindow &window);
-
-        /**
-         * @brief Expulse the player
-         * 
-         * Move the player in the direction he is facing
-         */
-        void expulse();
-
-        /**
-         * @brief The player drop "nomber" of resource on his actual tile
-         *
-         * @param nomber The nomber of resource to drop
-         * @param tile   The tile that the player is on
-         */
-        void dropResource(int nomber, std::shared_ptr<Tile> &tile);
-
-        /**
-         * @brief The player collect "nomber" of resource on his actual tile
-         *
-         * @param nomber The nomber of resource to collect
-         * @param tile   The tile that the player is on
-         */
-        void collectResource(int nomber, std::shared_ptr<Tile> &tile);
-
-        /**
-         * @brief Update the player
-         * Call this function for update the player animation
-         */
-        void update();
     
     // Private Methods
     private:
@@ -173,31 +190,31 @@ class Player {
 
     // Attributes
     private:
-        sf::Vector2i _position;              /*!< The position of the player */
-        int _direction;                      /*!< The direction of the player */
-        int _level;                          /*!< The level of the player */
-        std::string _teamName;               /*!< The team name of the player */
-        int *_inventory;                     /*!< The inventory of the player */
-        int _placement;                      /*!< The placement of the player */
+        sf::Vector2i _position; /*!< The position of the player */
+        int _direction;         /*!< The direction of the player */
+        int _level;             /*!< The level of the player */
+        std::string _teamName;  /*!< The team name of the player */
+        int *_inventory;        /*!< The inventory of the player */
+        int _placement;         /*!< The placement of the player */
 
     // Animation Status Attributes
     private:
-        bool _idle;                         /*!< The idle of the player */
-        bool _expulsion;                    /*!< The expulsion of the player */
-        bool _broadcast;                    /*!< The broadcast of the player */
-        UI::Animation *_idleAnim;           /*!< Animation of the player when he is idle */
-        UI::Animation *_pushAnim;           /*!< Animation of the player when he is pushing */
-        UI::Animation *_broadcastAnim;      /*!< Animation of the player when he is broadcasting */
+        bool _idle;                                    /*!< The idle of the player */
+        bool _expulsion;                               /*!< The expulsion of the player */
+        bool _broadcast;                               /*!< The broadcast of the player */
+        std::shared_ptr<UI::Animation> _idleAnim;      /*!< Animation of the player when he is idle */
+        std::shared_ptr<UI::Animation> _pushAnim;      /*!< Animation of the player when he is pushing */
+        std::shared_ptr<UI::Animation> _broadcastAnim; /*!< Animation of the player when he is broadcasting */
 
     // Sprites
     private:
-        sf::Sprite *_playerSprite;           /*!< The sprite of the player */
-        std::vector<Audio::SFX *> _SFX;      /*!< The vector of SFX */
+        std::shared_ptr<sf::Sprite> _playerSprite;     /*!< The sprite of the player */
+        std::vector<std::shared_ptr<Audio::SFX>> _SFX; /*!< The vector of SFX */
 
     // Define
     public:
-        static const int PLAYER_HEIGHT = 19; /*!< The height of the player */
-        static const int PLAYER_WIDTH = 28;  /*!< The width of the player */
+        static const int PLAYER_HEIGHT = 19;    /*!< The height of the player */
+        static const int PLAYER_WIDTH = 28;     /*!< The width of the player */
         static const size_t IDLE_FRAME = 5;     /*!< The number of frame of the idle animation */
         static const size_t PUSH_FRAME = 4;     /*!< The number of frame of the push animation */
         static const size_t BROADCAST_FRAME = 7 /*!< The number of frame of the broadcast animation */;

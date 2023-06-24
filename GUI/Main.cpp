@@ -42,8 +42,13 @@ int main(int ac, char **av)
         return 84;
     } catch (const libconfig::FileIOException &fioex) {
         std::cerr << "I/O error while reading file." << std::endl;
+        return 84;
     } catch (const libconfig::ParseException &pex) {
         std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError() << std::endl;
+        return 84;
+    } catch (const Error::NetworkError &e) {
+        std::cerr << e.what() << std::endl;
+        return 84;
     }
 
     // Destroy all the textures and fonts of the game

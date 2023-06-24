@@ -23,10 +23,12 @@
 
 namespace UI {
     class GameMenuHUD {
+
         // Constructor & Destructor
         public:
             GameMenuHUD();
-            ~GameMenuHUD();
+
+            ~GameMenuHUD() = default;
 
         // Methods
         public:
@@ -83,14 +85,14 @@ namespace UI {
         // Attributes
         private:
             sf::RectangleShape _background;         /*!< Background of the Settings HUD */
-            IButton *_resumeButton;                 /*!< Button to resume the game */
-            IButton *_settingsButton;              /*!< Button to go to the settings */
-            IButton *_helpButton;                  /*!< Button to go to the help */
-            IButton *_quitButton;                  /*!< Button to quit the game */
-            SettingsHUD *_settingsHUD;               /*!< Settings HUD */
+            std::shared_ptr<IButton> _resumeButton;                 /*!< Button to resume the game */
+            std::shared_ptr<IButton> _settingsButton;              /*!< Button to go to the settings */
+            std::shared_ptr<IButton> _helpButton;                  /*!< Button to go to the help */
+            std::shared_ptr<IButton> _quitButton;                  /*!< Button to quit the game */
+            std::shared_ptr<SettingsHUD> _settingsHUD;               /*!< Settings HUD */
             HelpHUD _helpHUD;                       /*!< Help HUD */
             bool _isOpened;                         /*!< Is the Settings HUD opened */
-            Audio::SFX *_mouseClick;                /*!< Mouse click sound */
+            std::shared_ptr<Audio::SFX> _mouseClick;                /*!< Mouse click sound */
             std::string _language;           /*!< Language of the game */
     };
 };

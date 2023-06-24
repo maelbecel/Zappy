@@ -8,9 +8,9 @@
 #include "InputBox.hpp"
 
 namespace UI {
-    //////////////////////////////
-    // Constructor & Destructor //
-    //////////////////////////////
+    /////////////////
+    // Constructor //
+    /////////////////
     InputBox::InputBox() : AWidget(), value(std::string("")) {};
 
     InputBox::InputBox(const std::string &name, const sf::Vector2f &position, const sf::Vector2f &size) : AWidget(position, size), value(std::string(""))
@@ -40,12 +40,6 @@ namespace UI {
         bgStyle.apply(_box);
         borderStyle.apply(_box);
     }
-
-    InputBox::~InputBox()
-    {
-        // Destroy the _name ~sf::Text() default destructor
-        // Destroy the _box ~sf::RectangleShape() default destructor
-    };
 
     /////////////
     // Methods //
@@ -94,9 +88,9 @@ namespace UI {
         value += static_cast<char>(event.text.unicode);
     }
 
-    ///////////////////////
-    // Setters & Getters //
-    ///////////////////////
+    /////////////
+    // Setters //
+    /////////////
 
     void InputBox::setPosition(const sf::Vector2f &position)
     {

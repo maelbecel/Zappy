@@ -10,9 +10,10 @@
 #include "Map.hpp"
 
 namespace UI {
-    //////////////////////////////
-    // Constructor & Destructor //
-    //////////////////////////////
+    /////////////////
+    // Constructor //
+    /////////////////
+
     TeamHUD::TeamHUD()
     {
         LayoutProperties properties;
@@ -21,10 +22,10 @@ namespace UI {
         properties.spacing = 15.0f;
 
         // Create the layout of the team HUD
-        _teamLayout = new VerticalLayout(properties);
+        _teamLayout = std::make_shared<VerticalLayout>(properties);
 
         try {
-            _cursor = new sf::Sprite();
+            _cursor = std::make_shared<sf::Sprite>();
 
             _cursor->setTexture(*TextureManager::getTexture(UI::CURSOR));
             _cursor->setTextureRect(sf::IntRect(0, 0, Tile::TILE_WIDTH, Tile::TILE_TOTAL_HEIGHT));
@@ -32,12 +33,7 @@ namespace UI {
             std::cerr << "Bad Initialization of TeamHUD: " << e.what() << std::endl;
         }
 
-        _mouseClick = new Audio::SFX(Audio::MOUSE_CLICK, Audio::Audio::sfxVolume);
-    };
-
-    TeamHUD::~TeamHUD()
-    {
-        delete _mouseClick;
+        _mouseClick = std::make_shared<Audio::SFX>(Audio::MOUSE_CLICK, Audio::Audio::sfxVolume);
     };
 
     /////////////
@@ -54,7 +50,7 @@ namespace UI {
 
     void TeamHUD::drawCursor(sf::RenderWindow &window, GameData &data)
     {
-        std::map<std::string, Player *> players = data.getPlayers();
+        std::map<std::string, std::shared_ptr<Player>> players = data.getPlayers();
         sf::Vector2f scale = data.getScale();
         sf::Vector2i size = data.getMapSize();
         sf::Vector2f userPosition = data.getPosition();
@@ -97,27 +93,6 @@ namespace UI {
         }
     }
 
-    sf::Color TeamHUD::setColor(int color)
-    {
-        if (color == 1)
-            return sf::Color(220, 136, 85, 255);
-        else if (color == 2)
-            return sf::Color(202, 102, 213, 255);
-        else if (color == 3)
-            return sf::Color::Blue;
-        else if (color == 4)
-            return sf::Color::Green;
-        else if (color == 5)
-            return sf::Color::Magenta;
-        else if (color == 6)
-            return sf::Color::Red;
-        else if (color == 7)
-            return sf::Color::Yellow;
-        else if (color == 8)
-            return sf::Color::Cyan;
-        return setColor(color - 8);
-    }
-
     void TeamHUD::handleEvent(sf::Event event)
     {
         bool found = false;
@@ -139,6 +114,7 @@ namespace UI {
     /////////////
     // Setters //
     /////////////
+
     void TeamHUD::setTeams(const std::vector<std::string> &teams)
     {
         int index = 1;
@@ -164,5 +140,26 @@ namespace UI {
 
         _teams = teams;
         _teamLayout->applyLayout();
+    }
+
+    sf::Color TeamHUD::setColor(int color)
+    {
+        if (color == 1)
+            return sf::Color(220, 136, 85, 255);
+        else if (color == 2)
+            return sf::Color(202, 102, 213, 255);
+        else if (color == 3)
+            return sf::Color::Blue;
+        else if (color == 4)
+            return sf::Color::Green;
+        else if (color == 5)
+            return sf::Color::Magenta;
+        else if (color == 6)
+            return sf::Color::Red;
+        else if (color == 7)
+            return sf::Color::Yellow;
+        else if (color == 8)
+            return sf::Color::Cyan;
+        return setColor(color - 8);
     }
 };

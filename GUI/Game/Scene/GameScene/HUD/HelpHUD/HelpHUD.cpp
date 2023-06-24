@@ -21,7 +21,7 @@ namespace UI {
         _background.setPosition(sf::Vector2f(0.0f, 0.0f));
 
         try {
-            texture = TextureManager::getTexture("./Assets/UI_UX/Paper UI Pack/Paper UI/Folding & Cutout/10 Calander/1.png");
+            texture = TextureManager::getTexture(UI::HELPHUD);
             _backgroundSprite = sf::Sprite(*texture);
             _backgroundSprite.setPosition(sf::Vector2f((Window::getWindowWidth() - texture->getSize().x * backgroundSpriteScale) / 2, (Window::getWindowHeight() - texture->getSize().y * backgroundSpriteScale) / 2));
             _backgroundSprite.setScale(sf::Vector2f(backgroundSpriteScale, backgroundSpriteScale));
@@ -39,12 +39,8 @@ namespace UI {
         std::shared_ptr<IWidget> leftButton = std::make_shared<ArrowButtonWidget>(sf::Vector2f(leftButtonXPosition, leftButtonYPosition), sf::Vector2f(16 * 2 * backgroundSpriteScale, 16 * 2 * backgroundSpriteScale), ArrowDirection::LEFT);
         std::shared_ptr<IWidget> rightButton = std::make_shared<ArrowButtonWidget>(sf::Vector2f(rightButtonXPosition, rightButtonYPosition), sf::Vector2f(16 * 2 * backgroundSpriteScale, 16 * 2 * backgroundSpriteScale), ArrowDirection::RIGHT);
 
-        _leftButton = new Button(leftButton);
-        _rightButton = new Button(rightButton);
-    }
-
-    HelpHUD::~HelpHUD()
-    {
+        _leftButton = std::make_shared<Button>(leftButton);
+        _rightButton = std::make_shared<Button>(rightButton);
     }
 
     void HelpHUD::draw(sf::RenderWindow &window)

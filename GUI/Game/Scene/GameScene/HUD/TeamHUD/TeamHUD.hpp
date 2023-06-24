@@ -17,11 +17,21 @@
 class GameData;
 
 namespace UI {
+
+    /**
+     * @brief Class of the Team HUD
+     */
     class TeamHUD {
-        // Constructor & Destructor
+
+        // Constructor & Destructor (default)
         public:
+
+            /**
+             * @brief Construct a new Team HUD object
+             */
             TeamHUD();
-            ~TeamHUD();
+
+            ~TeamHUD() = default;
 
         // Methods
         public:
@@ -32,6 +42,12 @@ namespace UI {
              */
             void draw(sf::RenderWindow &window);
 
+            /**
+             * @brief Draw the cursor of the Team HUD
+             *
+             * @param window The window where the cursor will be drawn
+             * @param data   The game data for map information
+             */
             void drawCursor(sf::RenderWindow &window, GameData &data);
 
             /**
@@ -41,7 +57,7 @@ namespace UI {
              */
             void handleEvent(sf::Event event);
 
-        // Setters
+        // Setter
         public:
 
             /**
@@ -50,7 +66,7 @@ namespace UI {
              */
             void setTeams(const std::vector<std::string> &teams);
 
-        // Private methods
+        // Private method
         private:
 
             /**
@@ -63,11 +79,11 @@ namespace UI {
 
         // Attributes
         private:
-            VerticalLayout *_teamLayout;     /*!< The layout of the team HUD */
-            std::vector<std::string> _teams; /*!< The teams of the HUD */
-            sf::Sprite *_cursor;             /*!< The cursor of the HUD */
-            std::string _teamName;           /*!< The name of the team that got clicked */
-            Audio::SFX *_mouseClick;         /*!< The sound of the mouse click */
+            std::shared_ptr<VerticalLayout> _teamLayout; /*!< The layout of the team HUD */
+            std::vector<std::string> _teams;             /*!< The teams of the HUD */
+            std::shared_ptr<sf::Sprite> _cursor;         /*!< The cursor of the HUD */
+            std::string _teamName;                       /*!< The name of the team that got clicked */
+            std::shared_ptr<Audio::SFX> _mouseClick;     /*!< The sound of the mouse click */
     };
 };
 

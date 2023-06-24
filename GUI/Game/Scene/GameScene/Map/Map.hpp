@@ -13,8 +13,16 @@
     #include "TextureManager.hpp"
     #include "TextureError.hpp"
 
+/**
+ * @brief Class of the map
+ */
 class Map {
+
+    // Enum
     public:
+        /**
+         * @brief Season enum for all season that game can have
+         */
         enum Season {
             SPRING = 1,
             SUMMER = 2,
@@ -24,8 +32,13 @@ class Map {
 
     // Constructor and Destructor (default)
     public:
+
+        /**
+         * @brief Construct a new Map object
+         */
         Map();
-        ~Map();
+
+        ~Map() = default;
 
     // Methods
     public:
@@ -41,17 +54,17 @@ class Map {
             /**
              * @brief Get a sprite of a tile refer to his season
              *
-             * @param height       The height of the tile
-             * @param width        The width of the tile
-             * @param gameData     The game data for map information
-             * @param season       The season of the tile
-             * @return sf::Sprite* The sprite of the tile
+             * @param height        The height of the tile
+             * @param width         The width of the tile
+             * @param gameData      The game data for map information
+             * @param season        The season of the tile
+             * @return sf::Sprite * The sprite of the tile
              */
             sf::Sprite *drawSeason(int height, int width, GameData &gameData, Season season);
 
-    // Attributes
+    // Attribute
     private:
-        std::map<std::string, sf::Sprite *> _tiles; /*!< The tiles for the map */
+        std::map<std::string, std::shared_ptr<sf::Sprite>> _tiles; /*!< The tiles for the map */
 
     // Define
     public:

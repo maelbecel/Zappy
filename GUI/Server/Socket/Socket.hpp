@@ -19,11 +19,13 @@
     #include <sstream>
 
 namespace Network {
+
     /**
      * @brief The Socket class
      * This class is used to manipulate socket
      */
     class Socket {
+
         // Constructor and Destructor
         public:
 
@@ -123,7 +125,7 @@ namespace Network {
              */
             void send(const std::string &message);
 
-        // Setters and Getters
+        // Setter
         public:
             /**
              * @brief Set the Socket object
@@ -155,7 +157,7 @@ namespace Network {
             fd_set _read;         /*!< The read socket of the socket */
             fd_set _write;        /*!< The write socket of the socket */
 
-        // Accessible Attributes
+        // Accessible Attribute
         public:
             std::string response; /*!< The response of the server */
     };

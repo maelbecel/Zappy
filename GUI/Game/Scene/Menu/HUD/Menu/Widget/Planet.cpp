@@ -13,54 +13,33 @@
 namespace UI {
 
     static const planetPath_t planetPath[] = {
-        {MERCURY, "Assets/Menu_Background/mercury_map.jpg"},
-        {VENUS, "Assets/Menu_Background/venus_map.jpg"},
-        {EARTH, "Assets/Menu_Background/earth_map.jpg"},
-        {MARS, "Assets/Menu_Background/mars_map.jpg"},
-        {JUPITER, "Assets/Menu_Background/jupiter_map.jpg"},
-        {SATURN, "Assets/Menu_Background/saturn_map.jpg"},
-        {URANUS, "Assets/Menu_Background/uranus_map.jpg"},
-        {NEPTUNE, "Assets/Menu_Background/neptune_map.jpg"},
+        {MERCURY, P_MERCURY},
+        {VENUS, P_VENUS},
+        {EARTH, P_EARTH},
+        {MARS, P_MARS},
+        {JUPITER, P_JUPITER},
+        {SATURN, P_SATURN},
+        {URANUS, P_URANUS},
+        {NEPTUNE, P_NEPTUNE},
     };
 
-    // Constructor & Destructor
+    /////////////////
+    // Constructor //
+    /////////////////
 
-    Planet::Planet() : AWidget() {
+    Planet::Planet() : AWidget()
+    {
         _type = (PlanetType)(Math::random(sizeof(planetPath) / sizeof(planetPath_t)));
-    };
-
-    Planet::~Planet() {};
-
-    // Getter & Setter
-
-    void Planet::setSize(const sf::Vector2f &size)
-    {
-        _size = size;
     }
 
-    void Planet::setPosition(const sf::Vector2f &position)
+    /////////////
+    // Methods //
+    /////////////
+
+    void Planet::handleEvent(UNUSED sf::Event event)
     {
-        _position = position;
+        return;
     }
-
-    void Planet::setType(PlanetType type)
-    {
-        _type = type;
-    }
-
-    PlanetType Planet::getType()
-    {
-        return _type;
-    }
-
-    int Planet::getNbPlanet()
-    {
-        return (sizeof(planetPath) / sizeof(planetPath_t));
-    }
-
-    // Methods
-
-    void Planet::handleEvent(UNUSED sf::Event event) {return;}
 
     void Planet::drawStars(sf::RenderTarget& target, sf::RenderStates states) const
     {
@@ -73,6 +52,7 @@ namespace UI {
                 if (_stars[i].intensity >= 2)
                     _stars[i].intensity = 0;
             }
+
             _clockStars.restart();
         }
 
@@ -99,44 +79,45 @@ namespace UI {
     void Planet::draw(sf::RenderTarget& target, sf::RenderStates states) const
     {
         drawStars(target, states);
+
         const float radius = 300.0f;
         sf::Image sphereImage;
-        sphereImage.create(radius * 2, radius * 2);
         sf::Image image;
+
+        sphereImage.create(radius * 2, radius * 2);
 
         static sf::Clock _clock = sf::Clock();
         static int rotationAngle = 0;
+
         if (_clock.getElapsedTime().asMilliseconds() > 20) {
             rotationAngle++;
             _clock.restart();
         }
 
         std::string file;
-        for (int i = 0; i < (int)(sizeof(planetPath) / sizeof(planetPath_t)); i++) {
+
+        for (int i = 0; i < (int)(sizeof(planetPath) / sizeof(planetPath_t)); i++)
             if (planetPath[i].type == _type)
                 file = planetPath[i].path;
-        }
 
         if (!image.loadFromFile(file))
-        {
             return;
-        }
 
-        for (int x = 0; x < radius * 2; ++x)
-        {
-            for (int y = 0; y < radius * 2; ++y)
-            {
+        for (int x = 0; x < radius * 2; ++x) {
+            for (int y = 0; y < radius * 2; ++y) {
                 float relX = x - radius;
                 float relY = y - radius;
                 float distance = std::sqrt(relX * relX + relY * relY);
 
-                if (distance <= radius)
-                {
+                if (distance <= radius) {
                     float intensity = 1.0f - distance / radius + 0.1f;
-                    intensity = intensity > 1 ? 1 : intensity;
                     sf::Color color =  image.getPixel(x + rotationAngle, y);
+
+                    intensity = intensity > 1 ? 1 : intensity;
+
                     if (x + rotationAngle > (int)image.getSize().x)
                         color = image.getPixel(x + rotationAngle - image.getSize().x, y);
+
                     color.r *= intensity;
                     color.g *= intensity;
                     color.b *= intensity;
@@ -144,9 +125,13 @@ namespace UI {
                 }
             }
         }
+
         sf::Texture sphereTexture;
+
         sphereTexture.loadFromImage(sphereImage);
+
         sf::Sprite sphereSprite(sphereTexture);
+
         sphereSprite.setPosition(_position);
         target.draw(sphereSprite, states);
     }
@@ -155,4 +140,33 @@ namespace UI {
     {
         drawHover(target, states);
     }
-}
+
+    ///////////////////////
+    // Setters & Getters //
+    ///////////////////////
+
+    void Planet::setSize(const sf::Vector2f &size)
+    {
+        _size = size;
+    }
+
+    void Planet::setPosition(const sf::Vector2f &position)
+    {
+        _position = position;
+    }
+
+    void Planet::setType(PlanetType type)
+    {
+        _type = type;
+    }
+
+    PlanetType Planet::getType()
+    {
+        return _type;
+    }
+
+    int Planet::getNbPlanet()
+    {
+        return (sizeof(planetPath) / sizeof(planetPath_t));
+    }
+};

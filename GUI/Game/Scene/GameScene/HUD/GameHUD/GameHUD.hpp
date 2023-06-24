@@ -25,7 +25,7 @@ namespace UI {
         // Constructor & Destructor
         public:
             GameHUD();
-            ~GameHUD();
+            ~GameHUD() = default;
 
         // Methods
         public:
@@ -55,13 +55,13 @@ namespace UI {
         // Attributes
         private:
             sf::Sprite _backgroundSprite; /*!< Sprite of the Settings HUD */
-            IButton *_speed1x;            /*!< Button to resume the game */
-            IButton *_speed2x;            /*!< Button to go to the settings */
-            IButton *_speed4x;            /*!< Button to quit the game */
+            std::shared_ptr<IButton>_speed1x;            /*!< Button to resume the game */
+            std::shared_ptr<IButton>_speed2x;            /*!< Button to go to the settings */
+            std::shared_ptr<IButton>_speed4x;            /*!< Button to quit the game */
             sf::Text _speed1xText;        /*!< Text of the resume button */
             sf::Text _speed2xText;        /*!< Text of the settings button */
             sf::Text _speed4xText;        /*!< Text of the quit button */
-            Audio::SFX *_mouseClick;      /*!< Sound of the mouse click */
+            std::shared_ptr<Audio::SFX> _mouseClick;      /*!< Sound of the mouse click */
     };
 };
 

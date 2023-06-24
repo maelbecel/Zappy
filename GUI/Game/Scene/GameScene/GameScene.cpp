@@ -10,34 +10,28 @@
 #include "Window.hpp"
 
 namespace Scene {
+
     /////////////////
     // Constructor //
     /////////////////
     GameScene::GameScene() : _isTileHUDOpen(false), _isTeamActivated(true)
     {
-        _ost = new Audio::Music(Audio::GAME_OST, Audio::Audio::musicVolume, true);
-        _mouseClick = new Audio::SFX(Audio::MOUSE_CLICK, Audio::Audio::sfxVolume);
-        _teamHUD = new UI::TeamHUD();
-        _gameMenuHUD = new UI::GameMenuHUD();
-        _gameHUD = new UI::GameHUD();
-        _tileHUD = new UI::TileHUD();
-    };
-
-    GameScene::~GameScene()
-    {
-        delete _ost;
-        delete _mouseClick;
-        delete _teamHUD;
-        delete _gameMenuHUD;
-        delete _gameHUD;
-        delete _tileHUD;
+        _ost = std::make_shared<Audio::Music>(Audio::GAME_OST, Audio::Audio::musicVolume, true);
+        _mouseClick = std::make_shared<Audio::SFX>(Audio::MOUSE_CLICK, Audio::Audio::sfxVolume);
+        _teamHUD = std::make_shared<UI::TeamHUD>();
+        _gameMenuHUD = std::make_shared<UI::GameMenuHUD>();
+        _gameHUD = std::make_shared<UI::GameHUD>();
+        _tileHUD = std::make_shared<UI::TileHUD>();
     };
 
     /////////////
     // Methods //
     /////////////
 
-    void GameScene::Initialize() {};
+    void GameScene::Initialize()
+    {
+        return;
+    }
 
     void GameScene::Update(Network::Server &server)
     {
@@ -46,57 +40,65 @@ namespace Scene {
             _ost->play();
         _ost->setVolume(Audio::Audio::musicVolume);
 
-        // Game Server
-        int response = 0;
+        try {
+            // Game Server
+            int response = 0;
 
-        askingToServer(server);
+            askingToServer(server);
 
-        server.Run();
-
-        response = _gameData.parse(server.getSocket().response);
-
-        if (response == 1) // New Team created
-            _teamHUD->setTeams(_gameData.getTeams());
-        else if (response == 2) {// New Eggs created
-            server.sendCommand("sgt");
             server.Run();
-            _gameData.parse(server.getSocket().response);
 
-            for (auto &egg : _gameData.getEggs()) {
-                if (egg.second->getTimeWhenDropped() == 0) {
-                    egg.second->setTimeWhenDropped(_gameData.getTimeUnit());
-                    break;
+            response = _gameData.parse(server.getSocket().response);
+
+            if (response == 1) // New Team created
+                _teamHUD->setTeams(_gameData.getTeams());
+            else if (response == 2) { // New Eggs created
+                server.sendCommand("sgt");
+                server.Run();
+                _gameData.parse(server.getSocket().response);
+
+                for (auto &egg : _gameData.getEggs()) {
+                    if (egg.second->getTimeWhenDropped() == 0) {
+                        egg.second->setTimeWhenDropped(_gameData.getTimeUnit());
+                        break;
+                    }
                 }
             }
+        } catch (const Error::NetworkError &e) {
+            throw Error::NetworkError(e.what());
         }
     }
 
     void GameScene::askingToServer(Network::Server &server)
     {
-        static int i = 0;
-        static bool asking = false;
+        try {
+            static int i = 0;
+            static bool asking = false;
 
-        if (_gameData.getMapSize().x == 0 || _gameData.getMapSize().y == 0) {
-            server.sendCommand("msz");
-            server.Run();
-            _gameData.parse(server.getSocket().response);
+            if (_gameData.getMapSize().x == 0 || _gameData.getMapSize().y == 0) {
+                server.sendCommand("msz");
+                server.Run();
+                _gameData.parse(server.getSocket().response);
+            }
+
+            if (i % 25 == 0) {
+                server.sendCommand("sgt");
+                server.Run();
+                _gameData.parse(server.getSocket().response);
+                asking = false;
+            }
+
+            if ((_gameData.getTimeUnit() % 20 == 0 && asking == false) || _gameData.getMap().empty()) {
+                server.sendCommand("mct");
+                server.Run();
+                _gameData.parse(server.getSocket().response);
+                asking = true;
+            }
+
+            i++;
+        } catch (const Error::NetworkError &e) {
+            Error::NetworkError error(e.what());
         }
-
-        if (i % 25 == 0) {
-            server.sendCommand("sgt");
-            server.Run();
-            _gameData.parse(server.getSocket().response);
-            asking = false;
-        }
-
-        if ((_gameData.getTimeUnit() % 20 == 0 && asking == false) || _gameData.getMap().empty()) {
-            server.sendCommand("mct");
-            server.Run();
-            _gameData.parse(server.getSocket().response);
-            asking = true;
-        }
-
-        i++;
     }
 
     void GameScene::Render(sf::RenderWindow &window)
@@ -175,8 +177,13 @@ namespace Scene {
                     return;
 
                 if (!_tileHUD->getIsOpen()) {
-                    if (LeftMousePressed(sf::Vector2i(event.mouseButton.x, event.mouseButton.y), server) == true)
-                        return;
+                    try {
+                        if (LeftMousePressed(sf::Vector2i(event.mouseButton.x, event.mouseButton.y), server) == true)
+                            return;
+                    } catch (const Error::NetworkError &e) {
+                        throw Error::NetworkError(e.what());
+                    }
+
                     _teamHUD->handleEvent(event);
                 }
             }
@@ -188,90 +195,100 @@ namespace Scene {
         std::map<std::pair<int, int>, std::shared_ptr<Tile>> tiles = _gameData.getMap();
         sf::Vector2f scale = _gameData.getScale();
 
-        // Loop on each tiles of the map
-        for (auto &tile : tiles) {
-            sf::Vector2f position = tile.second->getPosition();
+        try {
 
-            // Check if the mouse is on the tile
-            if (mousePos.x < position.x || mousePos.y < position.y || mousePos.x > (position.x + (Tile::TILE_WIDTH * (scale.x + 2))) || mousePos.y > (position.y + (Tile::TILE_HEIGHT * (scale.y + 1.25))))
-                continue;
+            // Loop on each tiles of the map
+            for (auto &tile : tiles) {
+                sf::Vector2f position = tile.second->getPosition();
 
-            // Check if the mouse is on the rectangle
-            if ((mousePos.x >= position.x + (8 * (scale.x + 2)) && mousePos.y >= position.y) && (mousePos.x <= position.x + (Tile::TILE_WIDTH * (scale.x + 2)) - (8 * (scale.x + 2)) && mousePos.y <= position.y + (Tile::TILE_HEIGHT * (scale.y + 1.25)))) {
-                _mouseClick->play();
+                // Check if the mouse is on the tile
+                if (mousePos.x < position.x || mousePos.y < position.y || mousePos.x > (position.x + (Tile::TILE_WIDTH * (scale.x + 2))) || mousePos.y > (position.y + (Tile::TILE_HEIGHT * (scale.y + 1.25))))
+                    continue;
 
-                // Check if the mouse is on the half left of the screen or the half right
-                if (mousePos.x < (Window::getWindowWidth()) / 2) {
-                    openTileHUD(tile.first.first, tile.first.second, server, true);
-                } else {
-                    openTileHUD(tile.first.first, tile.first.second, server, false);
+                // Check if the mouse is on the rectangle
+                if ((mousePos.x >= position.x + (8 * (scale.x + 2)) && mousePos.y >= position.y) && (mousePos.x <= position.x + (Tile::TILE_WIDTH * (scale.x + 2)) - (8 * (scale.x + 2)) && mousePos.y <= position.y + (Tile::TILE_HEIGHT * (scale.y + 1.25)))) {
+                    _mouseClick->play();
+
+                    // Check if the mouse is on the half left of the screen or the half right
+                    if (mousePos.x < (Window::getWindowWidth()) / 2) {
+                        openTileHUD(tile.first.first, tile.first.second, server, true);
+                    } else {
+                        openTileHUD(tile.first.first, tile.first.second, server, false);
+                    }
+
+                    break;
                 }
 
-                break;
-            }
+                // Check if the mouse is on the left triangle
+                sf::Vector2f a = sf::Vector2f(position.x + (8 * (scale.x + 2)), position.y);
+                sf::Vector2f b = sf::Vector2f(position.x, position.y + ((Tile::TILE_HEIGHT / 2) * (scale.y + 1.25)));
+                sf::Vector2f c = sf::Vector2f(position.x + (8 * (scale.x + 2)), position.y + (Tile::TILE_HEIGHT * (scale.y + 1.25)));
 
-            // Check if the mouse is on the left triangle
-            sf::Vector2f a = sf::Vector2f(position.x + (8 * (scale.x + 2)), position.y);
-            sf::Vector2f b = sf::Vector2f(position.x, position.y + ((Tile::TILE_HEIGHT / 2) * (scale.y + 1.25)));
-            sf::Vector2f c = sf::Vector2f(position.x + (8 * (scale.x + 2)), position.y + (Tile::TILE_HEIGHT * (scale.y + 1.25)));
+                if (isInsideTriangle(mousePos, sf::Vector2i(a.x, a.y), sf::Vector2i(b.x, b.y), sf::Vector2i(c.x, c.y))) {
+                    _mouseClick->play();
 
-            if (isInsideTriangle(mousePos, sf::Vector2i(a.x, a.y), sf::Vector2i(b.x, b.y), sf::Vector2i(c.x, c.y))) {
-                _mouseClick->play();
-
-                if (mousePos.x < (Window::getWindowWidth()) / 2) {
-                    openTileHUD(tile.first.first, tile.first.second, server, true);
-                } else {
-                    openTileHUD(tile.first.first, tile.first.second, server, false);
+                    if (mousePos.x < (Window::getWindowWidth()) / 2) {
+                        openTileHUD(tile.first.first, tile.first.second, server, true);
+                    } else {
+                        openTileHUD(tile.first.first, tile.first.second, server, false);
+                    }
+                    break;
                 }
-                break;
-            }
 
-            // Check if the mouse is on the right triangle
-            a = sf::Vector2f(position.x + (Tile::TILE_WIDTH * (scale.x + 2)) - (8 * (scale.x + 2)), position.y);
-            b = sf::Vector2f(position.x + (Tile::TILE_WIDTH * (scale.x + 2)), position.y + ((Tile::TILE_HEIGHT / 2) * (scale.y + 1.25)));
-            c = sf::Vector2f(position.x + (Tile::TILE_WIDTH * (scale.x + 2)) - (8 * (scale.x + 2)), position.y + (Tile::TILE_HEIGHT * (scale.y + 1.25)));
+                // Check if the mouse is on the right triangle
+                a = sf::Vector2f(position.x + (Tile::TILE_WIDTH * (scale.x + 2)) - (8 * (scale.x + 2)), position.y);
+                b = sf::Vector2f(position.x + (Tile::TILE_WIDTH * (scale.x + 2)), position.y + ((Tile::TILE_HEIGHT / 2) * (scale.y + 1.25)));
+                c = sf::Vector2f(position.x + (Tile::TILE_WIDTH * (scale.x + 2)) - (8 * (scale.x + 2)), position.y + (Tile::TILE_HEIGHT * (scale.y + 1.25)));
 
-            if (isInsideTriangle(mousePos, sf::Vector2i(a.x, a.y), sf::Vector2i(b.x, b.y), sf::Vector2i(c.x, c.y))) {
-                _mouseClick->play();
+                if (isInsideTriangle(mousePos, sf::Vector2i(a.x, a.y), sf::Vector2i(b.x, b.y), sf::Vector2i(c.x, c.y))) {
+                    _mouseClick->play();
 
-                if (mousePos.x < (Window::getWindowWidth()) / 2) {
-                    openTileHUD(tile.first.first, tile.first.second, server, true);
-                } else {
-                    openTileHUD(tile.first.first, tile.first.second, server, false);
+                    if (mousePos.x < (Window::getWindowWidth()) / 2) {
+                        openTileHUD(tile.first.first, tile.first.second, server, true);
+                    } else {
+                        openTileHUD(tile.first.first, tile.first.second, server, false);
+                    }
+                    break;
                 }
-                break;
             }
+        } catch (const Error::NetworkError &e) {
+            throw Error::NetworkError(e.what());
         }
+
         return _isTileHUDOpen;
     };
 
     void GameScene::openTileHUD(int x, int y, Network::Server &server, bool isLeft)
     {
-        _isTileHUDOpen = true;
-        _tileHUD->setIsOpen(true);
+        try {
+            _isTileHUDOpen = true;
+            _tileHUD->setIsOpen(true);
 
-        server.sendCommand("bct " + std::to_string(x) + " " + std::to_string(y));
-        server.Run();
-        _gameData.parse(server.getSocket().response);
-
-        server.sendCommand("sgt");
-        server.Run();
-        _gameData.parse(server.getSocket().response);
-
-        // Loop on the player
-        for (auto &player : _gameData.getPlayers()) {
-            if (player.second->getPosition() != sf::Vector2i(x, y))
-                continue;
-            server.sendCommand("plv " + player.first);
+            server.sendCommand("bct " + std::to_string(x) + " " + std::to_string(y));
             server.Run();
             _gameData.parse(server.getSocket().response);
 
-            server.sendCommand("pin " + player.first);
+            server.sendCommand("sgt");
             server.Run();
             _gameData.parse(server.getSocket().response);
+
+            // Loop on the player
+            for (auto &player : _gameData.getPlayers()) {
+                if (player.second->getPosition() != sf::Vector2i(x, y))
+                    continue;
+                server.sendCommand("plv " + player.first);
+                server.Run();
+                _gameData.parse(server.getSocket().response);
+
+                server.sendCommand("pin " + player.first);
+                server.Run();
+                _gameData.parse(server.getSocket().response);
+            }
+
+            _tileHUD->setTileHUD(_gameData, isLeft, x, y, _gameMenuHUD->getTileDisplayMode());
+        } catch (const Error::NetworkError &e) {
+            throw Error::NetworkError(e.what());
         }
-
-        _tileHUD->setTileHUD(_gameData, isLeft, x, y, _gameMenuHUD->getTileDisplayMode());
     }
 
     bool GameScene::isInsideTriangle(const sf::Vector2i &position, sf::Vector2i a, sf::Vector2i b, sf::Vector2i c)

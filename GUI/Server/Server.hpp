@@ -11,10 +11,22 @@
     #include "Socket.hpp"
 
 namespace Network {
+
+    /**
+     * @brief The server class
+     * This class is used to connect the GUI Client to the server and send the commands to the server
+     * but also to get the response of the server
+     */
     class Server {
+
         // Constructor & Destructor (default)
         public:
+
+            /**
+             * @brief Construct a new Server object
+             */
             Server();
+
             ~Server() = default;
 
         // Methods
@@ -59,21 +71,6 @@ namespace Network {
             void setConnectionStatus(bool status);
 
             /**
-             * @brief Get the Connection Status object
-             *
-             * @return true  The client is connected to the server
-             * @return false The client is not connected to the server
-             */
-            bool getConnectionStatus() const;
-
-            /**
-             * @brief Get the response message from the server
-             *
-             * @return std::string The response of the server
-             */
-            std::string getResponse() const;
-
-            /**
              * @brief Set the Port object
              *
              * @param port The new port
@@ -94,11 +91,26 @@ namespace Network {
              */
             Socket &getSocket();
 
+            /**
+             * @brief Get the Connection Status object
+             *
+             * @return true  The client is connected to the server
+             * @return false The client is not connected to the server
+             */
+            bool getConnectionStatus() const;
+
+            /**
+             * @brief Get the response message from the server
+             *
+             * @return std::string The response of the server
+             */
+            std::string getResponse() const;
+
         // Attributes
         private:
             Socket _socket;       /*!< The socket */
             bool _isConnected;    /*!< True if the client is connected to the server */
-            int _port;     /*!< The port */
+            int _port;            /*!< The port */
             std::string _machine; /*!< The IP address */
     };
 };

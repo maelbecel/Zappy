@@ -17,12 +17,17 @@
     #include <iostream>
 
 namespace UI {
+
+    /**
+     * @brief InputBox class
+     */
     class InputBox : public AWidget {
+
         // Define for InputBox
         public:
             static const int FONT_SIZE = 14;
 
-        // Constructor & Destructor
+        // Constructor & Destructor (default)
         public:
             /**
              * @brief Construct a new Input Box object
@@ -36,10 +41,7 @@ namespace UI {
             InputBox(const std::string &name, const sf::Vector2f &position, const sf::Vector2f &size);
             InputBox(); // Default Constructor
 
-            /**
-             * @brief Destroy the Input Box object
-             */
-            ~InputBox();
+            ~InputBox() = default;
 
         // Methods
         public:
@@ -69,7 +71,7 @@ namespace UI {
              */
             void handleEvent(sf::Event event) override;
 
-        // Getters & Setters
+        // Setters
         public:
 
             /**
@@ -102,7 +104,7 @@ namespace UI {
             sf::Text _name;          /*!< The name of the input box */
             sf::RectangleShape _box; /*!< The box UI for Input Area */
 
-        // Global Attributes
+        // Global Attribute
         public:
             std::string value;      /*!< The value that got enter in the input area */
     };

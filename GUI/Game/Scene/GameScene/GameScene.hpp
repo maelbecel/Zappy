@@ -21,16 +21,23 @@
     #include <memory>
 
 namespace Scene {
+
     /**
      * @brief Game scene
      * It's a concrete class, so it can be instanciated
      * It's used to define the game scene of the game
      */
     class GameScene : public IScene {
+
         // Constructor & Destructor (default)
         public:
+
+            /**
+             * @brief Construct a new Game Scene object
+             */
             GameScene();
-            ~GameScene() override;
+
+            ~GameScene() override = default;
 
         // Methods
         public:
@@ -116,16 +123,16 @@ namespace Scene {
 
         // Attributes
         private:
-            GameData _gameData;           /*!< The game data */
-            Map _map;                     /*!< The map */
-            bool _isTileHUDOpen;          /*!< If the tile HUD is open */
-            bool _isTeamActivated; /*!< If the team HUD is open */
-            UI::TeamHUD *_teamHUD;         /*!< The team HUD */
-            UI::GameMenuHUD *_gameMenuHUD; /*!< The game menu HUD */
-            UI::GameHUD *_gameHUD;         /*!< The game HUD */
-            UI::TileHUD *_tileHUD;         /*!< The tile HUD */
-            Audio::Music *_ost;           /*!< The game OST */
-            Audio::SFX *_mouseClick;      /*!< The mouse click sound */
+            GameData _gameData;                            /*!< The game data */
+            Map _map;                                      /*!< The map */
+            bool _isTileHUDOpen;                           /*!< If the tile HUD is open */
+            bool _isTeamActivated;                         /*!< If the team HUD is open */
+            std::shared_ptr<UI::TeamHUD> _teamHUD;         /*!< The team HUD */
+            std::shared_ptr<UI::GameMenuHUD> _gameMenuHUD; /*!< The game menu HUD */
+            std::shared_ptr<UI::GameHUD> _gameHUD;         /*!< The game HUD */
+            std::shared_ptr<UI::TileHUD> _tileHUD;         /*!< The tile HUD */
+            std::shared_ptr<Audio::Music> _ost;            /*!< The game OST */
+            std::shared_ptr<Audio::SFX> _mouseClick;       /*!< The mouse click sound */
     };
 }
 

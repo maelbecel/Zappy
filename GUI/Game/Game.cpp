@@ -9,23 +9,24 @@
 
 Game::Game()
 {
-    _scenes.emplace("Menu", std::make_pair(new Scene::Menu(), true));
-    _scenes.emplace("Game", std::make_pair(new Scene::GameScene(), false));
+    _scenes.emplace("Menu", std::make_pair(std::make_shared<Scene::Menu>(), true));
+    _scenes.emplace("Game", std::make_pair(std::make_shared<Scene::GameScene>(), false));
 
-    _server.Initialize();
+    try {
+        _server.Initialize();
+    } catch (Error::NetworkError &e) {
+        std::cerr << e.what() << std::endl;
+    }
 
-    _ost = new Audio::Music(Audio::MENU_OST, Audio::Audio::musicVolume);
+    _ost = std::make_shared<Audio::Music>(Audio::MENU_OST, Audio::Audio::musicVolume);
 
     _ost->play();
 };
 
 Game::~Game()
 {
-    for (auto &scene : _scenes) {
-        if (scene.second.first)
-            delete scene.second.first;
-    }
-    delete _ost;
+    _scenes.clear();
+    _ost->stop();
 };
 
 void Game::Initialize(std::string ip, std::string port)
@@ -48,21 +49,29 @@ void Game::Update()
 {
     _ost->setVolume(Audio::Audio::musicVolume);
 
-    for (auto &scene : _scenes) {
-        if (scene.second.second == true) {
-            scene.second.first->Update(_server);
-            break;
+    try {
+        for (auto &scene : _scenes) {
+            if (scene.second.second == true) {
+                scene.second.first->Update(_server);
+                break;
+            }
         }
+    } catch (Error::NetworkError &e) {
+        throw Error::NetworkError(e.what());
     }
 }
 
 void Game::OnEvent(const sf::Event &event, sf::RenderWindow &window)
 {
-    for (auto &scene : _scenes) {
-        if (scene.second.second == true) {
-            scene.second.first->OnEvent(event, _server, window);
-            break;
+    try {
+        for (auto &scene : _scenes) {
+            if (scene.second.second == true) {
+                scene.second.first->OnEvent(event, _server, window);
+                break;
+            }
         }
+    } catch (Error::NetworkError &e) {
+        throw Error::NetworkError(e.what());
     }
 
     if (_server.getConnectionStatus() == false) {

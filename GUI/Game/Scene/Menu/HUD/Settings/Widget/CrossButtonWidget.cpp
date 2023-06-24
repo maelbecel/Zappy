@@ -21,12 +21,13 @@ namespace UI {
         _position = position;
 
         try {
-            std::shared_ptr<sf::Texture> texture = TextureManager::getTexture("./Assets/UI_UX/Content/2 Icons/8.png");
+            std::shared_ptr<sf::Texture> texture = TextureManager::getTexture(UI::ICONS8);
+            std::shared_ptr<sf::Texture> textureHover = TextureManager::getTexture(UI::ICONS11);
+
             _idleSprite = sf::Sprite(*texture);
             _idleSprite.setScale(sf::Vector2f(3, 3));
             _idleSprite.setPosition(position);
 
-            std::shared_ptr<sf::Texture> textureHover = TextureManager::getTexture("./Assets/UI_UX/Content/2 Icons/11.png");
             _hoveredSprite = sf::Sprite(*textureHover);
             _hoveredSprite.setScale(sf::Vector2f(3, 3));
             _hoveredSprite.setPosition(position);
@@ -49,14 +50,14 @@ namespace UI {
         target.draw(_hoveredSprite, states);
     }
 
-    void CrossButtonWidget::handleEvent(sf::Event event)
+    void CrossButtonWidget::handleEvent(UNUSED sf::Event event)
     {
-        (void)event;
+        return;
     }
 
-    ///////////////////////
-    // Setters & Getters //
-    ///////////////////////
+    /////////////
+    // Setters //
+    /////////////
 
     void CrossButtonWidget::setPosition(const sf::Vector2f &position)
     {
@@ -67,6 +68,7 @@ namespace UI {
 
     void CrossButtonWidget::setSize(UNUSED const sf::Vector2f &size)
     {
+        return;
     }
 
     ///////////////

@@ -10,9 +10,15 @@
 
     #include <SFML/Graphics.hpp>
 
-    #include <algorithm>
+    #include <functional>
+
+    /////////////////////////////////////////////////////////////////////////////
+    // @Warning: This class is not called in the project yet                   //
+    //           So if you want to use it, you have to put him in the Makefile //
+    /////////////////////////////////////////////////////////////////////////////
 
 namespace UI {
+
     /**
      * @brief Implement smooth transitions for UI elements.
      * Such as fade-ins, slide-ins, or scaling effects for example.
@@ -21,6 +27,7 @@ namespace UI {
     class Transition {
         // Constructor & Destructor (default)
         public:
+
             /**
              * @brief Construct a new Transition object
              * The Transition didn't have destructor because their is no pointer
@@ -28,6 +35,7 @@ namespace UI {
              * @param duration The duration of the transition
              */
             Transition(sf::RenderWindow &window, sf::Time duration);
+
             ~Transition() = default;
 
         // Methods

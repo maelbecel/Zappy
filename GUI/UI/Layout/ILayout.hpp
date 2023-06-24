@@ -9,20 +9,25 @@
     #define ILAYOUT_HPP_
 
     #include <SFML/Graphics.hpp>
+    #include <memory>
+
     #include "IWidget.hpp"
 
 namespace UI {
+
     /**
      * @brief Interface that design a layout system
      * A layout system is a way to organize the widgets in a container
      * Like <div> in HTML
      */
     class ILayout {
+
         // Methods
         public:
 
             /**
              * @brief Apply the layout logic to the container
+             * Call this function after adding all the widgets to the container
              * // VerticalLayout example:
              * [Widget1]
              * [Widget2]
@@ -39,17 +44,17 @@ namespace UI {
 
             /**
              * @brief Add an element to the layout
-             *
+             * Call this function to add a widget to the container
              * @param element The element to add
              */
-            virtual void addElement(IWidget *element) = 0;
+            virtual void addElement(std::shared_ptr<IWidget> element) = 0;
 
             /**
              * @brief Get the Elements object
-             *
+             * Get the elements of the layout
              * @return IWidget The elements of the layout
              */
-            virtual std::vector<IWidget *> getElements() = 0;
+            virtual std::vector<std::shared_ptr<IWidget>> getElements() = 0;
     };
 
     /**
@@ -60,6 +65,7 @@ namespace UI {
      * - the spacing between each widget
      */
     class LayoutProperties {
+
         // Constructor (default) & Destructor (default)
         public:
             LayoutProperties() = default;

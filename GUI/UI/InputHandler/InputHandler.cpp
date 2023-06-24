@@ -8,9 +8,11 @@
 #include "InputHandler.hpp"
 
 namespace UI {
-    ////////////////////
-    // Public methods //
-    ////////////////////
+
+    ////////////
+    // Method //
+    ////////////
+
     void InputHandler::processInput(sf::RenderWindow& window)
     {
         sf::Event event;
@@ -44,9 +46,9 @@ namespace UI {
         }
     }
 
-    ////////////////////
-    // Public Setters //
-    ////////////////////
+    /////////////
+    // Setters //
+    /////////////
 
     void InputHandler::setKeyPressedCallback(sf::Keyboard::Key key, std::function<void()> callback)
     {

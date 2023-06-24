@@ -6,16 +6,15 @@
 */
 
 #include "GameData.hpp"
+#include "Map.hpp"
 
 uint GameData::timeUnit = 0;
-uint GameData::gameSpeed = 0;
 
-GameData::GameData() : _mapSize(sf::Vector2i(0, 0)), _gameScale(1.0f), _scale(sf::Vector2f(1.0f, 1.0f)), _position(sf::Vector2f(0, 900 / 2))
+GameData::GameData() : _mapSize(sf::Vector2i(0, 0)), _gameScale(1.0f), _season("1"), _scale(sf::Vector2f(1.0f, 1.0f)), _position(sf::Vector2f(0, 900 / 2))
 {
     _teams = std::vector<std::string>();
 
     GameData::timeUnit = 0;
-    GameData::gameSpeed = 0;
 };
 
 int GameData::parse(std::string &line)
@@ -60,6 +59,12 @@ int GameData::parse(std::string &line)
         response = KillEgg(line);
     else if (line.find("ebo") != std::string::npos) // ebo = Player connection from an egg
         response = KillEgg(line);
+
+    // Season Command
+    else if (line.find("season") != std::string::npos) {// seg = Season change
+        std::cout << "SEASON CHANGE" << std::endl;
+        response = setSeason(line);
+    }
     line.clear();
     return response;
 }
@@ -540,6 +545,24 @@ int GameData::KillEgg(const std::string &egg)
         throw Error::InvalidArgument("GameData::KillEgg");
     }
     return 0;
+}
+
+int GameData::setSeason(const std::string &season)
+{
+    std::string temp;
+    std::string id;
+
+    std::stringstream(season) >> temp >> id;
+
+    std::cout << "Season: " << id << std::endl;
+
+    _season = id;
+    return 0;
+}
+
+std::string GameData::getSeason() const
+{
+    return _season;
 }
 
 std::map<std::string, std::shared_ptr<Eggs>> GameData::getEggs() const

@@ -9,7 +9,9 @@
     #define ANIMATION_HPP_
 
     #include <SFML/Graphics.hpp>
+
     #include <vector>
+    #include <memory>
 
 namespace UI {
     /**
@@ -30,7 +32,7 @@ namespace UI {
              * If looped = true the animation will restart when it's finished
              * If looped = false the animation will stop when it's finished
              */
-            Animation(std::vector<sf::Sprite *> sprites, int frames, double frameDuration, bool looped = true);
+            Animation(std::vector<std::shared_ptr<sf::Sprite>> sprites, int frames, double frameDuration, bool looped = true);
             ~Animation() = default;
 
         // Methods
@@ -41,14 +43,14 @@ namespace UI {
              * Call this method for add a frame to the animation
              * @param frame The frame to add
              */
-            void addFrame(sf::Sprite *frame);
+            void addFrame(std::shared_ptr<sf::Sprite> frame);
 
             /**
              * @brief Add all the frames to the animation
              * Call this method for add all the frames to the animation
              * @param frames A list of frames to add
              */
-            void addFrames(std::vector<sf::Sprite *> frames);
+            void addFrames(std::vector<std::shared_ptr<sf::Sprite>> frames);
 
             /**
              * @brief Play the animation
@@ -75,7 +77,7 @@ namespace UI {
              */
             bool update();
 
-        // Getters & Setters
+        // Getter
         public:
 
             /**
@@ -83,19 +85,19 @@ namespace UI {
              * Call this method for get the current sprite of the animation and draw it in the future
              * @return sf::Sprite The current sprite of the animation
              */
-            sf::Sprite *getCurrentSprite() const;
+            std::shared_ptr<sf::Sprite> getCurrentSprite() const;
 
         // Attributes
         private:
-            std::vector<sf::Sprite *> _sprites; /*!< The list of sprites to animate */
-            sf::Sprite *_currentSprite;          /*!< The current sprite of the animation */
-            int _frames;                        /*!< The number of frames */
-            double _frameDuration;              /*!< The duration of a frame */
-            bool _looped;                       /*!< If the animation is looped or not */
-            bool _isPlaying;                    /*!< If the animation is playing or not */
-            double _elapsedTime;                /*!< The elapsed time since the animation started */
-            int _currentFrame;                  /*!< The current frame of the animation */
-            sf::Clock _clock;                   /*!< The clock of the animation */
+            std::vector<std::shared_ptr<sf::Sprite>> _sprites; /*!< The list of sprites to animate */
+            std::shared_ptr<sf::Sprite>_currentSprite;         /*!< The current sprite of the animation */
+            int _frames;                                       /*!< The number of frames */
+            double _frameDuration;                             /*!< The duration of a frame */
+            bool _looped;                                      /*!< If the animation is looped or not */
+            bool _isPlaying;                                   /*!< If the animation is playing or not */
+            double _elapsedTime;                               /*!< The elapsed time since the animation started */
+            int _currentFrame;                                 /*!< The current frame of the animation */
+            sf::Clock _clock;                                  /*!< The clock of the animation */
     };
 };
 

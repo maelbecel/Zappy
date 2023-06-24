@@ -18,14 +18,17 @@
     #include "ButtonWidget.hpp"
     #include "NetworkError.hpp"
     #include "SettingsHUD.hpp"
+    #include "SFX.hpp"
     #include "HelpHUD.hpp"
 
 namespace UI {
     class GameMenuHUD {
+
         // Constructor & Destructor
         public:
             GameMenuHUD();
-            ~GameMenuHUD();
+
+            ~GameMenuHUD() = default;
 
         // Methods
         public:
@@ -61,17 +64,36 @@ namespace UI {
              */
             bool getTileDisplayMode() const;
 
+            /**
+             * @brief Set the language of the Menu HUD
+             *
+             */
+            void setLanguage();
+
+            /**
+             * @brief Set buttons with default text
+             *
+             */
+            void setButtonsDefault();
+
+            /**
+             * @brief Set buttons with text
+             *
+             */
+            void setButtons(libconfig::Setting &button);
+
         // Attributes
         private:
             sf::RectangleShape _background;         /*!< Background of the Settings HUD */
-            sf::Sprite _backgroundSprite;           /*!< Sprite of the Settings HUD */
-            IButton *_resumeButton;                 /*!< Button to resume the game */
-            IButton *_settingsButton;              /*!< Button to go to the settings */
-            IButton *_helpButton;                  /*!< Button to go to the help */
-            IButton *_quitButton;                  /*!< Button to quit the game */
-            SettingsHUD _settingsHUD;               /*!< Settings HUD */
+            std::shared_ptr<IButton> _resumeButton;                 /*!< Button to resume the game */
+            std::shared_ptr<IButton> _settingsButton;              /*!< Button to go to the settings */
+            std::shared_ptr<IButton> _helpButton;                  /*!< Button to go to the help */
+            std::shared_ptr<IButton> _quitButton;                  /*!< Button to quit the game */
+            std::shared_ptr<SettingsHUD> _settingsHUD;               /*!< Settings HUD */
             HelpHUD _helpHUD;                       /*!< Help HUD */
             bool _isOpened;                         /*!< Is the Settings HUD opened */
+            std::shared_ptr<Audio::SFX> _mouseClick;                /*!< Mouse click sound */
+            std::string _language;           /*!< Language of the game */
     };
 };
 

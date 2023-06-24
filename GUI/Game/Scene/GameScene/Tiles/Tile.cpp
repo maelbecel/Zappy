@@ -7,28 +7,32 @@
 
 #include "Tile.hpp"
 
+/////////////////
+// Constructor //
+/////////////////
+
 Tile::Tile(sf::Vector2i coordonates, int q0, int q1, int q2, int q3, int q4, int q5, int q6) : _coordonates(coordonates), _position(sf::Vector2f(0, 0)), _q0(q0), _q1(q1), _q2(q2), _q3(q3), _q4(q4), _q5(q5), _q6(q6)
 {
     _quantities = q0 + q1 + q2 + q3 + q4 + q5 + q6;
 
     try {
         // Load the Tiles texture
-        sf::Texture *foodTexture = UI::TextureManager::getTexture("./Assets/UI_UX/Resources/food.png");
-        sf::Texture *linemateTexture = UI::TextureManager::getTexture("./Assets/UI_UX/Resources/linemate.png");
-        sf::Texture *deraumereTexture = UI::TextureManager::getTexture("./Assets/UI_UX/Resources/deraumere.png");
-        sf::Texture *siburTexture = UI::TextureManager::getTexture("./Assets/UI_UX/Resources/sibur.png");
-        sf::Texture *mendianeTexture = UI::TextureManager::getTexture("./Assets/UI_UX/Resources/mendiane.png");
-        sf::Texture *phirasTexture = UI::TextureManager::getTexture("./Assets/UI_UX/Resources/phiras.png");
-        sf::Texture *thystameTexture = UI::TextureManager::getTexture("./Assets/UI_UX/Resources/thystame.png");
+        std::shared_ptr<sf::Texture> foodTexture = UI::TextureManager::getTexture(UI::R_FOOD);
+        std::shared_ptr<sf::Texture> linemateTexture = UI::TextureManager::getTexture(UI::R_LINEMATE);
+        std::shared_ptr<sf::Texture> deraumereTexture = UI::TextureManager::getTexture(UI::R_DERAUMERE);
+        std::shared_ptr<sf::Texture> siburTexture = UI::TextureManager::getTexture(UI::R_SIBUR);
+        std::shared_ptr<sf::Texture> mendianeTexture = UI::TextureManager::getTexture(UI::R_MENDIANE);
+        std::shared_ptr<sf::Texture> phirasTexture = UI::TextureManager::getTexture(UI::R_PHIRAS);
+        std::shared_ptr<sf::Texture> thystameTexture = UI::TextureManager::getTexture(UI::R_THYSTAME);
 
         // Create the sprites for the texture
-        sf::Sprite *foodSprite = new sf::Sprite();
-        sf::Sprite *linemateSprite = new sf::Sprite();
-        sf::Sprite *deraumereSprite = new sf::Sprite();
-        sf::Sprite *siburSprite = new sf::Sprite();
-        sf::Sprite *mendianeSprite = new sf::Sprite();
-        sf::Sprite *phirasSprite = new sf::Sprite();
-        sf::Sprite *thystameSprite = new sf::Sprite();
+        std::shared_ptr<sf::Sprite> foodSprite = std::make_shared<sf::Sprite>();
+        std::shared_ptr<sf::Sprite> linemateSprite = std::make_shared<sf::Sprite>();
+        std::shared_ptr<sf::Sprite> deraumereSprite = std::make_shared<sf::Sprite>();
+        std::shared_ptr<sf::Sprite> siburSprite = std::make_shared<sf::Sprite>();
+        std::shared_ptr<sf::Sprite> mendianeSprite = std::make_shared<sf::Sprite>();
+        std::shared_ptr<sf::Sprite> phirasSprite = std::make_shared<sf::Sprite>();
+        std::shared_ptr<sf::Sprite> thystameSprite = std::make_shared<sf::Sprite>();
 
         // Set the texture to the sprite
         foodSprite->setTexture(*foodTexture);
@@ -66,34 +70,9 @@ Tile::Tile(sf::Vector2i coordonates, int q0, int q1, int q2, int q3, int q4, int
     }
 }
 
-Tile::~Tile()
-{
-    /*for (auto &resource : _resources) {
-        if (resource.second)
-            delete resource.second;
-    }*/
-}
-
-void Tile::setPosition(sf::Vector2f &position)
-{
-    _position = position;
-}
-
-sf::Vector2f Tile::getPosition() const
-{
-    return _position;
-}
-
-void Tile::setNewResources(int q0, int q1, int q2, int q3, int q4, int q5, int q6)
-{
-    _q0 = q0;
-    _q1 = q1;
-    _q2 = q2;
-    _q3 = q3;
-    _q4 = q4;
-    _q5 = q5;
-    _q6 = q6;
-}
+/////////////
+// Methods //
+/////////////
 
 void Tile::draw(sf::RenderWindow &window, sf::Vector2f scale)
 {
@@ -137,37 +116,6 @@ void Tile::draw(sf::RenderWindow &window, sf::Vector2f scale)
         _resources["Mendiane"]->setPosition(_position + sf::Vector2f(TILE_WIDTH * (scale.x + 2), 0.0f) + sf::Vector2f(-16 * (scale.x + 2), 13.5 * (scale.y + 1.25f)));
         _resources["Mendiane"]->setScale(setTileScale(scale));
         window.draw(*_resources["Mendiane"]);
-    }
-}
-
-sf::Vector2f Tile::setTileScale(sf::Vector2f &scale)
-{
-    if (scale.x >= 3.5f)
-        return sf::Vector2f(0.40f, 0.40f);
-    if (scale.x >= 1.0f)
-        return sf::Vector2f(0.20f, 0.20f);
-    return sf::Vector2f(0.15f, 0.15f);
-}
-
-int Tile::getResource(int type)
-{
-    switch (type) {
-        case 0:
-            return _q0;
-        case 1:
-            return _q1;
-        case 2:
-            return _q2;
-        case 3:
-            return _q3;
-        case 4:
-            return _q4;
-        case 5:
-            return _q5;
-        case 6:
-            return _q6;
-        default:
-            return 0;
     }
 }
 
@@ -226,5 +174,61 @@ void Tile::removeResource(int type)
             break;
         default:
             break;
+    }
+}
+
+///////////////////////
+// Setters & Getters //
+///////////////////////
+
+void Tile::setPosition(sf::Vector2f &position)
+{
+    _position = position;
+}
+
+void Tile::setNewResources(int q0, int q1, int q2, int q3, int q4, int q5, int q6)
+{
+    _q0 = q0;
+    _q1 = q1;
+    _q2 = q2;
+    _q3 = q3;
+    _q4 = q4;
+    _q5 = q5;
+    _q6 = q6;
+}
+
+sf::Vector2f Tile::setTileScale(sf::Vector2f &scale)
+{
+    if (scale.x >= 3.5f)
+        return sf::Vector2f(0.40f, 0.40f);
+    if (scale.x >= 1.0f)
+        return sf::Vector2f(0.20f, 0.20f);
+    return sf::Vector2f(0.15f, 0.15f);
+}
+
+sf::Vector2f Tile::getPosition() const
+{
+    return _position;
+}
+
+int Tile::getResource(int type)
+{
+    switch (type) {
+        case 0:
+            return _q0;
+        case 1:
+            return _q1;
+        case 2:
+            return _q2;
+        case 3:
+            return _q3;
+        case 4:
+            return _q4;
+        case 5:
+            return _q5;
+        case 6:
+            return _q6;
+        default:
+            return 0;
     }
 }

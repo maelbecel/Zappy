@@ -18,6 +18,7 @@ namespace UI {
      * [Widget3] [Widget4]
      */
     class GridLayout : public ILayout {
+
         // Constructor & Destructor (default)
         public:
 
@@ -28,6 +29,7 @@ namespace UI {
              * @param nbColumns Number of columns of the grid
              */
             GridLayout(LayoutProperties properties, size_t nbColumns);
+
             ~GridLayout() = default;
 
         // Methods
@@ -46,20 +48,20 @@ namespace UI {
              *
              * @param element The element to add
              */
-            void addElement(IWidget *element) override;
+            void addElement(std::shared_ptr<IWidget> element) override;
 
             /**
              * @brief Get the Elements object
              *
              * @return IWidget The elements of the layout
              */
-            std::vector<IWidget *> getElements() override;
+            std::vector<std::shared_ptr<IWidget>> getElements() override;
 
         // Attributes
         private:
-            std::vector<IWidget *> _elements; /*!< The elements of the layout */
-            LayoutProperties properties; /*!< Properties of the layout */
-            size_t _nbColumns; /*!< Number of columns of the grid */
+            std::vector<std::shared_ptr<IWidget>> _elements; /*!< The elements of the layout */
+            LayoutProperties properties;                     /*!< Properties of the layout */
+            size_t _nbColumns;                               /*!< Number of columns of the grid */
     };
 };
 

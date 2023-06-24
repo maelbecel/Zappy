@@ -62,10 +62,6 @@ class clientAi:
         else:
             self.rayCasting = None
 
-    def __del__(self):
-        if self.graphic is True:
-            rayCasting.pygame.quit()
-
     def initPygame(self):
         self.rayCasting = rayCasting(1200, 800)
 
@@ -137,26 +133,41 @@ class clientAi:
         if not self.alive:
             return False
         self.response = self.client.receive()
+        print("Response: " + self.response)
         if self.response == "dead\n":
             self.alive = False
             return False
         elif self.response.find("message") != -1:
             print("Message: " + self.response)
             self.message = self.response
-            values = self.response.split(";")
-            value1 = values[0].split(",")[-1].strip()
-            value2 = values[1]
-            value3 = values[2][:-1]
-            if (
-                value1 == self.teamName
-                and value2 == "Incantation"
-                and value3 == str(self.level)
-            ):
-                self.state = enumState.JOIN_INCANTATION
+            try:
+                values = self.response.split(";")
+                value1 = values[0].split(",")[-1].strip()
+                value2 = values[1]
+                value3 = values[2][:-1]
+                self.orientation = self.message.split(",")[0].split(" ")[-1].strip()
+                if (
+                    value1 == self.teamName
+                    and value2 == "Incantation"
+                    and value3 == str(self.level)
+                ):
+                    self.state = enumState.JOIN_INCANTATION
+            except:
+                pass
             self.receive()
         elif self.response.find("eject") != -1:
             # handle eject
             ...
+        elif self.response.find("Current level: ") != -1:
+            print("Get level: " + self.response.split(":")[1])
+            self.level = int(self.response.split(":")[1])
+            if self.state == enumState.JOIN_INCANTATION:
+                self.state = enumState.NEED_FOOD
+                self.receive()
+            self.state = enumState.NEED_FOOD
+        elif self.response.find("Elevation underway") != -1:
+            if self.state == enumState.JOIN_INCANTATION:
+                self.receive()
         return True
 
     def getSocket(self):
@@ -246,6 +257,8 @@ class clientAi:
         self.send(cAct.LOOK.value)
         if self.isValidArray() and self.alive:
             self.parseLook()
+        else:
+            return
         if self.graphic is True:
             array = self.lookResult
             array = self.rayCasting.ArrayToArrayOfDict(array)
@@ -349,7 +362,7 @@ class clientAi:
         self.send(cAct.INCANTATION.value)
         self.receive()
         if self.response != "ko\n" and self.alive:
-            self.level += 1
+            self.state = enumState.NEED_FOOD
             return True
         return False
 
@@ -377,7 +390,7 @@ class clientAi:
         if not self.alive:
             return
         for element in array:
-            if element[0] == "food":
+            if element[0] == "food" and element[1].isnumeric():
                 self.inv[element[0]] = int(element[1])
                 break
 
@@ -401,7 +414,7 @@ class clientAi:
             ):
                 self.fillInv(array)
                 break
-        print("inventory -> %s" % self.inv["food"])
+        print("food -> %s" % self.inv["food"])
 
     def fillInv(self, array):
         """
@@ -416,6 +429,8 @@ class clientAi:
         if not self.alive:
             return
         for element in array:
+            if element[1].isnumeric() == False:
+                return
             self.inv[element[0]] = int(element[1])
 
     def parseInv(self):
@@ -632,6 +647,7 @@ class clientAi:
         if not self.alive:
             return
         if not self.needFood():
+            self.state = enumState.LF_RESSOURCES
             return
         self.look()
         for element in self.lookResult[0]:

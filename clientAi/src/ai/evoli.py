@@ -69,16 +69,7 @@ REQUIRED = [
     },
 ]
 
-LEVEL = {
-    4: 1,
-    9: 2,
-    16: 3,
-    25: 4,
-    36: 5,
-    49: 6,
-    64: 7,
-    81: 8
-}
+LEVEL = {4: 1, 9: 2, 16: 3, 25: 4, 36: 5, 49: 6, 64: 7, 81: 8}
 
 REQUIRED_PLAYER = [
     1,
@@ -269,7 +260,7 @@ class evoli(clientAI):
         print("count = " + str(count))
         print("required = " + str(REQUIRED_PLAYER[self.level - 1]))
         if count == REQUIRED_PLAYER[self.level - 1]:
-            if (self.level > 1):
+            if self.level > 1:
                 self.broadcast(self.teamName + ";Incantation;" + str(self.level))
             if not self.incantation():
                 self.takeUselessRessourcesOnCase()
@@ -359,39 +350,39 @@ class evoli(clientAI):
         self.look()
         self.look()
         print("orientation : " + self.orientation)
-        if (self.orientation == "0"):
+        if self.orientation == "0":
             print("count = " + str(self.countPlayerOnCase()))
-            if (self.countPlayerOnCase() == 1):
-                while (self.checkPlayerInFront() == False):
+            if self.countPlayerOnCase() == 1:
+                while self.checkPlayerInFront() == False:
                     self.left()
-        elif (self.orientation == "1"):
+        elif self.orientation == "1":
             print("count = " + str(self.countPlayerOnCase()))
             self.forward()
-        elif (self.orientation == "2"):
+        elif self.orientation == "2":
             self.forward()
             self.left()
             self.forward()
-        elif (self.orientation == "3"):
+        elif self.orientation == "3":
             self.left()
             self.forward()
-        elif (self.orientation == "4"):
+        elif self.orientation == "4":
             self.left()
             self.forward()
             self.left()
             self.forward()
-        elif (self.orientation == "5"):
+        elif self.orientation == "5":
             self.left()
             self.left()
             self.forward()
-        elif (self.orientation == "6"):
+        elif self.orientation == "6":
             self.right()
             self.forward()
             self.right()
             self.forward()
-        elif (self.orientation == "7"):
+        elif self.orientation == "7":
             self.right()
             self.forward()
-        elif (self.orientation == "8"):
+        elif self.orientation == "8":
             self.forward()
             self.right()
             self.forward()

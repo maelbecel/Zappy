@@ -149,8 +149,12 @@ class clientAi:
                 value1 = values[0].split(",")[-1].strip()
                 value2 = values[1]
                 value3 = values[2][:-1]
-                self.orientation = self.message.split(',')[0].split(' ')[-1].strip()
-                if (value1 == self.teamName and value2 == "Incantation" and value3 == str(self.level)):
+                self.orientation = self.message.split(",")[0].split(" ")[-1].strip()
+                if (
+                    value1 == self.teamName
+                    and value2 == "Incantation"
+                    and value3 == str(self.level)
+                ):
                     self.state = enumState.JOIN_INCANTATION
             except:
                 pass
@@ -161,12 +165,12 @@ class clientAi:
         elif self.response.find("Current level: ") != -1:
             print("Get level: " + self.response.split(":")[1])
             self.level = int(self.response.split(":")[1])
-            if (self.state == enumState.JOIN_INCANTATION):
+            if self.state == enumState.JOIN_INCANTATION:
                 self.state = enumState.NEED_FOOD
                 self.receive()
             self.state = enumState.NEED_FOOD
         elif self.response.find("Elevation underway") != -1:
-            if (self.state == enumState.JOIN_INCANTATION):
+            if self.state == enumState.JOIN_INCANTATION:
                 self.receive()
         return True
 
@@ -427,7 +431,7 @@ class clientAi:
         if not self.alive:
             return
         for element in array:
-            if (element[1].isnumeric() == False):
+            if element[1].isnumeric() == False:
                 return
             self.inv[element[0]] = int(element[1])
 

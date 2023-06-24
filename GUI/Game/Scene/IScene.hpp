@@ -13,17 +13,23 @@
     #include "Server.hpp"
 
 namespace Scene {
+
     /**
      * @brief Interface for all scenes
      * It's a pure virtual class, so it can't be instanciated
      * It's used to define the methods that all scenes must implement
      */
     class IScene {
+
+        // Destructor
         public:
             /**
              * @brief Destroy the IScene object
              */
             virtual ~IScene() = default;
+
+        // Methods
+        public:
 
             /**
              * @brief Initialize the scene
@@ -32,7 +38,6 @@ namespace Scene {
 
             /**
              * @brief Initialize the scene with ip and port
-             *
              */
             virtual void Initialize(std::string ip, std::string port) = 0;
 

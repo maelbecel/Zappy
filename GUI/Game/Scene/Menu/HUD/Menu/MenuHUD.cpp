@@ -11,32 +11,46 @@
 #include "ToLowerCase.hpp"
 
 namespace UI {
+
+    /////////////////
+    // Constructor //
+    /////////////////
+
     MenuHUD::MenuHUD(std::string ip, std::string port) : _background(sf::Vector2f(Window::getWindowWidth(), Window::getWindowHeight()))
     {
+        // Background
 
         BackgroundStyle RectangleColorBg(sf::Color(0, 0, 0, 220));
 
         RectangleColorBg.apply(_background);
 
         _background.setPosition(sf::Vector2f(0.0f, 0.0f));
+
+        // Planet
+
         _planet.setPosition(sf::Vector2f((float)(Window::getWindowWidth() / 2) - 300, (float)(Window::getWindowHeight() / 2) - 300 + 50));
 
+        // Setup the language
+
         setLanguage();
+
+        // Setup the input boxes and buttons
         _ip.value = ip;
         _port.value = port;
 
-        _settingsHUD = new SettingsHUD();
+        _settingsHUD = std::make_shared<SettingsHUD>();
 
         _popUp = false;
 
         try {
-            sf::Texture *titleTexture = TextureManager::getTexture("./Assets/UI_UX/Paper UI Pack/Paper UI/Folding & Cutout/2 Headers/4.png");
+            std::shared_ptr<sf::Texture> titleTexture = TextureManager::getTexture(UI::TITLEMENUHUD);
+
             _titleHeader = sf::Sprite();
             _titleHeader.setTexture(*titleTexture);
             _titleHeader.setPosition(sf::Vector2f(Window::getWindowWidth() / 2 - 448, 0));
             _titleHeader.setScale(sf::Vector2f(2, 2));
 
-            sf::Font *font = FontManager::getFont(UI::ARIAL);
+            std::shared_ptr<sf::Font> font = FontManager::getFont(UI::ARIAL);
             _titleText = sf::Text();
             _titleText.setFont(*font);
             _titleText.setString("Zappy");
@@ -45,7 +59,7 @@ namespace UI {
             _titleText.setPosition(sf::Vector2f(Window::getWindowWidth() / 2 - (448 / 2.65), 75));
 
             float popUpScale = 2.0f;
-            sf::Texture *popUp = TextureManager::getTexture("./Assets/UI_UX/Paper UI Pack/Paper UI/Folding & Cutout/4 Notification/2.png");
+            std::shared_ptr<sf::Texture> popUp = TextureManager::getTexture(UI::POPUPHUD);
             _popUpSprite = sf::Sprite(*popUp);
             _popUpSprite.setScale(sf::Vector2f(popUpScale, popUpScale));
             _popUpSprite.setPosition(sf::Vector2f((Window::getWindowWidth() - (popUp->getSize().x * popUpScale)) / 2, (Window::getWindowHeight() - (popUp->getSize().y * popUpScale)) / 2));
@@ -53,55 +67,54 @@ namespace UI {
             std::cerr << "Bad Initialization of MenuHUD: " << e.what() << std::endl;
         }
 
-        CrossButtonWidget *crossButton = new CrossButtonWidget(sf::Vector2f((_popUpSprite.getPosition().x + _popUpSprite.getGlobalBounds().width) - 16 * 2, _popUpSprite.getPosition().y), sf::Vector2f(16 * 2, 16 * 2));
-        _crossButton = new Button(crossButton);
+        std::shared_ptr<IWidget> crossButton = std::make_shared<CrossButtonWidget>(sf::Vector2f((_popUpSprite.getPosition().x + _popUpSprite.getGlobalBounds().width) - 16 * 2, _popUpSprite.getPosition().y), sf::Vector2f(16 * 2, 16 * 2));
+
+        _crossButton = std::make_shared<Button>(crossButton);
     }
 
-    MenuHUD::~MenuHUD()
-    {
-        delete _connectButton;
-        delete _settingsButton;
-        delete _quitButton;
-        delete _mouseClick;
-        delete _settingsHUD;
-        delete _crossButton;
-    }
+    /////////////
+    // Methods //
+    /////////////
 
     void MenuHUD::draw(sf::RenderWindow &window)
     {
         _planet.draw(window, sf::RenderStates::Default);
+        
         window.draw(_titleHeader);
         window.draw(_titleText);
+        
         setLanguage();
+        
         _ip.draw(window, sf::RenderStates::Default);
         _port.draw(window, sf::RenderStates::Default);
-        if (_connectButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))) {
+        
+        if (_connectButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
             _connectButton->render(window, ButtonState::HOVERED);
-        } else {
+        else
             _connectButton->render(window, ButtonState::IDLE);
-        }
-        if (_settingsButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))) {
+
+        if (_settingsButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
             _settingsButton->render(window, ButtonState::HOVERED);
-        } else {
+        else
             _settingsButton->render(window, ButtonState::IDLE);
-        }
-        if (_quitButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))) {
+
+        if (_quitButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
             _quitButton->render(window, ButtonState::HOVERED);
-        } else {
+        else
             _quitButton->render(window, ButtonState::IDLE);
-        }
-        if (_settingsHUD->isOpened() == true) {
+
+        if (_settingsHUD->isOpened() == true)
             _settingsHUD->draw(window);
-        }
+
         if (_popUp == true) {
             window.draw(_background);
             window.draw(_popUpSprite);
             window.draw(_popUpText);
-            if (_crossButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y))) {
+
+            if (_crossButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
                 _crossButton->render(window, ButtonState::HOVERED);
-            } else {
+            else
                 _crossButton->render(window, ButtonState::IDLE);
-            }
         }
     }
 
@@ -109,28 +122,26 @@ namespace UI {
     {
         if (event.type == sf::Event::KeyPressed){
             if (event.key.code == sf::Keyboard::Escape) {
-                if (_settingsHUD->isOpened() == true) {
+                if (_settingsHUD->isOpened() == true)
                     _settingsHUD->setOpened(false);
-                }
-                if (_popUp == true) {
+                if (_popUp == true)
                     _popUp = false;
-                }
             } else if (event.key.code == sf::Keyboard::P)
                 _planet.setType((PlanetType)((_planet.getType() + 1 ) % _planet.getNbPlanet()));
         }
+
         if (event.type == sf::Event::MouseButtonPressed) {
             if (event.mouseButton.button != sf::Mouse::Left)
                 return;
 
             _mouseClick->setVolume(Audio::Audio::sfxVolume);
 
-
             if (_popUp == true) {
-                if (_crossButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
+                if (_crossButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)))
                     _popUp = false;
-                }
                 return;
             }
+
             if (_settingsHUD->isOpened() == true) {
                 _settingsHUD->handleEvent(event, server, window);
                 return;
@@ -149,8 +160,10 @@ namespace UI {
                     _popUp = true;
                     _popUpText = setString(e.what(), sf::Vector2f(_popUpSprite.getPosition().x + (_popUpSprite.getGlobalBounds().width / 5), _popUpSprite.getPosition().y + (_popUpSprite.getGlobalBounds().height) / 2), 12);
                 }
+
                 return;
             }
+
             if (_settingsButton->isClicked(sf::Vector2f(event.mouseButton.x, event.mouseButton.y))) {
                 _mouseClick->play();
                 _settingsHUD->setOpened(true);
@@ -173,16 +186,21 @@ namespace UI {
 
     void MenuHUD::Initialize(std::string ip, std::string port)
     {
-        _mouseClick = new Audio::VFX(Audio::MOUSE_CLICK, Audio::Audio::sfxVolume);
+        _mouseClick = std::make_shared<Audio::SFX>(Audio::MOUSE_CLICK, Audio::Audio::sfxVolume);
         _ip.value = ip;
         _port.value = port;
     }
 
+    /////////////
+    // Setters //
+    /////////////
+
     sf::Text MenuHUD::setString(std::string str, sf::Vector2f position, size_t fontSize)
     {
         sf::Text text;
+
         try {
-            sf::Font *font = FontManager::getFont(UI::ARIAL);
+            std::shared_ptr<sf::Font> font = FontManager::getFont(UI::ARIAL);
 
             text.setString(str + "\n\n(press escape to close)");
             text.setFont(*font);
@@ -199,18 +217,19 @@ namespace UI {
     {
         try {
             libconfig::Config cfg;
+            
             cfg.readFile("./Config/config.cfg");
+            
             libconfig::Setting &config = cfg.lookup("config");
-
             libconfig::Config language;
             std::string configLang = toLowerCase(std::string(config["language"]));
 
-            if (_language == configLang) {
+            if (_language == configLang)
                 return;
-            }
             _language = configLang;
 
             std::string languagePath = std::string("./Config/Languages/") + configLang + std::string(".cfg");
+
             language.readFile(languagePath.c_str());
 
             libconfig::Setting &lang = language.lookup("language");
@@ -248,21 +267,24 @@ namespace UI {
     {
         _ip = InputBox(std::string("Ip Adress :"), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 15, 250), BUTTON_STD_SIZE);
         _port = InputBox(std::string("Port :"), sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2 + 15, 300), BUTTON_STD_SIZE);
-        ButtonWidget *connectButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 375), BUTTON_STD_SIZE, std::string("Connect"), 7);
-        _connectButton = new Button(connectButton);
-        ButtonWidget *settingsButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450), BUTTON_STD_SIZE, std::string("Settings"), 7);
-        _settingsButton = new Button(settingsButton);
-        ButtonWidget *quitButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 525), BUTTON_STD_SIZE, std::string("Quit"), 7);
-        _quitButton = new Button(quitButton);
+        
+        std::shared_ptr<IWidget> connectButton = std::make_shared<ButtonWidget>(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 375), BUTTON_STD_SIZE, std::string("Connect"), 7);
+        std::shared_ptr<IWidget> settingsButton = std::make_shared<ButtonWidget>(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450), BUTTON_STD_SIZE, std::string("Settings"), 7);
+        std::shared_ptr<IWidget> quitButton = std::make_shared<ButtonWidget>(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 525), BUTTON_STD_SIZE, std::string("Quit"), 7);
+
+        _connectButton = std::make_shared<Button>(connectButton);
+        _settingsButton = std::make_shared<Button>(settingsButton);
+        _quitButton = std::make_shared<Button>(quitButton);
     }
 
     void MenuHUD::setButtons(libconfig::Setting &button)
     {
-        ButtonWidget *connectButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 375), BUTTON_STD_SIZE, std::string(button["connect"]), 7);
-        _connectButton = new Button(connectButton);
-        ButtonWidget *settingsButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450), BUTTON_STD_SIZE, std::string(button["settings"]), 7);
-        _settingsButton = new Button(settingsButton);
-        ButtonWidget *quitButton = new ButtonWidget(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 525), BUTTON_STD_SIZE, std::string(button["quit"]), 7);
-        _quitButton = new Button(quitButton);
+        std::shared_ptr<IWidget> connectButton = std::make_shared<ButtonWidget>(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 375), BUTTON_STD_SIZE, std::string(button["connect"]), 7);
+        std::shared_ptr<IWidget> settingsButton = std::make_shared<ButtonWidget>(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 450), BUTTON_STD_SIZE, std::string(button["settings"]), 7);
+        std::shared_ptr<IWidget> quitButton = std::make_shared<ButtonWidget>(sf::Vector2f((Window::getWindowWidth() - BUTTON_STD_TILES) / 2, 525), BUTTON_STD_SIZE, std::string(button["quit"]), 7);
+
+        _connectButton = std::make_shared<Button>(connectButton);
+        _settingsButton = std::make_shared<Button>(settingsButton);
+        _quitButton = std::make_shared<Button>(quitButton);
     }
 };

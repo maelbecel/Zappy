@@ -53,7 +53,7 @@ namespace Audio {
     }
 
     ///////////////////////
-    // Getters & Setters //
+    // Setters & Getters //
     ///////////////////////
 
     void Music::setLoop(bool loop)

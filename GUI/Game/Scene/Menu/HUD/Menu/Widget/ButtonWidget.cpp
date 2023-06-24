@@ -16,10 +16,10 @@ namespace UI {
 
     ButtonWidget::ButtonWidget(const sf::Vector2f &position, const sf::Vector2f &size, const std::string &text, const int nbrTiles) : AWidget(position, size)
     {
-        // [___Text____]
+        // [o____Text______]>>
 
         try {
-            sf::Font *font = FontManager::getFont(UI::ARIAL);
+            std::shared_ptr<sf::Font> font = FontManager::getFont(UI::ARIAL);
 
             _name.setString(text);
             _name.setFont(*font);
@@ -94,24 +94,9 @@ namespace UI {
         target.draw(text, states);
     }
 
-    void ButtonWidget::handleEvent(sf::Event event)
+    void ButtonWidget::handleEvent(UNUSED sf::Event event)
     {
-        (void)event;
-    }
-
-    ///////////////////////
-    // Setters & Getters //
-    ///////////////////////
-
-    void ButtonWidget::setPosition(const sf::Vector2f &position)
-    {
-        _box.setPosition(position);
-        _name.setPosition(position.x + _size.x / 4, position.y + _size.y / 4);
-    }
-
-    void ButtonWidget::setSize(const sf::Vector2f &size)
-    {
-        _box.setSize(size);
+        return;
     }
 
     std::map<std::string, sf::Sprite> ButtonWidget::setHoveredSprites()
@@ -119,16 +104,17 @@ namespace UI {
         std::map<std::string, sf::Sprite> sprites;
 
         try {
-            sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/25.png");
+            std::shared_ptr<sf::Texture> texture = TextureManager::getTexture(UI::BUTTON25);
             sf::Sprite sprite;
+
             sprite.setTexture(*texture);
             sprites["left"] = sprite;
 
-            texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/27.png");
+            texture = TextureManager::getTexture(UI::BUTTON27);
             sprite.setTexture(*texture);
             sprites["right"] = sprite;
 
-            texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/26.png");
+            texture = TextureManager::getTexture(UI::BUTTON26);
             sprite.setTexture(*texture);
             sprites["middle"] = sprite;
         } catch (const Error::TextureError &e) {
@@ -139,20 +125,36 @@ namespace UI {
 
     std::map<std::string, sf::Sprite> ButtonWidget::setIdleSprites()
     {
+        std::shared_ptr<sf::Texture> texture = TextureManager::getTexture(UI::BUTTON22);
         std::map<std::string, sf::Sprite> sprites;
-        sf::Texture *texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/22.png");
         sf::Sprite sprite;
+
         sprite.setTexture(*texture);
         sprites["left"] = sprite;
 
-        texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/24.png");
+        texture = TextureManager::getTexture(UI::BUTTON24);
         sprite.setTexture(*texture);
         sprites["right"] = sprite;
 
-        texture = TextureManager::getTexture("./Assets/UI_UX/Content/4 Buttons/23.png");
+        texture = TextureManager::getTexture(UI::BUTTON23);
         sprite.setTexture(*texture);
         sprites["middle"] = sprite;
         return sprites;
+    }
+
+    /////////////
+    // Setters //
+    /////////////
+
+    void ButtonWidget::setPosition(const sf::Vector2f &position)
+    {
+        _box.setPosition(position);
+        _name.setPosition(position.x + _size.x / 4, position.y + _size.y / 4);
+    }
+
+    void ButtonWidget::setSize(const sf::Vector2f &size)
+    {
+        _box.setSize(size);
     }
 
     ///////////////

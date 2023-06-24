@@ -39,17 +39,15 @@ SRC	+=	./Tools/PerlinNoise.cpp\
 
 SRC	+=	./UI/Animation/Animation.cpp\
 		./UI/Button/Button.cpp\
-		./UI/InputHandler/InputHandler.cpp\
 		./UI/Styling/BackgroundStyle.cpp\
 		./UI/Styling/BorderStyle.cpp\
-		./UI/Transition/Transition.cpp\
 		./UI/Manager/FontManager.cpp\
 		./UI/Manager/TextureManager.cpp\
 		./UI/Layout/GridLayout.cpp\
 		./UI/Layout/HorizontalLayout.cpp\
 		./UI/Layout/VerticalLayout.cpp\
 		./UI/Audio/Music.cpp\
-		./UI/Audio/VFX.cpp\
+		./UI/Audio/SFX.cpp\
 		./UI/Audio/Audio.cpp\
 
 INCLUDE =	-I .\
@@ -81,10 +79,7 @@ INCLUDE =	-I .\
 			-I ./Tools/\
 			-I ./UI/Animation/\
 			-I ./UI/Button/\
-			-I ./UI/EventHandler/\
-			-I ./UI/InputHandler/\
 			-I ./UI/Styling/\
-			-I ./UI/Transition/\
 			-I ./UI/Widget/\
 			-I ./UI/Manager/\
 			-I ./UI/Layout/\

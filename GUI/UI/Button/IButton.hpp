@@ -10,57 +10,35 @@
 
     #include <SFML/Graphics.hpp>
 
+    #include <functional>
+    #include <memory>
+
     #include "IWidget.hpp"
 
 namespace UI {
+    
+    /**
+     * @brief The state of the button
+     */
     enum ButtonState {
-        IDLE,
-        HOVERED,
-        CLICKED
+        IDLE,    // The button is not hovered
+        HOVERED, // The button is hovered
+        CLICKED  // The button is clicked
     };
 
     class IButton {
+    
+        // Destructor
         public:
+
             /**
              * @brief Destroy the IButton object
              *
              */
             virtual ~IButton() = default;
 
-            /**
-             * @brief Set the Position of the button
-             *
-             * @param position The button position
-             */
-            virtual void setPosition(const sf::Vector2f& position) = 0;
-
-            /**
-             * @brief Get the Position of the button
-             *
-             * @return sf::Vector2f The button position
-             */
-            virtual sf::Vector2f getPosition() const = 0;
-
-            /**
-             * @brief Set the Size of the button
-             *
-             * @param size The button size
-             */
-            virtual void setSize(const sf::Vector2f& size) = 0;
-
-            /**
-             * @brief Get the Size object
-             *
-             * @return sf::Vector2f The button size
-             */
-            virtual sf::Vector2f getSize() const = 0;
-
-            /**
-             * @brief Set the On Click Callback of the button
-             *
-             * @param callback The button callback function
-             */
-            virtual void setOnClickCallback(std::function<void()> callback) = 0;
+        // Methods
+        public:
 
             /**
              * @brief Get the On Click Callback of the button
@@ -75,12 +53,57 @@ namespace UI {
              */
             virtual void render(sf::RenderWindow& window, ButtonState state) const = 0;
 
+        // Setters / Getters
+        public:
+
+            /**
+             * @brief Set the Position of the button
+             *
+             * @param position The button position
+             */
+            virtual void setPosition(const sf::Vector2f& position) = 0;
+
+            /**
+             * @brief Set the Size of the button
+             *
+             * @param size The button size
+             */
+            virtual void setSize(const sf::Vector2f& size) = 0;
+
+            /**
+             * @brief Set the On Click Callback of the button
+             *
+             * @param callback The button callback function
+             */
+            virtual void setOnClickCallback(std::function<void()> callback) = 0;
+
             /**
              * @brief Set the Widget object
              * The widget is the object that will be rendered inside the button
              * @param widget The widget to set
              */
-            virtual void setWidget(IWidget *widget) = 0;
+            virtual void setWidget(std::shared_ptr<IWidget> widget) = 0;
+
+            /**
+             * @brief Set the value of the button
+             *
+             * @param value The value to set
+             */
+            virtual void setValue(ssize_t value) = 0;
+
+            /**
+             * @brief Get the Size object
+             *
+             * @return sf::Vector2f The button size
+             */
+            virtual sf::Vector2f getSize() const = 0;
+
+            /**
+             * @brief Get the Position of the button
+             *
+             * @return sf::Vector2f The button position
+             */
+            virtual sf::Vector2f getPosition() const = 0;
 
             /**
              * @brief Check if the button is clicked
@@ -99,13 +122,6 @@ namespace UI {
              * @return false        If the button is not hovered
              */
             virtual bool isHovered(sf::Vector2f mousePosition) const = 0;
-
-            /**
-             * @brief Set the value of the button
-             *
-             * @param value The value to set
-             */
-            virtual void setValue(ssize_t value) = 0;
 
             /**
              * @brief Get the value of the button

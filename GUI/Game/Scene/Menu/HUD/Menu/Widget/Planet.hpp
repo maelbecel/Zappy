@@ -21,112 +21,114 @@
     #define NBSTARS 400
     #define DEG_TO_RAD (M_PI / 180.0)
 
-    namespace UI {
+namespace UI {
 
-        typedef enum PlanetType {
-            MERCURY,
-            VENUS,
-            EARTH,
-            MARS,
-            JUPITER,
-            SATURN,
-            URANUS,
-            NEPTUNE,
-        } PlanetType;
+    typedef enum PlanetType {
+        MERCURY,
+        VENUS,
+        EARTH,
+        MARS,
+        JUPITER,
+        SATURN,
+        URANUS,
+        NEPTUNE,
+    } PlanetType;
 
-        typedef struct planetPath_s {
-            PlanetType type;
-            std::string path;
-        } planetPath_t;
+    typedef struct planetPath_s {
+        PlanetType type;
+        std::string path;
+    } planetPath_t;
 
-        class Planet : public AWidget {
-            // Constructor & Destructor
-            public:
-                Planet(); // Default Constructor
+    class Planet : public AWidget {
 
-                /**
-                 * @brief Destroy the Planet object
-                 */
-                ~Planet();
+        // Constructor & Destructor (default)
+        public:
 
-            // Methods
-            public:
+            /**
+             * @brief Construct a new Planet object
+             */
+            Planet();
 
-                /**
-                 * @brief Draw the Planet object
-                 * target represent the window where to draw the object
-                 * states represent the states of the render target
-                 * @param target The window where to draw the object
-                 * @param states The states of the render target
-                 */
-                void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+            ~Planet() = default;
 
-                /**
-                 * @brief Draw the stars
-                 *
-                 * @param target The window where to draw the object
-                 * @param states The states of the render target
-                */
-                void drawStars(sf::RenderTarget& target, sf::RenderStates states) const;
+        // Methods
+        public:
 
-                /**
-                 * @brief Draw the button in hover state
-                 * target represent the window where to draw the object
-                 * states represent the states of the render target
-                 * @param target The window where to draw the object
-                 * @param states The states of the render target
-                 */
-                void drawHover(UNUSED sf::RenderTarget &target, UNUSED sf::RenderStates states) const override;
+            /**
+             * @brief Draw the Planet object
+             * target represent the window where to draw the object
+             * states represent the states of the render target
+             * @param target The window where to draw the object
+             * @param states The states of the render target
+             */
+            void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
-                /**
-                 * @brief Handle the event of the widget
-                 *
-                 * @param event The event to handle
-                 */
-                void handleEvent(sf::Event event) override;
+            /**
+             * @brief Draw the stars
+             *
+             * @param target The window where to draw the object
+             * @param states The states of the render target
+            */
+            void drawStars(sf::RenderTarget& target, sf::RenderStates states) const;
 
-            // Getters & Setters
-            public:
+            /**
+             * @brief Draw the button in hover state
+             * target represent the window where to draw the object
+             * states represent the states of the render target
+             * @param target The window where to draw the object
+             * @param states The states of the render target
+             */
+            void drawHover(UNUSED sf::RenderTarget &target, UNUSED sf::RenderStates states) const override;
 
-                /**
-                 * @brief Set the Position object
-                 *
-                 * @param position The position of the widget at the top left corner
-                 */
-                void setPosition(const sf::Vector2f &position) override;
+            /**
+             * @brief Handle the event of the widget
+             *
+             * @param event The event to handle
+             */
+            void handleEvent(sf::Event event) override;
 
-                /**
-                 * @brief Set the Size object
-                 *
-                 * @param size The size of the widget
-                 */
-                void setSize(const sf::Vector2f &size) override;
+        // Setters & Getters
+        public:
 
-                /**
-                 * @brief Set the Type object
-                 *
-                 * @param type The type of the planet
-                 */
-                void setType(PlanetType type);
+            /**
+             * @brief Set the Position object
+             *
+             * @param position The position of the widget at the top left corner
+             */
+            void setPosition(const sf::Vector2f &position) override;
 
-                /**
-                 * @brief Get the Type object
-                 *
-                 * @return PlanetType The type of the planet
-                 */
-                PlanetType getType();
+            /**
+             * @brief Set the Size object
+             *
+             * @param size The size of the widget
+             */
+            void setSize(const sf::Vector2f &size) override;
 
-                /**
-                 * @brief Get the Nb Planet object
-                 *
-                 * @return int The number of planet
-                 */
-                int getNbPlanet();
+            /**
+             * @brief Set the Type object
+             *
+             * @param type The type of the planet
+             */
+            void setType(PlanetType type);
 
+            /**
+             * @brief Get the Type object
+             *
+             * @return PlanetType The type of the planet
+             */
+            PlanetType getType();
 
-            private:
-                PlanetType _type;
-        };
+            /**
+             * @brief Get the Nb Planet object
+             *
+             * @return int The number of planet
+             */
+            int getNbPlanet();
+
+        // Attribute
+        private:
+            PlanetType _type; /*!< The type of the planet */
     };
+};
 
 #endif /* !PLANET_HPP_ */

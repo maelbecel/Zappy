@@ -8,5 +8,5 @@
 #include "FontManager.hpp"
 
 namespace UI {
-    std::map<std::string, sf::Font *> FontManager::_fonts;
+    std::map<std::string, std::shared_ptr<sf::Font>> FontManager::_fonts;
 };

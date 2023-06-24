@@ -10,9 +10,10 @@
 #include "Map.hpp"
 
 namespace UI {
-    //////////////////////////////
-    // Constructor & Destructor //
-    //////////////////////////////
+    /////////////////
+    // Constructor //
+    /////////////////
+
     TeamHUD::TeamHUD()
     {
         LayoutProperties properties;
@@ -21,23 +22,18 @@ namespace UI {
         properties.spacing = 15.0f;
 
         // Create the layout of the team HUD
-        _teamLayout = new VerticalLayout(properties);
+        _teamLayout = std::make_shared<VerticalLayout>(properties);
 
         try {
-            _cursor = new sf::Sprite();
+            _cursor = std::make_shared<sf::Sprite>();
 
             _cursor->setTexture(*TextureManager::getTexture(UI::CURSOR));
             _cursor->setTextureRect(sf::IntRect(0, 0, Tile::TILE_WIDTH, Tile::TILE_TOTAL_HEIGHT));
-        } catch (const std::exception &e) {
-            std::cerr << e.what() << std::endl;
+        } catch (const Error::TextureError &e) {
+            std::cerr << "Bad Initialization of TeamHUD: " << e.what() << std::endl;
         }
 
-        _mouseClick = new Audio::VFX(Audio::MOUSE_CLICK, Audio::Audio::sfxVolume);
-    };
-
-    TeamHUD::~TeamHUD()
-    {
-        delete _mouseClick;
+        _mouseClick = std::make_shared<Audio::SFX>(Audio::MOUSE_CLICK, Audio::Audio::sfxVolume);
     };
 
     /////////////
@@ -54,7 +50,7 @@ namespace UI {
 
     void TeamHUD::drawCursor(sf::RenderWindow &window, GameData &data)
     {
-        std::map<std::string, Player *> players = data.getPlayers();
+        std::map<std::string, std::shared_ptr<Player>> players = data.getPlayers();
         sf::Vector2f scale = data.getScale();
         sf::Vector2i size = data.getMapSize();
         sf::Vector2f userPosition = data.getPosition();
@@ -97,6 +93,55 @@ namespace UI {
         }
     }
 
+    void TeamHUD::handleEvent(sf::Event event)
+    {
+        bool found = false;
+
+        _mouseClick->setVolume(Audio::Audio::sfxVolume);
+        for (auto element : _teamLayout->getElements()) {
+            if (static_cast<TeamWidget *>(element.get())->isInside(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)) == true) {
+                _mouseClick->play();
+                _teamName = static_cast<TeamWidget *>(element.get())->getTeamName();
+                found = true;
+                break;
+            }
+        }
+
+        if (found == false)
+            _teamName = "";
+    }
+
+    /////////////
+    // Setters //
+    /////////////
+
+    void TeamHUD::setTeams(const std::vector<std::string> &teams)
+    {
+        int index = 1;
+
+        // Loop on teams and _teams and when there is a difference, add a team to the layout
+        for (auto team : teams) {
+            bool found = false;
+
+            for (auto _team : _teams) {
+                if (team == _team) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                std::shared_ptr<TeamWidget> teamWidget = std::make_shared<TeamWidget>(team, index, sf::Vector2f(0.0f, 0.0f));
+
+                _teamLayout->addElement(teamWidget);
+            }
+            index++;
+        }
+
+        _teams = teams;
+        _teamLayout->applyLayout();
+    }
+
     sf::Color TeamHUD::setColor(int color)
     {
         if (color == 1)
@@ -116,53 +161,5 @@ namespace UI {
         else if (color == 8)
             return sf::Color::Cyan;
         return setColor(color - 8);
-    }
-
-    void TeamHUD::handleEvent(sf::Event event)
-    {
-        bool found = false;
-
-        _mouseClick->setVolume(Audio::Audio::sfxVolume);
-        for (auto element : _teamLayout->getElements()) {
-            if (static_cast<TeamWidget *>(element)->isInside(sf::Vector2f(event.mouseButton.x, event.mouseButton.y)) == true) {
-                _mouseClick->play();
-                _teamName = static_cast<TeamWidget *>(element)->getTeamName();
-                found = true;
-                break;
-            }
-        }
-
-        if (found == false)
-            _teamName = "";
-    }
-
-    /////////////
-    // Setters //
-    /////////////
-    void TeamHUD::setTeams(const std::vector<std::string> &teams)
-    {
-        int index = 1;
-
-        // Loop on teams and _teams and when there is a difference, add a team to the layout
-        for (auto team : teams) {
-            bool found = false;
-
-            for (auto _team : _teams) {
-                if (team == _team) {
-                    found = true;
-                    break;
-                }
-            }
-
-            if (!found) {
-                TeamWidget *teamWidget = new TeamWidget(team, index, sf::Vector2f(0.0f, 0.0f));
-
-                _teamLayout->addElement(teamWidget);
-            }
-            index++;
-        }
-
-        _teams = teams;
-        _teamLayout->applyLayout();
     }
 };

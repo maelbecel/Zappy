@@ -12,36 +12,40 @@
     #include "BackgroundStyle.hpp"
     #include "FontManager.hpp"
     #include "TextureManager.hpp"
-    #include <map>
 
     #include <iostream>
 
 namespace UI {
+
+    /**
+     * @brief Arrow Direction Enum
+     * Can be used to set the direction of the arrow
+     */
     enum ArrowDirection {
         UP,
         DOWN,
         LEFT,
         RIGHT
     };
+
+    /**
+     * @brief Arrow Button Widget
+     */
     class ArrowButtonWidget : public AWidget {
 
-        // Constructor & Destructor
+        // Constructor & Destructor (default)
         public:
             /**
              * @brief Construct a new Button Widget object
              * ArrowButtonWidget exemple :
-             * Name :
-             * [_____Text______]
-             *
+             * [<<] or [>>] or [^] or [v]
+             * 
              * @param position The position of the widget at the top left corner
              * @param size     The size of the widget
              */
             ArrowButtonWidget(const sf::Vector2f &position, const sf::Vector2f &size, const ArrowDirection &direction);
             ArrowButtonWidget(); // Default Constructor
 
-            /**
-             * @brief Destroy the Button Widget object
-             */
             ~ArrowButtonWidget() = default;
 
         // Methods
@@ -72,7 +76,7 @@ namespace UI {
              */
             void handleEvent(sf::Event event) override;
 
-        // Getters & Setters
+        // Setters
         public:
 
             /**
@@ -104,20 +108,6 @@ namespace UI {
         private:
             sf::Sprite _idleSprite;         /*!< The texture of the Cross Button Widget when idle */
             sf::Sprite _hoveredSprite;      /*!< The texture of the Cross Button Widget when hover */
-
-        // Methods
-        private:
-            /**
-             * @brief Set the map of hover sprites
-             *
-             */
-            std::map<std::string, sf::Sprite> setHoveredSprites();
-
-            /**
-             * @brief Set the map of idle sprites
-             *
-             */
-            std::map<std::string, sf::Sprite> setIdleSprites();
     };
 };
 

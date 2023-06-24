@@ -21,10 +21,21 @@ class Eggs {
 
     // Constructor & Destructor (default)
     public:
+
+        /**
+         * @brief Construct a new Eggs object
+         *
+         * @param pos             The position of the egg
+         * @param dropBy          The name of the player who dropped the egg
+         * @param team            The team of the egg
+         * @param color           The color of the egg
+         * @param timeWhenDropped The time when the egg was dropped
+         */
         Eggs(sf::Vector2i pos, std::string dropBy, std::string team, int color, size_t timeWhenDropped = 0);
+
         ~Eggs() = default;
 
-    // Methods
+    // Method
     public:
 
         /**

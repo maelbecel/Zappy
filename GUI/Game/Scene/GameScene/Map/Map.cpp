@@ -11,20 +11,20 @@ Map::Map()
 {
     try {
         // Load the Tiles texture
-        sf::Texture *grassTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/GrassHexP.png");
-        sf::Texture *forestTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/BushHexP.png");
-        sf::Texture *snowTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/SnowHexP.png");
-        sf::Texture *snowForestTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/SnowBushHexP.png");
-        sf::Texture *desertTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/DesertHexP.png");
-        sf::Texture *seaTexture = UI::TextureManager::getTexture("./Assets/Hexagonal/SeaHexP.png");
+        std::shared_ptr<sf::Texture> grassTexture = UI::TextureManager::getTexture(UI::GRASS);
+        std::shared_ptr<sf::Texture> forestTexture = UI::TextureManager::getTexture(UI::FOREST);
+        std::shared_ptr<sf::Texture> snowTexture = UI::TextureManager::getTexture(UI::SNOW);
+        std::shared_ptr<sf::Texture> snowForestTexture = UI::TextureManager::getTexture(UI::SNOWFOREST);
+        std::shared_ptr<sf::Texture> desertTexture = UI::TextureManager::getTexture(UI::DESERT);
+        std::shared_ptr<sf::Texture> seaTexture = UI::TextureManager::getTexture(UI::SEA);
 
         // Create the sprites for the texture
-        sf::Sprite *grassSprite = new sf::Sprite();
-        sf::Sprite *forestSprite = new sf::Sprite();
-        sf::Sprite *snowSprite = new sf::Sprite();
-        sf::Sprite *snowForestSprite = new sf::Sprite();
-        sf::Sprite *desertSprite = new sf::Sprite();
-        sf::Sprite *seaSprite = new sf::Sprite();
+        std::shared_ptr<sf::Sprite> grassSprite = std::make_shared<sf::Sprite>();
+        std::shared_ptr<sf::Sprite> forestSprite = std::make_shared<sf::Sprite>();
+        std::shared_ptr<sf::Sprite> snowSprite = std::make_shared<sf::Sprite>();
+        std::shared_ptr<sf::Sprite> snowForestSprite = std::make_shared<sf::Sprite>();
+        std::shared_ptr<sf::Sprite> desertSprite = std::make_shared<sf::Sprite>();
+        std::shared_ptr<sf::Sprite> seaSprite = std::make_shared<sf::Sprite>();
 
         // Set the texture to the sprite
         grassSprite->setTexture(*grassTexture);
@@ -54,15 +54,7 @@ Map::Map()
         _tiles["Sea"] = seaSprite;
 
     } catch (Error::TextureError &e) {
-        std::cerr << e.what() << std::endl;
-    }
-}
-
-Map::~Map()
-{
-    for (auto &tile : _tiles) {
-        if (tile.second)
-            delete tile.second;
+        std::cerr << "Bad Initialization of Map: " << e.what() << std::endl;
     }
 }
 
@@ -89,7 +81,7 @@ void Map::draw(sf::RenderWindow &window, GameData &gameData)
             // Handle tiles outside the map
             if (height >= mapSize.y + SEA_SIZE || width >= mapSize.x + SEA_SIZE || height < SEA_SIZE || width < SEA_SIZE) {
                 position.y += 1;
-                sprite = _tiles["Sea"];
+                sprite = _tiles["Sea"].get();
                 sprite->setPosition(position);
                 sprite->setScale(scale.x + 2.00, scale.y + 1.25);
                 window.draw(*sprite);
@@ -135,16 +127,16 @@ void Map::drawBiome(sf::RenderWindow &window, GameData &gameData)
             
             if (season == Season::WINTER) {
                 if (noise[height - SEA_SIZE][width - SEA_SIZE] > 0.65 && noise[height - SEA_SIZE][width - SEA_SIZE] < 0.75)
-                    sprite = _tiles["Forest"];
+                    sprite = _tiles["Forest"].get();
                 else
-                    sprite = _tiles["SnowForest"];
+                    sprite = _tiles["SnowForest"].get();
             } else if (season == Season::AUTUMN) {
                 if (noise[height - SEA_SIZE][width - SEA_SIZE] > 0.3 && noise[height - SEA_SIZE][width - SEA_SIZE] < 0.4)
-                    sprite = _tiles["SnowForest"];
+                    sprite = _tiles["SnowForest"].get();
                 else
-                    sprite = _tiles["Forest"];
+                    sprite = _tiles["Forest"].get();
             } else
-                sprite = _tiles["Forest"];
+                sprite = _tiles["Forest"].get();
 
             position.x += userPosition.x;
             position.y += userPosition.y;
@@ -179,26 +171,26 @@ sf::Sprite *Map::drawSeason(int height, int width, GameData &gameData, Season se
 
     if (season == Season::SUMMER) {
         if (noise[height - SEA_SIZE][width - SEA_SIZE] < 0.3)
-            return _tiles["Desert"];
-        return _tiles["Grass"];
+            return _tiles["Desert"].get();
+        return _tiles["Grass"].get();
     }
 
     if (season == Season::WINTER)
-        return _tiles["Snow"];
+        return _tiles["Snow"].get();
     
     if (season == Season::SPRING) {
         if (noise[height - SEA_SIZE][width - SEA_SIZE] < 0.3)
-            return _tiles["Desert"];
-        return _tiles["Grass"];
+            return _tiles["Desert"].get();
+        return _tiles["Grass"].get();
     }
     
     if (season == Season::AUTUMN) {
         if (noise[height - SEA_SIZE][width - SEA_SIZE] < 0.3)
-            return _tiles["Desert"];
+            return _tiles["Desert"].get();
         if (noise[height - SEA_SIZE][width - SEA_SIZE] >= 0.3 && noise[height - SEA_SIZE][width - SEA_SIZE] < 0.5)
-            return _tiles["Snow"];
-        return _tiles["Grass"];
+            return _tiles["Snow"].get();
+        return _tiles["Grass"].get();
     }
 
-    return _tiles["Grass"];
+    return _tiles["Grass"].get();
 }

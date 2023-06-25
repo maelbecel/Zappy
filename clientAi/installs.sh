@@ -1,4 +1,5 @@
-# if you want to run manually unit test and reformatting the code
-# pip install neat-python
+pip install neat-python
+pip install pygame
 pip install pytest
 pip install black
+pip install numba

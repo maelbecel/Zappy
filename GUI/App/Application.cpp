@@ -24,10 +24,14 @@ Application::~Application()
 
 void Application::run()
 {
-    while (_window.isOpen()) {
-        appEventManager();
-        appUpdate();
-        appRender();
+    try {
+        while (_window.isOpen()) {
+            appEventManager();
+            appUpdate();
+            appRender();
+        }
+    } catch (Error::NetworkError &e) {
+        throw Error::NetworkError(e.what());
     }
 }
 
@@ -38,7 +42,11 @@ void Application::appEventManager()
     while (_window.pollEvent(_event)) {
         if (_event.type == sf::Event::Closed)
             _window.close();
-        _game.OnEvent(_event, _window);
+        try {
+            _game.OnEvent(_event, _window);
+        } catch (Error::NetworkError &e) {
+            throw Error::NetworkError(e.what());
+        }
     }
 }
 

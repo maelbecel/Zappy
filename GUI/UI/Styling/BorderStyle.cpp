@@ -8,15 +8,16 @@
 #include "BorderStyle.hpp"
 
 namespace UI {
+
     /////////////////
     // Constructor //
     /////////////////
 
     BorderStyle::BorderStyle(sf::Color color, double thickness) : _borderColor(color), _borderThickness(thickness) {};
 
-    /////////////
-    // Methods //
-    /////////////
+    ////////////
+    // Method //
+    ////////////
 
     void BorderStyle::apply(sf::Drawable &drawable)
     {
@@ -25,7 +26,5 @@ namespace UI {
             shape->setOutlineColor(_borderColor);
             shape->setOutlineThickness(_borderThickness);
         }
-
-        // TODO: Add support for other drawable types as needed (e.g. sf::Text)
     }
 };

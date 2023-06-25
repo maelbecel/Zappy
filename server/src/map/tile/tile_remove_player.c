@@ -10,10 +10,13 @@
 
 void tile_remove_player(map_t *map, client_t *client)
 {
-    ai_t *ai = client->data;
+    ai_t *ai = NULL;
     tile_t *tile = NULL;
 
-    if (!map || !client || !ai)
+    if (!map || !client)
+        return;
+    ai = client->data;
+    if (!ai)
         return;
     tile = map_get_tile(map, ai->x, ai->y);
     if (!tile)

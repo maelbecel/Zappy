@@ -9,6 +9,7 @@
 #include <iostream>
 
 namespace Network {
+
     //////////////////////////////
     // Constructor & Destructor //
     //////////////////////////////
@@ -141,9 +142,9 @@ namespace Network {
         ::send(_socket, tmp.c_str(), tmp.size(), 0);
     }
 
-    /////////////
-    // Setters //
-    /////////////
+    ////////////
+    // Setter //
+    ////////////
 
     void Socket::setSocket(int socket)
     {

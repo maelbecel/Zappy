@@ -13,12 +13,12 @@ from ...src.server.clientServer import *
 class TryClientServerClass(TestCase):
 
     def test_clientEvoli_init(self):
-        client = evoli("team1", 4242, "localhost")
+        client = evoli("team1", 4242, "localhost", False)
         self.assertEqual(client.client.getPort(), 4242)
         self.assertEqual(client.client.getHost(), "localhost")
 
     def test_clientEvoli_connect(self):
-        client = evoli("team1", 4242, "localhost")
+        client = evoli("team1", 4242, "localhost", False)
         client.connect()
         self.assertIsNotNone(client.getSocket())
         client.disconnect()
@@ -27,7 +27,7 @@ class TryClientServerClass(TestCase):
 
         count = 0
 
-        client = evoli("team1", 4242, "localhost")
+        client = evoli("team1", 4242, "localhost", False)
         client.connect()
         client.look()
         count = client.countPlayerOnCase()
@@ -41,7 +41,7 @@ class TryClientServerClass(TestCase):
         dict1 = {"linemate": 1, "deraumere": 0, "sibur": 0, "mendiane": 0, "phiras": 0, "thystame": 0}
         dict2 = {"linemate": 1, "deraumere": 0, "sibur": 0, "mendiane": 0, "phiras": 0, "thystame": 0}
 
-        client = evoli("team1", 4242, "localhost")
+        client = evoli("team1", 4242, "localhost", False)
         client.connect()
 
         if not (client.compareDict(dict1, dict2)):
@@ -54,7 +54,7 @@ class TryClientServerClass(TestCase):
         dict1 = {"linemate": 4, "deraumere": 0, "sibur": 0, "mendiane": 0, "phiras": 0, "thystame": 0}
         dict2 = {"linemate": 1, "deraumere": 0, "sibur": 0, "mendiane": 0, "phiras": 0, "thystame": 0}
 
-        client = evoli("team1", 4242, "localhost")
+        client = evoli("team1", 4242, "localhost", False)
         client.connect()
 
         if not (client.compareDict(dict1, dict2)):
@@ -67,7 +67,7 @@ class TryClientServerClass(TestCase):
         dict1 = {"linemate": 4, "deraumere": 0, "sibur": 1, "mendiane": 0, "phiras": 5, "thystame": 0}
         dict2 = {"linemate": 1, "deraumere": 0, "sibur": 0, "mendiane": 0, "phiras": 0, "thystame": 0}
 
-        client = evoli("team1", 4242, "localhost")
+        client = evoli("team1", 4242, "localhost", False)
         client.connect()
 
         if not (client.compareDict(dict1, dict2)):
@@ -80,7 +80,7 @@ class TryClientServerClass(TestCase):
         dict1 = {"linemate": 0, "deraumere": 0, "sibur": 1, "mendiane": 0, "phiras": 5, "thystame": 0}
         dict2 = {"linemate": 1, "deraumere": 0, "sibur": 0, "mendiane": 0, "phiras": 2, "thystame": 0}
 
-        client = evoli("team1", 4242, "localhost")
+        client = evoli("team1", 4242, "localhost", False)
         client.connect()
 
         if (client.compareDict(dict1, dict2)):
@@ -93,7 +93,7 @@ class TryClientServerClass(TestCase):
         dict1 = {"linemate": 2, "deraumere": 0, "sibur": 1, "mendiane": 3, "phiras": 5, "thystame": 0}
         dict2 = {"linemate": 1, "deraumere": 0, "sibur": 1, "mendiane": 2, "phiras": 3, "thystame": 0}
 
-        client = evoli("team1", 4242, "localhost")
+        client = evoli("team1", 4242, "localhost", False)
         client.connect()
 
         if not (client.compareDict(dict1, dict2)):
@@ -105,7 +105,7 @@ class TryClientServerClass(TestCase):
 
         temp = dict()
 
-        client = evoli("team1", 4242, "localhost")
+        client = evoli("team1", 4242, "localhost", False)
         client.connect()
 
         client.look()
@@ -124,3 +124,39 @@ class TryClientServerClass(TestCase):
                 self.fail("Error: element is not in temp")
 
         client.disconnect()
+
+    def test_GoTo(self):
+
+        client = evoli("team1", 4242, "localhost", False)
+        client.connect()
+        client.look()
+        client.getGoTo(0)
+        self.assertEqual(client.getQueue(), [])
+        client.disconnect()
+
+    def test_GoTo2(self):
+
+        client = evoli("team1", 4242, "localhost", False)
+
+        client.connect()
+        client.look()
+        client.getGoTo(1)
+        self.assertEqual(client.getQueue(), [client.forward, client.left, client.forward])
+
+    def test_GoTo3(self):
+
+        client = evoli("team1", 4242, "localhost", False)
+
+        client.connect()
+        client.look()
+        client.getGoTo(2)
+        self.assertEqual(client.getQueue(), [client.forward])
+
+    def test_GoTo4(self):
+
+        client = evoli("team1", 4242, "localhost", False)
+
+        client.connect()
+        client.look()
+        client.getGoTo(3)
+        self.assertEqual(client.getQueue(), [client.forward, client.right, client.forward])

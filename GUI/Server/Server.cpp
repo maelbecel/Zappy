@@ -70,16 +70,6 @@ namespace Network {
         _isConnected = status;
     }
 
-    bool Server::getConnectionStatus() const
-    {
-        return _isConnected;
-    }
-
-    std::string Server::getResponse() const
-    {
-        return _socket.response;
-    }
-
     void Server::setPort(std::string port)
     {
         try {
@@ -101,5 +91,15 @@ namespace Network {
     Socket &Server::getSocket()
     {
         return _socket;
+    }
+
+    bool Server::getConnectionStatus() const
+    {
+        return _isConnected;
+    }
+
+    std::string Server::getResponse() const
+    {
+        return _socket.response;
     }
 };

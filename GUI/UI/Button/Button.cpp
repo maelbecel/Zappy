@@ -12,7 +12,7 @@ namespace UI {
     // Constructor //
     /////////////////
 
-    Button::Button(IWidget *widget, std::function<void()> callback) : _widget(widget), _callback(callback), _value(0) {};
+    Button::Button(std::shared_ptr<IWidget> widget, std::function<void()> callback) : _widget(widget), _callback(callback), _value(0) {};
 
     Button::Button(const Button &button) : _widget(button._widget), _callback(button._callback) {};
 
@@ -33,21 +33,11 @@ namespace UI {
             _widget->drawHover(window, sf::RenderStates::Default);
     }
 
-    bool Button::isClicked(sf::Vector2f clickPosition) const
-    {
-        return _widget->isIn(clickPosition);
-    }
-
-    bool Button::isHovered(sf::Vector2f mousePosition) const
-    {
-        return _widget->isIn(mousePosition);
-    }
-
     ///////////////////////
     // Setters & Getters //
     ///////////////////////
 
-    void Button::setWidget(IWidget *widget)
+    void Button::setWidget(std::shared_ptr<IWidget> widget)
     {
         _widget = widget;
     };
@@ -62,19 +52,9 @@ namespace UI {
         _widget->setPosition(position);
     }
 
-    sf::Vector2f Button::getPosition() const
-    {
-        return _widget->getPosition();
-    }
-
     void Button::setSize(const sf::Vector2f& size)
     {
         _widget->setSize(size);
-    }
-
-    sf::Vector2f Button::getSize() const
-    {
-        return _widget->getSize();
     }
 
     void Button::setValue(ssize_t value)
@@ -82,9 +62,29 @@ namespace UI {
         _value = value;
     }
 
+    sf::Vector2f Button::getSize() const
+    {
+        return _widget->getSize();
+    }
+
     ssize_t Button::getValue() const
     {
         return _value;
+    }
+
+    sf::Vector2f Button::getPosition() const
+    {
+        return _widget->getPosition();
+    }
+
+    bool Button::isClicked(sf::Vector2f clickPosition) const
+    {
+        return _widget->isIn(clickPosition);
+    }
+
+    bool Button::isHovered(sf::Vector2f mousePosition) const
+    {
+        return _widget->isIn(mousePosition);
     }
 
     ///////////////

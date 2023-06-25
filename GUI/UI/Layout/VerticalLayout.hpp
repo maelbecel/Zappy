@@ -21,6 +21,7 @@ namespace UI {
      * 
      */
     class VerticalLayout : public ILayout {
+
         // Constructor & Destructor (default)
         public:
 
@@ -30,6 +31,7 @@ namespace UI {
              * @param properties Properties of the layout
              */
             VerticalLayout(LayoutProperties properties);
+
             ~VerticalLayout() = default;
 
         // Methods
@@ -49,19 +51,19 @@ namespace UI {
              *
              * @param element The element to add
              */
-            void addElement(IWidget *element) override;
+            void addElement(std::shared_ptr<IWidget> element) override;
 
             /**
              * @brief Get the Elements object
              *
              * @return IWidget The elements of the layout
              */
-            std::vector<IWidget *> getElements() override;
+            std::vector<std::shared_ptr<IWidget>> getElements() override;
 
         // Attributes
         private:
-            std::vector<IWidget *> _elements; /*!< The elements of the layout */
-            LayoutProperties properties; /*!< Properties of the layout */
+            std::vector<std::shared_ptr<IWidget>> _elements; /*!< The elements of the layout */
+            LayoutProperties properties;                     /*!< Properties of the layout */
     };
 };
 

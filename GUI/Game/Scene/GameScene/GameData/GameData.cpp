@@ -6,58 +6,67 @@
 */
 
 #include "GameData.hpp"
+#include "Map.hpp"
 
 uint GameData::timeUnit = 0;
-uint GameData::gameSpeed = 0;
 
-GameData::GameData() : _mapSize(sf::Vector2i(0, 0)), _gameScale(1.0f), _scale(sf::Vector2f(1.0f, 1.0f)), _position(sf::Vector2f(0, 900 / 2))
+GameData::GameData() : _mapSize(sf::Vector2i(0, 0)), _gameScale(1.0f), _season("1"), _scale(sf::Vector2f(1.0f, 1.0f)), _position(sf::Vector2f(0, 900 / 2))
 {
     _teams = std::vector<std::string>();
 
     GameData::timeUnit = 0;
-    GameData::gameSpeed = 0;
 };
 
 int GameData::parse(std::string &line)
 {
+    int response = 0;
+
+    if (line.empty())
+        return response;
     if (line.find("msz") != std::string::npos)     // msz = map size
-        return setMapSize(line);
+        response = setMapSize(line);
     else if (line.find("sgt") != std::string::npos) // sgt = time unit
-        return setTimeUnit(line);
+        response = setTimeUnit(line);
     else if (line.find("sst") != std::string::npos) // sst = time unit with modification
-        return addTimeUnit(line);
+        response = addTimeUnit(line);
     else if (line.find("bct") != std::string::npos) // bct = content of a tile
-        return setTileContent(line);
+        response = setTileContent(line);
     else if (line.find("tna") != std::string::npos) // tna = team name
-        return setTeamName(line);
+        response = setTeamName(line);
     else if (line.find("pnw") != std::string::npos) // pnw = Connection of a new player
-        return setPlayer(line);
+        response = setPlayer(line);
     else if (line.find("pdi") != std::string::npos) // pdi = Death of a player
-        return deletePlayer(line);
+        response = deletePlayer(line);
     else if (line.find("ppo") != std::string::npos) // ppo = Position of the player
-        return setPlayerMovement(line);
+        response = setPlayerMovement(line);
     else if (line.find("plv") != std::string::npos) // plv = Player's level
-        return setPlayerLevel(line);
+        response = setPlayerLevel(line);
     else if (line.find("pin") != std::string::npos) // pin = Player's inventory
-        return setPlayerInventory(line);
+        response = setPlayerInventory(line);
     else if (line.find("pex") != std::string::npos) // pex = Expulsion
-        return PlayerExpulsion(line);
+        response = PlayerExpulsion(line);
     else if (line.find("pbc") != std::string::npos) // pbc = Broadcast
-        return PlayerBroadcast(line);
+        response = PlayerBroadcast(line);
     else if (line.find("pdr") != std::string::npos) // pdr = Player drop resources
-        return PlayerDropResource(line);
+        response = PlayerDropResource(line);
     else if (line.find("pgt") != std::string::npos) // pgt = Player collecting resources
-        return PlayerCollectResource(line);
+        response = PlayerCollectResource(line);
 
     // Eggs Command
     else if (line.find("enw") != std::string::npos) // enw = An egg was laid by a player
-        return CreateEgg(line);
+        response = CreateEgg(line);
     else if (line.find("edi") != std::string::npos) // edi = Death of an egg
-        return KillEgg(line);
+        response = KillEgg(line);
     else if (line.find("ebo") != std::string::npos) // ebo = Player connection from an egg
-        return KillEgg(line);
-    else
-        return 0;
+        response = KillEgg(line);
+
+    // Season Command
+    else if (line.find("season") != std::string::npos) {// seg = Season change
+        std::cout << "SEASON CHANGE" << std::endl;
+        response = setSeason(line);
+    }
+    line.clear();
+    return response;
 }
 
 int GameData::setMapSize(const std::string &mapSize)
@@ -91,10 +100,6 @@ int GameData::setTimeUnit(const std::string &timeUnit)
 
     try {
         int time = std::stoi(t);
-
-        if (GameData::timeUnit == 0)
-            GameData::gameSpeed = time;
-
         GameData::timeUnit = time;
     } catch (std::invalid_argument &e) {
         throw Error::InvalidArgument("GameData::setTimeUnit");
@@ -111,8 +116,6 @@ int GameData::addTimeUnit(const std::string &timeUnit)
 
     try {
         int time = std::stoi(t);
-
-        GameData::gameSpeed = time;
         GameData::timeUnit += time;
     } catch (std::invalid_argument &e) {
         throw Error::InvalidArgument("GameData::addTimeUnit");
@@ -129,7 +132,7 @@ int GameData::setMultipleTileContent(const std::string &tiles)
 
     while (ss >> temp)
         tilesVector.push_back(temp);
-    
+
     for (auto &tile : tilesVector)
         setSingleTileContent(tile);
     return 0;
@@ -161,7 +164,7 @@ int GameData::setSingleTileContent(const std::string &tile)
         int q5Int = std::stoi(q5);
         int q6Int = std::stoi(q6);
 
-        
+
         // Check if the map[x][y] already exists
         if (_map.find(std::make_pair(xInt, yInt)) != _map.end()) {
             _map[std::make_pair(xInt, yInt)]->setNewResources(q0Int, q1Int, q2Int, q3Int, q4Int, q5Int, q6Int);
@@ -302,7 +305,7 @@ int GameData::setPlayerMovement(const std::string &player)
         // Check if the #n players didn't exists
         if (_players.find(name) == _players.end())
             return 0;
-        
+
         int xInt = std::stoi(x);
         int yInt = std::stoi(y);
         int oriantationInt = std::stoi(orientation);
@@ -542,6 +545,24 @@ int GameData::KillEgg(const std::string &egg)
         throw Error::InvalidArgument("GameData::KillEgg");
     }
     return 0;
+}
+
+int GameData::setSeason(const std::string &season)
+{
+    std::string temp;
+    std::string id;
+
+    std::stringstream(season) >> temp >> id;
+
+    std::cout << "Season: " << id << std::endl;
+
+    _season = id;
+    return 0;
+}
+
+std::string GameData::getSeason() const
+{
+    return _season;
 }
 
 std::map<std::string, std::shared_ptr<Eggs>> GameData::getEggs() const

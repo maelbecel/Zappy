@@ -89,10 +89,8 @@ static int client_loop(server_t *server, client_t *client)
     if (FD_ISSET(client->socket->fd, &server->select->writefds)) {
         handle_write(server, client);
         buffer = wbuffer_empty(client);
-        if (buffer) {
-            dprintf(client->socket->fd, "%s", buffer);
-            free(buffer);
-        }
+        if (buffer)
+            wbuffer_print(client->socket->fd, buffer);
     }
     return 0;
 }

@@ -69,6 +69,8 @@ build/
 .vscode
 *.code-workspace
 
+zappy_server-1-4.tgz
 zappy_server
 zappy_gui
+unit_tests
 *.vscode

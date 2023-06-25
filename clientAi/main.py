@@ -6,11 +6,7 @@
 ##
 
 import src.exception.clientException as cException
-import src.ai.clientAi as cAi
 import src.ai.evoli as evoli
-import src.ai.testAi as testAi
-import src.ai.littleDuffer as littleDuffer
-import src.ai.bouftou as bouftou
 import sys, traceback
 from time import sleep
 
@@ -30,11 +26,7 @@ def parse(argv, graphic):
     if int(argv[2]) > MAX_PORT or int(argv[2]) < 0:
         raise cException("Error: port is invalid")
 
-    # client = cAi.clientAi(argv[4], argv[2], argv[6], graphic)
     client = evoli.evoli(argv[4], argv[2], argv[6], graphic)
-    # client = testAi.testAi(argv[4], argv[2], argv[6], grahpic)
-    # client = littleDuffer.littleDuffer(argv[4], argv[2], argv[6], grahpic)
-    # client = bouftou.bouftou(argv[4], argv[2], argv[6], "thystame")
     return client
 
 
@@ -50,25 +42,38 @@ def main(client):
         raise e
 
 
+def parseArg(argv):
+    graphic = False
+    machine = "localhost"
+    port = 0
+    name = ""
+    for i in range(len(argv)):
+        if argv[i] == "-p":
+            port = argv[i + 1]
+        elif argv[i] == "-n":
+            name = argv[i + 1]
+        elif argv[i] == "-h":
+            machine = argv[i + 1]
+        elif argv[i] == "-g":
+            graphic = True
+    if port == 0 or name == "":
+        raise cException.clientException("Error: argument is missing")
+    if int(port) > MAX_PORT or int(port) < 0:
+        raise cException.clientException("Error: port is invalid")
+    if machine == "localhost":
+        machine = "127.0.0.1"
+    client = evoli.evoli(name, port, machine, graphic)
+    return client
+
 if __name__ == "__main__":
     client = None
 
-    if len(sys.argv) == 2 and sys.argv[1] == "-h":
+    if len(sys.argv) == 2 and sys.argv[1] == "-help":
         help()
         sys.exit(0)
-    elif (
-        len(sys.argv) >= 7
-        and sys.argv[1] == "-p"
-        and sys.argv[3] == "-n"
-        and sys.argv[5] == "-h"
-    ):
+    else:
         try:
-            if len(sys.argv) == 8 and sys.argv[7] == "-g" or len(sys.argv) == 6 and sys.argv[5] == "-g":
-                client = parse(sys.argv, True)
-            elif len(sys.argv) > 7:
-                raise "Wrong argument"
-            else:
-                client = parse(sys.argv, False)
+            client = parseArg(sys.argv)
         except Exception as e:
             print(e)
             sys.exit(84)
@@ -76,5 +81,5 @@ if __name__ == "__main__":
             main(client)
         except Exception as e:
             print(e)
-            print(traceback.format_exc())
+            # print(traceback.format_exc())
             sys.exit(84)

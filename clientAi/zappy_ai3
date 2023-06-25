@@ -1,3 +1,4 @@
+#!/bin/env python3
 ##
 ## EPITECH PROJECT, 2023
 ## endYearPorject
@@ -5,8 +6,8 @@
 ## main
 ##
 
-import src.exception.clientException as cException
-import src.ai.evoli as evoli
+import clientAi.src.exception.clientException as cException
+import clientAi.src.ai.littleDuffer as littleDuffer
 import sys, traceback
 from time import sleep
 
@@ -26,7 +27,7 @@ def parse(argv, graphic):
     if int(argv[2]) > MAX_PORT or int(argv[2]) < 0:
         raise cException("Error: port is invalid")
 
-    client = evoli.evoli(argv[4], argv[2], argv[6], graphic)
+    client = littleDuffer.littleDuffer(argv[4], argv[2], argv[6], graphic)
     return client
 
 
@@ -62,7 +63,7 @@ def parseArg(argv):
         raise cException.clientException("Error: port is invalid")
     if machine == "localhost":
         machine = "127.0.0.1"
-    client = evoli.evoli(name, port, machine, graphic)
+    client = littleDuffer.littleDuffer(name, port, machine, graphic)
     return client
 
 if __name__ == "__main__":

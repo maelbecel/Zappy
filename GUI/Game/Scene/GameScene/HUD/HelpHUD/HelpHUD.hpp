@@ -49,7 +49,7 @@ namespace UI {
              *
              * @param str
              */
-            sf::Text setString(std::string str, sf::Vector2f pos);
+            sf::Text setString(std::string str, sf::Vector2f pos, int fontSize = 10);
 
             /**
              * @brief Check if the Settings HUD is opened
@@ -67,6 +67,10 @@ namespace UI {
             sf::Sprite _backgroundSprite;           /*!< Sprite of the Settings HUD */
             std::shared_ptr<IButton>_leftButton;    /*!< Button to turn left the pages */
             std::shared_ptr<IButton> _rightButton;  /*!< Button to turn right the pages */
+            std::shared_ptr<IButton> _closeButton;  /*!< Button to close the Settings HUD */
+            sf::Text _title;                        /*!< Title of the Settings HUD */
+            std::map<int, std::map<int, sf::Text>> _text; /*!< Text of the Settings HUD */
+            int _nbrPage;                           /*!< Number of pages */
             bool _opened;                           /*!< If the Settings HUD is opened or not */
     };
 };

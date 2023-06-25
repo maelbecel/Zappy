@@ -55,7 +55,7 @@ namespace UI {
         window.draw(_background);
         window.draw(_backgroundSprite);
         window.draw(_title);
-
+        setLanguage();
         for (auto &i : _text[_leftButton->getValue()]) {
             window.draw(i.second);
         }
@@ -131,7 +131,7 @@ namespace UI {
     {
         try {
             libconfig::Config cfg;
-            cfg.readFile("./Config/config.cfg");
+            sf::Vector2f backgroundSpriteScale = _backgroundSprite.getScale();            cfg.readFile("./Config/config.cfg");
             libconfig::Setting &config = cfg.lookup("config");
 
             libconfig::Config language;
@@ -145,10 +145,12 @@ namespace UI {
             libconfig::Setting &lang = language.lookup("language");
             libconfig::Setting &help = lang.lookup("help");
 
-            _title = setString(help["title"].c_str(), sf::Vector2f(_backgroundSprite.getPosition().x + 4 * 32, _backgroundSprite.getPosition().y + 16 * 5 * backgroundSpriteScale), 20);
+            _title = setString(help["title"].c_str(), sf::Vector2f(_backgroundSprite.getPosition().x + 4 * 32, _backgroundSprite.getPosition().y + 16 * 5 * backgroundSpriteScale.x), 20);
 
             libconfig::Setting &helpText = help["text"];
             int numeroPage = 0;
+            _nbrPage = 0;
+            _text.clear();
             for (int i = 0; i < helpText.getLength(); i++) {
                 bool pageTurned = false;
                 std::string helpTextStr = helpText[i];
@@ -156,16 +158,16 @@ namespace UI {
                 if (helpTextStr.find("\n\n") != std::string::npos) {
                     std::string firstPart = helpTextStr.substr(0, helpTextStr.find("\n\n"));
                     std::string secondPart = helpTextStr.substr(helpTextStr.find("\n\n") + 2, helpTextStr.size());
-                    _text[numeroPage][i - numeroPage * 23] = setString(firstPart.c_str(), sf::Vector2f(_backgroundSprite.getPosition().x + 4 * 32, _backgroundSprite.getPosition().y + 16 * 8 * backgroundSpriteScale + 16 * (i - numeroPage * 23) * backgroundSpriteScale), 10);
+                    _text[numeroPage][i - numeroPage * 23] = setString(firstPart.c_str(), sf::Vector2f(_backgroundSprite.getPosition().x + 4 * 32, _backgroundSprite.getPosition().y + 16 * 8 * backgroundSpriteScale.x + 16 * (i - numeroPage * 23) * backgroundSpriteScale.x), 10);
                     i++;
                     if (i % 23 == 0 && i != 0) {
                         _nbrPage = numeroPage + 1;
                         numeroPage++;
                         pageTurned = true;
                     }
-                    _text[numeroPage][i - numeroPage * 23] = setString(secondPart.c_str(), sf::Vector2f(_backgroundSprite.getPosition().x + 4 * 32, _backgroundSprite.getPosition().y + 16 * 8 * backgroundSpriteScale + 16 * (i - numeroPage * 23) * backgroundSpriteScale), 10);
+                    _text[numeroPage][i - numeroPage * 23] = setString(secondPart.c_str(), sf::Vector2f(_backgroundSprite.getPosition().x + 4 * 32, _backgroundSprite.getPosition().y + 16 * 8 * backgroundSpriteScale.x + 16 * (i - numeroPage * 23) * backgroundSpriteScale.x), 10);
                 } else
-                    _text[numeroPage][i - numeroPage * 23] = setString(helpTextStr.c_str(), sf::Vector2f(_backgroundSprite.getPosition().x + 4 * 32, _backgroundSprite.getPosition().y + 16 * 8 * backgroundSpriteScale + 16 * (i - numeroPage * 23) * backgroundSpriteScale), 10);
+                    _text[numeroPage][i - numeroPage * 23] = setString(helpTextStr.c_str(), sf::Vector2f(_backgroundSprite.getPosition().x + 4 * 32, _backgroundSprite.getPosition().y + 16 * 8 * backgroundSpriteScale.x + 16 * (i - numeroPage * 23) * backgroundSpriteScale.x), 10);
 
                 // if i % 23 == 0, we need to change page
                 if (i % 23 == 0 && i != 0 && pageTurned == false) {

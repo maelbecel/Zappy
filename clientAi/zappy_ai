@@ -1,3 +1,4 @@
+#!/bin/env python3
 ##
 ## EPITECH PROJECT, 2023
 ## endYearPorject
@@ -5,8 +6,8 @@
 ## main
 ##
 
-import src.exception.clientException as cException
-import src.ai.evoli as evoli
+import clientAi.src.exception.clientException as cException
+import clientAi.src.ai.evoli as evoli
 import sys, traceback
 from time import sleep
 

@@ -38,12 +38,12 @@ namespace UI {
 
         std::string str = "Tile clicked: (0, 0)\n\nResources:\n\n  Food: 0\n\n  Linemate: 0\n\n  Deraumere: 0\n\n  Sibur: 0\n\n  Mendiane: 0\n\n  Phiras: 0\n\n  Thystame: 0\n\n";
         _tileContent = setString(str, sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10), 10);
-    
+
         std::shared_ptr<IWidget> crossTileHUDButton = std::make_shared<CrossButtonWidget>(sf::Vector2f((Window::getWindowWidth() - 200), 150), sf::Vector2f(16 * 2.5, 16 * 2.5));
         std::shared_ptr<IWidget> changePlayerLeftButton = std::make_shared<ArrowButtonWidget>(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 550), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
-        std::shared_ptr<IWidget> changePlayerRightButton = std::make_shared<ArrowButtonWidget>(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 547), sf::Vector2f(16 * 2, 16 * 2), ArrowDirection::RIGHT);
+        std::shared_ptr<IWidget> changePlayerRightButton = std::make_shared<ArrowButtonWidget>(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 547), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
         std::shared_ptr<IWidget> changeEggLeftButton = std::make_shared<ArrowButtonWidget>(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 850), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::LEFT);
-        std::shared_ptr<IWidget> changeEggRightButton = std::make_shared<ArrowButtonWidget>(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 847), sf::Vector2f(16 * 2, 16 * 2), ArrowDirection::RIGHT);
+        std::shared_ptr<IWidget> changeEggRightButton = std::make_shared<ArrowButtonWidget>(sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 847), sf::Vector2f(16 * 3, 16 * 3), ArrowDirection::RIGHT);
 
         _crossTileHUDButton = std::make_shared<Button>(crossTileHUDButton);
         _changePlayerLeftButton = std::make_shared<Button>(changePlayerLeftButton);
@@ -80,7 +80,7 @@ namespace UI {
     {
         window.draw(_background);
         window.draw(_backgroundSprite);
-        
+
         if (_textMode == false) {
             window.draw(_tileClicked);
 
@@ -99,7 +99,7 @@ namespace UI {
         if (_tilePlayerContent.size() > 2) {
             _tilePlayerContent[_changePlayerLeftButton->getValue()].setPosition(_tileContent.getPosition().x + 10, 450);
             _tilePlayerContent[_changePlayerRightButton->getValue()].setPosition(_tileContent.getPosition().x + 240, 450);
-            
+
             window.draw(_tilePlayerContent[_changePlayerLeftButton->getValue()]);
             window.draw(_tilePlayerContent[_changePlayerRightButton->getValue()]);
 
@@ -107,7 +107,7 @@ namespace UI {
                 _changePlayerLeftButton->render(window, ButtonState::HOVERED);
             else
                 _changePlayerLeftButton->render(window, ButtonState::IDLE);
-            
+
             if (_changePlayerRightButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
                 _changePlayerRightButton->render(window, ButtonState::HOVERED);
             else
@@ -117,14 +117,14 @@ namespace UI {
                 _tilePlayerContent[_changePlayerLeftButton->getValue()].setPosition(_tileContent.getPosition().x + 10, 450);
                 window.draw(_tilePlayerContent[_changePlayerLeftButton->getValue()]);
             }
-            
+
             if (_tilePlayerContent.size() == 2) {
                 _tilePlayerContent[_changePlayerLeftButton->getValue()].setPosition(_tileContent.getPosition().x + 10, 450);
                 _tilePlayerContent[_changePlayerRightButton->getValue()].setPosition(_tileContent.getPosition().x + 240, 450);
                 window.draw(_tilePlayerContent[_changePlayerLeftButton->getValue()]);
                 window.draw(_tilePlayerContent[_changePlayerRightButton->getValue()]);
             }
-            
+
             if (_tilePlayerContent.size() == 0) {
                 _tilePlayerContent[_changePlayerLeftButton->getValue()] = setString(_noPlayer, sf::Vector2f(_tileContent.getPosition().x + 75, 450), 10);
                 window.draw(_tilePlayerContent[_changePlayerLeftButton->getValue()]);
@@ -133,14 +133,14 @@ namespace UI {
 
         if (_tileEggContent.size() > 1) {
             _tileEggContent[_changeEggLeftButton->getValue()].setPosition(_tileContent.getPosition().x + 80, 750);
-            
+
             window.draw(_tileEggContent[_changeEggLeftButton->getValue()]);
 
             if (_changeEggLeftButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
                 _changeEggLeftButton->render(window, ButtonState::HOVERED);
             else
                 _changeEggLeftButton->render(window, ButtonState::IDLE);
-            
+
             if (_changeEggRightButton->isHovered(sf::Vector2f(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y)))
                 _changeEggRightButton->render(window, ButtonState::HOVERED);
             else
@@ -150,7 +150,7 @@ namespace UI {
                 _tileEggContent[_changeEggLeftButton->getValue()].setPosition(_tileContent.getPosition().x + 80, 750);
                 window.draw(_tileEggContent[_changeEggLeftButton->getValue()]);
             }
-            
+
             if (_tileEggContent.size() == 0) {
                 _tileEggContent[_changeEggLeftButton->getValue()] = setString(_noEgg, sf::Vector2f(_tileContent.getPosition().x + 100, 750), 10);
                 window.draw(_tileEggContent[_changeEggLeftButton->getValue()]);
@@ -223,7 +223,6 @@ namespace UI {
         int i = 0;
         int j = 0;
         int index = 0;
-        libconfig::Config cfg;
 
         try {
             libconfig::Config cfg;
@@ -276,14 +275,14 @@ namespace UI {
 
         try {
             libconfig::Config cfg;
-            
+
             cfg.readFile("./Config/config.cfg");
-            
+
             libconfig::Setting &config = cfg.lookup("config");
             libconfig::Config language;
             std::string configLang = toLowerCase(std::string(config["language"]));
             std::string languagePath = std::string("./Config/Languages/") + configLang + std::string(".cfg");
-            
+
             language.readFile(languagePath.c_str());
 
             libconfig::Setting &lang = language.lookup("language");
@@ -321,14 +320,14 @@ namespace UI {
 
         try {
             libconfig::Config cfg;
-            
+
             cfg.readFile("./Config/config.cfg");
-            
+
             libconfig::Setting &config = cfg.lookup("config");
             libconfig::Config language;
             std::string configLang = toLowerCase(std::string(config["language"]));
             std::string languagePath = std::string("./Config/Languages/") + configLang + std::string(".cfg");
-            
+
             language.readFile(languagePath.c_str());
 
             libconfig::Setting &lang = language.lookup("language");
@@ -365,25 +364,25 @@ namespace UI {
 
         try {
             libconfig::Config cfg;
-            
+
             cfg.readFile("./Config/config.cfg");
             libconfig::Setting &config = cfg.lookup("config");
             libconfig::Config language;
             std::string configLang = toLowerCase(std::string(config["language"]));
             std::string languagePath = std::string("./Config/Languages/") + configLang + std::string(".cfg");
-            
+
             language.readFile(languagePath.c_str());
             if (configLang != _language) {
                 _tilePlayerContent.clear();
                 _tileEggContent.clear();
             }
             _language = configLang;
-            
+
             libconfig::Setting &lang = language.lookup("language");
             libconfig::Setting &tileHUD = lang.lookup("tileHUD");
             libconfig::Setting &playerHUD = tileHUD.lookup("player");
             libconfig::Setting &eggHUD = tileHUD.lookup("egg");
-            
+
             _noPlayer = std::string(playerHUD["noPlayer"]);
             _noEgg = std::string(eggHUD["noEgg"]);
         } catch (const libconfig::FileIOException &fioex) {

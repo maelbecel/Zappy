@@ -81,7 +81,7 @@ namespace Scene {
                 _gameData.parse(server.getSocket().response);
             }
 
-            if (i % 25 == 0) {
+            if (i % 1000 == 0) {
                 server.sendCommand("sgt");
                 server.Run();
                 _gameData.parse(server.getSocket().response);

@@ -48,64 +48,6 @@ namespace UI {
 
         _leftButton->setValue(0);
 
-        try {
-            libconfig::Config cfg;
-            cfg.readFile("./Config/config.cfg");
-            libconfig::Setting &config = cfg.lookup("config");
-
-            libconfig::Config language;
-            std::string configLang = toLowerCase(std::string(config["language"]));
-            std::string languagePath = std::string("./Config/Languages/") + configLang + std::string(".cfg");
-            language.readFile(languagePath.c_str());
-
-            libconfig::Setting &lang = language.lookup("language");
-            libconfig::Setting &help = lang.lookup("help");
-
-            _title = setString(help["title"].c_str(), sf::Vector2f(_backgroundSprite.getPosition().x + 4 * 32, _backgroundSprite.getPosition().y + 16 * 5 * backgroundSpriteScale), 20);
-
-            libconfig::Setting &helpText = help["text"];
-            int numeroPage = 0;
-            for (int i = 0; i < helpText.getLength(); i++) {
-                bool pageTurned = false;
-                std::string helpTextStr = helpText[i];
-                // if in helpText[i] there is a \n\n, we need to split the string
-                if (helpTextStr.find("\n\n") != std::string::npos) {
-                    std::string firstPart = helpTextStr.substr(0, helpTextStr.find("\n\n"));
-                    std::string secondPart = helpTextStr.substr(helpTextStr.find("\n\n") + 2, helpTextStr.size());
-                    _text[numeroPage][i - numeroPage * 23] = setString(firstPart.c_str(), sf::Vector2f(_backgroundSprite.getPosition().x + 4 * 32, _backgroundSprite.getPosition().y + 16 * 8 * backgroundSpriteScale + 16 * (i - numeroPage * 23) * backgroundSpriteScale), 10);
-                    i++;
-                    if (i % 23 == 0 && i != 0) {
-                        _nbrPage = numeroPage + 1;
-                        numeroPage++;
-                        pageTurned = true;
-                    }
-                    _text[numeroPage][i - numeroPage * 23] = setString(secondPart.c_str(), sf::Vector2f(_backgroundSprite.getPosition().x + 4 * 32, _backgroundSprite.getPosition().y + 16 * 8 * backgroundSpriteScale + 16 * (i - numeroPage * 23) * backgroundSpriteScale), 10);
-                } else
-                    _text[numeroPage][i - numeroPage * 23] = setString(helpTextStr.c_str(), sf::Vector2f(_backgroundSprite.getPosition().x + 4 * 32, _backgroundSprite.getPosition().y + 16 * 8 * backgroundSpriteScale + 16 * (i - numeroPage * 23) * backgroundSpriteScale), 10);
-
-                // if i % 23 == 0, we need to change page
-                if (i % 23 == 0 && i != 0 && pageTurned == false) {
-                    _nbrPage = numeroPage + 1;
-                    numeroPage++;
-                }
-            }
-        } catch (const libconfig::FileIOException &fioex) {
-            std::cerr << "I/O error while reading file." << std::endl;
-            _title = setString("Help", sf::Vector2f(_backgroundSprite.getPosition().x + 10, _backgroundSprite.getPosition().y + 10));
-        } catch (const libconfig::ParseException &pex) {
-            std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError() << std::endl;
-            _title = setString("Help", sf::Vector2f(_backgroundSprite.getPosition().x + 10, _backgroundSprite.getPosition().y + 10));
-        } catch (const libconfig::SettingNotFoundException &nfex) {
-            std::cerr << "Setting not found in configuration file." << std::endl;
-            _title = setString("Help", sf::Vector2f(_backgroundSprite.getPosition().x + 10, _backgroundSprite.getPosition().y + 10));
-        } catch (const libconfig::SettingTypeException &setex) {
-            std::cerr << "Setting type error in configuration file." << std::endl;
-            _title = setString("Help", sf::Vector2f(_backgroundSprite.getPosition().x + 10, _backgroundSprite.getPosition().y + 10));
-        } catch (const libconfig::ConfigException &confex) {
-            std::cerr << "Configuration error." << std::endl;
-            _title = setString("Help", sf::Vector2f(_backgroundSprite.getPosition().x + 10, _backgroundSprite.getPosition().y + 10));
-        }
-
     }
 
     void HelpHUD::draw(sf::RenderWindow &window)
@@ -183,5 +125,70 @@ namespace UI {
     void HelpHUD::setOpened(bool opened)
     {
         _opened = opened;
+    }
+
+    void UI::HelpHUD::setLanguage()
+    {
+        try {
+            libconfig::Config cfg;
+            cfg.readFile("./Config/config.cfg");
+            libconfig::Setting &config = cfg.lookup("config");
+
+            libconfig::Config language;
+            std::string configLang = toLowerCase(std::string(config["language"]));
+            if (configLang == _language)
+                return;
+            _language = configLang;
+            std::string languagePath = std::string("./Config/Languages/") + configLang + std::string(".cfg");
+            language.readFile(languagePath.c_str());
+
+            libconfig::Setting &lang = language.lookup("language");
+            libconfig::Setting &help = lang.lookup("help");
+
+            _title = setString(help["title"].c_str(), sf::Vector2f(_backgroundSprite.getPosition().x + 4 * 32, _backgroundSprite.getPosition().y + 16 * 5 * backgroundSpriteScale), 20);
+
+            libconfig::Setting &helpText = help["text"];
+            int numeroPage = 0;
+            for (int i = 0; i < helpText.getLength(); i++) {
+                bool pageTurned = false;
+                std::string helpTextStr = helpText[i];
+                // if in helpText[i] there is a \n\n, we need to split the string
+                if (helpTextStr.find("\n\n") != std::string::npos) {
+                    std::string firstPart = helpTextStr.substr(0, helpTextStr.find("\n\n"));
+                    std::string secondPart = helpTextStr.substr(helpTextStr.find("\n\n") + 2, helpTextStr.size());
+                    _text[numeroPage][i - numeroPage * 23] = setString(firstPart.c_str(), sf::Vector2f(_backgroundSprite.getPosition().x + 4 * 32, _backgroundSprite.getPosition().y + 16 * 8 * backgroundSpriteScale + 16 * (i - numeroPage * 23) * backgroundSpriteScale), 10);
+                    i++;
+                    if (i % 23 == 0 && i != 0) {
+                        _nbrPage = numeroPage + 1;
+                        numeroPage++;
+                        pageTurned = true;
+                    }
+                    _text[numeroPage][i - numeroPage * 23] = setString(secondPart.c_str(), sf::Vector2f(_backgroundSprite.getPosition().x + 4 * 32, _backgroundSprite.getPosition().y + 16 * 8 * backgroundSpriteScale + 16 * (i - numeroPage * 23) * backgroundSpriteScale), 10);
+                } else
+                    _text[numeroPage][i - numeroPage * 23] = setString(helpTextStr.c_str(), sf::Vector2f(_backgroundSprite.getPosition().x + 4 * 32, _backgroundSprite.getPosition().y + 16 * 8 * backgroundSpriteScale + 16 * (i - numeroPage * 23) * backgroundSpriteScale), 10);
+
+                // if i % 23 == 0, we need to change page
+                if (i % 23 == 0 && i != 0 && pageTurned == false) {
+                    _nbrPage = numeroPage + 1;
+                    numeroPage++;
+                }
+            }
+        } catch (const libconfig::FileIOException &fioex) {
+            std::cerr << "I/O error while reading file." << std::endl;
+            _title = setString("Help", sf::Vector2f(_backgroundSprite.getPosition().x + 10, _backgroundSprite.getPosition().y + 10));
+        } catch (const libconfig::ParseException &pex) {
+            std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine() << " - " << pex.getError() << std::endl;
+            _title = setString("Help", sf::Vector2f(_backgroundSprite.getPosition().x + 10, _backgroundSprite.getPosition().y + 10));
+        } catch (const libconfig::SettingNotFoundException &nfex) {
+            std::cerr << "Setting not found in configuration file." << std::endl;
+            _title = setString("Help", sf::Vector2f(_backgroundSprite.getPosition().x + 10, _backgroundSprite.getPosition().y + 10));
+        } catch (const libconfig::SettingTypeException &setex) {
+            std::cerr << "Setting type error in configuration file." << std::endl;
+            _title = setString("Help", sf::Vector2f(_backgroundSprite.getPosition().x + 10, _backgroundSprite.getPosition().y + 10));
+        } catch (const libconfig::ConfigException &confex) {
+            std::cerr << "Configuration error." << std::endl;
+            _title = setString("Help", sf::Vector2f(_backgroundSprite.getPosition().x + 10, _backgroundSprite.getPosition().y + 10));
+        }
+
     }
 };

@@ -450,12 +450,6 @@ namespace UI {
                 continue;
             _tileEggContent.insert(std::pair<int, sf::Text>(i, setString(constructEggContent(egg, gameData), sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10), 10)));
         }
-        _tileEggContent[0] = setString("Egg[0]: \n\n  Time before hatching: 0\n\n", sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10), 10);
-        _tileEggContent[1] = setString("Egg[1]: \n\n  Time before hatching: 0\n\n", sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10), 10);
-        _tileEggContent[2] = setString("Egg[2]: \n\n  Time before hatching: 0\n\n", sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10), 10);
-        _tilePlayerContent[0] = setString("Player[0] : \n\n  Level: 0\n\n  Inventory: \n\n    Food: 0\n\n    Linemate: 0\n\n    Deraumere: 0\n\n    Sibur: 0\n\n    Mendiane: 0\n\n    Phiras: 0\n\n    Thystame: 0\n\n", sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10), 10);
-        _tilePlayerContent[1] = setString("Player[1] : \n\n  Level: 0\n\n  Inventory: \n\n    Food: 0\n\n    Linemate: 0\n\n    Deraumere: 0\n\n    Sibur: 0\n\n    Mendiane: 0\n\n    Phiras: 0\n\n    Thystame: 0\n\n", sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10), 10);
-        _tilePlayerContent[2] = setString("Player[2] : \n\n  Level: 0\n\n  Inventory: \n\n    Food: 0\n\n    Linemate: 0\n\n    Deraumere: 0\n\n    Sibur: 0\n\n    Mendiane: 0\n\n    Phiras: 0\n\n    Thystame: 0\n\n", sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 10, 10), 10);
         if (isLeft == true) {
             _backgroundSprite.setPosition(sf::Vector2f(Window::getWindowWidth() - 416 * 2, 0));
             _tileContent = setString(constructContent(gameData, x, y), sf::Vector2f(Window::getWindowWidth() - 416 * 2 + 175, 175), 10);
